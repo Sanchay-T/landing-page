@@ -55,41 +55,48 @@ const industries = [
 export default function IndustriesSection() {
   return (
     <section id="industries" className="mx-auto mt-32 max-w-6xl px-6 md:mt-36 md:px-8">
-      <div className="flex flex-col gap-4 md:flex-row md:justify-between md:gap-8">
+      <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/70">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#facc15]/70">
             Industries
           </p>
-          <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
+          <h2 className="mt-2 text-3xl font-semibold leading-tight text-white md:text-4xl">
             Agents tailored to the way your business operates.
           </h2>
         </div>
-        <p className="max-w-xl text-sm text-muted-foreground md:text-base">
+        <p className="max-w-xl text-sm text-white/70 md:text-base">
           We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across
           multiple verticals.
         </p>
       </div>
-      <div className="mt-12 grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         {industries.map((industry, index) => (
           <motion.div
             key={industry.name}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
-            className="group rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(16,16,22,0.95),rgba(6,6,10,0.98))] p-6 shadow-[0_45px_120px_-90px_rgba(250,204,21,0.45)]"
+            className="group relative flex flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(16,16,22,0.95),rgba(6,6,10,0.98))] p-6"
           >
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-primary/70">
-              <span>{industry.name}</span>
-              <span className="rounded-full border border-primary/40 bg-primary/10 p-2 text-primary">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#facc15]/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+            <div className="relative z-10 flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#facc15]/70">
+                  {industry.name}
+                </p>
+                <h3 className="mt-2 text-xl font-semibold leading-tight text-white">
+                  {industry.headline}
+                </h3>
+              </div>
+              <div className="rounded-full border border-[#facc15]/40 bg-[#facc15]/10 p-2.5 text-[#facc15]">
                 {industry.icon}
-              </span>
+              </div>
             </div>
-            <div className="mt-4 space-y-2">
-              <h3 className="text-lg font-semibold text-white">{industry.headline}</h3>
-              <p className="text-sm text-white/70">{industry.copy}</p>
-            </div>
-            <div className="mt-6 flex flex-wrap gap-2">
+            <p className="relative z-10 text-sm leading-relaxed text-white/70">
+              {industry.copy}
+            </p>
+            <div className="relative z-10 flex flex-wrap gap-2">
               {industry.highlights.map((highlight) => (
                 <span
                   key={highlight}

@@ -45,27 +45,27 @@ const steps = [
 const toolLogos = [
   {
     name: "OpenAI",
-    src: "https://cdn.magicui.design/tools/openai.svg",
+    src: "https://cdn.simpleicons.org/openai/white",
   },
   {
     name: "Zapier",
-    src: "https://cdn.magicui.design/tools/zapier.svg",
+    src: "https://cdn.simpleicons.org/zapier/white",
   },
   {
     name: "Notion",
-    src: "https://cdn.magicui.design/tools/notion.svg",
+    src: "https://cdn.simpleicons.org/notion/white",
   },
   {
     name: "Slack",
-    src: "https://cdn.magicui.design/tools/slack.svg",
+    src: "https://cdn.simpleicons.org/slack/white",
   },
   {
     name: "HubSpot",
-    src: "https://cdn.magicui.design/tools/hubspot.svg",
+    src: "https://cdn.simpleicons.org/hubspot/white",
   },
   {
     name: "Stripe",
-    src: "https://cdn.magicui.design/tools/stripe.svg",
+    src: "https://cdn.simpleicons.org/stripe/white",
   },
 ];
 

@@ -175,7 +175,7 @@ export default function CallToActionSection() {
                   stack, and activate an autonomous agent that compounds your
                   growth.
                 </p>
-                <div className="mt-4 flex flex-col items-center justify-center gap-4 lg:flex-row">
+                <div className="relative mt-6 flex flex-col items-center justify-center gap-4 lg:flex-row">
                   <ShimmerButton className="px-8 py-3 text-base font-semibold">
                     <span className="flex items-center gap-2">
                       Book a strategy call
@@ -192,8 +192,8 @@ export default function CallToActionSection() {
                     View engagement plans
                   </a>
                 </div>
-                <div className="mt-6 flex justify-center">
-                  <SpinningText duration={14} radius={6} className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
+                <div className="pointer-events-none relative mt-16 flex h-24 w-24 items-center justify-center">
+                  <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">
                     autonomous agents · automation ops · devonel studio ·
                   </SpinningText>
                 </div>

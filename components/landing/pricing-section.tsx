@@ -1,19 +1,30 @@
 "use client";
 
+import { useState } from "react";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { motion } from "framer-motion";
-import { Loader } from "lucide-react";
-import { useState } from "react";
+
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 
 type Interval = "month" | "year";
 
-export const toHumanPrice = (price: number, decimals: number = 2) => {
-  return Number(price / 100).toFixed(decimals);
+type Plan = {
+  id: string;
+  name: string;
+  description: string;
+  features: string[];
+  monthlyPrice: number;
+  yearlyPrice: number;
+  highlight?: boolean;
+  cta?: string;
 };
-const demoPrices = [
+
+const plans: Plan[] = [
   {
     id: "launch",
     name: "Launch",
@@ -26,7 +37,7 @@ const demoPrices = [
     ],
     monthlyPrice: 4500,
     yearlyPrice: 4500 * 10,
-    isMostPopular: false,
+    cta: "Start with Launch",
   },
   {
     id: "scale",
@@ -41,13 +52,13 @@ const demoPrices = [
     ],
     monthlyPrice: 7800,
     yearlyPrice: 7800 * 10,
-    isMostPopular: true,
+    highlight: true,
+    cta: "Book a scale blueprint",
   },
   {
     id: "enterprise",
     name: "Enterprise",
-    description:
-      "Custom governance, security reviews, and performance SLAs at scale.",
+    description: "Custom governance, security reviews, and performance SLAs at scale.",
     features: [
       "Unlimited agents & journeys",
       "Compliance + legal review support",
@@ -57,9 +68,13 @@ const demoPrices = [
     ],
     monthlyPrice: 0,
     yearlyPrice: 0,
-    isMostPopular: false,
+    cta: "Request enterprise plan",
   },
 ];
+
+export const toHumanPrice = (price: number, decimals: number = 0) => {
+  return Number(price / 100).toFixed(decimals);
+};
 
 export default function PricingSection() {
   const [interval, setInterval] = useState<Interval>("month");
@@ -69,30 +84,29 @@ export default function PricingSection() {
   const onSubscribeClick = async (priceId: string) => {
     setIsLoading(true);
     setId(priceId);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate a delay
+    await new Promise((resolve) => setTimeout(resolve, 900));
     setIsLoading(false);
   };
 
   return (
-    <section id="pricing">
-      <div className="mx-auto flex max-w-screen-xl flex-col gap-8 px-4 py-14 md:px-8">
-        <div className="mx-auto max-w-5xl text-center">
-          <h4 className="text-xl font-bold tracking-tight text-black dark:text-white">
-            Engagements
-          </h4>
-
-          <h2 className="text-5xl font-bold tracking-tight text-black dark:text-white sm:text-6xl">
+    <section id="pricing" className="relative">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,#facc1512,transparent_70%),linear-gradient(180deg,#070708,#040406)]" />
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-20 md:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70">
+            <Sparkles className="size-3" /> Engagements
+          </div>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
             Flexible operator plans to launch and scale AI agents.
           </h2>
-
-          <p className="mt-6 text-xl leading-8 text-black/80 dark:text-white">
-            Every Devonel engagement pairs automation architects with on-call
-            operators so your agents stay compliant, on-brand, and tied to
-            revenue results.
+          <p className="mt-4 text-base text-white/70 md:text-lg">
+            Every Devonel engagement pairs automation architects with on-call operators so your agents stay compliant,
+            on-brand, and tied to revenue results.
           </p>
         </div>
 
-        <div className="flex w-full items-center justify-center space-x-2">
+        <div className="mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70">
+          <span>Monthly</span>
           <Switch
             id="interval"
             onCheckedChange={(checked) => {
@@ -100,109 +114,88 @@ export default function PricingSection() {
             }}
           />
           <span>Annual</span>
-          <span className="inline-block whitespace-nowrap rounded-full bg-black px-2.5 py-1 text-[11px] font-semibold uppercase leading-5 tracking-wide text-white dark:bg-white dark:text-black">
-            Save 2 months yearly ✨
+          <span className="rounded-full bg-[#facc15]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#facc15]">
+            Save 2 months
           </span>
         </div>
 
-        <div className="mx-auto grid w-full justify-center sm:grid-cols-2 lg:grid-cols-4 flex-col gap-4">
-          {demoPrices.map((price, idx) => (
-            <div
-              key={price.id}
-              className={cn(
-                "relative flex max-w-[400px] flex-col gap-8 rounded-2xl border p-4 text-black dark:text-white overflow-hidden",
-                {
-                  "border-2 border-[var(--color-one)] dark:border-[var(--color-one)]":
-                    price.isMostPopular,
-                }
-              )}
-            >
-              <div className="flex items-center">
-                <div className="ml-4">
-                  <h2 className="text-base font-semibold leading-7">
-                    {price.name}
-                  </h2>
-                  <p className="h-12 text-sm leading-5 text-black/70 dark:text-white">
-                    {price.description}
-                  </p>
-                </div>
-              </div>
-
+        <div className="grid gap-6 md:grid-cols-3">
+          {plans.map((plan, idx) => {
+            const amount = interval === "year" ? plan.yearlyPrice : plan.monthlyPrice;
+            const isEnterprise = amount === 0;
+            return (
               <motion.div
-                key={`${price.id}-${interval}`}
-                initial="initial"
-                animate="animate"
-                variants={{
-                  initial: {
-                    opacity: 0,
-                    y: 12,
-                  },
-                  animate: {
-                    opacity: 1,
-                    y: 0,
-                  },
-                }}
-                transition={{
-                  duration: 0.4,
-                  delay: 0.1 + idx * 0.05,
-                  ease: [0.21, 0.47, 0.32, 0.98],
-                }}
-                className="flex flex-row gap-1"
-              >
-                <span className="text-4xl font-bold text-black dark:text-white">
-                  {(() => {
-                    const amount =
-                      interval === "year"
-                        ? price.yearlyPrice
-                        : price.monthlyPrice;
-                    if (amount === 0) {
-                      return "Custom";
-                    }
-                    return (
-                      <>
-                        ${toHumanPrice(amount, 0)}
-                        <span className="text-xs"> / {interval}</span>
-                      </>
-                    );
-                  })()}
-                </span>
-              </motion.div>
-
-              <Button
+                key={plan.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-120px" }}
+                transition={{ duration: 0.45, delay: idx * 0.05, ease: "easeOut" }}
                 className={cn(
-                  "group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter",
-                  "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
+                  "relative flex h-full flex-col gap-6 rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,rgba(18,18,24,0.95),rgba(7,7,10,0.98))] p-8 text-left shadow-[0_55px_140px_-100px_rgba(250,204,21,0.55)]",
+                  plan.highlight && "border-[#facc15]/30 bg-[linear-gradient(180deg,rgba(55,46,12,0.9),rgba(12,10,4,0.98))]"
                 )}
-                disabled={isLoading}
-                onClick={() => void onSubscribeClick(price.id)}
               >
-                <span className="absolute right-0 -mt-12 h-32 w-8 translate-x-12 rotate-12 transform-gpu bg-white opacity-10 transition-all duration-1000 ease-out group-hover:-translate-x-96 dark:bg-black" />
-                {(!isLoading || (isLoading && id !== price.id)) && (
-                  <p>Subscribe</p>
-                )}
-
-                {isLoading && id === price.id && <p>Subscribing</p>}
-                {isLoading && id === price.id && (
-                  <Loader className="mr-2 h-4 w-4 animate-spin" />
-                )}
-              </Button>
-
-              <hr className="m-0 h-px w-full border-none bg-gradient-to-r from-neutral-200/0 via-neutral-500/30 to-neutral-200/0" />
-              {price.features && price.features.length > 0 && (
-                <ul className="flex flex-col gap-2 font-normal">
-                  {price.features.map((feature: any, idx: any) => (
-                    <li
-                      key={idx}
-                      className="flex items-center gap-3 text-xs font-medium text-black dark:text-white"
-                    >
-                      <CheckIcon className="h-5 w-5 shrink-0 rounded-full bg-green-400 p-[2px] text-black dark:text-white" />
-                      <span className="flex">{feature}</span>
+                {plan.highlight ? (
+                  <span className="absolute right-6 top-6 rounded-full bg-[#facc15]/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#facc15]">
+                    Most popular
+                  </span>
+                ) : null}
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">{plan.name}</h3>
+                    <p className="mt-1 text-sm text-white/65">{plan.description}</p>
+                  </div>
+                  <div className="flex items-baseline gap-2 text-white">
+                    {isEnterprise ? (
+                      <span className="text-3xl font-semibold">Custom</span>
+                    ) : (
+                      <>
+                        <span className="text-4xl font-semibold">
+                          ${toHumanPrice(amount, 0)}
+                        </span>
+                        <span className="text-xs uppercase tracking-[0.2em] text-white/60">
+                          / {interval}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <ul className="flex flex-col gap-3 text-sm text-white/70">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2">
+                      <CheckIcon className="mt-1 size-4 text-[#facc15]" />
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-              )}
-            </div>
-          ))}
+                <div className="mt-auto">
+                  {plan.highlight ? (
+                    <ShimmerButton
+                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,#facc15,#f59e0b)] py-3 text-sm font-semibold text-black"
+                      shimmerColor="#ffffff"
+                      shimmerDuration="2s"
+                      onClick={() => onSubscribeClick(plan.id)}
+                    >
+                      {plan.cta ?? "Talk to us"}
+                    </ShimmerButton>
+                  ) : (
+                    <Button
+                      className="w-full rounded-full border border-white/15 bg-white/10 text-sm font-semibold text-white hover:bg-white/20"
+                      disabled={isLoading && id === plan.id}
+                      onClick={() => onSubscribeClick(plan.id)}
+                    >
+                      {isLoading && id === plan.id ? "Scheduling…" : plan.cta ?? "Talk to us"}
+                    </Button>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="mx-auto max-w-3xl rounded-[32px] border border-white/10 bg-black/40 px-8 py-6 text-center text-xs uppercase tracking-[0.24em] text-white/60">
+          All plans include: discovery workshops · operator dashboards · compliance guardrails · success reporting ·
+          dedicated Slack channel
         </div>
       </div>
     </section>

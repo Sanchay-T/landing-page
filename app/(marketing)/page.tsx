@@ -8,7 +8,6 @@ import PricingSection from "@/components/landing/pricing-section";
 import ProcessSection from "@/components/landing/process-section";
 import IndustriesSection from "@/components/landing/industries-section";
 import TestimonialsSection from "@/components/landing/testimonials-section";
-import ServicesFeatureSection from "@/components/landing/services-feature-section";
 import Particles from "@/components/magicui/particles";
 import { SphereMask } from "@/components/magicui/sphere-mask";
 
@@ -18,7 +17,6 @@ export default async function Page() {
       <HeroSection />
       <AboutSection />
       <ClientSection />
-      <ServicesFeatureSection />
       <ServicesSection />
       <ProcessSection />
       <IndustriesSection />

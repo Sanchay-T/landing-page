@@ -1,53 +1,54 @@
-import { DiscordLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import { TwitterLogoIcon } from "@radix-ui/react-icons";
+import { Linkedin } from "lucide-react";
 import Link from "next/link";
 
 const footerNavs = [
   {
-    label: "Product",
+    label: "Services",
     items: [
       {
-        href: "/",
-        name: "Email Collection",
+        href: "#services",
+        name: "AI Agents",
       },
       {
-        href: "/pricing",
+        href: "#services",
+        name: "Voice Concierge",
+      },
+      {
+        href: "#services",
+        name: "Automations",
+      },
+    ],
+  },
+
+  {
+    label: "Company",
+    items: [
+      {
+        href: "#about",
+        name: "About",
+      },
+      {
+        href: "#case-studies",
+        name: "Case Studies",
+      },
+      {
+        href: "#pricing",
         name: "Pricing",
       },
+    ],
+  },
+  {
+    label: "Resources",
+    items: [
       {
-        href: "/faq",
+        href: "#process",
+        name: "Process",
+      },
+
+      {
+        href: "#faq",
         name: "FAQ",
-      },
-    ],
-  },
-
-  {
-    label: "Community",
-    items: [
-      {
-        href: "/",
-        name: "Discord",
-      },
-      {
-        href: "/",
-        name: "Twitter",
-      },
-      {
-        href: "mailto:hello@chatcollect.com",
-        name: "Email",
-      },
-    ],
-  },
-  {
-    label: "Legal",
-    items: [
-      {
-        href: "/terms",
-        name: "Terms",
-      },
-
-      {
-        href: "/privacy",
-        name: "Privacy",
       },
     ],
   },
@@ -55,12 +56,12 @@ const footerNavs = [
 
 const footerSocials = [
   {
-    href: "",
-    name: "Discord",
-    icon: <DiscordLogoIcon className="h-4 w-4" />,
+    href: "https://linkedin.com/company/devonel",
+    name: "LinkedIn",
+    icon: <Linkedin className="h-4 w-4" />,
   },
   {
-    href: "",
+    href: "https://x.com/devonel",
     name: "Twitter",
     icon: <TwitterLogoIcon className="h-4 w-4" />,
   },
@@ -73,15 +74,17 @@ export function SiteFooter() {
         <div className="md:flex md:justify-between px-8 p-4 py-16 sm:pb-16 gap-4">
           <div className="mb-12 flex-col flex gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <img
-                src="https://magicui.design/icon.png"
-                className="h-8 w-8 text-primary"
-              />
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border text-sm font-semibold uppercase tracking-wide text-foreground">
+                D
+              </span>
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                Magic UI
+                Devonel
               </span>
             </Link>
-            <p className="max-w-xs">UI Library for Design Engineers</p>
+            <p className="max-w-xs">
+              AI agents and automation systems engineered to compound your
+              team’s output.
+            </p>
           </div>
           <div className="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-3">
             {footerNavs.map((nav) => (
@@ -120,11 +123,8 @@ export function SiteFooter() {
             ))}
           </div>
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            Copyright © {new Date().getFullYear()}{" "}
-            <Link href="/" className="cursor-pointer">
-              Magic UI
-            </Link>
-            . All Rights Reserved.
+            © {new Date().getFullYear()} Devonel Automation Co. All rights
+            reserved.
           </span>
         </div>
       </div>

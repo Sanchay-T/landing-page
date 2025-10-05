@@ -10,23 +10,28 @@ import { useEffect, useState } from "react";
 const menuItem = [
   {
     id: 1,
-    label: "Features",
-    href: "/features",
+    label: "Services",
+    href: "#services",
   },
   {
     id: 2,
-    label: "Pricing",
-    href: "#",
+    label: "Process",
+    href: "#process",
   },
   {
     id: 3,
-    label: "Careers",
-    href: "#",
+    label: "Industries",
+    href: "#industries",
   },
   {
     id: 4,
-    label: "Contact Us",
-    href: "#",
+    label: "Pricing",
+    href: "#pricing",
+  },
+  {
+    id: 5,
+    label: "FAQ",
+    href: "#faq",
   },
 ];
 
@@ -99,22 +104,22 @@ export function SiteHeader() {
     <>
       <header className="fixed left-0 top-0 z-50 w-full px-4 animate-fade-in border-b opacity-0 backdrop-blur-[12px] [--animation-delay:600ms]">
         <div className="container mx-auto flex h-[var(--navigation-height)] w-full items-center justify-between">
-          <Link className="text-md flex items-center justify-center" href="/">
-            Magic UI
+          <Link className="text-md flex items-center justify-center font-semibold tracking-tight" href="/">
+            Devonel
           </Link>
 
           <div className="ml-auto flex h-full items-center">
-            <Link className="mr-6 text-sm" href="/signin">
-              Log in
+            <Link className="mr-6 text-sm" href="#case-studies">
+              Case studies
             </Link>
             <Link
               className={cn(
                 buttonVariants({ variant: "secondary" }),
                 "mr-6 text-sm"
               )}
-              href="/signup"
+              href="#contact"
             >
-              Sign up
+              Book a strategy call
             </Link>
           </div>
           <button
@@ -140,8 +145,8 @@ export function SiteHeader() {
           )}
         >
           <div className="container mx-auto flex h-[var(--navigation-height)] items-center justify-between">
-            <Link className="text-md flex items-center" href="/">
-              Magic UI
+            <Link className="text-md flex items-center font-semibold" href="/">
+              Devonel
             </Link>
 
             <button

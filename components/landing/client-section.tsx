@@ -11,37 +11,23 @@ export default function ClientSection() {
           </h2>
           <div className="mt-6">
             <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 md:gap-x-16 [&_path]:fill-white">
-              <li>
-                <img
-                  src={`https://cdn.magicui.design/companies/Google.svg`}
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
-                />
-              </li>
-              <li>
-                <img
-                  src={`https://cdn.magicui.design/companies/Microsoft.svg`}
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
-                />
-              </li>
-              <li>
-                <img
-                  src={`https://cdn.magicui.design/companies/GitHub.svg`}
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
-                />
-              </li>
-
-              <li>
-                <img
-                  src={`https://cdn.magicui.design/companies/Uber.svg`}
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
-                />
-              </li>
-              <li>
-                <img
-                  src={`https://cdn.magicui.design/companies/Notion.svg`}
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
-                />
-              </li>
+              {[
+                { name: "Google", src: "https://cdn.magicui.design/companies/Google.svg" },
+                { name: "Microsoft", src: "https://cdn.magicui.design/companies/Microsoft.svg" },
+                { name: "GitHub", src: "https://cdn.magicui.design/companies/GitHub.svg" },
+                { name: "Uber", src: "https://cdn.magicui.design/companies/Uber.svg" },
+                { name: "Notion", src: "https://cdn.magicui.design/companies/Notion.svg" },
+              ].map((logo) => (
+                <li key={logo.name} className="flex items-center justify-center">
+                  <picture>
+                    <img
+                      src={logo.src}
+                      alt={`${logo.name} logo`}
+                      className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
+                    />
+                  </picture>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

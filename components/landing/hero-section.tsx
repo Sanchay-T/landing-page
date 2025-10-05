@@ -1,67 +1,115 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { useRef } from "react";
+import { useInView } from "framer-motion";
+import { ArrowRightIcon, CheckIcon } from "@radix-ui/react-icons";
+
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
+import { WordRotate } from "@/components/magicui/word-rotate";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 
 export default function HeroSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-  return (
-    <section
-      id="hero"
-      className="relative mx-auto mt-32 max-w-[80rem] px-6 text-center md:px-8"
-    >
-      <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-border bg-white/10 px-3 text-xs text-white dark:text-black transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
-        <TextShimmer className="inline-flex items-center justify-center">
-          <span>✨ Introducing Magic UI Template</span>{" "}
-          <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-        </TextShimmer>
-      </div>
-      <h1 className="bg-gradient-to-br dark:from-white from-black from-30% dark:to-white/40 to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent text-balance sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
-        Magic UI is the new way
-        <br className="hidden md:block" /> to build landing pages.
-      </h1>
-      <p className="mb-12 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
-        Beautifully designed, animated components and templates built with
-        <br className="hidden md:block" /> Tailwind CSS, React, and Framer
-        Motion.
-      </p>
-      <Button className="translate-y-[-1rem] animate-fade-in gap-1 rounded-lg text-white dark:text-black opacity-0 ease-in-out [--animation-delay:600ms]">
-        <span>Get Started for free </span>
-        <ArrowRightIcon className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-      </Button>
-      <div
-        ref={ref}
-        className="relative mt-[8rem] animate-fade-up opacity-0 [--animation-delay:400ms] [perspective:2000px] after:absolute after:inset-0 after:z-50 after:[background:linear-gradient(to_top,var(--background)_30%,transparent)]"
-      >
-        <div
-          className={`rounded-xl border border-border bg-white bg-opacity-[0.01] before:absolute before:bottom-1/2 before:left-0 before:top-0 before:h-full before:w-full before:opacity-0 before:[filter:blur(180px)] before:[background-image:linear-gradient(to_bottom,var(--color-one),var(--color-one),transparent_40%)] ${
-            inView ? "before:animate-image-glow" : ""
-          }`}
-        >
-          <BorderBeam
-            size={200}
-            duration={12}
-            delay={11}
-            colorFrom="var(--color-one)"
-            colorTo="var(--color-two)"
-          />
+  const mediaRef = useRef(null);
+  const mediaInView = useInView(mediaRef, { once: true, margin: "-120px" });
 
-          <img
-            src="/hero-dark.png"
-            alt="Hero Image"
-            className="hidden relative w-full h-full rounded-[inherit] border object-contain dark:block"
-          />
-          <img
-            src="/hero-light.png"
-            alt="Hero Image"
-            className="block relative w-full h-full  rounded-[inherit] border object-contain dark:hidden"
-          />
+  return (
+    <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 md:px-10">
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top,#facc1518_0%,transparent_60%),linear-gradient(180deg,#030304_0%,#08080c_45%,#010103_100%)]" />
+      <div className="relative overflow-hidden rounded-[56px] border border-[#facc1510] bg-[linear-gradient(180deg,rgba(21,20,16,0.85)_0%,rgba(4,4,7,0.92)_65%,rgba(3,3,5,0.98)_100%)] px-6 py-16 shadow-[0_80px_200px_-120px_rgba(250,204,21,0.65)] md:px-16 lg:py-20">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,#facc1533_0%,transparent_70%)] opacity-70" />
+        <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,520px)] lg:items-end">
+          <div className="space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70 backdrop-blur">
+              <TextShimmer>
+                <span>Devonel • AI Agents & Automations</span>
+              </TextShimmer>
+            </div>
+            <div>
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-6xl md:text-[4.5rem]">
+                Deploy
+                <br className="hidden sm:block" />
+                <span className="inline-flex items-center gap-3">
+                  <WordRotate
+                    className="text-white"
+                    words={[
+                      "AI support concierges",
+                      "autonomous revenue agents",
+                      "AI operations copilots",
+                    ]}
+                  />
+                </span>
+              </h1>
+              <div className="mt-5 h-2 w-48 rounded-full bg-[#facc15]" />
+            </div>
+            <p className="max-w-2xl text-base text-white/70 md:text-lg">
+              Devonel designs, deploys, and fine-tunes AI agents that qualify leads, close loops,
+              and automate operations across your stack within weeks — without derailing your team.
+            </p>
+            <div className="flex flex-col items-start gap-4 md:flex-row">
+              <ShimmerButton
+                className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
+                shimmerColor="#facc15"
+                shimmerDuration="2.4s"
+              >
+                <span className="flex items-center gap-2">
+                  Book a strategy call
+                  <ArrowRightIcon className="size-4" />
+                </span>
+              </ShimmerButton>
+              <Button
+                size="lg"
+                variant="outline"
+                className="gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10"
+                asChild
+              >
+                <a href="#case-studies">
+                  See agent playbooks
+                  <ArrowRightIcon className="size-4" />
+                </a>
+              </Button>
+            </div>
+            <div className="grid gap-3 text-sm text-white/70 md:grid-cols-3">
+              {[
+                "24/7 AI agents orchestrated by Devonel operators",
+                "Integrates with your tools: HubSpot, Slack, Notion, Zapier",
+                "Launch a production-ready agent in under 4 weeks",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-2">
+                  <CheckIcon className="mt-1 size-4 text-[#facc15]" />
+                  <span className="max-w-sm">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div ref={mediaRef} className="relative">
+            <div
+              className={`relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur [mask-image:linear-gradient(to_bottom,black_85%,transparent)] ${
+                mediaInView ? "before:animate-image-glow" : ""
+              }`}
+            >
+              <BorderBeam
+                size={260}
+                duration={14}
+                delay={9}
+                colorFrom="rgba(250,204,21,0.35)"
+                colorTo="rgba(250,204,21,0.05)"
+              />
+              <img
+                src="/hero-dark.png"
+                alt="Workflow automations preview"
+                className="hidden h-full w-full rounded-[inherit] border border-white/10 object-cover dark:block"
+              />
+              <img
+                src="/hero-light.png"
+                alt="Workflow automations preview"
+                className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

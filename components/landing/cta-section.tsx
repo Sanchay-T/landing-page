@@ -3,6 +3,8 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
+import { SpinningText } from "@/components/magicui/spinning-text";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { motion, useAnimation, useInView } from "motion/react";
 import {
   BarChart,
@@ -165,25 +167,36 @@ export default function CallToActionSection() {
                 <HeartHandshake className="mx-auto size-16 text-foreground dark:text-foreground lg:size-24" />
               </div>
               <div className="z-10 mt-4 flex flex-col items-center text-center text-primary">
-                <h1 className="text-3xl font-bold lg:text-4xl">
-                  Stop wasting time on design.
+                <h1 className="text-3xl font-bold text-foreground lg:text-4xl">
+                  Ready to launch your Devonel agent?
                 </h1>
-                <p className="mt-2">
-                  Start your 7-day free trial. No credit card required.
+                <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                  Partner with our operators to map the playbook, integrate your
+                  stack, and activate an autonomous agent that compounds your
+                  growth.
                 </p>
-                <a
-                  href="/"
-                  className={cn(
-                    buttonVariants({
-                      size: "lg",
-                      variant: "outline",
-                    }),
-                    "group mt-4 rounded-[2rem] px-6"
-                  )}
-                >
-                  Get Started
-                  <ChevronRight className="ml-1 size-4 transition-all duration-300 ease-out group-hover:translate-x-1" />
-                </a>
+                <div className="mt-4 flex flex-col items-center justify-center gap-4 lg:flex-row">
+                  <ShimmerButton className="px-8 py-3 text-base font-semibold">
+                    <span className="flex items-center gap-2">
+                      Book a strategy call
+                      <ChevronRight className="size-4" />
+                    </span>
+                  </ShimmerButton>
+                  <a
+                    href="#pricing"
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "lg" }),
+                      "rounded-[2rem]"
+                    )}
+                  >
+                    View engagement plans
+                  </a>
+                </div>
+                <div className="mt-6 flex justify-center">
+                  <SpinningText duration={14} radius={6} className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
+                    autonomous agents · automation ops · devonel studio ·
+                  </SpinningText>
+                </div>
               </div>
               <div className="absolute inset-0 -z-10 rounded-full  bg-background opacity-40 blur-xl dark:bg-background" />
             </div>

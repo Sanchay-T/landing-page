@@ -16,39 +16,32 @@ export default function HeroSection() {
   const mediaInView = useInView(mediaRef, { once: true, margin: "-120px" });
 
   return (
-    <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 md:px-10">
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top,#facc1518_0%,transparent_60%),linear-gradient(180deg,#030304_0%,#08080c_45%,#010103_100%)]" />
-      <div className="relative overflow-hidden rounded-[56px] border border-[#facc1510] bg-[linear-gradient(180deg,rgba(21,20,16,0.85)_0%,rgba(4,4,7,0.92)_65%,rgba(3,3,5,0.98)_100%)] px-6 py-16 shadow-[0_80px_200px_-120px_rgba(250,204,21,0.65)] md:px-16 lg:py-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,#facc1533_0%,transparent_70%)] opacity-70" />
-        <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,520px)] lg:items-end">
-          <div className="space-y-6 text-left">
+    <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 py-16 md:px-10 md:py-20">
+      <div className="flex flex-col gap-12">
+          <div className="mx-auto max-w-4xl space-y-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70 backdrop-blur">
               <TextShimmer>
                 <span>Devonel • AI Agents & Automations</span>
               </TextShimmer>
             </div>
-            <div>
-              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-6xl md:text-[4.5rem]">
-                Deploy
-                <br className="hidden sm:block" />
-                <span className="inline-flex items-center gap-3">
-                  <WordRotate
-                    className="text-white"
-                    words={[
-                      "AI support concierges",
-                      "autonomous revenue agents",
-                      "AI operations copilots",
-                    ]}
-                  />
-                </span>
-              </h1>
-              <div className="mt-5 h-2 w-48 rounded-full bg-[#facc15]" />
-            </div>
-            <p className="max-w-2xl text-base text-white/70 md:text-lg">
+            <h1 className="space-y-2 text-4xl font-semibold leading-[1.15] tracking-tight text-white sm:text-6xl md:text-[4.5rem]">
+              <div>Deploy</div>
+              <div className="relative inline-block min-h-[1.2em] overflow-visible">
+                <WordRotate
+                  className="text-white text-4xl sm:text-6xl md:text-[4.5rem] font-semibold"
+                  words={[
+                    "AI support concierges",
+                    "autonomous revenue agents",
+                    "AI operations copilots",
+                  ]}
+                />
+              </div>
+            </h1>
+            <p className="mx-auto max-w-2xl text-base text-white/70 md:text-lg">
               Devonel designs, deploys, and fine-tunes AI agents that qualify leads, close loops,
               and automate operations across your stack within weeks — without derailing your team.
             </p>
-            <div className="flex flex-col items-start gap-4 md:flex-row">
+            <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
               <ShimmerButton
                 className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
                 shimmerColor="#facc15"
@@ -71,7 +64,7 @@ export default function HeroSection() {
                 </a>
               </Button>
             </div>
-            <div className="grid gap-3 text-sm text-white/70 md:grid-cols-3">
+            <div className="mx-auto grid max-w-3xl gap-3 text-sm text-white/70 md:grid-cols-3">
               {[
                 "24/7 AI agents orchestrated by Devonel operators",
                 "Integrates with your tools: HubSpot, Slack, Notion, Zapier",
@@ -85,9 +78,9 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div ref={mediaRef} className="relative">
+          <div ref={mediaRef} className="relative mx-auto w-full max-w-7xl">
             <div
-              className={`relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur [mask-image:linear-gradient(to_bottom,black_85%,transparent)] ${
+              className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur ${
                 mediaInView ? "before:animate-image-glow" : ""
               }`}
             >
@@ -110,7 +103,6 @@ export default function HeroSection() {
               />
             </div>
           </div>
-        </div>
       </div>
     </section>
   );

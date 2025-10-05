@@ -30,7 +30,7 @@ export function WordRotate({
   const currentWord = words[index] ?? "";
 
   return (
-    <span className={cn("relative inline-flex h-[1.1em] overflow-hidden", className)}>
+    <span className={cn("relative inline-block overflow-visible py-2", className)}>
       <AnimatePresence mode="wait">
         <motion.span
           key={currentWord}
@@ -38,7 +38,7 @@ export function WordRotate({
           animate={{ y: "0%", opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
-          className="inline-flex items-center"
+          className="inline-block whitespace-nowrap"
         >
           {currentWord}
         </motion.span>

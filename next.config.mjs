@@ -15,6 +15,21 @@ const nextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    // Exclude blog-template-main from compilation
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: ['**/node_modules', '**/blog-template-main/**'],
+    };
+    return config;
+  },
+  // Exclude blog-template-main from TypeScript compilation
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  experimental: {
+    externalDir: true,
+  },
 };
 
 export default nextConfig;

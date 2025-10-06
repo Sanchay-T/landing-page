@@ -12,7 +12,7 @@ const cards = [
     title: "AI Revenue Desk",
     description:
       "Qualify inbound, follow up, and book meetings autonomously with full CRM sync.",
-    className: "col-span-2 row-span-2",
+    className: "md:col-span-2 md:row-span-2",
     media: "/hero-dark.png",
     chip: "Featured",
     featured: true,
@@ -64,7 +64,7 @@ export default function ServicesSection() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map((card, index) => (
           <motion.article
             key={card.title}

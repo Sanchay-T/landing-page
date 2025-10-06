@@ -10,6 +10,7 @@ import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
+import { AnimatedSpan, Terminal, TypingAnimation } from "@/components/ui/terminal";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 export default function HeroSection() {
@@ -106,18 +107,36 @@ export default function HeroSection() {
                 colorFrom="rgba(250,204,21,0.35)"
                 colorTo="rgba(250,204,21,0.05)"
               />
-              <img
-                src="/hero-dark.png"
-                alt="Workflow automations preview"
-                className="hidden h-full w-full rounded-[inherit] border border-white/10 object-cover dark:block"
-              />
-              <img
-                src="/hero-light.png"
-                alt="Workflow automations preview"
-                className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
-              />
+              <div className="relative h-full w-full p-4">
+                <Terminal className="h-full w-full max-h-[520px] border-white/20 bg-black/80 text-left shadow-[0_0_60px_rgba(250,204,21,0.12)] [&>pre>code]:!font-mono [&>pre>code]:!text-[15px] [&>pre>code]:!text-white/80">
+                  <TypingAnimation className="text-[#facc15]">
+                    {"devonel deploy --agent \"autonomous-review\" --stack claude,codex"}
+                  </TypingAnimation>
+                  <AnimatedSpan className="text-emerald-400">
+                    ✔ Claude orchestrator engaged
+                  </AnimatedSpan>
+                  <AnimatedSpan className="text-emerald-400">
+                    ✔ Codex automation pipeline synced
+                  </AnimatedSpan>
+                  <TypingAnimation className="text-[#facc15]">
+                    agent.status --summary
+                  </TypingAnimation>
+                  <AnimatedSpan>
+                    • autonomous review agents: auditing pull requests in realtime
+                  </AnimatedSpan>
+                  <AnimatedSpan>
+                    • revenue copilots: following up with every warm lead 24/7
+                  </AnimatedSpan>
+                  <AnimatedSpan>
+                    • ops copilots: syncing actions to Slack, Notion & HubSpot
+                  </AnimatedSpan>
+                  <TypingAnimation className="text-[#facc15]">
+                    all systems calibrated ▸ ready to launch
+                  </TypingAnimation>
+                </Terminal>
+              </div>
+            </div>
           </div>
-        </div>
       </div>
     </section>
   );

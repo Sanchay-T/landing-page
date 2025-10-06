@@ -128,7 +128,7 @@ export default function CallToActionSection() {
     <section id="cta">
       <div className="py-14">
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
+          <div className="relative flex w-full flex-col items-center justify-center overflow-visible px-4 py-16 sm:overflow-hidden sm:px-8 sm:py-20">
             <Marquee
               reverse
               className="-delay-[200ms] [--duration:20s]"
@@ -162,20 +162,20 @@ export default function CallToActionSection() {
                 <Card key={idx} {...review} />
               ))}
             </Marquee>
-            <div className="absolute z-10">
+            <div className="absolute inset-x-0 top-0 z-10 flex w-full flex-col items-center px-4 pb-28 pt-14 text-center text-primary sm:px-10 sm:pb-32 sm:pt-16">
               <div className="mx-auto size-24 rounded-[2rem] border bg-background/10 p-3 shadow-2xl backdrop-blur-md dark:bg-background/10 lg:size-32">
                 <HeartHandshake className="mx-auto size-16 text-foreground dark:text-foreground lg:size-24" />
               </div>
-              <div className="z-10 mt-4 flex flex-col items-center text-center text-primary">
-                <h1 className="text-3xl font-bold text-foreground lg:text-4xl">
+              <div className="z-10 mt-6 flex flex-col items-center text-center text-primary sm:mt-8">
+                <h1 className="text-3xl font-bold text-foreground sm:text-[2.1rem] lg:text-4xl">
                   Ready to launch your Devonel agent?
                 </h1>
-                <p className="mt-2 max-w-md text-sm text-muted-foreground">
+                <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:mt-4 sm:text-base">
                   Partner with our operators to map the playbook, integrate your
                   stack, and activate an autonomous agent that compounds your
                   growth.
                 </p>
-                <div className="relative mt-6 flex flex-col items-center justify-center gap-4 lg:flex-row">
+                <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
                   <ShimmerButton
                     className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
                     shimmerColor="rgb(var(--brand-accent-rgb))"
@@ -196,15 +196,21 @@ export default function CallToActionSection() {
                     View engagement plans
                   </a>
                 </div>
-                <div className="pointer-events-none relative mt-16 flex h-24 w-24 items-center justify-center">
-                  <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground/60">
+                <div className="pointer-events-none relative mt-14 flex h-32 w-32 items-center justify-center sm:mt-16">
+                  <span className="absolute size-2 rounded-full bg-[rgb(var(--brand-accent-rgb))]/80 shadow-[0_0_14px_rgba(var(--brand-accent-rgb),0.35)]" />
+                  <SpinningText
+                    duration={14}
+                    radius={38}
+                    className="size-full"
+                    textClassName="text-[10px] uppercase tracking-[0.32em] text-muted-foreground/60"
+                  >
                     autonomous agents · automation ops · devonel studio ·
                   </SpinningText>
                 </div>
               </div>
-              <div className="absolute inset-0 -z-10 rounded-full  bg-background opacity-40 blur-xl dark:bg-background" />
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-background opacity-40 blur-xl dark:bg-background" />
             </div>
-            <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-background to-70% dark:to-background" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-background to-70% dark:to-background" />
           </div>
         </div>
       </div>

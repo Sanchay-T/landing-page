@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,11 @@ export function WordRotate({
   duration = 2500,
 }: WordRotateProps) {
   const [index, setIndex] = useState(0);
+  const [maxHeight, setMaxHeight] = useState<number>();
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const measurementRef = useRef<HTMLSpanElement>(null);
+
+  const joinedWords = useMemo(() => words.join("|"), [words]);
 
   useEffect(() => {
     if (words.length <= 1) return;
@@ -27,10 +32,45 @@ export function WordRotate({
     return () => clearInterval(timer);
   }, [words, duration]);
 
+  useEffect(() => {
+    const measureHeights = () => {
+      if (!measurementRef.current) return;
+
+      const spans = Array.from(
+        measurementRef.current.children,
+      ) as HTMLElement[];
+
+      const tallest = spans.reduce((acc, span) => {
+        const height = span.getBoundingClientRect().height;
+        return height > acc ? height : acc;
+      }, 0);
+
+      setMaxHeight(tallest || undefined);
+    };
+
+    measureHeights();
+
+    if (!containerRef.current) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      measureHeights();
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [joinedWords, className]);
+
   const currentWord = words[index] ?? "";
 
   return (
-    <span className={cn("relative inline-block overflow-visible py-2", className)}>
+    <span
+      ref={containerRef}
+      className={cn("relative inline-block overflow-visible py-2", className)}
+      style={maxHeight ? { minHeight: maxHeight } : undefined}
+    >
       <AnimatePresence mode="wait">
         <motion.span
           key={currentWord}
@@ -43,6 +83,20 @@ export function WordRotate({
           {currentWord}
         </motion.span>
       </AnimatePresence>
+      <span
+        ref={measurementRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[-1] flex flex-col opacity-0"
+      >
+        {words.map((word) => (
+          <span
+            key={word}
+            className="inline-block max-w-full break-words md:whitespace-nowrap"
+          >
+            {word}
+          </span>
+        ))}
+      </span>
     </span>
   );
 }

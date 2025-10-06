@@ -196,8 +196,14 @@ export default function CallToActionSection() {
                     View engagement plans
                   </a>
                 </div>
-                <div className="pointer-events-none relative mt-16 flex h-24 w-24 items-center justify-center">
-                  <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground/60">
+                <div className="pointer-events-none relative mt-16 flex h-32 w-32 items-center justify-center">
+                  <span className="absolute size-2 rounded-full bg-[rgb(var(--brand-accent-rgb))]/80 shadow-[0_0_14px_rgba(var(--brand-accent-rgb),0.35)]" />
+                  <SpinningText
+                    duration={14}
+                    radius={38}
+                    className="size-full"
+                    textClassName="text-[10px] uppercase tracking-[0.32em] text-muted-foreground/60"
+                  >
                     autonomous agents · automation ops · devonel studio ·
                   </SpinningText>
                 </div>

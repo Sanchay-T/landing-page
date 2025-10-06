@@ -50,6 +50,8 @@
   --animate-shimmer: shimmer 8s infinite;
   --animate-marquee: marquee var(--duration) infinite linear;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-gradient-move: gradient-move 8s ease infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
 
   @keyframes accordion-down {
     from {
@@ -118,19 +120,81 @@
   }
   @keyframes marquee {
     from {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
     }
     to {
-      transform: translateX(calc(-100% - var(--gap)));
+      transform: translate3d(calc(-100% - var(--gap)), 0, 0);
     }
   }
   @keyframes marquee-vertical {
     from {
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
     }
     to {
-      transform: translateY(calc(-100% - var(--gap)));
+      transform: translate3d(0, calc(-100% - var(--gap)), 0);
     }
+  }
+  @keyframes spinning-text-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes gradient-move {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  animation: orbit-spin var(--orbit-duration, 24s) linear infinite;
+  will-change: transform;
+}
+
+.orbit-ring[data-direction="reverse"] {
+  animation-direction: reverse;
+}
+
+.orbit-item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: rotate(var(--orbit-angle))
+    translateY(calc(var(--orbit-radius) * -1))
+    rotate(calc(var(--orbit-angle) * -1));
+  transform-origin: center;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring {
+    animation: none;
   }
 }
 
@@ -229,5 +293,25 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.animate-marquee {
+  animation: var(--animate-marquee);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.animate-marquee-vertical {
+  animation: var(--animate-marquee-vertical);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-vertical {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

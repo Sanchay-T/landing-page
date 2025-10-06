@@ -49,7 +49,7 @@ export default function HeroSection() {
         />
       </h1>
 
-      <p className="mb-8 -mt-14 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
+      <p className="mb-8 mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms] sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10">
         Operator-led automation for revenue, success, and support.
       </p>
 

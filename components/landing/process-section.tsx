@@ -80,8 +80,8 @@ const capabilities = [
 export default function ProcessSection() {
   return (
     <section id="process" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
+      <div className="flex flex-col gap-4 text-center md:flex-row md:items-end md:justify-between md:text-left">
+        <div className="mx-auto max-w-2xl md:mx-0">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
             Process
           </p>
@@ -93,13 +93,13 @@ export default function ProcessSection() {
             A proven operating cadence for autonomous agents.
           </LineShadowText>
         </div>
-        <p className="max-w-xl text-sm text-muted-foreground md:text-base">
+        <p className="mx-auto max-w-2xl text-sm text-muted-foreground md:mx-0 md:max-w-xl md:text-base">
           Devonel combines product discovery, automation engineering, and operator oversight so your AI agents stay
           on-brand, compliant, and revenue-focused from pilot to scale.
         </p>
       </div>
 
-      <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
           <div
             key={step.title}
@@ -118,13 +118,13 @@ export default function ProcessSection() {
         ))}
       </div>
 
-      <div className="relative mt-14 overflow-hidden rounded-[40px] border border-white/10 bg-[radial-gradient(circle_at_top,#facc150d,transparent_75%),linear-gradient(180deg,rgba(15,15,20,0.95),rgba(5,5,9,0.98))] px-6 py-12">
-        <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,320px)] md:items-center">
-          <div>
+      <div className="relative mt-14 overflow-hidden rounded-[40px] border border-white/10 bg-[radial-gradient(circle_at_top,#facc150d,transparent_75%),linear-gradient(180deg,rgba(15,15,20,0.95),rgba(5,5,9,0.98))] px-5 py-12 sm:px-8 md:px-10">
+        <div className="grid gap-10 text-center lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)] lg:items-center lg:text-left">
+          <div className="mx-auto max-w-2xl lg:mx-0">
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
               Integrations we automate
             </span>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap justify-center gap-3 lg:justify-start">
               {toolLogos.map((tool) => (
                 <div
                   key={tool.name}
@@ -147,7 +147,7 @@ export default function ProcessSection() {
               ))}
             </div>
           </div>
-          <div className="relative mx-auto h-60 w-60">
+          <div className="relative mx-auto mt-8 h-48 w-48 sm:h-56 sm:w-56 lg:mt-0 lg:h-60 lg:w-60">
             <OrbitingCircles radius={120} iconSize={60} className="bg-primary/10 text-primary">
               {toolLogos.map((tool) => (
                 <div

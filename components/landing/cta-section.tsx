@@ -95,7 +95,7 @@ const Card = (card: { icon: JSX.Element; bg: JSX.Element }) => {
       initial={{ opacity: 0 }}
       animate={controls}
       className={cn(
-        "relative size-20 cursor-pointer overflow-hidden rounded-2xl border p-4",
+        "relative size-16 cursor-pointer overflow-hidden rounded-2xl border p-3 sm:size-20 sm:p-4 lg:size-24",
         // light styles
         "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
         // dark styles
@@ -124,84 +124,101 @@ export default function CallToActionSection() {
     }
   }, []);
 
+  const marqueeRows = [
+    {
+      key: "row-1",
+      tiles: randomTiles1,
+      wrapperClassName: "",
+      marqueeProps: {
+        reverse: true,
+        className: "-delay-[200ms] [--duration:22s]",
+      },
+    },
+    {
+      key: "row-2",
+      tiles: randomTiles2,
+      wrapperClassName: "",
+      marqueeProps: {
+        reverse: false,
+        className: "[--duration:30s]",
+      },
+    },
+    {
+      key: "row-3",
+      tiles: randomTiles3,
+      wrapperClassName: "hidden md:block",
+      marqueeProps: {
+        reverse: true,
+        className: "-delay-[200ms] [--duration:24s]",
+      },
+    },
+    {
+      key: "row-4",
+      tiles: randomTiles4,
+      wrapperClassName: "hidden lg:block",
+      marqueeProps: {
+        reverse: false,
+        className: "[--duration:36s]",
+      },
+    },
+  ];
+
   return (
-    <section id="cta">
-      <div className="py-14">
-        <div className="flex w-full flex-col items-center justify-center">
-          <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-            <Marquee
-              reverse
-              className="-delay-[200ms] [--duration:20s]"
-              repeat={5}
-            >
-              {randomTiles1.map((review, idx) => (
-                <Card key={idx} {...review} />
-              ))}
-            </Marquee>
-            <Marquee reverse className="[--duration:30s]" repeat={5}>
-              {randomTiles2.map((review, idx) => (
-                <Card key={idx} {...review} />
-              ))}
-            </Marquee>
-            <Marquee
-              reverse
-              className="-delay-[200ms] [--duration:20s]"
-              repeat={5}
-            >
-              {randomTiles3.map((review, idx) => (
-                <Card key={idx} {...review} />
-              ))}
-            </Marquee>
-            <Marquee reverse className="[--duration:30s]" repeat={5}>
-              {randomTiles4.map((review, idx) => (
-                <Card key={idx} {...review} />
-              ))}
-            </Marquee>
-            <Marquee reverse className="[--duration:30s]" repeat={5}>
-              {randomTiles4.map((review, idx) => (
-                <Card key={idx} {...review} />
-              ))}
-            </Marquee>
-            <div className="absolute z-10">
-              <div className="mx-auto size-24 rounded-[2rem] border bg-background/10 p-3 shadow-2xl backdrop-blur-md dark:bg-background/10 lg:size-32">
-                <HeartHandshake className="mx-auto size-16 text-foreground dark:text-foreground lg:size-24" />
+    <section
+      id="cta"
+      className="mx-auto mt-32 w-full max-w-7xl px-6 md:mt-40 md:px-8"
+    >
+      <div className="relative overflow-hidden rounded-[3rem] border border-white/10 bg-background/40 px-4 py-16 sm:px-6 md:px-10">
+        <div className="relative flex min-h-[28rem] w-full flex-col items-center justify-center overflow-hidden">
+          <div className="flex w-full flex-col items-center justify-center gap-3 sm:gap-4">
+            {marqueeRows.map(({ key, tiles, wrapperClassName, marqueeProps }) => (
+              <div key={key} className={cn("w-full", wrapperClassName)}>
+                <Marquee repeat={4} {...marqueeProps}>
+                  {tiles.map((review, idx) => (
+                    <Card key={`${key}-${idx}`} {...review} />
+                  ))}
+                </Marquee>
               </div>
-              <div className="z-10 mt-4 flex flex-col items-center text-center text-primary">
-                <h1 className="text-3xl font-bold text-foreground lg:text-4xl">
-                  Ready to launch your Devonel agent?
-                </h1>
-                <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                  Partner with our operators to map the playbook, integrate your
-                  stack, and activate an autonomous agent that compounds your
-                  growth.
-                </p>
-                <div className="relative mt-6 flex flex-col items-center justify-center gap-4 lg:flex-row">
-                  <ShimmerButton className="px-8 py-3 text-base font-semibold">
-                    <span className="flex items-center gap-2">
-                      Book a strategy call
-                      <ChevronRight className="size-4" />
-                    </span>
-                  </ShimmerButton>
-                  <a
-                    href="#pricing"
-                    className={cn(
-                      buttonVariants({ variant: "outline", size: "lg" }),
-                      "rounded-[2rem]"
-                    )}
-                  >
-                    View engagement plans
-                  </a>
-                </div>
-                <div className="pointer-events-none relative mt-16 flex h-24 w-24 items-center justify-center">
-                  <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">
-                    autonomous agents · automation ops · devonel studio ·
-                  </SpinningText>
-                </div>
-              </div>
-              <div className="absolute inset-0 -z-10 rounded-full  bg-background opacity-40 blur-xl dark:bg-background" />
-            </div>
-            <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-background to-70% dark:to-background" />
+            ))}
           </div>
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 px-4 text-center sm:px-8">
+            <div className="mx-auto size-20 rounded-[2rem] border bg-background/20 p-3 shadow-2xl backdrop-blur-md dark:bg-background/10 sm:size-24 lg:size-32">
+              <HeartHandshake className="mx-auto size-12 text-foreground dark:text-foreground sm:size-16 lg:size-24" />
+            </div>
+            <div className="flex flex-col items-center text-primary">
+              <h1 className="text-3xl font-bold text-foreground sm:text-4xl lg:text-[2.75rem]">
+                Ready to launch your Devonel agent?
+              </h1>
+              <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
+                Partner with our operators to map the playbook, integrate your stack, and activate an autonomous agent that compounds your growth.
+              </p>
+              <div className="relative mt-6 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
+                <ShimmerButton className="w-full justify-center px-8 py-3 text-base font-semibold sm:w-auto">
+                  <span className="flex items-center gap-2">
+                    Book a strategy call
+                    <ChevronRight className="size-4" />
+                  </span>
+                </ShimmerButton>
+                <a
+                  href="#pricing"
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "lg" }),
+                    "w-full rounded-[2rem] sm:w-auto"
+                  )}
+                >
+                  View engagement plans
+                </a>
+              </div>
+              <div className="pointer-events-none relative mt-12 flex h-20 w-20 items-center justify-center sm:mt-16 sm:h-24 sm:w-24">
+                <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">
+                  autonomous agents · automation ops · devonel studio ·
+                </SpinningText>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute inset-0 -z-10 rounded-[2.5rem] bg-background/40 blur-2xl" />
+          </div>
+          <div className="pointer-events-none absolute inset-0 -z-10 rounded-[3rem] bg-background/30 blur-3xl" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-b from-transparent via-background/70 to-background" />
         </div>
       </div>
     </section>

@@ -90,7 +90,7 @@ export default function PricingSection() {
 
   return (
     <section id="pricing" className="relative">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-20 md:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 py-20 md:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70">
             <Sparkles className="size-3" /> Engagements

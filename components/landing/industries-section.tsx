@@ -54,7 +54,7 @@ const industries = [
 
 export default function IndustriesSection() {
   return (
-    <section id="industries" className="mx-auto mt-32 max-w-6xl px-6 md:mt-36 md:px-8">
+    <section id="industries" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#facc15]/70">

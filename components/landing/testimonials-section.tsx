@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 
 import Marquee from "@/components/magicui/marquee";
+import { ShineBorder } from "@/components/magicui/shine-border";
 
 const testimonials = [
   {
@@ -29,7 +30,7 @@ export default function TestimonialsSection() {
   return (
     <section
       id="case-studies"
-      className="mx-auto mt-28 max-w-6xl px-6 md:mt-36 md:px-8"
+      className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8"
     >
       <div className="text-left md:text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
@@ -43,30 +44,39 @@ export default function TestimonialsSection() {
           agents without sacrificing brand experience.
         </p>
       </div>
-      <div className="mt-12 grid gap-4 md:grid-cols-3">
+      <div className="mt-12 grid gap-6 md:grid-cols-3">
         {testimonials.map((testimonial, index) => (
-          <motion.blockquote
+          <motion.div
             key={testimonial.name}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
-            className="flex h-full flex-col justify-between rounded-3xl border border-border/70 bg-background/75 p-6"
+            className="group relative"
           >
-            <p className="text-base text-foreground/90 md:text-lg">
-              “{testimonial.quote}”
-            </p>
-            <footer className="mt-8 text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">
-                {testimonial.name}
-              </span>
-              <br />
-              {testimonial.role}
-            </footer>
-          </motion.blockquote>
+            <ShineBorder
+              className="flex h-full flex-col justify-between rounded-3xl bg-background/75 p-6"
+              borderWidth={2}
+              duration={14}
+              shineColor={["#facc15", "#f59e0b", "#facc15"]}
+            >
+              <blockquote>
+                <p className="text-base text-foreground/90 md:text-lg">
+                  "{testimonial.quote}"
+                </p>
+                <footer className="mt-8 text-sm text-muted-foreground">
+                  <span className="font-semibold text-foreground">
+                    {testimonial.name}
+                  </span>
+                  <br />
+                  {testimonial.role}
+                </footer>
+              </blockquote>
+            </ShineBorder>
+          </motion.div>
         ))}
       </div>
-      <div className="mt-10 overflow-hidden rounded-full border border-border/60 bg-background/80">
+      <div className="mt-10 overflow-hidden rounded-full border border-white/10 bg-background/80">
         <Marquee className="[--duration:30s]" pauseOnHover>
           {testimonials.map((testimonial) => (
             <span

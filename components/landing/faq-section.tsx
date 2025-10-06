@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 const faqs = [
   {
@@ -29,7 +30,7 @@ export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="mx-auto mt-28 max-w-4xl px-6 md:mt-36 md:px-8">
+    <section id="faq" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
           FAQ
@@ -48,8 +49,18 @@ export default function FAQSection() {
           return (
             <div
               key={faq.question}
-              className="rounded-2xl border border-border/70 bg-background/75 p-5"
+              className="relative rounded-2xl border border-white/10 bg-background/75 p-5 hover:border-[#facc15]/30 transition-colors"
             >
+              {isOpen && (
+                <BorderBeam
+                  size={250}
+                  duration={12}
+                  delay={0}
+                  colorFrom="#facc15"
+                  colorTo="#f59e0b"
+                  borderWidth={2}
+                />
+              )}
               <button
                 type="button"
                 onClick={() => setOpenIndex(isOpen ? null : index)}

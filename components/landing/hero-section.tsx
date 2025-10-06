@@ -10,6 +10,7 @@ import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
+import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 export default function HeroSection() {
   const mediaRef = useRef(null);
@@ -17,6 +18,14 @@ export default function HeroSection() {
 
   return (
     <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 py-16 md:px-10 md:py-20">
+      <FlickeringGrid
+        className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]"
+        squareSize={4}
+        gridGap={6}
+        color="#facc15"
+        maxOpacity={0.3}
+        flickerChance={0.1}
+      />
       <div className="flex flex-col gap-12">
           <div className="mx-auto max-w-4xl space-y-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70 backdrop-blur">

@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import Marquee from "@/components/magicui/marquee";
 import { cn } from "@/lib/utils";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 const cards = [
   {
@@ -13,7 +14,8 @@ const cards = [
       "Qualify inbound, follow up, and book meetings autonomously with full CRM sync.",
     className: "col-span-2 row-span-2",
     media: "/hero-dark.png",
-    chip: "Option B",
+    chip: "Featured",
+    featured: true,
   },
   {
     title: "Voice Concierge",
@@ -46,7 +48,7 @@ const marqueeItems = [
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="relative mx-auto mt-32 max-w-6xl px-6 md:px-8">
+    <section id="services" className="relative mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary/70">
@@ -71,10 +73,20 @@ export default function ServicesSection() {
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
             className={cn(
-              "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-border/70 bg-background/70 p-6",
-              card.className
+              "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 hover:border-[#facc15]/30 transition-all duration-300",
+              card.className,
+              card.featured && "border-[#facc15]/20"
             )}
           >
+            {card.featured && (
+              <BorderBeam
+                size={250}
+                duration={12}
+                delay={0}
+                colorFrom="#facc15"
+                colorTo="#f59e0b"
+              />
+            )}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
             <div className="relative z-10 space-y-3">
               <div className="flex items-center gap-2">
@@ -90,7 +102,7 @@ export default function ServicesSection() {
             {card.media ? (
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="relative z-10 mt-auto overflow-hidden rounded-2xl border border-border/60"
+                className="relative z-10 mt-auto overflow-hidden rounded-2xl border border-white/10"
               >
                 <Image
                   src={card.media}
@@ -105,7 +117,7 @@ export default function ServicesSection() {
         ))}
       </div>
 
-      <div className="mt-10 overflow-hidden rounded-full border border-border/60 bg-background/80">
+      <div className="mt-10 overflow-hidden rounded-full border border-white/10 bg-background/80">
         <Marquee className="[--duration:35s]" pauseOnHover>
           {marqueeItems.map((item) => (
             <span

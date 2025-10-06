@@ -79,7 +79,7 @@ const capabilities = [
 
 export default function ProcessSection() {
   return (
-    <section id="process" className="mx-auto mt-32 max-w-6xl px-6 md:mt-36 md:px-8">
+    <section id="process" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">

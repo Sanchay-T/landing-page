@@ -30,27 +30,27 @@ export default function HeroSection() {
 
       <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/20 bg-white/10 px-3 text-xs transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
         <TextShimmer className="inline-flex items-center justify-center text-white">
-          <span className="text-white">✨ Devonel • AI Agents & Automations</span>
+          <span className="text-white">✨ Devonel • Operator-led AI services</span>
           <ArrowRightIcon className="ml-1 size-3 text-white transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
         </TextShimmer>
       </div>
 
       <h1 className="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text pt-6 pb-1 text-5xl font-medium leading-[1.2] tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
-        Deploy AI Agents
+        Operator-led AI agents
         <br />
         <WordRotate
           className="mt-3"
           textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
           words={[
-            "Close Loops",
-            "Filter Leads",
-            "Resolve Tickets",
+            "Run by Devonel operators",
+            "Embedded in your team",
+            "Shipped into your stack",
           ]}
         />
       </h1>
 
       <p className="mb-8 -mt-14 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
-        Operator-led automation for revenue, success, and support.
+        A services team that designs, deploys, and runs automation loops across revenue, success, and support.
       </p>
 
       <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
@@ -79,7 +79,7 @@ export default function HeroSection() {
       </div>
 
       <div className="flex max-w-3xl mx-auto flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/70 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:800ms]">
-        {["24/7 operator-backed", "Stacks with your tools", "4-week go-live"].map((item) => (
+        {["Embedded operator pod", "Builds on your tooling", "Four-week go-live"].map((item) => (
           <div key={item} className="flex items-center gap-2">
             <span className="inline-flex size-2 rounded-full bg-[rgb(var(--brand-accent-rgb))]" />
             <span>{item}</span>

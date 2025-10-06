@@ -19,7 +19,7 @@ export default function HeroSection() {
   return (
     <section id="hero" className="relative mx-auto mt-32 max-w-[80rem] px-6 text-center md:px-8">
       <FlickeringGrid
-        className="absolute inset-x-0 -top-20 bottom-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]"
+        className="fixed inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]"
         squareSize={4}
         gridGap={6}
         color="rgba(255,255,255,0.8)"
@@ -28,10 +28,10 @@ export default function HeroSection() {
       />
       <div className="pointer-events-none absolute inset-0 -z-[11] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_62%),radial-gradient(circle_at_bottom,rgba(255,201,132,0.1),transparent_75%)]" />
 
-      <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/20 bg-white/10 px-3 text-xs text-white transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
-        <TextShimmer className="inline-flex items-center justify-center">
-          <span>✨ Devonel • AI Agents & Automations</span>
-          <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+      <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/20 bg-white/10 px-3 text-xs transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
+        <TextShimmer className="inline-flex items-center justify-center text-white">
+          <span className="text-white">✨ Devonel • AI Agents & Automations</span>
+          <ArrowRightIcon className="ml-1 size-3 text-white transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
         </TextShimmer>
       </div>
 
@@ -49,7 +49,7 @@ export default function HeroSection() {
         />
       </h1>
 
-      <p className="mb-8 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
+      <p className="mb-8 -mt-14 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
         Operator-led automation for revenue, success, and support.
       </p>
 
@@ -87,9 +87,8 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div ref={mediaRef} className={`relative mx-auto w-full max-w-7xl before:absolute before:bottom-1/2 before:left-0 before:top-0 before:h-full before:w-full before:opacity-0 before:[filter:blur(200px)] before:[background-image:linear-gradient(to_bottom,rgba(250,204,21,1),rgba(250,204,21,1),transparent_35%)] ${
-        mediaInView ? "before:animate-image-glow" : ""
-      }`}>
+      <div ref={mediaRef} className={`relative mx-auto w-full max-w-7xl before:absolute before:bottom-1/2 before:left-0 before:top-0 before:h-full before:w-full before:opacity-0 before:[filter:blur(200px)] before:[background-image:linear-gradient(to_bottom,rgba(250,204,21,1),rgba(250,204,21,1),transparent_35%)] ${mediaInView ? "before:animate-image-glow" : ""
+        }`}>
         <div
           className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur"
         >

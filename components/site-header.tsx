@@ -107,7 +107,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/40 px-4 backdrop-blur-md animate-fade-in opacity-0 [--animation-delay:600ms]">
+      <header className="fixed left-0 top-0 z-50 w-full px-4 animate-fade-in opacity-0 [--animation-delay:600ms]">
         <div className="container mx-auto flex h-[var(--navigation-height)] w-full items-center justify-between">
           <Link className="text-md flex items-center justify-center font-semibold tracking-tight" href="/">
             Devonel

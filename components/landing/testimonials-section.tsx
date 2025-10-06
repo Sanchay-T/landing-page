@@ -62,7 +62,7 @@ export default function TestimonialsSection() {
             >
               <blockquote>
                 <p className="text-base text-foreground/90 md:text-lg">
-                  "{testimonial.quote}"
+                  &ldquo;{testimonial.quote}&rdquo;
                 </p>
                 <footer className="mt-8 text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">

@@ -176,7 +176,11 @@ export default function CallToActionSection() {
                   growth.
                 </p>
                 <div className="relative mt-6 flex flex-col items-center justify-center gap-4 lg:flex-row">
-                  <ShimmerButton className="px-8 py-3 text-base font-semibold">
+                  <ShimmerButton
+                    className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
+                    shimmerColor="rgb(var(--brand-accent-rgb))"
+                    shimmerDuration="2.4s"
+                  >
                     <span className="flex items-center gap-2">
                       Book a strategy call
                       <ChevronRight className="size-4" />
@@ -193,7 +197,7 @@ export default function CallToActionSection() {
                   </a>
                 </div>
                 <div className="pointer-events-none relative mt-16 flex h-24 w-24 items-center justify-center">
-                  <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">
+                  <SpinningText duration={14} radius={6} className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground/60">
                     autonomous agents · automation ops · devonel studio ·
                   </SpinningText>
                 </div>

@@ -104,7 +104,7 @@ export default function PricingSection() {
           </p>
         </div>
 
-        <div className="mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70">
+        <div className="mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.24em] text-white/70">
           <span>Monthly</span>
           <Switch
             id="interval"
@@ -113,7 +113,7 @@ export default function PricingSection() {
             }}
           />
           <span>Annual</span>
-          <span className="rounded-full bg-[#facc15]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#facc15]">
+          <span className="rounded-full bg-[rgb(var(--brand-accent-rgb)/0.1)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb))]">
             Save 2 months
           </span>
         </div>
@@ -130,12 +130,12 @@ export default function PricingSection() {
                 viewport={{ once: true, margin: "-120px" }}
                 transition={{ duration: 0.45, delay: idx * 0.05, ease: "easeOut" }}
                 className={cn(
-                  "relative flex h-full flex-col gap-6 rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,rgba(18,18,24,0.95),rgba(7,7,10,0.98))] p-8 text-left shadow-[0_55px_140px_-100px_rgba(250,204,21,0.55)]",
-                  plan.highlight && "border-[#facc15]/30 bg-[linear-gradient(180deg,rgba(55,46,12,0.9),rgba(12,10,4,0.98))]"
+                  "relative flex h-full flex-col gap-6 rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(18,18,24,0.95),rgba(7,7,10,0.98))] p-8 text-left shadow-[0_55px_140px_-100px_rgb(var(--brand-accent-rgb)/0.55)]",
+                  plan.highlight && "border-[rgb(var(--brand-accent-rgb)/0.3)] bg-[linear-gradient(180deg,rgba(55,46,12,0.9),rgba(12,10,4,0.98))]"
                 )}
               >
                 {plan.highlight ? (
-                  <span className="absolute right-6 top-6 rounded-full bg-[#facc15]/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#facc15]">
+                  <span className="absolute right-6 top-6 rounded-full bg-[rgb(var(--brand-accent-rgb)/0.2)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb))]">
                     Most popular
                   </span>
                 ) : null}
@@ -152,7 +152,7 @@ export default function PricingSection() {
                         <span className="text-4xl font-semibold">
                           ${toHumanPrice(amount, 0)}
                         </span>
-                        <span className="text-xs uppercase tracking-[0.2em] text-white/60">
+                        <span className="text-xs uppercase tracking-[0.24em] text-white/60">
                           / {interval}
                         </span>
                       </>
@@ -162,7 +162,7 @@ export default function PricingSection() {
                 <ul className="flex flex-col gap-3 text-sm text-white/70">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2">
-                      <CheckIcon className="mt-1 size-4 text-[#facc15]" />
+                      <CheckIcon className="mt-1 size-4 text-[rgb(var(--brand-accent-rgb))]" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -170,7 +170,7 @@ export default function PricingSection() {
                 <div className="mt-auto">
                   {plan.highlight ? (
                     <ShimmerButton
-                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,#facc15,#f59e0b)] py-3 text-sm font-semibold text-black"
+                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,rgb(var(--brand-accent-rgb)),rgb(var(--brand-accent-strong-rgb)))] py-3 text-sm font-semibold text-black"
                       shimmerColor="#ffffff"
                       shimmerDuration="2s"
                       onClick={() => onSubscribeClick(plan.id)}
@@ -192,7 +192,7 @@ export default function PricingSection() {
           })}
         </div>
 
-        <div className="mx-auto max-w-3xl rounded-[32px] border border-white/10 bg-black/40 px-8 py-6 text-center text-xs uppercase tracking-[0.24em] text-white/60">
+        <div className="mx-auto max-w-3xl rounded-[2rem] border border-white/10 bg-black/40 px-8 py-6 text-center text-xs uppercase tracking-[0.24em] text-white/60">
           All plans include: discovery workshops · operator dashboards · compliance guardrails · success reporting ·
           dedicated Slack channel
         </div>

@@ -12,7 +12,7 @@ interface TextHighlighterProps extends ComponentPropsWithoutRef<"span"> {
 export function TextHighlighter({
   children,
   className,
-  accentColor = "#facc15",
+  accentColor = "rgb(var(--brand-accent-rgb))",
   offset = "0.4em",
   ...props
 }: TextHighlighterProps) {

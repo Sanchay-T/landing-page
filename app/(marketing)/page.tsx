@@ -20,14 +20,14 @@ export default async function Page() {
       <ServicesSection />
       <ProcessSection />
       <IndustriesSection />
-      <SphereMask />
+      <SphereMask className="hidden md:block" />
       <PricingSection />
       <TestimonialsSection />
       <FAQSection />
       <CallToActionSection />
       <Particles
-        className="absolute inset-0 -z-10"
-        quantity={50}
+        className="absolute inset-0 -z-20"
+        quantity={35}
         ease={70}
         size={0.05}
         staticity={40}

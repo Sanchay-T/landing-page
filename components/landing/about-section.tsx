@@ -28,7 +28,7 @@ export default function AboutSection() {
     >
       <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,380px)] md:items-center">
         <div className="space-y-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
             Why Devonel
           </p>
           <HyperText
@@ -65,9 +65,9 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-background/50 via-background to-background/70 p-6 shadow-[0_20px_70px_-35px_rgba(250,204,21,0.15)]"
+          className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-background/50 via-background to-background/70 p-6 shadow-[0_20px_70px_-35px_rgb(var(--brand-accent-rgb)/0.15)]"
         >
-          <div className="pointer-events-none absolute -right-20 -top-20 size-40 rounded-full bg-[#facc15]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -right-20 -top-20 size-40 rounded-full bg-[rgb(var(--brand-accent-rgb)/0.1)] blur-3xl" />
           <div className="relative space-y-6">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-muted-foreground">
@@ -81,7 +81,7 @@ export default function AboutSection() {
             <div className="grid grid-cols-2 gap-6">
               {stats.map((stat) => (
                 <div key={stat.label} className="group space-y-1">
-                  <div className="flex items-baseline gap-1 text-3xl font-semibold text-foreground transition-colors group-hover:text-[#facc15]">
+                  <div className="flex items-baseline gap-1 text-3xl font-semibold text-foreground transition-colors group-hover:text-[rgb(var(--brand-accent-rgb))]">
                     <NumberTicker value={parseInt(stat.value)} startValue={0} />
                     {stat.value.includes("+") ? <span>+</span> : null}
                     {stat.value.includes("%") ? <span>%</span> : null}

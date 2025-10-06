@@ -32,7 +32,7 @@ export default function FAQSection() {
   return (
     <section id="faq" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
+        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
           FAQ
         </p>
         <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
@@ -49,15 +49,15 @@ export default function FAQSection() {
           return (
             <div
               key={faq.question}
-              className="relative rounded-2xl border border-white/10 bg-background/75 p-5 hover:border-[#facc15]/30 transition-colors"
+              className="relative rounded-2xl border border-white/10 bg-background/75 p-5 hover:border-[rgb(var(--brand-accent-rgb)/0.3)] transition-colors"
             >
               {isOpen && (
                 <BorderBeam
                   size={250}
                   duration={12}
                   delay={0}
-                  colorFrom="#facc15"
-                  colorTo="#f59e0b"
+                  colorFrom="rgb(var(--brand-accent-rgb))"
+                  colorTo="rgb(var(--brand-accent-strong-rgb))"
                   borderWidth={2}
                 />
               )}

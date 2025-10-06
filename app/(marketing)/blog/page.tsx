@@ -74,7 +74,7 @@ export default function BlogIndexPage() {
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-primary/70">
+                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.24em] text-primary/70">
                   <span>{formatDate(post.date)}</span>
                   {post.readTime ? <span className="text-muted-foreground/80">• {post.readTime}</span> : null}
                 </div>

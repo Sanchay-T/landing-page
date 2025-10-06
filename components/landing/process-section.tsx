@@ -14,6 +14,7 @@ import {
 
 import { OrbitingCircles } from "@/components/magicui/orbiting-circles";
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
+import { cn } from "@/lib/utils";
 
 const steps = [
   {
@@ -77,17 +78,20 @@ const capabilities = [
   { label: "Calendar sync", icon: <CalendarCheck className="size-4" /> },
 ];
 
+const cardBase =
+  "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.3)]";
+
 export default function ProcessSection() {
   return (
     <section id="process" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
             Process
           </p>
           <LineShadowText
             as="h2"
-            shadowColor="rgba(250,204,21,0.35)"
+            shadowColor="rgb(var(--brand-accent-rgb)/0.35)"
             className="mt-2 text-3xl font-semibold text-foreground md:text-4xl"
           >
             A proven operating cadence for autonomous agents.
@@ -101,24 +105,23 @@ export default function ProcessSection() {
 
       <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
-          <div
-            key={step.title}
-            className="group relative flex h-full flex-col gap-4 rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(20,20,24,0.95),rgba(7,7,11,0.98))] p-6 shadow-[0_40px_100px_-70px_rgba(250,204,21,0.45)]"
-          >
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-primary/70">
+          <div key={step.title} className={cn(cardBase)}>
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[rgb(var(--brand-accent-rgb)/0.06)] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
               <span>Step {index + 1}</span>
-              <span className="rounded-full border border-primary/40 bg-primary/10 p-2 text-primary">
+              <span className="rounded-full border border-[rgb(var(--brand-accent-rgb)/0.4)] bg-[rgb(var(--brand-accent-rgb)/0.1)] p-2 text-[rgb(var(--brand-accent-rgb))]">
                 {step.icon}
               </span>
             </div>
             <h3 className="text-xl font-semibold text-white">{step.title}</h3>
             <p className="text-sm text-white/70">{step.description}</p>
-            <span className="pointer-events-none absolute inset-x-5 bottom-5 h-px bg-gradient-to-r from-transparent via-[#facc1538] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <span className="pointer-events-none absolute inset-x-5 bottom-5 h-px bg-gradient-to-r from-transparent via-[rgb(var(--brand-accent-rgb)/0.18)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
         ))}
       </div>
 
-      <div className="relative mt-14 overflow-hidden rounded-[40px] border border-white/10 bg-[radial-gradient(circle_at_top,#facc150d,transparent_75%),linear-gradient(180deg,rgba(15,15,20,0.95),rgba(5,5,9,0.98))] px-6 py-12">
+      <div className="relative mt-14 overflow-hidden rounded-3xl border border-white/10 bg-background/70 px-6 py-12">
+        <div className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(circle_at_top,rgb(var(--brand-accent-rgb)/0.05),transparent_70%)]" />
         <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,320px)] md:items-center">
           <div>
             <span className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
@@ -142,7 +145,7 @@ export default function ProcessSection() {
                   className="flex items-center gap-2 rounded-full border border-white/10 bg-black/50 px-3 py-2"
                 >
                   {capability.icon}
-                  <span className="uppercase tracking-[0.15em]">{capability.label}</span>
+                  <span className="uppercase tracking-[0.18em]">{capability.label}</span>
                 </div>
               ))}
             </div>

@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
       className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8"
     >
       <div className="text-left md:text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
+        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
           Results
         </p>
         <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
@@ -58,7 +58,11 @@ export default function TestimonialsSection() {
               className="flex h-full flex-col justify-between rounded-3xl bg-background/75 p-6"
               borderWidth={2}
               duration={14}
-              shineColor={["#facc15", "#f59e0b", "#facc15"]}
+              shineColor={[
+                "rgb(var(--brand-accent-rgb))",
+                "rgb(var(--brand-accent-strong-rgb))",
+                "rgb(var(--brand-accent-rgb))",
+              ]}
             >
               <blockquote>
                 <p className="text-base text-foreground/90 md:text-lg">
@@ -81,7 +85,7 @@ export default function TestimonialsSection() {
           {testimonials.map((testimonial) => (
             <span
               key={`${testimonial.name}-marquee`}
-              className="flex items-center gap-3 px-5 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground"
+              className="flex items-center gap-3 px-5 text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground"
             >
               <span className="size-1 rounded-full bg-primary" />
               {testimonial.role}

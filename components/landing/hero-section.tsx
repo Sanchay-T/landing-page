@@ -3,7 +3,7 @@
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-import { ArrowRightIcon, CheckIcon } from "@radix-ui/react-icons";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
@@ -14,104 +14,102 @@ import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 
 export default function HeroSection() {
   const mediaRef = useRef(null);
-  const mediaInView = useInView(mediaRef, { once: true, margin: "-120px" });
+  const mediaInView = useInView(mediaRef, { once: true, margin: "-100px" });
 
   return (
-    <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 py-16 md:px-10 md:py-20">
+    <section id="hero" className="relative mx-auto mt-32 max-w-[80rem] px-6 text-center md:px-8">
       <FlickeringGrid
-        className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]"
+        className="absolute inset-x-0 -top-20 bottom-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]"
         squareSize={4}
         gridGap={6}
-        color="#facc15"
-        maxOpacity={0.3}
-        flickerChance={0.1}
+        color="rgba(255,255,255,0.8)"
+        maxOpacity={0.14}
+        flickerChance={0.07}
       />
-      <div className="flex flex-col gap-12">
-          <div className="mx-auto max-w-4xl space-y-6 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70 backdrop-blur">
-              <TextShimmer>
-                <span>Devonel • AI Agents & Automations</span>
-              </TextShimmer>
-            </div>
-            <h1 className="space-y-2 text-4xl font-semibold leading-[1.15] tracking-tight text-white sm:text-6xl md:text-[4.5rem]">
-              <div>Deploy</div>
-              <div className="relative inline-block min-h-[1.2em] overflow-visible">
-                <WordRotate
-                  className="text-white text-4xl sm:text-6xl md:text-[4.5rem] font-semibold"
-                  words={[
-                    "AI support concierges",
-                    "autonomous revenue agents",
-                    "AI operations copilots",
-                  ]}
-                />
-              </div>
-            </h1>
-            <p className="mx-auto max-w-2xl text-base text-white/70 md:text-lg">
-              Devonel designs, deploys, and fine-tunes AI agents that qualify leads, close loops,
-              and automate operations across your stack within weeks — without derailing your team.
-            </p>
-            <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
-              <ShimmerButton
-                className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
-                shimmerColor="#facc15"
-                shimmerDuration="2.4s"
-              >
-                <span className="flex items-center gap-2">
-                  Book a strategy call
-                  <ArrowRightIcon className="size-4" />
-                </span>
-              </ShimmerButton>
-              <Button
-                size="lg"
-                variant="outline"
-                className="gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10"
-                asChild
-              >
-                <a href="#case-studies">
-                  See agent playbooks
-                  <ArrowRightIcon className="size-4" />
-                </a>
-              </Button>
-            </div>
-            <div className="mx-auto mt-12 grid max-w-3xl gap-4 text-sm text-white/70 md:grid-cols-3">
-              {[
-                "24/7 AI agents orchestrated by Devonel operators",
-                "Integrates with your tools: HubSpot, Slack, Notion, Zapier",
-                "Launch a production-ready agent in under 4 weeks",
-              ].map((item) => (
-                <div key={item} className="flex items-start gap-2">
-                  <CheckIcon className="mt-1 size-4 text-[#facc15]" />
-                  <span className="max-w-sm">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="pointer-events-none absolute inset-0 -z-[11] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_62%),radial-gradient(circle_at_bottom,rgba(255,201,132,0.1),transparent_75%)]" />
 
-          <div ref={mediaRef} className="relative mx-auto w-full max-w-7xl">
-            <div
-              className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur ${
-                mediaInView ? "before:animate-image-glow" : ""
-              }`}
-            >
-              <BorderBeam
-                size={260}
-                duration={14}
-                delay={9}
-                colorFrom="rgba(250,204,21,0.35)"
-                colorTo="rgba(250,204,21,0.05)"
-              />
-              <img
-                src="/hero-dark.png"
-                alt="Workflow automations preview"
-                className="hidden h-full w-full rounded-[inherit] border border-white/10 object-cover dark:block"
-              />
-              <img
-                src="/hero-light.png"
-                alt="Workflow automations preview"
-                className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
-              />
-            </div>
+      <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/20 bg-white/10 px-3 text-xs text-white transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
+        <TextShimmer className="inline-flex items-center justify-center">
+          <span>✨ Devonel • AI Agents & Automations</span>
+          <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+        </TextShimmer>
+      </div>
+
+      <h1 className="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
+        Deploy AI Agents
+        <br />
+        <WordRotate
+          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium leading-none tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
+          words={[
+            "Close Loops",
+            "Qualify Leads",
+            "Resolve Tickets",
+          ]}
+        />
+      </h1>
+
+      <p className="mb-12 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
+        Operator-led automation for revenue, success, and support.
+      </p>
+
+      <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
+        <ShimmerButton
+          borderRadius="999px"
+          className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)] hover:shadow-[0_25px_80px_-40px_rgba(0,0,0,0.9)]"
+          shimmerColor="rgb(var(--brand-accent-rgb))"
+          shimmerDuration="2.4s"
+        >
+          <span className="flex items-center gap-2">
+            Book a strategy call
+            <ArrowRightIcon className="size-4" />
+          </span>
+        </ShimmerButton>
+        <Button
+          size="lg"
+          variant="outline"
+          className="gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10"
+          asChild
+        >
+          <a href="#case-studies">
+            See agent playbooks
+            <ArrowRightIcon className="size-4" />
+          </a>
+        </Button>
+      </div>
+
+      <div className="flex max-w-3xl mx-auto flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/70 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:800ms]">
+        {["24/7 operator-backed", "Stacks with your tools", "4-week go-live"].map((item) => (
+          <div key={item} className="flex items-center gap-2">
+            <span className="inline-flex size-2 rounded-full bg-[rgb(var(--brand-accent-rgb))]" />
+            <span>{item}</span>
           </div>
+        ))}
+      </div>
+
+      <div ref={mediaRef} className={`relative mx-auto w-full max-w-7xl before:absolute before:bottom-1/2 before:left-0 before:top-0 before:h-full before:w-full before:opacity-0 before:[filter:blur(200px)] before:[background-image:linear-gradient(to_bottom,rgba(250,204,21,1),rgba(250,204,21,1),transparent_35%)] ${
+        mediaInView ? "before:animate-image-glow" : ""
+      }`}>
+        <div
+          className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur"
+        >
+          <BorderBeam
+            size={260}
+            duration={14}
+            delay={9}
+            colorFrom="rgba(250,204,21,0.35)"
+            colorTo="rgba(250,204,21,0.05)"
+          />
+          <img
+            src="/hero-dark.png"
+            alt="Workflow automations preview"
+            className="hidden h-full w-full rounded-[inherit] border border-white/10 object-cover dark:block"
+          />
+          <img
+            src="/hero-light.png"
+            alt="Workflow automations preview"
+            className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
+          />
+        </div>
       </div>
     </section>
   );

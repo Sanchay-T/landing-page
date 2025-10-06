@@ -107,7 +107,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="fixed left-0 top-0 z-50 w-full px-4 animate-fade-in border-b opacity-0 backdrop-blur-[12px] [--animation-delay:600ms]">
+      <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/40 px-4 backdrop-blur-md animate-fade-in opacity-0 [--animation-delay:600ms]">
         <div className="container mx-auto flex h-[var(--navigation-height)] w-full items-center justify-between">
           <Link className="text-md flex items-center justify-center font-semibold tracking-tight" href="/">
             Devonel
@@ -119,10 +119,10 @@ export function SiteHeader() {
             </Link>
             <Link
               className={cn(
-                buttonVariants({ variant: "secondary" }),
-                "mr-6 text-sm"
+                buttonVariants({ variant: "ghost" }),
+                "mr-6 rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
               )}
-              href="#contact"
+              href="#cta"
             >
               Book a strategy call
             </Link>

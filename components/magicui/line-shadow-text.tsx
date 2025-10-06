@@ -13,7 +13,7 @@ interface LineShadowTextProps
 
 export function LineShadowText({
   children,
-  shadowColor = "rgba(250,204,21,0.35)",
+  shadowColor = "rgb(var(--brand-accent-rgb)/0.35)",
   className,
   as: Component = "span",
   ...props

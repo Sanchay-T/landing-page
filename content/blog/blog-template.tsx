@@ -84,7 +84,7 @@ const BlogTemplateArticle = () => {
               {techStack.map((technology) => (
                 <span
                   key={technology}
-                  className="rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary"
+                  className="rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary"
                 >
                   {technology}
                 </span>

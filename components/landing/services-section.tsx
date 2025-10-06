@@ -51,7 +51,7 @@ export default function ServicesSection() {
     <section id="services" className="relative mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary/70">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
             Services · Option B Bento Grid
           </p>
           <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
@@ -73,9 +73,9 @@ export default function ServicesSection() {
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
             className={cn(
-              "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 hover:border-[#facc15]/30 transition-all duration-300",
+              "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 hover:border-[rgb(var(--brand-accent-rgb)/0.3)] transition-all duration-300",
               card.className,
-              card.featured && "border-[#facc15]/20"
+              card.featured && "border-[rgb(var(--brand-accent-rgb)/0.2)]"
             )}
           >
             {card.featured && (
@@ -83,16 +83,16 @@ export default function ServicesSection() {
                 size={250}
                 duration={12}
                 delay={0}
-                colorFrom="#facc15"
-                colorTo="#f59e0b"
+                colorFrom="rgb(var(--brand-accent-rgb))"
+                colorTo="rgb(var(--brand-accent-strong-rgb))"
               />
             )}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[rgb(var(--brand-accent-rgb)/0.06)] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
             <div className="relative z-10 space-y-3">
               <div className="flex items-center gap-2">
                 <h3 className="text-xl font-semibold text-foreground">{card.title}</h3>
                 {card.chip ? (
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
                     {card.chip}
                   </span>
                 ) : null}
@@ -122,7 +122,7 @@ export default function ServicesSection() {
           {marqueeItems.map((item) => (
             <span
               key={item}
-              className="flex items-center gap-3 px-6 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground"
+              className="flex items-center gap-3 px-6 text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground"
             >
               <span className="size-1 rounded-full bg-primary" />
               {item}

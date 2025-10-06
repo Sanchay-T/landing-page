@@ -9,6 +9,8 @@ import {
   Briefcase,
 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 const industries = [
   {
     name: "E-commerce",
@@ -52,12 +54,15 @@ const industries = [
   },
 ];
 
+const cardBase =
+  "group relative flex flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.3)]";
+
 export default function IndustriesSection() {
   return (
     <section id="industries" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#facc15]/70">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
             Industries
           </p>
           <h2 className="mt-2 text-3xl font-semibold leading-tight text-white md:text-4xl">
@@ -77,19 +82,19 @@ export default function IndustriesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
-            className="group relative flex flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(16,16,22,0.95),rgba(6,6,10,0.98))] p-6"
+            className={cn(cardBase)}
           >
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#facc15]/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[rgb(var(--brand-accent-rgb)/0.06)] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
             <div className="relative z-10 flex items-start justify-between gap-4">
               <div className="flex-1">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#facc15]/70">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
                   {industry.name}
                 </p>
                 <h3 className="mt-2 text-xl font-semibold leading-tight text-white">
                   {industry.headline}
                 </h3>
               </div>
-              <div className="rounded-full border border-[#facc15]/40 bg-[#facc15]/10 p-2.5 text-[#facc15]">
+              <div className="rounded-full border border-[rgb(var(--brand-accent-rgb)/0.4)] bg-[rgb(var(--brand-accent-rgb)/0.1)] p-2.5 text-[rgb(var(--brand-accent-rgb))]">
                 {industry.icon}
               </div>
             </div>
@@ -100,7 +105,7 @@ export default function IndustriesSection() {
               {industry.highlights.map((highlight) => (
                 <span
                   key={highlight}
-                  className="rounded-full border border-white/10 bg-black/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/75"
+                  className="rounded-full border border-white/10 bg-black/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/75"
                 >
                   {highlight}
                 </span>

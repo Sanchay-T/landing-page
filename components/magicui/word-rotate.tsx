@@ -18,7 +18,6 @@ export function WordRotate({
 }: WordRotateProps) {
   const [index, setIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number>();
-  const containerRef = useRef<HTMLSpanElement>(null);
   const measurementRef = useRef<HTMLSpanElement>(null);
 
   const joinedWords = useMemo(() => words.join("|"), [words]);
@@ -48,17 +47,21 @@ export function WordRotate({
       setMaxHeight(tallest || undefined);
     };
 
-    measureHeights();
+    const measurementEl = measurementRef.current;
 
-    if (!containerRef.current) return;
+    measureHeights();
+    const frame = requestAnimationFrame(measureHeights);
+
+    if (!measurementEl) return;
 
     const resizeObserver = new ResizeObserver(() => {
       measureHeights();
     });
 
-    resizeObserver.observe(containerRef.current);
+    resizeObserver.observe(measurementEl);
 
     return () => {
+      cancelAnimationFrame(frame);
       resizeObserver.disconnect();
     };
   }, [joinedWords, className]);
@@ -67,7 +70,6 @@ export function WordRotate({
 
   return (
     <span
-      ref={containerRef}
       className={cn("relative inline-block overflow-visible py-2", className)}
       style={maxHeight ? { minHeight: maxHeight } : undefined}
     >
@@ -78,7 +80,7 @@ export function WordRotate({
           animate={{ y: "0%", opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
-          className="inline-block max-w-full break-words md:whitespace-nowrap"
+          className="block w-full max-w-full break-words md:whitespace-nowrap"
         >
           {currentWord}
         </motion.span>
@@ -91,7 +93,7 @@ export function WordRotate({
         {words.map((word) => (
           <span
             key={word}
-            className="inline-block max-w-full break-words md:whitespace-nowrap"
+            className="block w-full max-w-full break-words md:whitespace-nowrap"
           >
             {word}
           </span>

@@ -1,7 +1,10 @@
 "use client";
 
-import { ComponentPropsWithoutRef } from "react";
-import { motion, Transition, Variants } from "motion/react";
+import {
+  ComponentPropsWithoutRef,
+  CSSProperties,
+  useId,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -9,82 +12,78 @@ interface SpinningTextProps extends ComponentPropsWithoutRef<"div"> {
   children: string | string[];
   duration?: number;
   reverse?: boolean;
+  /**
+   * Radius of the circle path inside the SVG viewBox (0-45).
+   */
   radius?: number;
-  transition?: Transition;
-  variants?: {
-    container?: Variants;
-    item?: Variants;
-  };
+  textClassName?: string;
 }
-
-const BASE_TRANSITION: Transition = {
-  repeat: Infinity,
-  ease: "linear",
-};
-
-const BASE_ITEM_VARIANTS: Variants = {
-  hidden: { opacity: 1 },
-  visible: { opacity: 1 },
-};
 
 export function SpinningText({
   children,
-  duration = 10,
+  duration = 12,
   reverse = false,
-  radius = 5,
-  transition,
-  variants,
+  radius = 42,
   className,
+  textClassName,
   style,
+  ...props
 }: SpinningTextProps) {
   if (typeof children !== "string" && !Array.isArray(children)) {
-    throw new Error("SpinningText: children must be a string or array of strings");
+    throw new Error(
+      "SpinningText: children must be a string or array of strings"
+    );
   }
 
-  const content = Array.isArray(children) ? children.join("") : children;
-  const letters = content.split("");
-  letters.push(" ");
+  const id = useId();
+  const content = Array.isArray(children)
+    ? children.join(" ").trim()
+    : children.trim();
+  const textContent = content.endsWith(" ") ? content : `${content} `;
 
-  const finalTransition: Transition = {
-    ...BASE_TRANSITION,
-    ...transition,
-    duration: transition?.duration ?? duration,
+  const clampedRadius = Math.min(Math.max(radius, 6), 45);
+  const pathDefinition = `M 50 50 m -${clampedRadius},0 a ${clampedRadius},${clampedRadius} 0 1,1 ${
+    clampedRadius * 2
+  },0 a ${clampedRadius},${clampedRadius} 0 1,1 -${clampedRadius * 2},0`;
+
+  const animationStyles: CSSProperties = {
+    animation: `spinning-text-rotate ${duration}s linear infinite`,
+    animationDirection: reverse ? "reverse" : "normal",
+    willChange: "transform",
   };
 
-  const containerVariants: Variants = {
-    visible: { rotate: reverse ? -360 : 360 },
-    ...variants?.container,
-  };
+  const combinedStyle = style
+    ? ({ ...style, ...animationStyles } as CSSProperties)
+    : animationStyles;
 
-  const itemVariants: Variants = {
-    ...BASE_ITEM_VARIANTS,
-    ...variants?.item,
-  };
+  const svgTextClasses = cn(
+    "fill-current",
+    textClassName ?? undefined
+  );
 
   return (
-    <motion.div
-      className={cn("relative", className)}
-      style={style}
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      transition={finalTransition}
+    <div
+      className={cn(
+        "relative inline-flex items-center justify-center",
+        className
+      )}
+      style={combinedStyle}
+      {...props}
     >
-      {letters.map((letter, index) => (
-        <motion.span
-          aria-hidden="true"
-          key={`${index}-${letter}`}
-          variants={itemVariants}
-          className="absolute top-1/2 left-1/2 inline-block"
-          style={{
-            transform: `translate(-50%, -50%) rotate(${(360 / letters.length) * index}deg) translateY(${radius * -1}ch)`,
-            transformOrigin: "center",
-          }}
+      <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
+        <defs>
+          <path id={id} d={pathDefinition} />
+        </defs>
+        <text
+          className={svgTextClasses}
+          style={{ fontSize: "1em", letterSpacing: "0.3em" }}
         >
-          {letter}
-        </motion.span>
-      ))}
+          <textPath xlinkHref={`#${id}`} startOffset="0%">
+            {textContent}
+          </textPath>
+        </text>
+      </svg>
       <span className="sr-only">{content}</span>
-    </motion.div>
+    </div>
   );
 }

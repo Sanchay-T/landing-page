@@ -47,7 +47,6 @@ const marqueeItems = [
 export default function ServicesSection() {
   return (
     <section id="services" className="relative mx-auto mt-32 max-w-6xl px-6 md:px-8">
-      <div className="pointer-events-none absolute inset-0 -z-10 rounded-[48px] bg-[radial-gradient(circle_at_top,#f59f0b0d,transparent_65%),linear-gradient(180deg,#060608,#040406)]" />
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary/70">

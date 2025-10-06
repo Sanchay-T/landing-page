@@ -90,7 +90,6 @@ export default function PricingSection() {
 
   return (
     <section id="pricing" className="relative">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,#facc1512,transparent_70%),linear-gradient(180deg,#070708,#040406)]" />
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-20 md:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70">

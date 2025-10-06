@@ -17,7 +17,6 @@ export default function HeroSection() {
 
   return (
     <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 py-16 md:px-10 md:py-20">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,#facc1518_0%,transparent_60%),linear-gradient(180deg,#030304_0%,#08080c_45%,#010103_100%)]" />
       <div className="flex flex-col gap-12">
           <div className="mx-auto max-w-4xl space-y-6 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70 backdrop-blur">

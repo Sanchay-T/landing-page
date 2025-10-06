@@ -10,6 +10,8 @@ export default async function MarketingLayout({
 }: MarketingLayoutProps) {
   return (
     <>
+      {/* Universal gradient background - fixed to viewport for seamless effect */}
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,#facc1518_0%,transparent_60%),linear-gradient(180deg,#030304_0%,#08080c_45%,#010103_100%)]" />
       {/* <SiteBanner /> */}
       <SiteHeader />
       <main className="mx-auto flex-1 overflow-hidden">{children}</main>

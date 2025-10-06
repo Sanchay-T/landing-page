@@ -38,6 +38,11 @@ const menuItem = [
     label: "Blog",
     href: "/blog",
   },
+  {
+    id: 7,
+    label: "Case Studies",
+    href: "/case-studies",
+  },
 ];
 
 export function SiteHeader() {
@@ -116,6 +121,9 @@ export function SiteHeader() {
           <div className="ml-auto flex h-full items-center">
             <Link className="mr-6 text-sm" href="/blog">
               Blog
+            </Link>
+            <Link className="mr-6 text-sm" href="/case-studies">
+              Case Studies
             </Link>
             <Link
               className={cn(

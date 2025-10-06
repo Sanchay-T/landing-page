@@ -43,7 +43,7 @@ export default function HeroSection() {
           textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
           words={[
             "Close Loops",
-            "Qualify Leads",
+            "Filter Leads",
             "Resolve Tickets",
           ]}
         />

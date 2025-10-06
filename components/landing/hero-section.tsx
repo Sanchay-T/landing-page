@@ -35,11 +35,12 @@ export default function HeroSection() {
         </TextShimmer>
       </div>
 
-      <h1 className="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
+      <h1 className="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text pt-6 pb-1 text-5xl font-medium leading-[1.2] tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
         Deploy AI Agents
         <br />
         <WordRotate
-          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium leading-none tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
+          className="mt-3"
+          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
           words={[
             "Close Loops",
             "Qualify Leads",
@@ -48,7 +49,7 @@ export default function HeroSection() {
         />
       </h1>
 
-      <p className="mb-12 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
+      <p className="mb-8 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]">
         Operator-led automation for revenue, success, and support.
       </p>
 

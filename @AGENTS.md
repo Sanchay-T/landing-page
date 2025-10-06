@@ -55,7 +55,14 @@ This playbook explains how to work with Magic UI assets in this repository witho
   ```
 - Commit only the generated sources plus any required dependency updates.
 
-## 5. Housekeeping
+## 5. Repository Reference Docs
+- Component doc snapshots live in `batch_scrape_markdown/`. `magicui.design_docs_components.md` indexes the full public catalog; every individual component has a dedicated `magicui.design_docs_components_<slug>.md` file scraped on 2025-10-06.
+- `component_summaries.md` condenses those files into quick descriptions for fast lookup.
+- Conversion strategy lives in `devonel-conversion-plan.md` (Proof → Playbooks → Commit chapter map, animation budget, ASCII layouts).
+- Bento grid execution details live in `devonel-bento-grid-sop.md` (step-by-step instructions, QA checklist, conversation timeline).
+- Treat these docs as the canonical context before fetching new assets or updating UI modules.
+
+## 6. Housekeeping
 - Keep downloads transient (`/tmp`). Delete them when done.
 - Document any new procedures in this file rather than repeating discovery work.
 - If the Pro registry changes (new categories, renamed slugs), refresh the manifest and update the slug list here.

@@ -1,11 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
-
-import Image from "next/image";
-import { motion } from "framer-motion";
 import {
-  BadgeCheck,
   Clock3,
   Headset,
   LineChart,
@@ -19,8 +14,7 @@ import {
 
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import { AnimatedList } from "@/components/magicui/animated-list";
-import { BorderBeam } from "@/components/magicui/border-beam";
-import { MagicCard } from "@/components/magicui/magic-card";
+import { OrbitingCircles } from "@/components/magicui/orbiting-circles";
 import Marquee from "@/components/magicui/marquee";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { WordRotate } from "@/components/magicui/word-rotate";
@@ -106,7 +100,6 @@ export default function ProofChapter() {
 
       <div className="mt-14 space-y-16">
         <PainPromiseMetrics />
-        <EmailOpsSnapshot />
         <OperatorAdvantage />
         <CredibilityStrip />
       </div>
@@ -160,72 +153,6 @@ function PainPromiseMetrics() {
         ))}
       </div>
     </div>
-  );
-}
-
-function EmailOpsSnapshot() {
-  return (
-    <MagicCard className="relative grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,360px)] md:items-center">
-      <BorderBeam
-        size={300}
-        duration={14}
-        borderWidth={2}
-        colorFrom="rgba(var(--brand-accent-rgb), 0.95)"
-        colorTo="rgba(255,255,255,0.35)"
-      />
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/70">
-        <Image
-          src="/hero-dark.png"
-          alt="Devonel operator inbox"
-          width={960}
-          height={540}
-          className="h-full w-full object-cover opacity-95"
-        />
-        <div className="absolute inset-x-6 bottom-6 rounded-xl border border-white/10 bg-black/70 px-4 py-3 text-sm text-white/70">
-          <p className="flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb))]">
-            <BadgeCheck className="size-4" /> Operator Walkthrough
-          </p>
-          <p className="mt-2 text-sm">
-            Triage → escalate → resolve workflows orchestrated by Devonel operators.
-          </p>
-        </div>
-      </div>
-      <div className="space-y-4 text-muted-foreground">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-          Email ops snapshot
-        </p>
-        <h3 className="text-2xl font-semibold text-white md:text-3xl">
-          See the inbox, the guardrails, and the human oversight in one view.
-        </h3>
-        <motion.ul
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.4 }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.1 } },
-          }}
-          className="space-y-3"
-        >
-          {["Auto-triage high intent leads", "Surface blockers to operators", "Push qualified meetings to your CRM"].map(
-            (item) => (
-              <motion.li
-                key={item}
-                variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="flex items-start gap-3 rounded-2xl border border-white/10 bg-background/70 px-4 py-3"
-              >
-                <Sparkles className="mt-1 size-4 text-[rgb(var(--brand-accent-rgb))]" />
-                <span className="text-sm">{item}</span>
-              </motion.li>
-            )
-          )}
-        </motion.ul>
-        <p className="text-xs uppercase tracking-[0.24em] text-white/60">
-          Request a walkthrough → we demo this inbox live.
-        </p>
-      </div>
-    </MagicCard>
   );
 }
 
@@ -301,41 +228,41 @@ function CredibilityStrip() {
 }
 
 function IntegrationOrbit() {
-  const layers = [
-    { radius: 120, duration: 28, direction: "forward" as const, items: outerOrbit },
-    { radius: 78, duration: 20, direction: "reverse" as const, items: innerOrbit },
-  ];
-
   return (
     <div className="relative mx-auto mt-8 size-72 max-w-[20rem]">
       <div className="pointer-events-none absolute inset-0 rounded-full border border-white/10" />
       <div className="pointer-events-none absolute inset-6 rounded-full border border-white/5" />
       <div className="pointer-events-none absolute inset-[3.75rem] rounded-full border border-white/5" />
 
-      {layers.map((layer) => (
-        <div
-          key={layer.direction}
-          className="orbit-ring motion-reduce:[animation:none]"
-          data-direction={layer.direction}
-          style={{
-            "--orbit-duration": `${layer.duration}s`,
-          } as CSSProperties}
-        >
-          {layer.items.map((item, index) => (
-            <OrbitBadge
-              key={item.label}
-              item={item}
-              angle={(360 / layer.items.length) * index}
-              radius={layer.radius}
-            />
-          ))}
-        </div>
-      ))}
+      <OrbitingCircles
+        radius={116}
+        iconSize={108}
+        duration={36}
+        className="z-20"
+        path={false}
+      >
+        {outerOrbit.map((item) => (
+          <OrbitBadge key={item.label} item={item} />
+        ))}
+      </OrbitingCircles>
+      <OrbitingCircles
+        radius={80}
+        iconSize={96}
+        duration={26}
+        speed={1.35}
+        reverse
+        className="z-20"
+        path={false}
+      >
+        {innerOrbit.map((item) => (
+          <OrbitBadge key={item.label} item={item} />
+        ))}
+      </OrbitingCircles>
 
-      <div className="relative z-10 flex h-full items-center justify-center">
-        <div className="rounded-full border border-white/10 bg-[rgb(var(--brand-accent-rgb)/0.18)] px-6 py-5 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white shadow-[0_0_35px_rgba(var(--brand-accent-rgb),0.35)]">
+      <div className="relative z-30 flex h-full items-center justify-center">
+        <div className="rounded-full border border-white/10 bg-[rgb(var(--brand-accent-rgb)/0.18)] px-6 py-5 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white shadow-[0_0_35px_rgba(var(--brand-accent-rgb),0.35)] backdrop-blur">
           Operator Control Center
-          <p className="mt-2 text-[0.6rem] font-normal uppercase tracking-[0.32em] text-white/60">
+          <p className="mt-2 text-[0.6rem] font-normal uppercase tracking-[0.32em] text-white/70">
             HubSpot · Salesforce · Slack
           </p>
         </div>
@@ -344,37 +271,20 @@ function IntegrationOrbit() {
   );
 }
 
-function OrbitBadge({
-  item,
-  angle,
-  radius,
-}: {
-  item: IntegrationBadge;
-  angle: number;
-  radius: number;
-}) {
+function OrbitBadge({ item }: { item: IntegrationBadge }) {
   const Icon = item.icon;
 
   return (
     <div
-      className="orbit-item"
+      className="flex h-full w-full flex-col items-center justify-center gap-1 rounded-[26px] border border-white/10 px-3 py-3 text-center text-[0.5rem] font-semibold uppercase tracking-[0.28em] text-white shadow-[0_12px_32px_rgba(15,23,42,0.35)] backdrop-blur"
       style={{
-        "--orbit-angle": `${angle}deg`,
-        "--orbit-radius": `${radius}px`,
-      } as CSSProperties}
+        background: `linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1]})`,
+      }}
     >
-      <div
-        className="flex min-w-[96px] flex-col items-center gap-1 rounded-full px-3 py-2 text-center text-[0.55rem] font-semibold uppercase tracking-[0.28em] text-white shadow-[0_12px_32px_rgba(15,23,42,0.3)] ring-1 ring-white/10"
-        style={{
-          background: `linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1]})`,
-        }}
-      >
-        <Icon className="h-5 w-5 text-white drop-shadow-[0_6px_10px_rgba(15,23,42,0.35)]" aria-hidden />
-        <span className="text-[0.5rem] font-medium uppercase tracking-[0.32em] text-white/80">
-          {item.label}
-        </span>
-      </div>
+      <Icon className="h-5 w-5 text-white drop-shadow-[0_6px_12px_rgba(15,23,42,0.45)]" aria-hidden />
+      <span className="text-[0.45rem] font-medium uppercase tracking-[0.32em] text-white/80">
+        {item.label}
+      </span>
     </div>
   );
 }
-

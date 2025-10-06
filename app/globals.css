@@ -50,6 +50,7 @@
   --animate-shimmer: shimmer 8s infinite;
   --animate-marquee: marquee var(--duration) infinite linear;
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  --animate-orbit: orbit calc(var(--duration) * 1s) linear infinite;
   --animate-gradient-move: gradient-move 8s ease infinite;
   --animate-float-slow: float 9s ease-in-out infinite;
 
@@ -59,6 +60,18 @@
     }
     to {
       height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes orbit {
+    0% {
+      transform: rotate(calc(var(--angle) * 1deg))
+        translateY(calc(var(--radius) * 1px))
+        rotate(calc(var(--angle) * -1deg));
+    }
+    100% {
+      transform: rotate(calc(var(--angle) * 1deg + 360deg))
+        translateY(calc(var(--radius) * 1px))
+        rotate(calc((var(--angle) * -1deg) - 360deg));
     }
   }
   @keyframes accordion-up {
@@ -158,43 +171,6 @@
     50% {
       transform: translateY(-6px);
     }
-  }
-}
-
-@keyframes orbit-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.orbit-ring {
-  position: absolute;
-  inset: 0;
-  animation: orbit-spin var(--orbit-duration, 24s) linear infinite;
-  will-change: transform;
-}
-
-.orbit-ring[data-direction="reverse"] {
-  animation-direction: reverse;
-}
-
-.orbit-item {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: rotate(var(--orbit-angle))
-    translateY(calc(var(--orbit-radius) * -1))
-    rotate(calc(var(--orbit-angle) * -1));
-  transform-origin: center;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .orbit-ring {
-    animation: none;
   }
 }
 

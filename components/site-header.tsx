@@ -113,22 +113,22 @@ export function SiteHeader() {
   return (
     <>
       <header className="fixed left-0 top-0 z-50 w-full px-4 animate-fade-in opacity-0 [--animation-delay:600ms]">
-        <div className="container mx-auto flex h-[var(--navigation-height)] w-full items-center justify-between">
-          <Link className="text-md flex items-center justify-center font-semibold tracking-tight" href="/">
+        <div className="container mx-auto flex w-full items-center justify-between py-4 md:h-[var(--navigation-height)] md:py-0">
+          <Link className="text-md flex items-center font-semibold tracking-tight" href="/">
             Devonel
           </Link>
 
-          <div className="ml-auto flex h-full items-center">
-            <Link className="mr-6 text-sm" href="/blog">
+          <div className="hidden h-full items-center gap-6 md:flex">
+            <Link className="text-sm" href="/blog">
               Blog
             </Link>
-            <Link className="mr-6 text-sm" href="/case-studies">
+            <Link className="text-sm" href="/case-studies">
               Case Studies
             </Link>
             <Link
               className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "mr-6 rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
+                "rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
               )}
               href="#cta"
             >
@@ -136,7 +136,7 @@ export function SiteHeader() {
             </Link>
           </div>
           <button
-            className="ml-6 md:hidden"
+            className="ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm md:hidden"
             onClick={() => setHamburgerMenuIsOpen((open) => !open)}
           >
             <span className="sr-only">Toggle menu</span>

@@ -17,7 +17,10 @@ export default function HeroSection() {
   const mediaInView = useInView(mediaRef, { once: true, margin: "-120px" });
 
   return (
-    <section id="hero" className="relative mx-auto mt-20 max-w-[90rem] px-6 py-16 md:px-10 md:py-20">
+    <section
+      id="hero"
+      className="relative mx-auto mt-16 w-full max-w-[90rem] px-6 py-16 md:mt-20 md:px-10 md:py-20"
+    >
       <FlickeringGrid
         className="absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,white,transparent_70%)]"
         squareSize={4}
@@ -26,18 +29,18 @@ export default function HeroSection() {
         maxOpacity={0.3}
         flickerChance={0.1}
       />
-      <div className="flex flex-col gap-12">
-          <div className="mx-auto max-w-4xl space-y-6 text-center">
+        <div className="flex flex-col gap-12 lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-16">
+          <div className="mx-auto max-w-3xl space-y-6 text-center lg:mx-0 lg:max-w-none lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70 backdrop-blur">
               <TextShimmer>
                 <span>Devonel • AI Agents & Automations</span>
               </TextShimmer>
             </div>
-            <h1 className="space-y-2 text-4xl font-semibold leading-[1.15] tracking-tight text-white sm:text-6xl md:text-[4.5rem]">
+            <h1 className="space-y-2 text-3xl font-semibold leading-[1.15] tracking-tight text-white sm:text-5xl md:text-[4rem]">
               <div>Deploy</div>
               <div className="relative inline-block min-h-[1.2em] overflow-visible">
                 <WordRotate
-                  className="text-white text-4xl sm:text-6xl md:text-[4.5rem] font-semibold"
+                  className="text-white text-3xl sm:text-5xl md:text-[4rem] font-semibold"
                   words={[
                     "AI support concierges",
                     "autonomous revenue agents",
@@ -46,13 +49,13 @@ export default function HeroSection() {
                 />
               </div>
             </h1>
-            <p className="mx-auto max-w-2xl text-base text-white/70 md:text-lg">
+            <p className="mx-auto max-w-2xl text-base text-white/70 md:text-lg lg:mx-0 lg:max-w-xl">
               Devonel designs, deploys, and fine-tunes AI agents that qualify leads, close loops,
               and automate operations across your stack within weeks — without derailing your team.
             </p>
-            <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
               <ShimmerButton
-                className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
+                className="w-full justify-center border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white sm:w-auto"
                 shimmerColor="#facc15"
                 shimmerDuration="2.4s"
               >
@@ -64,7 +67,7 @@ export default function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10"
+                className="w-full gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 sm:w-auto"
                 asChild
               >
                 <a href="#case-studies">
@@ -73,7 +76,7 @@ export default function HeroSection() {
                 </a>
               </Button>
             </div>
-            <div className="mx-auto mt-12 grid max-w-3xl gap-4 text-sm text-white/70 md:grid-cols-3">
+            <div className="mx-auto mt-12 grid max-w-3xl gap-4 text-sm text-white/70 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
               {[
                 "24/7 AI agents orchestrated by Devonel operators",
                 "Integrates with your tools: HubSpot, Slack, Notion, Zapier",
@@ -87,7 +90,10 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div ref={mediaRef} className="relative mx-auto w-full max-w-7xl">
+          <div
+            ref={mediaRef}
+            className="relative mx-auto w-full max-w-2xl lg:mx-0 lg:max-w-3xl"
+          >
             <div
               className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.6))] backdrop-blur ${
                 mediaInView ? "before:animate-image-glow" : ""
@@ -110,8 +116,8 @@ export default function HeroSection() {
                 alt="Workflow automations preview"
                 className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
               />
-            </div>
           </div>
+        </div>
       </div>
     </section>
   );

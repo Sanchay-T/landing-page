@@ -55,8 +55,8 @@ const industries = [
 export default function IndustriesSection() {
   return (
     <section id="industries" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
-      <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
+      <div className="mb-10 flex flex-col gap-4 text-center md:flex-row md:items-end md:justify-between md:text-left">
+        <div className="mx-auto max-w-2xl md:mx-0">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#facc15]/70">
             Industries
           </p>
@@ -64,12 +64,12 @@ export default function IndustriesSection() {
             Agents tailored to the way your business operates.
           </h2>
         </div>
-        <p className="max-w-xl text-sm text-white/70 md:text-base">
+        <p className="mx-auto max-w-2xl text-sm text-white/70 md:mx-0 md:max-w-xl md:text-base">
           We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across
           multiple verticals.
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {industries.map((industry, index) => (
           <motion.div
             key={industry.name}
@@ -96,7 +96,7 @@ export default function IndustriesSection() {
             <p className="relative z-10 text-sm leading-relaxed text-white/70">
               {industry.copy}
             </p>
-            <div className="relative z-10 flex flex-wrap gap-2">
+            <div className="relative z-10 flex flex-wrap justify-center gap-2 md:justify-start">
               {industry.highlights.map((highlight) => (
                 <span
                   key={highlight}

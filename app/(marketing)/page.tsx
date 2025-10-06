@@ -1,13 +1,8 @@
-import AboutSection from "@/components/landing/about-section";
-import ClientSection from "@/components/landing/client-section";
-import CallToActionSection from "@/components/landing/cta-section";
-import FAQSection from "@/components/landing/faq-section";
+import ChapterNav from "@/components/landing/chapter-nav";
+import CommitChapter from "@/components/landing/commit-chapter";
 import HeroSection from "@/components/landing/hero-section";
-import ServicesSection from "@/components/landing/services-section";
-import PricingSection from "@/components/landing/pricing-section";
-import ProcessSection from "@/components/landing/process-section";
-import IndustriesSection from "@/components/landing/industries-section";
-import TestimonialsSection from "@/components/landing/testimonials-section";
+import PlaybooksChapter from "@/components/landing/playbooks-chapter";
+import ProofChapter from "@/components/landing/proof-chapter";
 import Particles from "@/components/magicui/particles";
 import { SphereMask } from "@/components/magicui/sphere-mask";
 
@@ -15,16 +10,11 @@ export default async function Page() {
   return (
     <>
       <HeroSection />
-      <AboutSection />
-      <ClientSection />
-      <ServicesSection />
-      <ProcessSection />
-      <IndustriesSection />
+      <ChapterNav />
+      <ProofChapter />
+      <PlaybooksChapter />
       <SphereMask className="hidden md:block" />
-      <PricingSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <CallToActionSection />
+      <CommitChapter />
       <Particles
         className="absolute inset-0 -z-20"
         quantity={35}

@@ -104,7 +104,7 @@ export default function PricingSection() {
           </p>
         </div>
 
-        <div className="mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70">
+        <div className="mx-auto flex w-full max-w-md flex-wrap items-center justify-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/70">
           <span>Monthly</span>
           <Switch
             id="interval"
@@ -118,7 +118,7 @@ export default function PricingSection() {
           </span>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan, idx) => {
             const amount = interval === "year" ? plan.yearlyPrice : plan.monthlyPrice;
             const isEnterprise = amount === 0;

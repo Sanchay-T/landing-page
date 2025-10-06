@@ -38,7 +38,7 @@ export function WordRotate({
           animate={{ y: "0%", opacity: 1 }}
           exit={{ y: "-100%", opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
-          className="inline-block whitespace-nowrap"
+          className="inline-block max-w-full break-words md:whitespace-nowrap"
         >
           {currentWord}
         </motion.span>

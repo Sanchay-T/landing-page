@@ -1,6 +1,5 @@
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
-import { Slot } from "@radix-ui/react-slot"
 import {
   Controller,
   ControllerProps,
@@ -101,26 +100,70 @@ const FormLabel = React.forwardRef<
 })
 FormLabel.displayName = "FormLabel"
 
-const FormControl = React.forwardRef<
-  React.ElementRef<typeof Slot>,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
-
-  return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
+function mergeRefs<T>(
+  ...refs: (React.Ref<T | null> | undefined)[]
+): React.RefCallback<T | null> {
+  return (value) => {
+    for (const ref of refs) {
+      if (!ref) continue
+      if (typeof ref === "function") {
+        ref(value)
+      } else {
+        ;(ref as React.MutableRefObject<T | null>).current = value
       }
-      aria-invalid={!!error}
-      {...props}
-    />
-  )
-})
+    }
+  }
+}
+
+interface FormControlProps {
+  children: React.ReactElement
+  [key: string]: unknown
+}
+
+const FormControl = React.forwardRef<HTMLElement, FormControlProps>(
+  ({ children, ...props }, ref) => {
+    const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+
+    if (!React.isValidElement(children)) {
+      return null
+    }
+
+    const childProps = children.props ?? {}
+    const {
+      ref: childRef,
+      className: childClassName,
+      ...restChildProps
+    } = childProps as {
+      ref?: React.Ref<HTMLElement>
+      className?: string
+      [key: string]: unknown
+    }
+
+    const { className: providedClassName, ...restProps } = props as {
+      className?: unknown
+      [key: string]: unknown
+    }
+
+    const controlProps = {
+      id: formItemId,
+      "aria-describedby": !error
+        ? `${formDescriptionId}`
+        : `${formDescriptionId} ${formMessageId}`,
+      "aria-invalid": !!error,
+    }
+
+    return React.cloneElement(children, {
+      ...restChildProps,
+      ...restProps,
+      ...controlProps,
+      className: cn(
+        typeof childClassName === "string" ? childClassName : undefined,
+        typeof providedClassName === "string" ? providedClassName : undefined
+      ) || undefined,
+      ref: mergeRefs(childRef, ref as React.Ref<HTMLElement>),
+    })
+  }
+)
 FormControl.displayName = "FormControl"
 
 const FormDescription = React.forwardRef<

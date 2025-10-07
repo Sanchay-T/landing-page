@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { UserAuthForm } from "@/components/user-auth-form";
 import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";

@@ -1,11 +1,12 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CalTrigger } from "@/components/integrations/cal-trigger";
 
 const menuItem = [
   {
@@ -125,15 +126,15 @@ export function SiteHeader() {
             <Link className="text-sm" href="/case-studies">
               Case Studies
             </Link>
-            <Link
-              className={cn(
-                buttonVariants({ variant: "ghost" }),
-                "rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
-              )}
-              href="#cta"
-            >
-              Book a strategy call
-            </Link>
+            <CalTrigger>
+              <Button
+                variant="ghost"
+                className="rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
+                type="button"
+              >
+                Book a strategy call
+              </Button>
+            </CalTrigger>
           </div>
           <button
             className="ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm md:hidden"

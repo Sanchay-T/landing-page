@@ -11,6 +11,7 @@ import { WordRotate } from "@/components/magicui/word-rotate";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { CalTrigger } from "@/components/integrations/cal-trigger";
 
 export default function HeroSection() {
   const mediaRef = useRef(null);
@@ -54,17 +55,19 @@ export default function HeroSection() {
       </p>
 
       <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-        <ShimmerButton
-          borderRadius="999px"
-          className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)] hover:shadow-[0_25px_80px_-40px_rgba(0,0,0,0.9)]"
-          shimmerColor="rgb(var(--brand-accent-rgb))"
-          shimmerDuration="2.4s"
-        >
-          <span className="flex items-center gap-2">
-            Book a strategy call
-            <ArrowRightIcon className="size-4" />
-          </span>
-        </ShimmerButton>
+        <CalTrigger>
+          <ShimmerButton
+            borderRadius="999px"
+            className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)] hover:shadow-[0_25px_80px_-40px_rgba(0,0,0,0.9)]"
+            shimmerColor="rgb(var(--brand-accent-rgb))"
+            shimmerDuration="2.4s"
+          >
+            <span className="flex items-center gap-2">
+              Book a strategy call
+              <ArrowRightIcon className="size-4" />
+            </span>
+          </ShimmerButton>
+        </CalTrigger>
         <Button
           size="lg"
           variant="outline"

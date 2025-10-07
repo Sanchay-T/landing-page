@@ -1,6 +1,6 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import {
   Form,
   FormControl,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { ShineBorder } from "@/registry/magicui/shine-border";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Loader2 } from "lucide-react";
@@ -64,73 +65,82 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  {/* <FormLabel>Email</FormLabel> */}
-                  <FormControl>
-                    <Input
-                      id="email"
-                      placeholder="name@example.com"
-                      type="email"
-                      autoCapitalize="none"
-                      autoComplete="email"
-                      autoCorrect="off"
-                      disabled={isLoading || isGitHubLoading}
-                      {...field}
-                    />
-                  </FormControl>
-                  {/* <FormDescription>This is your email address.</FormDescription> */}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <div
+      className={cn(
+        "relative w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-black/80 p-8 shadow-[0_30px_90px_-60px_rgba(15,23,42,0.9)]",
+        className,
+      )}
+      {...props}
+    >
+      <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
+      <div className="relative grid gap-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Email</FormLabel> */}
+                    <FormControl>
+                      <Input
+                        id="email"
+                        placeholder="name@example.com"
+                        type="email"
+                        autoCapitalize="none"
+                        autoComplete="email"
+                        autoCorrect="off"
+                        disabled={isLoading || isGitHubLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    {/* <FormDescription>This is your email address.</FormDescription> */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <button
-              type="submit"
-              className={cn(buttonVariants())}
-              disabled={isLoading || isGitHubLoading}
-              onClick={() => {
-                // onSignIn();
-              }}
-            >
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In with Email
-            </button>
+              <button
+                type="submit"
+                className={cn(buttonVariants())}
+                disabled={isLoading || isGitHubLoading}
+                onClick={() => {
+                  // onSignIn();
+                }}
+              >
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Sign In with Email
+              </button>
+            </div>
+          </form>
+        </Form>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
           </div>
-        </form>
-      </Form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
+        <button
+          type="button"
+          className={cn(buttonVariants({ variant: "outline" }))}
+          onClick={() => {
+            onSignInGithub();
+          }}
+          disabled={isLoading || isGitHubLoading}
+        >
+          {isGitHubLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <GitHubLogoIcon className="mr-2 h-4 w-4" />
+          )}{" "}
+          Github
+        </button>
       </div>
-      <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          onSignInGithub();
-        }}
-        disabled={isLoading || isGitHubLoading}
-      >
-        {isGitHubLoading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <GitHubLogoIcon className="mr-2 h-4 w-4" />
-        )}{" "}
-        Github
-      </button>
     </div>
   );
 }

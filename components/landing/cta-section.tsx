@@ -1,10 +1,11 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
 import { SpinningText } from "@/components/magicui/spinning-text";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { CalTrigger } from "@/components/integrations/cal-trigger";
 import { motion, useAnimation, useInView } from "motion/react";
 import {
   BarChart,
@@ -176,16 +177,18 @@ export default function CallToActionSection() {
                   growth.
                 </p>
                 <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
-                  <ShimmerButton
-                    className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
-                    shimmerColor="rgb(var(--brand-accent-rgb))"
-                    shimmerDuration="2.4s"
-                  >
-                    <span className="flex items-center gap-2">
-                      Book a strategy call
-                      <ChevronRight className="size-4" />
-                    </span>
-                  </ShimmerButton>
+                  <CalTrigger>
+                    <ShimmerButton
+                      className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
+                      shimmerColor="rgb(var(--brand-accent-rgb))"
+                      shimmerDuration="2.4s"
+                    >
+                      <span className="flex items-center gap-2">
+                        Book a strategy call
+                        <ChevronRight className="size-4" />
+                      </span>
+                    </ShimmerButton>
+                  </CalTrigger>
                   <a
                     href="#pricing"
                     className={cn(

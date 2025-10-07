@@ -13,7 +13,7 @@ interface ShineBorderProps extends React.HTMLAttributes<HTMLDivElement> {
 export function ShineBorder({
   borderWidth = 1,
   duration = 14,
-  shineColor = "#000000",
+  shineColor = ["rgba(250, 204, 21, 0.5)", "rgba(15, 118, 110, 0.45)"],
   className,
   style,
   ...props
@@ -24,10 +24,11 @@ export function ShineBorder({
         {
           "--border-width": `${borderWidth}px`,
           "--duration": `${duration}s`,
-          backgroundImage: `radial-gradient(transparent,transparent, ${
-            Array.isArray(shineColor) ? shineColor.join(",") : shineColor
-          },transparent,transparent)`,
-          backgroundSize: "300% 300%",
+          backgroundImage: `radial-gradient(transparent, transparent 40%, ${
+            Array.isArray(shineColor) ? shineColor.join(", ") : shineColor
+          }, transparent 70%, transparent)`,
+          backgroundSize: "220% 220%",
+          backgroundPosition: "0% 50%",
           mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskComposite: "xor",
@@ -37,7 +38,7 @@ export function ShineBorder({
         } as React.CSSProperties
       }
       className={cn(
-        "motion-safe:animate-shine pointer-events-none absolute inset-0 size-full rounded-[inherit] will-change-[background-position]",
+        "pointer-events-none absolute inset-0 size-full rounded-[inherit] animate-shine",
         className
       )}
       {...props}

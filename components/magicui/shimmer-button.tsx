@@ -23,6 +23,7 @@ export const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonPr
       background = "linear-gradient(90deg,#0b0b0f,#151520)",
       className,
       children,
+      type = "button",
       ...props
     },
     ref
@@ -45,6 +46,7 @@ export const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonPr
           "rounded-full transition-transform duration-300 ease-in-out active:translate-y-px",
           className
         )}
+        type={type}
         {...props}
       >
         <div

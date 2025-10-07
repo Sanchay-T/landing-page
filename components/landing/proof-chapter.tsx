@@ -114,7 +114,7 @@ function PainPromiseMetrics() {
         >
           <span className="text-white/90">Stop letting </span>
           <WordRotate
-            words={["missed demo slots", "priority tickets", "late stage deals"]}
+            words={["missed demo slots", "priority support tickets", "late stage deals"]}
             className="mx-1"
             textClassName="text-white"
           />

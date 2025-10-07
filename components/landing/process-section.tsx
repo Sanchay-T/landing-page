@@ -16,6 +16,7 @@ import {
 import { AnimatedBeam } from "@/registry/magicui/animated-beam";
 import { cn } from "@/lib/utils";
 import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 const steps = [
   {
@@ -111,9 +112,9 @@ function IntegrationsBeam() {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-[360px] w-full max-w-[460px] items-center justify-center overflow-hidden rounded-[32px] border border-white/12 bg-black/90 p-14 shadow-[0_40px_140px_-90px_rgba(0,0,0,0.9)]"
+      className="relative flex h-[340px] w-full max-w-[460px] items-center justify-center overflow-hidden rounded-[28px] border border-white/10 bg-white/5 p-12 shadow-[0_30px_120px_-80px_rgba(15,23,42,0.7)]"
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.18),transparent_65%)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_70%)]" />
       <div className="relative z-10 flex size-full max-h-[260px] flex-col items-stretch justify-between gap-12">
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div1Ref}>
@@ -624,15 +625,19 @@ export default function ProcessSection() {
         ))}
       </div>
 
-      <div className="relative mt-14 overflow-hidden rounded-[44px] border border-white/10 bg-black/85 px-10 py-16 shadow-[0_70px_180px_-110px_rgba(10,15,25,0.95)]">
-        <div className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.12),transparent_65%)]" />
-        <div className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(circle_at_bottom_right,rgba(192,132,252,0.1),transparent_65%)]" />
-        <div className="grid gap-12 md:grid-cols-[minmax(0,520px)_minmax(0,520px)] md:items-center">
-          <div className="flex flex-col gap-10 pr-0 md:pr-6">
+      <div className="mt-20 grid gap-12 md:grid-cols-[minmax(0,520px)_minmax(0,520px)] md:items-start">
+        <div className="flex flex-col gap-10">
             <div className="space-y-3 max-w-lg">
-              <span className="inline-flex items-center rounded-full border border-white/12 bg-black/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-primary/70">
-                Integrations we automate
-              </span>
+              <TypingAnimation
+                as="span"
+                className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-primary/70"
+                words={["Integrations we automate", "Operators wire every surface"]}
+                pauseDelay={1400}
+                typeSpeed={75}
+                deleteSpeed={40}
+                loop
+                cursorStyle="underscore"
+              />
               <h3 className="text-3xl font-semibold text-white md:text-4xl">
                 Connect your ops stack without slowing delivery.
               </h3>
@@ -649,7 +654,7 @@ export default function ProcessSection() {
                 {toolLogos.map((tool) => (
                   <div
                     key={tool.name}
-                    className="flex items-center gap-2 rounded-2xl border border-white/12 bg-black/75 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85"
+                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85"
                   >
                     <Image src={tool.src} alt={tool.name} width={18} height={18} className="opacity-85" />
                     {tool.name}
@@ -665,9 +670,9 @@ export default function ProcessSection() {
                 {capabilities.map((capability) => (
                   <div
                     key={capability.label}
-                    className="flex items-center gap-3 rounded-2xl border border-white/12 bg-black/75 px-4 py-3 uppercase tracking-[0.18em]"
+                    className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 uppercase tracking-[0.18em]"
                   >
-                    <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-black/65 text-primary/70">
+                    <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-white/10 text-primary/70">
                       {capability.icon}
                     </span>
                     <TextAnimate
@@ -685,10 +690,9 @@ export default function ProcessSection() {
                 ))}
               </div>
             </div>
-          </div>
-          <div className="flex justify-center md:justify-end">
-            <IntegrationsBeam />
-          </div>
+        </div>
+        <div className="flex justify-center md:justify-end">
+          <IntegrationsBeam />
         </div>
       </div>
     </section>

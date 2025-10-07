@@ -77,7 +77,7 @@ const industries = [
 ];
 
 const cardBase =
-  "group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-white/10 bg-background/75 p-6 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.9)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.35)]";
+  "group relative flex h-full flex-col gap-5 overflow-hidden rounded-4xl border border-white/10 bg-white/[0.06] p-7 shadow-[0_22px_65px_-48px_rgba(15,23,42,0.95)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.4)]";
 
 export default function IndustriesSection() {
   return (
@@ -102,7 +102,7 @@ export default function IndustriesSection() {
           We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across multiple verticals.
         </TextAnimate>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 auto-rows-[minmax(0,1fr)]">
         {industries.map((industry, index) => (
           <motion.div
             key={industry.name}
@@ -110,49 +110,51 @@ export default function IndustriesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
-            className={cn(cardBase)}
+            className={cn(cardBase, "backdrop-blur-sm")}
           >
-            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_top,rgb(var(--brand-accent-rgb)/0.08),transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-80" />
-            <div className="relative z-10 flex items-start justify-between gap-4">
-              <div className="flex-1">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
-                  {industry.name}
-                </p>
-                <TextAnimate
-                  as="h3"
-                  className="mt-2 text-xl font-semibold leading-tight text-white"
-                  animation="slideUp"
-                  by="text"
-                  delay={index * 0.04}
-                  duration={0.4}
-                  viewport={{ margin: "-120px" }}
-                  once
-                >
-                  {industry.headline}
-                </TextAnimate>
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_top,rgb(var(--brand-accent-rgb)/0.16),transparent_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+            <div className="relative z-10 flex h-full flex-col justify-between gap-6">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 space-y-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
+                    {industry.name}
+                  </p>
+                  <TextAnimate
+                    as="h3"
+                    className="text-xl font-semibold leading-tight text-white"
+                    animation="slideUp"
+                    by="text"
+                    delay={index * 0.04}
+                    duration={0.4}
+                    viewport={{ margin: "-120px" }}
+                    once
+                  >
+                    {industry.headline}
+                  </TextAnimate>
+                  <p className="text-sm leading-relaxed text-white/70">
+                    {industry.copy}
+                  </p>
+                </div>
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5">
+                  <Image
+                    src={industry.logo.src}
+                    alt={industry.logo.alt}
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 opacity-90"
+                  />
+                </div>
               </div>
-              <div className="flex size-12 items-center justify-center rounded-full border border-white/15 bg-white/5">
-                <Image
-                  src={industry.logo.src}
-                  alt={industry.logo.alt}
-                  width={28}
-                  height={28}
-                  className="h-7 w-7 opacity-90"
-                />
+              <div className="flex flex-wrap gap-2">
+                {industry.highlights.map((highlight) => (
+                  <span
+                    key={highlight}
+                    className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/80"
+                  >
+                    {highlight}
+                  </span>
+                ))}
               </div>
-            </div>
-            <p className="relative z-10 text-sm leading-relaxed text-white/70">
-              {industry.copy}
-            </p>
-            <div className="relative z-10 flex flex-wrap gap-2">
-              {industry.highlights.map((highlight) => (
-                <span
-                  key={highlight}
-                  className="rounded-full border border-white/10 bg-black/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/75"
-                >
-                  {highlight}
-                </span>
-              ))}
             </div>
           </motion.div>
         ))}

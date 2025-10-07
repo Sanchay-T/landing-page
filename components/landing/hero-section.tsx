@@ -11,6 +11,7 @@ import { WordRotate } from "@/components/magicui/word-rotate";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
 import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { CalTrigger } from "@/components/integrations/cal-trigger";
 
@@ -32,7 +33,19 @@ export default function HeroSection() {
 
       <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/20 bg-white/10 px-3 text-xs transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
         <TextShimmer className="inline-flex items-center justify-center text-white">
-          <span className="text-white">✨ Devonel • AI Agents & Automations</span>
+          <TypingAnimation
+            words={[
+              "✨ Devonel • AI Agents & Automations",
+              "✨ Devonel • Operator-led Deployments",
+              "✨ Devonel • Close Loops Faster",
+            ]}
+            className="text-white"
+            loop
+            pauseDelay={1600}
+            typeSpeed={70}
+            deleteSpeed={40}
+            cursorStyle="underscore"
+          />
           <ArrowRightIcon className="ml-1 size-3 text-white transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
         </TextShimmer>
       </div>

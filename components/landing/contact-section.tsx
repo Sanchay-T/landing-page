@@ -29,6 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { ShineBorder } from "@/registry/magicui/shine-border";
 import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 const defaultValues: ContactFormValues = {
   name: "",
@@ -115,14 +116,14 @@ export default function ContactSection() {
             {assurances.map((assurance, index) => (
               <li
                 key={assurance}
-                className="grid grid-cols-[auto,1fr] items-start gap-3"
+                className="flex items-start gap-3"
               >
-                <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-[rgb(var(--brand-accent-rgb)/0.15)] text-white">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-white/15 bg-[rgb(var(--brand-accent-rgb)/0.15)] text-white">
                   <Check className="size-3.5" aria-hidden />
                 </span>
                 <TextAnimate
-                  as="span"
-                  className="inline-block"
+                  as="p"
+                  className="flex-1 text-left"
                   animation="slideRight"
                   by="word"
                   delay={0.15 + index * 0.05}

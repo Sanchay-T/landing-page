@@ -67,7 +67,16 @@ export function SpinningText({
         "relative inline-flex items-center justify-center",
         className
       )}
-      style={combinedStyle}
+      style={{
+        animationName: "spinning-text-rotate",
+        animationDuration: `${duration}s`,
+        animationTimingFunction: "linear",
+        animationIterationCount: "infinite",
+        animationDirection: reverse ? "reverse" : "normal",
+        willChange: "transform",
+      } as React.CSSProperties}
+      data-spinning-text="true"
+      data-duration={duration}
       {...props}
     >
       <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">

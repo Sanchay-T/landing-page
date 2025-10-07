@@ -3,7 +3,7 @@
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
-import { SpinningText } from "@/registry/magicui/spinning-text";
+import { SpinningText } from "@/components/magicui/spinning-text";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { CalTrigger } from "@/components/integrations/cal-trigger";
 import { TypingAnimation } from "@/components/ui/typing-animation";
@@ -189,7 +189,7 @@ export default function CallToActionSection() {
                   stack, and activate an autonomous agent that compounds your
                   growth.
                 </p>
-                <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
+                <div className="relative z-10 mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
                   <CalTrigger>
                     <ShimmerButton
                       className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
@@ -212,15 +212,18 @@ export default function CallToActionSection() {
                     View engagement plans
                   </a>
                 </div>
-                <div className="pointer-events-none relative mt-14 flex h-28 w-28 items-center justify-center sm:h-32 sm:w-32 sm:mt-16">
-                  <span className="absolute size-2 rounded-full bg-[rgb(var(--brand-accent-rgb))]/80 shadow-[0_0_14px_rgba(var(--brand-accent-rgb),0.35)]" />
+                <div className="relative mt-14 flex h-32 w-32 items-center justify-center overflow-visible sm:h-36 sm:w-36 sm:mt-16">
+                  {/* Extended dark background - properly sized */}
+                  <div className="absolute inset-0 -m-14 -z-10 rounded-full bg-gradient-to-br from-background/70 via-background/90 to-background/70 backdrop-blur-lg shadow-[0_20px_80px_-20px_rgba(0,0,0,0.5)]" />
+
+                  <span className="absolute z-10 size-2.5 rounded-full bg-[rgb(var(--brand-accent-rgb))]/90 shadow-[0_0_18px_rgba(var(--brand-accent-rgb),0.45)]" />
                   <SpinningText
-                    duration={12}
-                    radius={32}
-                    className="size-full text-muted-foreground/60"
-                    textClassName="text-[9px] uppercase tracking-[0.28em] sm:text-[10px] sm:tracking-[0.32em]"
+                    duration={15}
+                    radius={28}
+                    className="relative z-10 size-full text-muted-foreground/70"
+                    textClassName="text-[10px] uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.3em] font-semibold"
                   >
-                    learn more • earn more • grow more •
+                    ship faster • automate everything • scale autonomously •
                   </SpinningText>
                 </div>
               </div>

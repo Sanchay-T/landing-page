@@ -6,7 +6,6 @@ import { AnimatedGradientText } from "@/components/magicui/animated-gradient-tex
 import { AnimatedList } from "@/components/magicui/animated-list";
 import Marquee from "@/components/magicui/marquee";
 import { NumberTicker } from "@/components/magicui/number-ticker";
-import { WordRotate } from "@/components/magicui/word-rotate";
 import { SectionHeading } from "@/components/landing/section-heading";
 import { TextAnimate } from "@/components/ui/text-animate";
 
@@ -110,15 +109,11 @@ function PainPromiseMetrics() {
       <div className="max-w-3xl space-y-4">
         <AnimatedGradientText
           as="h3"
-          className="text-3xl font-semibold leading-tight md:text-4xl"
+          className="text-3xl font-semibold leading-tight md:text-4xl space-y-1"
         >
-          <span className="text-white/90">Stop letting </span>
-          <WordRotate
-            words={["missed demo slots", "priority support tickets", "late stage deals"]}
-            className="mx-1"
-            textClassName="text-white"
-          />
-          <span className="text-white/90"> slip through.</span>
+          <span className="block text-white/90">Stop letting missed demo slots,</span>
+          <span className="block text-white">priority support tickets,</span>
+          <span className="block text-white/90">and late stage deals slip through.</span>
         </AnimatedGradientText>
         <p className="text-sm text-muted-foreground md:text-base">
           The proof bar compresses pains into outcomes. Operators see live numbers for

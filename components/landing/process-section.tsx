@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, type ReactNode, useRef } from "react";
+import React, { forwardRef, type ReactNode, useRef } from "react";
 import Image from "next/image";
 import {
   Compass,
@@ -88,7 +88,7 @@ const Circle = forwardRef<HTMLDivElement, { className?: string; children?: React
   <div
     ref={ref}
     className={cn(
-      "z-10 flex size-12 items-center justify-center rounded-full border-2 bg-white p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
+      "z-10 flex size-14 items-center justify-center rounded-full border-2 bg-white p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
       className,
     )}
   >
@@ -112,10 +112,9 @@ function IntegrationsBeam() {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-[340px] w-full max-w-[460px] items-center justify-center overflow-hidden rounded-[28px] border border-white/10 bg-white/5 p-12 shadow-[0_30px_120px_-80px_rgba(15,23,42,0.7)]"
+      className="relative flex h-[350px] w-full min-w-[600px] items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-10 backdrop-blur-sm"
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_70%)]" />
-      <div className="relative z-10 flex size-full max-h-[260px] flex-col items-stretch justify-between gap-12">
+      <div className="flex size-full max-h-[280px] w-full flex-col items-stretch justify-between gap-10">
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div1Ref}>
             <IntegrationIcons.googleDrive />
@@ -128,7 +127,7 @@ function IntegrationsBeam() {
           <Circle ref={div2Ref}>
             <IntegrationIcons.notion />
           </Circle>
-          <Circle ref={div4Ref} className="size-16">
+          <Circle ref={div4Ref} className="size-20">
             <IntegrationIcons.openai />
           </Circle>
           <Circle ref={div6Ref}>
@@ -144,77 +143,48 @@ function IntegrationsBeam() {
           </Circle>
         </div>
       </div>
-      {[
-        {
-          fromRef: div1Ref,
-          toRef: div4Ref,
-          curvature: -95,
-          endYOffset: -16,
-          duration: 6,
-          delay: 0.2,
-        },
-        {
-          fromRef: div2Ref,
-          toRef: div4Ref,
-          curvature: -12,
-          duration: 3.4,
-          delay: 0.6,
-        },
-        {
-          fromRef: div3Ref,
-          toRef: div4Ref,
-          curvature: 110,
-          endYOffset: 18,
-          duration: 7.2,
-          delay: 1.1,
-        },
-        {
-          fromRef: div5Ref,
-          toRef: div4Ref,
-          curvature: -80,
-          endYOffset: -14,
-          reverse: true,
-          duration: 5.5,
-          delay: 0.4,
-        },
-        {
-          fromRef: div6Ref,
-          toRef: div4Ref,
-          reverse: true,
-          curvature: 8,
-          startYOffset: -4,
-          duration: 4,
-          delay: 0.9,
-        },
-        {
-          fromRef: div7Ref,
-          toRef: div4Ref,
-          curvature: 105,
-          endYOffset: 14,
-          reverse: true,
-          duration: 6.5,
-          delay: 1.3,
-        },
-      ].map((beam, index) => (
-        <AnimatedBeam
-          // eslint-disable-next-line react/no-array-index-key
-          key={index}
-          containerRef={containerRef}
-          fromRef={beam.fromRef}
-          toRef={beam.toRef}
-          curvature={beam.curvature}
-          reverse={beam.reverse}
-          duration={beam.duration}
-          delay={beam.delay}
-          endYOffset={beam.endYOffset}
-          startYOffset={beam.startYOffset}
-          pathColor="rgba(226, 232, 240, 0.4)"
-          pathOpacity={0.45}
-          pathWidth={3.2}
-          gradientStartColor="#22d3ee"
-          gradientStopColor="#c084fc"
-        />
-      ))}
+
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div1Ref}
+        toRef={div4Ref}
+        curvature={-75}
+        endYOffset={-10}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div2Ref}
+        toRef={div4Ref}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div3Ref}
+        toRef={div4Ref}
+        curvature={75}
+        endYOffset={10}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div5Ref}
+        toRef={div4Ref}
+        curvature={-75}
+        endYOffset={-10}
+        reverse
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div6Ref}
+        toRef={div4Ref}
+        reverse
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div7Ref}
+        toRef={div4Ref}
+        curvature={75}
+        endYOffset={10}
+        reverse
+      />
     </div>
   );
 }
@@ -556,7 +526,7 @@ const IntegrationIcons = {
 
 export default function ProcessSection() {
   return (
-    <section id="process" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
+    <section id="process" className="mx-auto mt-32 max-w-7xl px-6 pb-20 md:mt-40 md:px-8 md:pb-24">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <TextAnimate
@@ -625,9 +595,12 @@ export default function ProcessSection() {
         ))}
       </div>
 
-      <div className="mt-20 grid gap-12 md:grid-cols-[minmax(0,520px)_minmax(0,520px)] md:items-start">
-        <div className="flex flex-col gap-10">
-            <div className="space-y-3 max-w-lg">
+      {/* Integrations Section - Matching Site Aesthetic */}
+      <div className="mt-20 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-8 shadow-[0_30px_80px_-50px_rgb(var(--brand-accent-rgb)/0.25)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.2)] lg:p-10">
+        <div className="flex flex-col lg:flex-row lg:gap-8">
+          {/* Left Content */}
+          <div className="flex-1 space-y-8">
+            <div>
               <TypingAnimation
                 as="span"
                 className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-primary/70"
@@ -638,61 +611,62 @@ export default function ProcessSection() {
                 loop
                 cursorStyle="underscore"
               />
-              <h3 className="text-3xl font-semibold text-white md:text-4xl">
+              <h3 className="mt-5 text-3xl font-semibold text-white md:text-4xl">
                 Connect your ops stack without slowing delivery.
               </h3>
-              <p className="text-sm leading-relaxed text-white/75">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70 md:text-base">
                 We wire agents into your CRM, help desk, knowledge systems, and automation layer using least-privilege
                 access, scoped actions, and real-time health checks so each hand-off lands where it should.
               </p>
             </div>
-            <div className="space-y-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
-                Active surfaces today
-              </span>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {toolLogos.map((tool) => (
-                  <div
-                    key={tool.name}
-                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85"
-                  >
-                    <Image src={tool.src} alt={tool.name} width={18} height={18} className="opacity-85" />
-                    {tool.name}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
-                Every deployment includes
-              </span>
-              <div className="grid gap-3 text-xs text-white/85 sm:grid-cols-2">
-                {capabilities.map((capability) => (
-                  <div
-                    key={capability.label}
-                    className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 uppercase tracking-[0.18em]"
-                  >
-                    <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-white/10 text-primary/70">
-                      {capability.icon}
-                    </span>
-                    <TextAnimate
-                      as="span"
-                      className="inline-block text-white/85"
-                      animation="slideLeft"
-                      by="character"
-                      duration={0.45}
-                      startOnView={false}
-                      once
+
+            {/* Badges in two columns */}
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <h4 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
+                  Active Surfaces Today
+                </h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {toolLogos.map((tool) => (
+                    <div
+                      key={tool.name}
+                      className="flex items-center gap-2 rounded-xl border border-white/10 bg-background/50 px-2.5 py-2 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/60"
                     >
-                      {capability.label}
-                    </TextAnimate>
-                  </div>
-                ))}
+                      <Image src={tool.src} alt={tool.name} width={16} height={16} className="opacity-85" />
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/85">
+                        {tool.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h4 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
+                  Every Deployment Includes
+                </h4>
+                <div className="space-y-2">
+                  {capabilities.map((capability) => (
+                    <div
+                      key={capability.label}
+                      className="flex items-center gap-2 rounded-xl border border-white/10 bg-background/50 px-2.5 py-2 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/60"
+                    >
+                      <span className="flex size-5 items-center justify-center rounded-md bg-[rgb(var(--brand-accent-rgb)/0.1)] text-[rgb(var(--brand-accent-rgb)/0.7)]">
+                        {React.cloneElement(capability.icon, { className: "size-3" })}
+                      </span>
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/85">
+                        {capability.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-        </div>
-        <div className="flex justify-center md:justify-end">
-          <IntegrationsBeam />
+          </div>
+
+          {/* Right Animation - Wider Rectangle */}
+          <div className="flex items-center justify-center lg:flex-1">
+            <IntegrationsBeam />
+          </div>
         </div>
       </div>
     </section>

@@ -66,5 +66,6 @@ This playbook explains how to work with Magic UI assets in this repository witho
 - Keep downloads transient (`/tmp`). Delete them when done.
 - Document any new procedures in this file rather than repeating discovery work.
 - If the Pro registry changes (new categories, renamed slugs), refresh the manifest and update the slug list here.
+- All UI updates must preserve responsive behavior across mobile, tablet, and desktop breakpoints. Double-check layouts on small and large viewports before shipping.
 
 Refer back to this guide before interacting with Magic UI resources.

@@ -1,5 +1,45 @@
 # Devonel Landing Page Structure
 
+## 2025-02 Layout Overview
+
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│ HERO                                                                      │
+│  ├─ Announcement pill: "✨ Devonel • AI Agents & Automations"             │
+│  ├─ H1 line 1: "Deploy AI Agents" (TextAnimate blur-in)                   │
+│  ├─ H1 line 2: rotating verbs (WordRotate)                                 │
+│  ├─ Supporting copy: "Operator-led automation for revenue…"               │
+│  ├─ New emphasis line: "A human operator pod…" with Magic UI Highlighter │
+│  ├─ Primary CTA: RainbowButton → Book a strategy call                     │
+│  └─ Secondary CTA: InteractiveHoverButton → See agent playbooks           │
+│
+│ MANIFESTO SCROLL (TextReveal)                                             │
+│  └─ Sticky reveal of statement about operator-led AI                      │
+│
+│ PROOF · CHAPTER ONE                                                       │
+│  ├─ SectionHeading: "Evidence our operator squads…"                       │
+│  ├─ PainPromiseMetrics card grid with NumberTicker stats                  │
+│  ├─ OperatorAdvantage two-column layout                                   │
+│  └─ CredibilityStrip with marquee logos + coverage list                   │
+│
+│ PLAYBOOKS · CHAPTER TWO                                                   │
+│  ├─ SectionHeading & proof points sidebar                                 │
+│  ├─ Three-phase cards: Scope, Launch, Scale                               │
+│  ├─ ProcessSection (AnimatedBeam integrations diagram)                    │
+│  ├─ ServicesSection (Bento grid of offers)                                │
+│  └─ IndustriesSection (vertical tabs)                                     │
+│
+│ COMMIT · CHAPTER THREE                                                    │
+│  ├─ SectionHeading & intro copy                                           │
+│  ├─ PricingSection tiers                                                  │
+│  ├─ FAQSection accordion                                                  │
+│  ├─ ContactSection form                                                   │
+│  └─ CTA Section with marquee tiles + spinning badge                       │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Header
 ```
 ┌─────────────────────────────────────────────────────────────┐

@@ -12,6 +12,7 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { TypingAnimation } from "@/components/ui/typing-animation";
+import { Highlighter } from "@/components/ui/highlighter";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { CalTrigger } from "@/components/integrations/cal-trigger";
 
@@ -76,7 +77,7 @@ export default function HeroSection() {
 
       <TextAnimate
         as="p"
-        className="mb-8 mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10"
+        className="mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10"
         animation="blurInUp"
         by="word"
         delay={0.4}
@@ -85,8 +86,17 @@ export default function HeroSection() {
       >
         Operator-led automation for revenue, success, and support.
       </TextAnimate>
+      <p className="mx-auto mt-6 max-w-2xl text-sm text-white/80 text-balance md:text-base lg:text-lg">
+        A
+        {" "}
+        <Highlighter color="#FDE68A" strokeWidth={2} animationDuration={800}>
+          human operator pod
+        </Highlighter>
+        {" "}
+        audits transcripts live, tunes prompts in your stack, and keeps every agent on brand.
+      </p>
 
-      <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
+      <div className="mb-8 mt-6 flex flex-col items-center justify-center gap-4 translate-y-[-1rem] animate-fade-in opacity-0 md:mt-8 md:flex-row [--animation-delay:600ms]">
         <CalTrigger>
           <RainbowButton
             size="lg"

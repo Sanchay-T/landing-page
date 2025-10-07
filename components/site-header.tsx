@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
@@ -127,13 +127,13 @@ export function SiteHeader() {
               Case Studies
             </Link>
             <CalTrigger>
-              <Button
-                variant="ghost"
-                className="rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
+              <RainbowButton
+                size="sm"
+                className="rounded-full px-4 py-1.5 text-sm font-semibold"
                 type="button"
               >
                 Book a strategy call
-              </Button>
+              </RainbowButton>
             </CalTrigger>
           </div>
           <button

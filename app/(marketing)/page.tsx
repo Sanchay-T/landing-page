@@ -3,6 +3,7 @@ import CommitChapter from "@/components/landing/commit-chapter";
 import HeroSection from "@/components/landing/hero-section";
 import PlaybooksChapter from "@/components/landing/playbooks-chapter";
 import ProofChapter from "@/components/landing/proof-chapter";
+import SignalSection from "@/components/landing/signal-section";
 import Particles from "@/components/magicui/particles";
 import { SphereMask } from "@/components/magicui/sphere-mask";
 
@@ -12,6 +13,7 @@ export default async function Page() {
       <HeroSection />
       <ChapterNav />
       <ProofChapter />
+      <SignalSection />
       <PlaybooksChapter />
       <SphereMask className="hidden md:block" />
       <CommitChapter />

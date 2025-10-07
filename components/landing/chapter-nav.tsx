@@ -4,6 +4,7 @@ const items = [
   { href: "#proof", label: "Proof" },
   { href: "#playbooks", label: "Playbooks" },
   { href: "#commit", label: "Commit" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export default function ChapterNav() {

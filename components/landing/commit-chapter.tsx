@@ -1,4 +1,5 @@
 import CallToActionSection from "@/components/landing/cta-section";
+import ContactSection from "@/components/landing/contact-section";
 import FAQSection from "@/components/landing/faq-section";
 import PricingSection from "@/components/landing/pricing-section";
 
@@ -23,6 +24,7 @@ export default function CommitChapter() {
       </section>
       <PricingSection />
       <FAQSection />
+      <ContactSection />
       <CallToActionSection />
     </>
   );

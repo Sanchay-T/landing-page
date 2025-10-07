@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { TextAnimate } from "@/components/ui/text-animate";
 import { getPublishedCaseStudies } from "@/lib/case-studies/posts";
 
 export const metadata: Metadata = {
@@ -40,13 +41,28 @@ export default function CaseStudiesIndexPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-primary/70">
             Case Studies
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+          <TextAnimate
+            as="h1"
+            className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl"
+            animation="blurInUp"
+            by="word"
+            delay={0.15}
+            duration={0.7}
+            once
+          >
             Real results from AI agents in production.
-          </h1>
-          <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
-            See how businesses across industries are using Devonel&apos;s AI agents to automate operations,
-            improve customer experience, and drive measurable revenue growth—with zero compliance incidents.
-          </p>
+          </TextAnimate>
+          <TextAnimate
+            as="p"
+            className="max-w-2xl text-sm text-muted-foreground md:text-base"
+            animation="slideUp"
+            by="line"
+            delay={0.3}
+            duration={0.6}
+            once
+          >
+            See how businesses across industries are using Devonel&apos;s AI agents to automate operations, improve customer experience, and drive measurable revenue growth—with zero compliance incidents.
+          </TextAnimate>
         </header>
 
         <section className="mt-12 grid gap-6 md:grid-cols-2">

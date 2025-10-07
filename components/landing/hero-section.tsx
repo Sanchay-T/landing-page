@@ -10,6 +10,7 @@ import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Button } from "@/components/ui/button";
+import { TextAnimate } from "@/components/ui/text-animate";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { CalTrigger } from "@/components/integrations/cal-trigger";
 
@@ -36,9 +37,19 @@ export default function HeroSection() {
         </TextShimmer>
       </div>
 
-      <h1 className="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text pt-6 pb-1 text-5xl font-medium leading-[1.2] tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
-        Deploy AI Agents
-        <br />
+      <h1 className="pt-6 pb-1 text-5xl font-medium leading-[1.2] tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
+        <TextAnimate
+          as="span"
+          className="block"
+          segmentClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-transparent"
+          animation="blurInUp"
+          by="text"
+          delay={0.2}
+          duration={0.9}
+          once
+        >
+          Deploy AI Agents
+        </TextAnimate>
         <WordRotate
           className="mt-3"
           textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
@@ -50,9 +61,17 @@ export default function HeroSection() {
         />
       </h1>
 
-      <p className="mb-8 mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms] sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10">
+      <TextAnimate
+        as="p"
+        className="mb-8 mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10"
+        animation="blurInUp"
+        by="word"
+        delay={0.4}
+        duration={0.9}
+        once
+      >
         Operator-led automation for revenue, success, and support.
-      </p>
+      </TextAnimate>
 
       <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
         <CalTrigger>

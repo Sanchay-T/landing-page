@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 import Marquee from "@/components/magicui/marquee";
 import { ShineBorder } from "@/components/magicui/shine-border";
+import { SectionHeading } from "@/components/landing/section-heading";
 
 const testimonials = [
   {
@@ -32,18 +33,15 @@ export default function TestimonialsSection() {
       id="case-studies"
       className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8"
     >
-      <div className="text-left md:text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
-          Results
-        </p>
-        <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
-          Teams trust Devonel agents to drive measurable outcomes.
-        </h2>
-        <p className="mt-4 text-base text-muted-foreground md:text-lg">
-          Hear how revenue, support, and operations leaders activate autonomous
-          agents without sacrificing brand experience.
-        </p>
-      </div>
+      <SectionHeading
+        eyebrow="Results"
+        title="Teams trust Devonel agents to drive measurable outcomes."
+        description="Hear how revenue, support, and operations leaders activate autonomous agents without sacrificing brand experience."
+        align="center"
+        className="text-left md:text-center"
+        titleClassName="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl"
+        descriptionClassName="mt-4 text-base text-muted-foreground md:text-lg"
+      />
       <div className="mt-12 grid gap-6 md:grid-cols-3">
         {testimonials.map((testimonial, index) => (
           <motion.div

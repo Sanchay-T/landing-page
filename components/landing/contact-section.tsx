@@ -28,6 +28,7 @@ import {
 } from "@/lib/schemas/contact";
 import { cn } from "@/lib/utils";
 import { ShineBorder } from "@/registry/magicui/shine-border";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const defaultValues: ContactFormValues = {
   name: "",
@@ -111,7 +112,7 @@ export default function ContactSection() {
             transcripts, data flows, and compliance needs before proposing the pod that launches your agents.
           </p>
           <ul className="space-y-4 text-sm text-white/75">
-            {assurances.map((assurance) => (
+            {assurances.map((assurance, index) => (
               <li
                 key={assurance}
                 className="grid grid-cols-[auto,1fr] items-start gap-3"
@@ -119,7 +120,17 @@ export default function ContactSection() {
                 <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-[rgb(var(--brand-accent-rgb)/0.15)] text-white">
                   <Check className="size-3.5" aria-hidden />
                 </span>
-                <span>{assurance}</span>
+                <TextAnimate
+                  as="span"
+                  className="inline-block"
+                  animation="slideRight"
+                  by="word"
+                  delay={0.15 + index * 0.05}
+                  duration={0.5}
+                  once
+                >
+                  {assurance}
+                </TextAnimate>
               </li>
             ))}
           </ul>

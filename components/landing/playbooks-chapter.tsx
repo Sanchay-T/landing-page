@@ -1,6 +1,8 @@
 import ProcessSection from "@/components/landing/process-section";
 import ServicesSection from "@/components/landing/services-section";
 import IndustriesSection from "@/components/landing/industries-section";
+import { SectionHeading } from "@/components/landing/section-heading";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const phases = [
   {
@@ -35,23 +37,15 @@ export default function PlaybooksChapter() {
         aria-labelledby="playbooks-heading"
       >
         <header className="grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,340px)] md:items-start md:gap-14">
-          <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-              Playbooks · Chapter Two
-            </p>
-            <div className="space-y-3">
-              <h2
-                id="playbooks-heading"
-                className="text-3xl font-semibold leading-tight text-foreground md:text-4xl"
-              >
-                See how our operators scope, launch, and scale your agents.
-              </h2>
-              <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
-                We run every engagement through the same proven lifecycle. Start with shared context, graduate to
-                governed launches, and graduate into durable growth loops without losing sight of compliance.
-              </p>
-            </div>
-          </div>
+          <SectionHeading
+            eyebrow="Playbooks · Chapter Two"
+            title="See how our operators scope, launch, and scale your agents."
+            description="We run every engagement through the same proven lifecycle. Start with shared context, graduate to governed launches, and graduate into durable growth loops without losing sight of compliance."
+            className="space-y-4"
+            titleClassName="text-3xl font-semibold leading-tight text-foreground md:text-4xl"
+            descriptionClassName="max-w-2xl text-sm text-muted-foreground md:text-base"
+            once
+          />
           <div className="rounded-3xl border border-white/10 bg-background/75 p-6 shadow-[0_20px_70px_-40px_rgba(15,23,42,0.9)] md:max-w-sm md:self-start md:p-7">
             <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
               What stays consistent
@@ -70,14 +64,23 @@ export default function PlaybooksChapter() {
           </div>
         </header>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {phases.map((phase) => (
+          {phases.map((phase, index) => (
             <div
               key={phase.title}
               className="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] via-white/[0.03] to-transparent p-6 transition-shadow hover:shadow-[0_25px_80px_-55px_rgba(15,23,42,0.9)]"
             >
-              <h3 className="text-lg font-semibold text-white">
+              <TextAnimate
+                as="h3"
+                className="text-lg font-semibold text-white"
+                animation="slideUp"
+                by="text"
+                delay={index * 0.05}
+                duration={0.4}
+                viewport={{ margin: "-120px" }}
+                once
+              >
                 {phase.title}
-              </h3>
+              </TextAnimate>
               <p className="mt-3 text-sm text-white/70">{phase.description}</p>
             </div>
           ))}

@@ -13,9 +13,9 @@ import {
   Workflow as WorkflowIcon,
 } from "lucide-react";
 
-import { LineShadowText } from "@/components/magicui/line-shadow-text";
 import { AnimatedBeam } from "@/registry/magicui/animated-beam";
 import { cn } from "@/lib/utils";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const steps = [
   {
@@ -558,21 +558,42 @@ export default function ProcessSection() {
     <section id="process" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
+          <TextAnimate
+            as="p"
+            className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80"
+            animation="slideUp"
+            by="word"
+            delay={0.05}
+            duration={0.4}
+            once
+          >
             Process
-          </p>
-          <LineShadowText
+          </TextAnimate>
+          <TextAnimate
             as="h2"
-            shadowColor="rgb(var(--brand-accent-rgb)/0.35)"
             className="mt-2 text-3xl font-semibold text-foreground md:text-4xl"
+            segmentClassName="bg-gradient-to-r from-white/95 via-white/80 to-white/95 bg-clip-text text-transparent"
+            animation="blurInUp"
+            by="line"
+            delay={0.15}
+            duration={0.7}
+            once
           >
             A proven operating cadence for autonomous agents.
-          </LineShadowText>
+          </TextAnimate>
         </div>
-        <p className="max-w-xl text-sm text-muted-foreground md:text-base">
+        <TextAnimate
+          as="p"
+          className="max-w-xl text-sm text-muted-foreground md:text-base"
+          animation="slideUp"
+          by="line"
+          delay={0.25}
+          duration={0.6}
+          once
+        >
           Devonel combines product discovery, automation engineering, and operator oversight so your AI agents stay
           on-brand, compliant, and revenue-focused from pilot to scale.
-        </p>
+        </TextAnimate>
       </div>
 
       <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -585,7 +606,18 @@ export default function ProcessSection() {
                 {step.icon}
               </span>
             </div>
-            <h3 className="text-xl font-semibold text-white">{step.title}</h3>
+            <TextAnimate
+              as="h3"
+              className="text-xl font-semibold text-white"
+              animation="slideUp"
+              by="text"
+              delay={index * 0.05}
+              duration={0.4}
+              viewport={{ margin: "-120px" }}
+              once
+            >
+              {step.title}
+            </TextAnimate>
             <p className="text-sm text-white/70">{step.description}</p>
             <span className="pointer-events-none absolute inset-x-5 bottom-5 h-px bg-gradient-to-r from-transparent via-[rgb(var(--brand-accent-rgb)/0.18)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
@@ -638,7 +670,17 @@ export default function ProcessSection() {
                     <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-black/65 text-primary/70">
                       {capability.icon}
                     </span>
-                    {capability.label}
+                    <TextAnimate
+                      as="span"
+                      className="inline-block text-white/85"
+                      animation="slideLeft"
+                      by="character"
+                      duration={0.45}
+                      startOnView={false}
+                      once
+                    >
+                      {capability.label}
+                    </TextAnimate>
                   </div>
                 ))}
               </div>

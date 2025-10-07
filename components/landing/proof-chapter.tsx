@@ -7,6 +7,8 @@ import { AnimatedList } from "@/components/magicui/animated-list";
 import Marquee from "@/components/magicui/marquee";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { WordRotate } from "@/components/magicui/word-rotate";
+import { SectionHeading } from "@/components/landing/section-heading";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const metrics = [
   {
@@ -74,19 +76,23 @@ export default function ProofChapter() {
   return (
     <section id="proof" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-            Proof · Chapter One
-          </p>
-          <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
-            Evidence our operator squads own every day.
-          </h2>
-        </div>
-        <p className="max-w-xl text-sm text-muted-foreground md:text-base">
-          Each module translates our services promise into accountable numbers. We
-          show the inbox, the operators, and the customers so leadership sees real
-          traction before diving into the playbooks.
-        </p>
+        <SectionHeading
+          eyebrow="Proof · Chapter One"
+          title="Evidence our operator squads own every day."
+          className="md:max-w-xl"
+          description={undefined}
+        />
+        <TextAnimate
+          as="p"
+          className="max-w-xl text-sm text-muted-foreground md:text-base"
+          animation="slideUp"
+          by="line"
+          delay={0.2}
+          duration={0.6}
+        >
+          Each module translates our services promise into accountable numbers. We show the inbox, the operators, and
+          the customers so leadership sees real traction before diving into the playbooks.
+        </TextAnimate>
       </header>
 
       <div className="mt-14 space-y-16">

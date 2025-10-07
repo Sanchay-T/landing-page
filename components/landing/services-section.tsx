@@ -6,6 +6,8 @@ import Image from "next/image";
 import Marquee from "@/components/magicui/marquee";
 import { cn } from "@/lib/utils";
 import { BorderBeam } from "@/components/magicui/border-beam";
+import { SectionHeading } from "@/components/landing/section-heading";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const cards = [
   {
@@ -50,18 +52,22 @@ export default function ServicesSection() {
   return (
     <section id="services" className="relative mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-            Services · Option B Bento Grid
-          </p>
-          <h2 className="mt-2 text-3xl font-semibold leading-tight text-foreground md:text-4xl">
-            Compose your Devonel agent stack.
-          </h2>
-        </div>
-        <p className="max-w-xl text-sm text-muted-foreground md:text-base">
-          Mix and match revenue, support, and operations agents. Each tile introduces
-          the mission, outcomes, and integration hooks so stakeholders see the full picture.
-        </p>
+        <SectionHeading
+          eyebrow="Services · Option B Bento Grid"
+          title="Compose your Devonel agent stack."
+          className="md:max-w-xl"
+          description={undefined}
+        />
+        <TextAnimate
+          as="p"
+          className="max-w-xl text-sm text-muted-foreground md:text-base"
+          animation="slideUp"
+          by="line"
+          delay={0.2}
+          duration={0.6}
+        >
+          Mix and match revenue, support, and operations agents. Each tile introduces the mission, outcomes, and integration hooks so stakeholders see the full picture.
+        </TextAnimate>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -90,7 +96,18 @@ export default function ServicesSection() {
             <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[rgb(var(--brand-accent-rgb)/0.06)] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
             <div className="relative z-10 space-y-3">
               <div className="flex items-center gap-2">
-                <h3 className="text-xl font-semibold text-foreground">{card.title}</h3>
+                <TextAnimate
+                  as="h3"
+                  className="text-xl font-semibold text-foreground"
+                  animation="slideUp"
+                  by="text"
+                  delay={index * 0.05}
+                  duration={0.4}
+                  viewport={{ margin: "-120px" }}
+                  once
+                >
+                  {card.title}
+                </TextAnimate>
                 {card.chip ? (
                   <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
                     {card.chip}
@@ -125,7 +142,17 @@ export default function ServicesSection() {
               className="flex items-center gap-3 px-6 text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground"
             >
               <span className="size-1 rounded-full bg-primary" />
-              {item}
+              <TextAnimate
+                as="span"
+                className="inline-block"
+                animation="slideLeft"
+                by="character"
+                duration={0.45}
+                startOnView={false}
+                once
+              >
+                {item}
+              </TextAnimate>
             </span>
           ))}
         </Marquee>

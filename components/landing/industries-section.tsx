@@ -4,6 +4,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+import { SectionHeading } from "@/components/landing/section-heading";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const industries = [
   {
@@ -81,18 +83,24 @@ export default function IndustriesSection() {
   return (
     <section id="industries" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
       <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
-            Industries
-          </p>
-          <h2 className="mt-2 text-3xl font-semibold leading-tight text-white md:text-4xl">
-            Agents tailored to the way your business operates.
-          </h2>
-        </div>
-        <p className="max-w-xl text-sm text-white/70 md:text-base">
-          We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across
-          multiple verticals.
-        </p>
+        <SectionHeading
+          eyebrow="Industries"
+          title="Agents tailored to the way your business operates."
+          className="md:max-w-xl"
+          titleClassName="text-3xl font-semibold leading-tight text-white md:text-4xl"
+          description={undefined}
+          eyebrowClassName="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]"
+        />
+        <TextAnimate
+          as="p"
+          className="max-w-xl text-sm text-white/70 md:text-base"
+          animation="slideUp"
+          by="line"
+          delay={0.2}
+          duration={0.6}
+        >
+          We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across multiple verticals.
+        </TextAnimate>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {industries.map((industry, index) => (
@@ -110,9 +118,18 @@ export default function IndustriesSection() {
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
                   {industry.name}
                 </p>
-                <h3 className="mt-2 text-xl font-semibold leading-tight text-white">
+                <TextAnimate
+                  as="h3"
+                  className="mt-2 text-xl font-semibold leading-tight text-white"
+                  animation="slideUp"
+                  by="text"
+                  delay={index * 0.04}
+                  duration={0.4}
+                  viewport={{ margin: "-120px" }}
+                  once
+                >
                   {industry.headline}
-                </h3>
+                </TextAnimate>
               </div>
               <div className="flex size-12 items-center justify-center rounded-full border border-white/15 bg-white/5">
                 <Image

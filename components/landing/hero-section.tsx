@@ -8,8 +8,8 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
@@ -88,29 +88,22 @@ export default function HeroSection() {
 
       <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
         <CalTrigger>
-          <ShimmerButton
-            borderRadius="999px"
-            className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)] hover:shadow-[0_25px_80px_-40px_rgba(0,0,0,0.9)]"
-            shimmerColor="rgb(var(--brand-accent-rgb))"
-            shimmerDuration="2.4s"
+          <RainbowButton
+            size="lg"
+            className="rounded-full px-8 py-3 text-base font-semibold"
           >
             <span className="flex items-center gap-2">
               Book a strategy call
               <ArrowRightIcon className="size-4" />
             </span>
-          </ShimmerButton>
+          </RainbowButton>
         </CalTrigger>
-        <Button
-          size="lg"
-          variant="outline"
-          className="gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10"
-          asChild
+        <InteractiveHoverButton
+          className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
+          onClick={() => document.getElementById("case-studies")?.scrollIntoView({ behavior: "smooth" })}
         >
-          <a href="#case-studies">
-            See agent playbooks
-            <ArrowRightIcon className="size-4" />
-          </a>
-        </Button>
+          See agent playbooks
+        </InteractiveHoverButton>
       </div>
 
       <div className="flex max-w-3xl mx-auto flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/70 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:800ms]">

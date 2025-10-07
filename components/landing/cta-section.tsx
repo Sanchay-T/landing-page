@@ -1,10 +1,10 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
 import { SpinningText } from "@/components/magicui/spinning-text";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { CalTrigger } from "@/components/integrations/cal-trigger";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { motion, useAnimation, useInView } from "motion/react";
@@ -191,26 +191,22 @@ export default function CallToActionSection() {
                 </p>
                 <div className="relative z-10 mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
                   <CalTrigger>
-                    <ShimmerButton
-                      className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
-                      shimmerColor="rgb(var(--brand-accent-rgb))"
-                      shimmerDuration="2.4s"
+                    <RainbowButton
+                      size="lg"
+                      className="rounded-full px-8 py-3 text-base font-semibold"
                     >
                       <span className="flex items-center gap-2">
                         Book a strategy call
                         <ChevronRight className="size-4" />
                       </span>
-                    </ShimmerButton>
+                    </RainbowButton>
                   </CalTrigger>
-                  <a
-                    href="#pricing"
-                    className={cn(
-                      buttonVariants({ variant: "outline", size: "lg" }),
-                      "rounded-[2rem]"
-                    )}
+                  <InteractiveHoverButton
+                    className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
+                    onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
                   >
                     View engagement plans
-                  </a>
+                  </InteractiveHoverButton>
                 </div>
                 <div className="relative mt-14 flex h-32 w-32 items-center justify-center overflow-visible sm:h-36 sm:w-36 sm:mt-16">
                   {/* Extended dark background - properly sized */}

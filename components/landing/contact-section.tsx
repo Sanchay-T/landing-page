@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
-import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import {
   Form,
   FormControl,
@@ -332,14 +332,15 @@ export default function ContactSection() {
               />
 
               <div className="space-y-2 lg:col-span-6">
-                <Button
+                <RainbowButton
                   type="submit"
-                  className="w-full rounded-full bg-[rgb(var(--brand-accent-rgb))] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-black transition-colors hover:bg-[rgb(var(--brand-accent-rgb))]/90"
+                  size="lg"
+                  className="w-full justify-center rounded-full px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em]"
                   disabled={isSubmitting}
                   aria-busy={isSubmitting}
                 >
                   {isSubmitting ? "Sending…" : "Send my request"}
-                </Button>
+                </RainbowButton>
                 <p className="text-center text-[0.7rem] uppercase tracking-[0.24em] text-white/40">
                   By submitting, you agree to our privacy practices. We never share your information.
                 </p>

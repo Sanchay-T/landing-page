@@ -5,11 +5,11 @@ import { CheckIcon } from "@radix-ui/react-icons";
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
 
 type Interval = "month" | "year";
@@ -205,22 +205,21 @@ export default function PricingSection() {
                 </ul>
                 <div className="mt-auto">
                   {plan.highlight ? (
-                    <ShimmerButton
-                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,rgb(var(--brand-accent-rgb)),rgb(var(--brand-accent-strong-rgb)))] py-3 text-sm font-semibold text-black"
-                      shimmerColor="#ffffff"
-                      shimmerDuration="2s"
+                    <RainbowButton
+                      size="lg"
+                      className="w-full justify-center rounded-full py-3 text-sm font-semibold"
                       onClick={() => onSubscribeClick(plan.id)}
                     >
                       {plan.cta ?? "Talk to us"}
-                    </ShimmerButton>
+                    </RainbowButton>
                   ) : (
-                    <Button
-                      className="w-full rounded-full border border-white/15 bg-white/10 text-sm font-semibold text-white hover:bg-white/20"
+                    <InteractiveHoverButton
+                      className="w-full border-white/15 bg-white/10 text-white hover:bg-white/20 text-sm"
                       disabled={isLoading && id === plan.id}
                       onClick={() => onSubscribeClick(plan.id)}
                     >
                       {isLoading && id === plan.id ? "Scheduling…" : plan.cta ?? "Talk to us"}
-                    </Button>
+                    </InteractiveHoverButton>
                   )}
                 </div>
               </motion.div>

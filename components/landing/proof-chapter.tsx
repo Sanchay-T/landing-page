@@ -1,20 +1,9 @@
 "use client";
 
-import {
-  Clock3,
-  Headset,
-  LineChart,
-  LucideIcon,
-  Mail,
-  ShieldCheck,
-  Slack,
-  Sparkles,
-  Webhook,
-} from "lucide-react";
+import { Clock3, Headset, ShieldCheck, Sparkles } from "lucide-react";
 
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 import { AnimatedList } from "@/components/magicui/animated-list";
-import { OrbitingCircles } from "@/components/magicui/orbiting-circles";
 import Marquee from "@/components/magicui/marquee";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { WordRotate } from "@/components/magicui/word-rotate";
@@ -56,27 +45,29 @@ const differentiators = [
   },
 ];
 
-type IntegrationBadge = {
-  icon: LucideIcon;
-  label: string;
-  colors: [string, string];
-};
-
-const outerOrbit: IntegrationBadge[] = [
-  { icon: Mail, label: "Outreach", colors: ["#38bdf8", "#6366f1"] },
-  { icon: Slack, label: "Slack", colors: ["#22d3ee", "#0ea5e9"] },
-  { icon: Webhook, label: "Zapier", colors: ["#f97316", "#fb7185"] },
-  { icon: LineChart, label: "HubSpot", colors: ["#fbbf24", "#ef4444"] },
-];
-
-const innerOrbit: IntegrationBadge[] = [
-  { icon: ShieldCheck, label: "TrustArc", colors: ["#34d399", "#22c55e"] },
-  { icon: Headset, label: "Zendesk", colors: ["#60a5fa", "#2563eb"] },
-  { icon: Sparkles, label: "Custom", colors: ["#f472b6", "#a855f7"] },
-];
-
 const marqueeLogos = [
   "Figma", "Mercury", "Tome", "Linear", "Attio", "Notation Capital",
+];
+
+const coverageHighlights = [
+  {
+    label: "Escalations handled live",
+    description:
+      "Operator pods watch transcripts in real time and surface the right human before metrics dip.",
+    icon: Headset,
+  },
+  {
+    label: "Playbooks stay fresh",
+    description:
+      "Weekly QA loops tighten prompts, refresh datasets, and broadcast annotated learnings to your team.",
+    icon: Sparkles,
+  },
+  {
+    label: "Compliance-ready guardrails",
+    description:
+      "Every intervention is logged with approvals so audits, SOC 2 reviews, and finance sign-off stay painless.",
+    icon: ShieldCheck,
+  },
 ];
 
 export default function ProofChapter() {
@@ -117,7 +108,7 @@ function PainPromiseMetrics() {
         >
           <span className="text-white/90">Stop letting </span>
           <WordRotate
-            words={["missed demos", "tier-one tickets", "renewals"]}
+            words={["missed demo slots", "priority tickets", "late stage deals"]}
             className="mx-1"
             textClassName="text-white"
           />
@@ -216,75 +207,37 @@ function CredibilityStrip() {
       </div>
       <div className="rounded-3xl border border-white/10 bg-background/70 p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/70">
-          Integrations on day one
+          Operator coverage promise
         </p>
-        <IntegrationOrbit />
+        <p className="mt-3 text-sm text-white/70 md:text-base">
+          Devonel operators run the same dashboards you do—triaging spikes, refreshing prompts, and capturing
+          every intervention so your leadership reviews stay confident.
+        </p>
+        <ul className="mt-6 space-y-3">
+          {coverageHighlights.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li
+                key={item.label}
+                className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/40 px-4 py-3"
+              >
+                <span className="mt-1 flex size-10 items-center justify-center rounded-full border border-white/10 bg-[rgb(var(--brand-accent-rgb)/0.12)] text-white/90">
+                  <Icon className="size-4" aria-hidden />
+                </span>
+                <div className="space-y-1">
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-white/70">
+                    {item.label}
+                  </p>
+                  <p className="text-sm text-white/65">{item.description}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
         <p className="mt-6 flex items-center gap-2 text-xs uppercase tracking-[0.24em] text-white/60">
-          <Clock3 className="size-4" /> Monitoring coverage · 24/7 · Operator escalations under 5 minutes
+          <Clock3 className="size-4" aria-hidden /> Monitoring coverage · 24/7 · Operator escalations under 5 minutes
         </p>
       </div>
-    </div>
-  );
-}
-
-function IntegrationOrbit() {
-  return (
-    <div className="relative mx-auto mt-8 size-72 max-w-[20rem]">
-      <div className="pointer-events-none absolute inset-0 rounded-full border border-white/10" />
-      <div className="pointer-events-none absolute inset-6 rounded-full border border-white/5" />
-      <div className="pointer-events-none absolute inset-[3.75rem] rounded-full border border-white/5" />
-
-      <OrbitingCircles
-        radius={116}
-        iconSize={108}
-        duration={36}
-        className="z-20"
-        path={false}
-      >
-        {outerOrbit.map((item) => (
-          <OrbitBadge key={item.label} item={item} />
-        ))}
-      </OrbitingCircles>
-      <OrbitingCircles
-        radius={80}
-        iconSize={96}
-        duration={26}
-        speed={1.35}
-        reverse
-        className="z-20"
-        path={false}
-      >
-        {innerOrbit.map((item) => (
-          <OrbitBadge key={item.label} item={item} />
-        ))}
-      </OrbitingCircles>
-
-      <div className="relative z-30 flex h-full items-center justify-center">
-        <div className="rounded-full border border-white/10 bg-[rgb(var(--brand-accent-rgb)/0.18)] px-6 py-5 text-center text-xs font-semibold uppercase tracking-[0.24em] text-white shadow-[0_0_35px_rgba(var(--brand-accent-rgb),0.35)] backdrop-blur">
-          Operator Control Center
-          <p className="mt-2 text-[0.6rem] font-normal uppercase tracking-[0.32em] text-white/70">
-            HubSpot · Salesforce · Slack
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function OrbitBadge({ item }: { item: IntegrationBadge }) {
-  const Icon = item.icon;
-
-  return (
-    <div
-      className="flex h-full w-full flex-col items-center justify-center gap-1 rounded-[26px] border border-white/10 px-3 py-3 text-center text-[0.5rem] font-semibold uppercase tracking-[0.28em] text-white shadow-[0_12px_32px_rgba(15,23,42,0.35)] backdrop-blur"
-      style={{
-        background: `linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1]})`,
-      }}
-    >
-      <Icon className="h-5 w-5 text-white drop-shadow-[0_6px_12px_rgba(15,23,42,0.45)]" aria-hidden />
-      <span className="text-[0.45rem] font-medium uppercase tracking-[0.32em] text-white/80">
-        {item.label}
-      </span>
     </div>
   );
 }

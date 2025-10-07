@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -41,17 +40,65 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+    const classes = cn(buttonVariants({ variant, size, className }))
+
+    if (asChild) {
+      if (!React.isValidElement(children)) {
+        return null
+      }
+
+      const childProps = children.props ?? {}
+      const {
+        ref: childRef,
+        className: childClassName,
+        ...restChildProps
+      } = childProps as {
+        ref?: React.Ref<HTMLElement>
+        className?: string
+        [key: string]: unknown
+      }
+
+      const { className: providedClassName, ...restProps } = props as {
+        className?: unknown
+        [key: string]: unknown
+      }
+
+      return React.cloneElement(children, {
+        ...restChildProps,
+        ...restProps,
+        className:
+          cn(
+            typeof childClassName === "string" ? childClassName : undefined,
+            typeof providedClassName === "string" ? providedClassName : undefined,
+            classes
+          ) || undefined,
+        ref: mergeRefs(childRef, ref as React.Ref<HTMLElement>),
+      })
+    }
+
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
+      <button className={classes} ref={ref} {...props}>
+        {children}
+      </button>
     )
   }
 )
 Button.displayName = "Button"
 
 export { Button, buttonVariants }
+
+function mergeRefs<T>(
+  ...refs: (React.Ref<T | null> | undefined)[]
+): React.RefCallback<T | null> {
+  return (value) => {
+    for (const ref of refs) {
+      if (!ref) continue
+      if (typeof ref === "function") {
+        ref(value)
+      } else {
+        ;(ref as React.MutableRefObject<T | null>).current = value
+      }
+    }
+  }
+}

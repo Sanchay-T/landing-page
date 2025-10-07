@@ -1,13 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  ShoppingBag,
-  Building2,
-  Landmark,
-  Activity,
-  Briefcase,
-} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -18,7 +12,32 @@ const industries = [
     copy:
       "AI sales agents recover abandoned carts, recommend bundles, and sync actions with your ESP and CRM.",
     highlights: ["Cart recovery", "VIP concierge", "Post-purchase automation"],
-    icon: <ShoppingBag className="size-5" />,
+    logo: {
+      src: "/industries/shopify.svg",
+      alt: "Shopify logo",
+    },
+  },
+  {
+    name: "B2B SaaS",
+    headline: "Keep pipelines warm between touchpoints",
+    copy:
+      "Product-led growth teams lean on Devonel agents to qualify trials, answer technical blockers, and surface upsell signals.",
+    highlights: ["Trial conversion", "Product education", "Expansion alerts"],
+    logo: {
+      src: "/industries/linear.svg",
+      alt: "Linear logo",
+    },
+  },
+  {
+    name: "Financial Services",
+    headline: "Keep clients informed and compliant",
+    copy:
+      "Automations pull data from internal systems, while agents deliver timely portfolio updates and route escalations.",
+    highlights: ["Compliance guardrails", "Portfolio updates", "Secure handoffs"],
+    logo: {
+      src: "/industries/stripe.svg",
+      alt: "Stripe logo",
+    },
   },
   {
     name: "Real Estate",
@@ -26,23 +45,21 @@ const industries = [
     copy:
       "Voice and chat agents schedule tours, answer availability questions, and update your MLS + CRM instantly.",
     highlights: ["Tour booking", "Lead scoring", "Follow-up sequences"],
-    icon: <Building2 className="size-5" />,
+    logo: {
+      src: "/industries/zillow.svg",
+      alt: "Zillow logo",
+    },
   },
   {
-    name: "Finance",
-    headline: "Keep clients informed and compliant",
+    name: "Logistics & Delivery",
+    headline: "Coordinate shipments before they bottleneck",
     copy:
-      "Automations pull data from internal systems, while agents deliver timely portfolio updates and route escalations.",
-    highlights: ["Compliance guardrails", "Portfolio updates", "Secure handoffs"],
-    icon: <Landmark className="size-5" />,
-  },
-  {
-    name: "Healthcare",
-    headline: "Supercharge patient operations",
-    copy:
-      "Agents triage inbound requests, coordinate appointments, and surface the right knowledge for staff 24/7.",
-    highlights: ["Patient intake", "Knowledge retrieval", "Scheduling"],
-    icon: <Activity className="size-5" />,
+      "Ops agents orchestrate carrier handoffs, notify customers of delays, and sync inventory movements into your ERP stack.",
+    highlights: ["Carrier escalations", "Proactive alerts", "ERP updates"],
+    logo: {
+      src: "/industries/fedex.svg",
+      alt: "FedEx logo",
+    },
   },
   {
     name: "Professional Services",
@@ -50,12 +67,15 @@ const industries = [
     copy:
       "Devonel agents manage follow-ups, billing nudges, and status updates while syncing notes to Notion and Slack.",
     highlights: ["Client updates", "Billing automations", "Project dashboards"],
-    icon: <Briefcase className="size-5" />,
+    logo: {
+      src: "/industries/notion.svg",
+      alt: "Notion logo",
+    },
   },
 ];
 
 const cardBase =
-  "group relative flex flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.3)]";
+  "group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-white/10 bg-background/75 p-6 shadow-[0_18px_60px_-45px_rgba(15,23,42,0.9)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.35)]";
 
 export default function IndustriesSection() {
   return (
@@ -74,7 +94,7 @@ export default function IndustriesSection() {
           multiple verticals.
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {industries.map((industry, index) => (
           <motion.div
             key={industry.name}
@@ -84,7 +104,7 @@ export default function IndustriesSection() {
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
             className={cn(cardBase)}
           >
-            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[rgb(var(--brand-accent-rgb)/0.06)] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
+            <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_top,rgb(var(--brand-accent-rgb)/0.08),transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-80" />
             <div className="relative z-10 flex items-start justify-between gap-4">
               <div className="flex-1">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb)/0.7)]">
@@ -94,8 +114,14 @@ export default function IndustriesSection() {
                   {industry.headline}
                 </h3>
               </div>
-              <div className="rounded-full border border-[rgb(var(--brand-accent-rgb)/0.4)] bg-[rgb(var(--brand-accent-rgb)/0.1)] p-2.5 text-[rgb(var(--brand-accent-rgb))]">
-                {industry.icon}
+              <div className="flex size-12 items-center justify-center rounded-full border border-white/15 bg-white/5">
+                <Image
+                  src={industry.logo.src}
+                  alt={industry.logo.alt}
+                  width={28}
+                  height={28}
+                  className="h-7 w-7 opacity-90"
+                />
               </div>
             </div>
             <p className="relative z-10 text-sm leading-relaxed text-white/70">

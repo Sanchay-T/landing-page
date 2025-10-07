@@ -46,27 +46,27 @@ const steps = [
 const toolLogos = [
   {
     name: "OpenAI",
-    src: "https://cdn.simpleicons.org/openai/white",
+    src: "/integrations/openai.svg",
   },
   {
     name: "Zapier",
-    src: "https://cdn.simpleicons.org/zapier/white",
+    src: "/integrations/zapier.svg",
   },
   {
     name: "Notion",
-    src: "https://cdn.simpleicons.org/notion/white",
+    src: "/integrations/notion.svg",
   },
   {
     name: "Slack",
-    src: "https://cdn.simpleicons.org/slack/white",
+    src: "/integrations/slack.svg",
   },
   {
     name: "HubSpot",
-    src: "https://cdn.simpleicons.org/hubspot/white",
+    src: "/integrations/hubspot.svg",
   },
   {
     name: "Stripe",
-    src: "https://cdn.simpleicons.org/stripe/white",
+    src: "/integrations/stripe.svg",
   },
 ];
 
@@ -150,8 +150,8 @@ export default function ProcessSection() {
               ))}
             </div>
           </div>
-          <div className="relative mx-auto h-60 w-60">
-            <OrbitingCircles radius={120} iconSize={60} className="bg-primary/10 text-primary">
+          <div className="relative mx-auto h-60 w-60 overflow-hidden md:h-72 md:w-72">
+            <OrbitingCircles radius={96} iconSize={48} className="bg-primary/10 text-primary">
               {toolLogos.map((tool) => (
                 <div
                   key={`${tool.name}-orbit`}

@@ -1,6 +1,6 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
 import { SpinningText } from "@/components/magicui/spinning-text";

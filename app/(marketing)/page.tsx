@@ -1,3 +1,4 @@
+import ChapterNav from "@/components/landing/chapter-nav";
 import CommitChapter from "@/components/landing/commit-chapter";
 import HeroSection from "@/components/landing/hero-section";
 import PlaybooksChapter from "@/components/landing/playbooks-chapter";
@@ -24,6 +25,7 @@ export default async function Page() {
           {manifestoCopy}
         </p>
       </div>
+      <ChapterNav />
       <ProofChapter />
       <PlaybooksChapter />
       <SphereMask className="hidden md:block" />

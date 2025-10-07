@@ -44,7 +44,7 @@ export const contactFormSchema = z.object({
   focus: z
     .array(z.enum(FOCUS_AREAS))
     .min(1, "Pick at least one area where you need help.")
-    .max(FOCUS_AREAS.length, "Pick the priorities that matter most."),
+    .max(3, "Pick up to three priorities so we can focus the kickoff."),
   message: z
     .string({ required_error: "Share a bit more context so we can prepare." })
     .trim()

@@ -292,6 +292,10 @@ export default function ContactSection() {
                               if (current.includes(area)) {
                                 field.onChange(current.filter((item) => item !== area));
                               } else {
+                                if (current.length >= 3) {
+                                  toast.error("Pick up to three focus areas.");
+                                  return;
+                                }
                                 field.onChange([...current, area]);
                               }
                             }}

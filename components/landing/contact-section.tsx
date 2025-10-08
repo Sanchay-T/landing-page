@@ -152,18 +152,20 @@ export default function ContactSection() {
             <Form {...form}>
               <form
               onSubmit={form.handleSubmit(handleSubmit)}
-              className="grid gap-4 lg:grid-cols-6"
+              className="grid gap-5 lg:grid-cols-6"
               noValidate
             >
-              <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55 lg:col-span-6">
-                Contact details
-              </p>
+              <div className="lg:col-span-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55">
+                  Contact details
+                </p>
+              </div>
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem className="space-y-1 lg:col-span-3">
-                    <FormLabel>Full name</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-sm font-medium text-white/85">Full name</FormLabel>
                     <FormControl>
                       <Input placeholder="Taylor Rivera" {...field} />
                     </FormControl>
@@ -175,8 +177,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="space-y-1 lg:col-span-3">
-                    <FormLabel>Work email</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-sm font-medium text-white/85">Work email</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="you@company.com" {...field} />
                     </FormControl>
@@ -188,8 +190,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="company"
                 render={({ field }) => (
-                  <FormItem className="space-y-1 lg:col-span-3">
-                    <FormLabel>Company</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-sm font-medium text-white/85">Company</FormLabel>
                     <FormControl>
                       <Input placeholder="Devonel" {...field} />
                     </FormControl>
@@ -201,8 +203,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="website"
                 render={({ field }) => (
-                  <FormItem className="space-y-1 lg:col-span-3">
-                    <FormLabel>Website</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-sm font-medium text-white/85">Website</FormLabel>
                     <FormControl>
                       <Input placeholder="https://yourdomain.com" {...field} />
                     </FormControl>
@@ -211,17 +213,19 @@ export default function ContactSection() {
                 )}
               />
 
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55 lg:col-span-6">
-                Engagement snapshot
-              </p>
+              <div className="lg:col-span-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55">
+                  Engagement snapshot
+                </p>
+              </div>
               <FormField
                 control={form.control}
                 name="headcount"
                 render={({ field }) => (
-                  <FormItem className="space-y-1 lg:col-span-3">
+                  <FormItem className="space-y-2 lg:col-span-3">
                     <div className="flex items-center justify-between gap-3">
-                      <FormLabel>Go-to-market headcount</FormLabel>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/40">
+                      <FormLabel className="text-sm font-medium text-white/85">Go-to-market headcount</FormLabel>
+                      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
                         Daily pod size
                       </span>
                     </div>
@@ -245,10 +249,10 @@ export default function ContactSection() {
                 control={form.control}
                 name="timeline"
                 render={({ field }) => (
-                  <FormItem className="space-y-1 lg:col-span-3">
+                  <FormItem className="space-y-2 lg:col-span-3">
                     <div className="flex items-center justify-between gap-3">
-                      <FormLabel>Activation timeline</FormLabel>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/40">
+                      <FormLabel className="text-sm font-medium text-white/85">Activation timeline</FormLabel>
+                      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
                         Go-live window
                       </span>
                     </div>
@@ -273,10 +277,10 @@ export default function ContactSection() {
                 control={form.control}
                 name="focus"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-6">
+                  <FormItem className="space-y-3 lg:col-span-6">
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                      <FormLabel>Where do you need help first?</FormLabel>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/40">
+                      <FormLabel className="text-sm font-medium text-white/85">Where do you need help first?</FormLabel>
+                      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
                         Choose up to three
                       </span>
                     </div>
@@ -317,12 +321,13 @@ export default function ContactSection() {
                 control={form.control}
                 name="message"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-6">
-                    <FormLabel>What should we know?</FormLabel>
+                  <FormItem className="space-y-3 lg:col-span-6">
+                    <FormLabel className="text-sm font-medium text-white/85">What should we know?</FormLabel>
                     <FormControl>
                       <Textarea
-                        rows={2}
-                        placeholder="Share the funnel leaks, KPIs, or integrations you’re prioritizing."
+                        rows={3}
+                        placeholder="Share the funnel leaks, KPIs, or integrations you're prioritizing."
+                        className="resize-none"
                         {...field}
                       />
                     </FormControl>
@@ -331,19 +336,19 @@ export default function ContactSection() {
                 )}
               />
 
-              <div className="space-y-2 lg:col-span-6">
+              <div className="space-y-3 lg:col-span-6">
                 <ShimmerButton
                   type="submit"
                   borderRadius="999px"
                   shimmerColor="#ffffff"
                   shimmerDuration="2s"
-                  className="w-full rounded-full bg-[rgb(var(--brand-accent-rgb))] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-black transition-colors hover:bg-[rgb(var(--brand-accent-rgb))]/90"
+                  className="w-full rounded-full bg-[rgb(var(--brand-accent-rgb))] px-6 py-3 text-sm font-semibold uppercase tracking-[0.24em] text-black transition-colors hover:bg-[rgb(var(--brand-accent-rgb))]/90"
                   disabled={isSubmitting}
                   aria-busy={isSubmitting}
                 >
                   {isSubmitting ? "Sending…" : "Send my request"}
                 </ShimmerButton>
-                <p className="text-center text-[0.7rem] uppercase tracking-[0.24em] text-white/40">
+                <p className="text-center text-[0.68rem] leading-relaxed uppercase tracking-[0.2em] text-white/40">
                   By submitting, you agree to our privacy practices. We never share your information.
                 </p>
               </div>

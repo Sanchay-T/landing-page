@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { TextAnimate } from "@/components/ui/text-animate";
 import { getPublishedBlogPosts } from "@/lib/blog/posts";
 
 export const metadata: Metadata = {
@@ -41,13 +42,28 @@ export default function BlogIndexPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-primary/70">
             Blog
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+          <TextAnimate
+            as="h1"
+            className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl"
+            animation="blurInUp"
+            by="word"
+            delay={0.15}
+            duration={0.7}
+            once
+          >
             Notes on building autonomous operators that feel on-brand.
-          </h1>
-          <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
-            Fresh publish-ready templates, growth experiments, and changelog patterns our team uses
-            while shipping AI-powered onboarding and support flows.
-          </p>
+          </TextAnimate>
+          <TextAnimate
+            as="p"
+            className="max-w-2xl text-sm text-muted-foreground md:text-base"
+            animation="slideUp"
+            by="line"
+            delay={0.3}
+            duration={0.6}
+            once
+          >
+            Fresh publish-ready templates, growth experiments, and changelog patterns our team uses while shipping AI-powered onboarding and support flows.
+          </TextAnimate>
         </header>
 
         <section className="mt-12 grid gap-6 md:grid-cols-2">

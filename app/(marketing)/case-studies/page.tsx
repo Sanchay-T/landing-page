@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { TextReveal } from "@/components/ui/text-reveal";
 import { getPublishedCaseStudies } from "@/lib/case-studies/posts";
 
 export const metadata: Metadata = {
@@ -40,14 +42,27 @@ export default function CaseStudiesIndexPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-primary/70">
             Case Studies
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+          <TextAnimate
+            as="h1"
+            className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl"
+            animation="blurInUp"
+            by="word"
+            delay={0.15}
+            duration={0.7}
+            once
+          >
             Real results from AI agents in production.
-          </h1>
-          <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
-            See how businesses across industries are using Devonel&apos;s AI agents to automate operations,
-            improve customer experience, and drive measurable revenue growth—with zero compliance incidents.
-          </p>
+          </TextAnimate>
         </header>
+
+        <div className="mt-10">
+          <TextReveal className="hidden lg:block" viewportHeight={110}>
+            We pair every deployment with live operators who surface the transcripts, numbers, and compliance notes behind these case studies—so you can see the systems that make the headlines real.
+          </TextReveal>
+          <p className="mx-auto max-w-3xl text-sm text-muted-foreground md:text-base lg:hidden">
+            We pair every deployment with live operators who surface the transcripts, numbers, and compliance notes behind these case studies—so you can see the systems that make the headlines real.
+          </p>
+        </div>
 
         <section className="mt-12 grid gap-6 md:grid-cols-2">
           {caseStudies.map((caseStudy) => (

@@ -5,11 +5,12 @@ import { CheckIcon } from "@radix-ui/react-icons";
 import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 type Interval = "month" | "year";
 
@@ -95,24 +96,59 @@ export default function PricingSection() {
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1 text-xs uppercase tracking-[0.24em] text-white/70">
             <Sparkles className="size-3" /> Engagements
           </div>
-          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+          <TextAnimate
+            as="h2"
+            className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl"
+            animation="scaleUp"
+            by="word"
+            delay={0.15}
+            duration={0.6}
+            once
+          >
             Flexible operator plans to launch and scale AI agents.
-          </h2>
-          <p className="mt-4 text-base text-white/70 md:text-lg">
-            Every Devonel engagement pairs automation architects with on-call operators so your agents stay compliant,
-            on-brand, and tied to revenue results.
-          </p>
+          </TextAnimate>
+          <TextAnimate
+            as="p"
+            className="mt-4 text-base text-white/70 md:text-lg"
+            animation="blurInUp"
+            by="line"
+            delay={0.3}
+            duration={0.6}
+            once
+          >
+            Every Devonel engagement pairs automation architects with on-call operators so your agents stay compliant, on-brand, and tied to revenue results.
+          </TextAnimate>
         </div>
 
         <div className="mx-auto flex w-full max-w-md items-center justify-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs uppercase tracking-[0.24em] text-white/70">
-          <span>Monthly</span>
+          <TextAnimate
+            as="span"
+            className="inline-block"
+            animation="slideRight"
+            by="word"
+            delay={0.2}
+            duration={0.4}
+            once
+          >
+            Monthly
+          </TextAnimate>
           <Switch
             id="interval"
             onCheckedChange={(checked) => {
               setInterval(checked ? "year" : "month");
             }}
           />
-          <span>Annual</span>
+          <TextAnimate
+            as="span"
+            className="inline-block"
+            animation="slideLeft"
+            by="word"
+            delay={0.25}
+            duration={0.4}
+            once
+          >
+            Annual
+          </TextAnimate>
           <span className="rounded-full bg-[rgb(var(--brand-accent-rgb)/0.1)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[rgb(var(--brand-accent-rgb))]">
             Save 2 months
           </span>
@@ -170,21 +206,22 @@ export default function PricingSection() {
                 <div className="mt-auto">
                   {plan.highlight ? (
                     <ShimmerButton
-                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,rgb(var(--brand-accent-rgb)),rgb(var(--brand-accent-strong-rgb)))] py-3 text-sm font-semibold text-black"
+                      borderRadius="999px"
                       shimmerColor="#ffffff"
                       shimmerDuration="2s"
+                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,rgb(250,204,21),rgb(245,158,11))] py-3 text-sm font-semibold text-black"
                       onClick={() => onSubscribeClick(plan.id)}
                     >
                       {plan.cta ?? "Talk to us"}
                     </ShimmerButton>
                   ) : (
-                    <Button
-                      className="w-full rounded-full border border-white/15 bg-white/10 text-sm font-semibold text-white hover:bg-white/20"
+                    <InteractiveHoverButton
+                      className="w-full border-white/15 bg-white/10 text-white hover:bg-white/20 text-sm"
                       disabled={isLoading && id === plan.id}
                       onClick={() => onSubscribeClick(plan.id)}
                     >
                       {isLoading && id === plan.id ? "Scheduling…" : plan.cta ?? "Talk to us"}
-                    </Button>
+                    </InteractiveHoverButton>
                   )}
                 </div>
               </motion.div>

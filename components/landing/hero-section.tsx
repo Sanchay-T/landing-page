@@ -1,21 +1,34 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
+import { CAL_EMBED_ID, CTA_LINKS } from "@/lib/marketing";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { Button } from "@/components/ui/button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
+import { Highlighter } from "@/components/ui/highlighter";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { CalTrigger } from "@/components/integrations/cal-trigger";
 
 export default function HeroSection() {
   const mediaRef = useRef(null);
   const mediaInView = useInView(mediaRef, { once: true, margin: "-100px" });
+
+  const handleBookCallClick = () => {
+    const target = document.getElementById(CAL_EMBED_ID);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.open(CTA_LINKS.bookCall, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <section id="hero" className="relative mx-auto mt-32 max-w-[80rem] px-6 text-center md:px-8">
@@ -31,17 +44,39 @@ export default function HeroSection() {
 
       <div className="backdrop-filter-[12px] inline-flex h-7 items-center justify-between rounded-full border border-white/20 bg-white/10 px-3 text-xs transition-all ease-in hover:cursor-pointer hover:bg-white/20 group gap-1 translate-y-[-1rem] animate-fade-in opacity-0">
         <TextShimmer className="inline-flex items-center justify-center text-white">
-          <span className="text-white">✨ Devonel • AI Agents & Automations</span>
+          <TypingAnimation
+            words={[
+              "✨ Devonel • AI Agents & Automations",
+              "✨ Devonel • Operator-led Deployments",
+              "✨ Devonel • Close Loops Faster",
+            ]}
+            className="text-white"
+            loop
+            pauseDelay={1600}
+            typeSpeed={70}
+            deleteSpeed={40}
+            cursorStyle="underscore"
+          />
           <ArrowRightIcon className="ml-1 size-3 text-white transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
         </TextShimmer>
       </div>
 
-      <h1 className="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text pt-6 pb-1 text-5xl font-medium leading-[1.2] tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:200ms]">
-        Deploy AI Agents
-        <br />
+      <h1 className="pt-6 pb-1 text-5xl font-medium leading-[1.15] tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
+        <TextAnimate
+          as="span"
+          className="block"
+          segmentClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-transparent"
+          animation="blurInUp"
+          by="text"
+          delay={0.2}
+          duration={0.9}
+          once
+        >
+          Deploy AI Agents
+        </TextAnimate>
         <WordRotate
-          className="mt-3"
-          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
+          className="mt-1 sm:mt-3"
+          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium leading-[1.1] tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
           words={[
             "Close Loops",
             "Filter Leads",
@@ -50,35 +85,54 @@ export default function HeroSection() {
         />
       </h1>
 
-      <p className="mb-8 mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms] sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10">
+      <TextAnimate
+        as="p"
+        className="mt-10 text-lg tracking-tight text-gray-300 md:text-xl text-balance sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10"
+        animation="blurInUp"
+        by="word"
+        delay={0.4}
+        duration={0.9}
+        once
+      >
         Operator-led automation for revenue, success, and support.
+      </TextAnimate>
+      <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-white/85 text-balance md:mt-6 md:text-base lg:text-lg">
+        A
+        {" "}
+        <span className="relative inline-flex font-semibold text-white">
+          <Highlighter color="#F59E0B" strokeWidth={2.4} animationDuration={720}>
+            human operator pod
+          </Highlighter>
+        </span>
+        {" "}
+        audits transcripts live, tunes prompts in your stack, and keeps every agent{" "}
+        <span className="relative inline-flex font-semibold text-white">
+          <Highlighter action="underline" color="#FF9800" strokeWidth={2} animationDuration={800}>
+            on brand
+          </Highlighter>
+        </span>
+        .
       </p>
 
-      <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
-        <CalTrigger>
-          <ShimmerButton
-            borderRadius="999px"
-            className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)] hover:shadow-[0_25px_80px_-40px_rgba(0,0,0,0.9)]"
-            shimmerColor="rgb(var(--brand-accent-rgb))"
-            shimmerDuration="2.4s"
-          >
-            <span className="flex items-center gap-2">
-              Book a strategy call
-              <ArrowRightIcon className="size-4" />
-            </span>
-          </ShimmerButton>
-        </CalTrigger>
-        <Button
-          size="lg"
-          variant="outline"
-          className="gap-2 rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10"
-          asChild
+      <div className="mb-8 mt-9 flex flex-col items-center justify-center gap-4 translate-y-[-1rem] animate-fade-in opacity-0 sm:mt-8 md:mt-10 md:flex-row [--animation-delay:600ms]">
+        <ShimmerButton
+          onClick={handleBookCallClick}
+          borderRadius="999px"
+          shimmerColor="rgb(250, 204, 21)"
+          shimmerDuration="2.4s"
+          className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)]"
         >
-          <a href="#case-studies">
-            See agent playbooks
+          <span className="flex items-center gap-2">
+            Book a strategy call
             <ArrowRightIcon className="size-4" />
-          </a>
-        </Button>
+          </span>
+        </ShimmerButton>
+        <InteractiveHoverButton
+          className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
+          onClick={() => document.getElementById("case-studies")?.scrollIntoView({ behavior: "smooth" })}
+        >
+          See agent playbooks
+        </InteractiveHoverButton>
       </div>
 
       <div className="flex max-w-3xl mx-auto flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/70 translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:800ms]">
@@ -102,15 +156,23 @@ export default function HeroSection() {
             colorFrom="rgba(250,204,21,0.35)"
             colorTo="rgba(250,204,21,0.05)"
           />
-          <img
+          <Image
             src="/hero-dark.png"
             alt="Workflow automations preview"
+            width={1400}
+            height={900}
+            priority
             className="hidden h-full w-full rounded-[inherit] border border-white/10 object-cover dark:block"
+            quality={90}
           />
-          <img
+          <Image
             src="/hero-light.png"
             alt="Workflow automations preview"
+            width={1400}
+            height={900}
+            priority
             className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
+            quality={90}
           />
         </div>
       </div>

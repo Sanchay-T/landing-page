@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, type ReactNode, useRef } from "react";
+import React, { forwardRef, type ReactNode, useRef } from "react";
 import Image from "next/image";
 import {
   Compass,
@@ -13,9 +13,10 @@ import {
   Workflow as WorkflowIcon,
 } from "lucide-react";
 
-import { LineShadowText } from "@/components/magicui/line-shadow-text";
 import { AnimatedBeam } from "@/registry/magicui/animated-beam";
 import { cn } from "@/lib/utils";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 const steps = [
   {
@@ -87,7 +88,7 @@ const Circle = forwardRef<HTMLDivElement, { className?: string; children?: React
   <div
     ref={ref}
     className={cn(
-      "z-10 flex size-12 items-center justify-center rounded-full border-2 bg-white p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
+      "z-10 flex size-12 items-center justify-center rounded-full border-2 bg-white p-2.5 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)] sm:size-14 sm:p-3",
       className,
     )}
   >
@@ -111,11 +112,10 @@ function IntegrationsBeam() {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-[360px] w-full max-w-[460px] items-center justify-center overflow-hidden rounded-[32px] border border-white/12 bg-black/90 p-14 shadow-[0_40px_140px_-90px_rgba(0,0,0,0.9)]"
+      className="relative flex h-[260px] w-full max-w-[22rem] flex-1 items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-6 backdrop-blur-sm sm:h-[300px] sm:max-w-[26rem] md:max-w-[32rem] lg:h-[350px] lg:max-w-none lg:min-w-[560px] lg:p-10"
     >
-      <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.18),transparent_65%)]" />
-      <div className="relative z-10 flex size-full max-h-[260px] flex-col items-stretch justify-between gap-12">
-        <div className="flex flex-row items-center justify-between">
+      <div className="flex size-full max-h-[280px] w-full flex-col items-stretch justify-between gap-6 sm:gap-8 md:gap-10">
+        <div className="flex flex-row flex-wrap items-center justify-between gap-6">
           <Circle ref={div1Ref}>
             <IntegrationIcons.googleDrive />
           </Circle>
@@ -123,18 +123,18 @@ function IntegrationsBeam() {
             <IntegrationIcons.googleDocs />
           </Circle>
         </div>
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row flex-wrap items-center justify-between gap-6">
           <Circle ref={div2Ref}>
             <IntegrationIcons.notion />
           </Circle>
-          <Circle ref={div4Ref} className="size-16">
+          <Circle ref={div4Ref} className="size-20">
             <IntegrationIcons.openai />
           </Circle>
           <Circle ref={div6Ref}>
             <IntegrationIcons.zapier />
           </Circle>
         </div>
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row flex-wrap items-center justify-between gap-6">
           <Circle ref={div3Ref}>
             <IntegrationIcons.whatsapp />
           </Circle>
@@ -143,77 +143,48 @@ function IntegrationsBeam() {
           </Circle>
         </div>
       </div>
-      {[
-        {
-          fromRef: div1Ref,
-          toRef: div4Ref,
-          curvature: -95,
-          endYOffset: -16,
-          duration: 6,
-          delay: 0.2,
-        },
-        {
-          fromRef: div2Ref,
-          toRef: div4Ref,
-          curvature: -12,
-          duration: 3.4,
-          delay: 0.6,
-        },
-        {
-          fromRef: div3Ref,
-          toRef: div4Ref,
-          curvature: 110,
-          endYOffset: 18,
-          duration: 7.2,
-          delay: 1.1,
-        },
-        {
-          fromRef: div5Ref,
-          toRef: div4Ref,
-          curvature: -80,
-          endYOffset: -14,
-          reverse: true,
-          duration: 5.5,
-          delay: 0.4,
-        },
-        {
-          fromRef: div6Ref,
-          toRef: div4Ref,
-          reverse: true,
-          curvature: 8,
-          startYOffset: -4,
-          duration: 4,
-          delay: 0.9,
-        },
-        {
-          fromRef: div7Ref,
-          toRef: div4Ref,
-          curvature: 105,
-          endYOffset: 14,
-          reverse: true,
-          duration: 6.5,
-          delay: 1.3,
-        },
-      ].map((beam, index) => (
-        <AnimatedBeam
-          // eslint-disable-next-line react/no-array-index-key
-          key={index}
-          containerRef={containerRef}
-          fromRef={beam.fromRef}
-          toRef={beam.toRef}
-          curvature={beam.curvature}
-          reverse={beam.reverse}
-          duration={beam.duration}
-          delay={beam.delay}
-          endYOffset={beam.endYOffset}
-          startYOffset={beam.startYOffset}
-          pathColor="rgba(226, 232, 240, 0.4)"
-          pathOpacity={0.45}
-          pathWidth={3.2}
-          gradientStartColor="#22d3ee"
-          gradientStopColor="#c084fc"
-        />
-      ))}
+
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div1Ref}
+        toRef={div4Ref}
+        curvature={-75}
+        endYOffset={-10}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div2Ref}
+        toRef={div4Ref}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div3Ref}
+        toRef={div4Ref}
+        curvature={75}
+        endYOffset={10}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div5Ref}
+        toRef={div4Ref}
+        curvature={-75}
+        endYOffset={-10}
+        reverse
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div6Ref}
+        toRef={div4Ref}
+        reverse
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        fromRef={div7Ref}
+        toRef={div4Ref}
+        curvature={75}
+        endYOffset={10}
+        reverse
+      />
     </div>
   );
 }
@@ -555,27 +526,48 @@ const IntegrationIcons = {
 
 export default function ProcessSection() {
   return (
-    <section id="process" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
+    <section id="process" className="mx-auto mt-32 max-w-7xl px-6 pb-20 md:mt-40 md:px-8 md:pb-24">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
+          <TextAnimate
+            as="p"
+            className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80"
+            animation="slideUp"
+            by="word"
+            delay={0.05}
+            duration={0.4}
+            once
+          >
             Process
-          </p>
-          <LineShadowText
+          </TextAnimate>
+          <TextAnimate
             as="h2"
-            shadowColor="rgb(var(--brand-accent-rgb)/0.35)"
             className="mt-2 text-3xl font-semibold text-foreground md:text-4xl"
+            segmentClassName="bg-gradient-to-r from-white/95 via-white/80 to-white/95 bg-clip-text text-transparent"
+            animation="blurInUp"
+            by="line"
+            delay={0.15}
+            duration={0.7}
+            once
           >
             A proven operating cadence for autonomous agents.
-          </LineShadowText>
+          </TextAnimate>
         </div>
-        <p className="max-w-xl text-sm text-muted-foreground md:text-base">
+        <TextAnimate
+          as="p"
+          className="max-w-xl text-sm text-muted-foreground md:text-base"
+          animation="slideUp"
+          by="line"
+          delay={0.25}
+          duration={0.6}
+          once
+        >
           Devonel combines product discovery, automation engineering, and operator oversight so your AI agents stay
           on-brand, compliant, and revenue-focused from pilot to scale.
-        </p>
+        </TextAnimate>
       </div>
 
-      <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-12 grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, index) => (
           <div key={step.title} className={cn(cardBase)}>
             <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-[rgb(var(--brand-accent-rgb)/0.06)] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-70" />
@@ -585,66 +577,100 @@ export default function ProcessSection() {
                 {step.icon}
               </span>
             </div>
-            <h3 className="text-xl font-semibold text-white">{step.title}</h3>
+            <TextAnimate
+              as="h3"
+              className="text-xl font-semibold text-white"
+              animation="slideUp"
+              by="text"
+              delay={index * 0.05}
+              duration={0.4}
+              viewport={{ margin: "-120px" }}
+              once
+            >
+              {step.title}
+            </TextAnimate>
             <p className="text-sm text-white/70">{step.description}</p>
             <span className="pointer-events-none absolute inset-x-5 bottom-5 h-px bg-gradient-to-r from-transparent via-[rgb(var(--brand-accent-rgb)/0.18)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
         ))}
       </div>
 
-      <div className="relative mt-14 overflow-hidden rounded-[44px] border border-white/10 bg-black/85 px-10 py-16 shadow-[0_70px_180px_-110px_rgba(10,15,25,0.95)]">
-        <div className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.12),transparent_65%)]" />
-        <div className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(circle_at_bottom_right,rgba(192,132,252,0.1),transparent_65%)]" />
-        <div className="grid gap-12 md:grid-cols-[minmax(0,520px)_minmax(0,520px)] md:items-center">
-          <div className="flex flex-col gap-10 pr-0 md:pr-6">
-            <div className="space-y-3 max-w-lg">
-              <span className="inline-flex items-center rounded-full border border-white/12 bg-black/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-primary/70">
-                Integrations we automate
-              </span>
-              <h3 className="text-3xl font-semibold text-white md:text-4xl">
+      {/* Integrations Section - Matching Site Aesthetic */}
+      <div className="mt-20 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-7 shadow-[0_30px_80px_-50px_rgb(var(--brand-accent-rgb)/0.25)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.2)] sm:p-8 lg:p-10">
+        <div className="flex flex-col lg:flex-row lg:items-stretch lg:gap-8">
+          {/* Left Content */}
+          <div className="flex-1 space-y-8">
+            <div>
+              <TypingAnimation
+                as="span"
+                className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-primary/70"
+                words={["Integrations we automate", "Operators wire every surface"]}
+                pauseDelay={1400}
+                typeSpeed={75}
+                deleteSpeed={40}
+                loop
+                cursorStyle="underscore"
+              />
+              <h3 className="mt-5 text-3xl font-semibold text-white text-balance md:text-4xl">
                 Connect your ops stack without slowing delivery.
               </h3>
-              <p className="text-sm leading-relaxed text-white/75">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70 text-balance md:text-base">
                 We wire agents into your CRM, help desk, knowledge systems, and automation layer using least-privilege
                 access, scoped actions, and real-time health checks so each hand-off lands where it should.
               </p>
             </div>
-            <div className="space-y-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
-                Active surfaces today
-              </span>
-              <div className="grid gap-3 sm:grid-cols-3">
-                {toolLogos.map((tool) => (
-                  <div
-                    key={tool.name}
-                    className="flex items-center gap-2 rounded-2xl border border-white/12 bg-black/75 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85"
-                  >
-                    <Image src={tool.src} alt={tool.name} width={18} height={18} className="opacity-85" />
-                    {tool.name}
-                  </div>
-                ))}
+
+            {/* Badges in two columns */}
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+              <div className="space-y-5">
+                <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/65">
+                  Active Surfaces Today
+                </h4>
+                <div className="grid grid-cols-2 gap-4">
+                  {toolLogos.map((tool) => (
+                    <div
+                      key={tool.name}
+                      className="flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-background/60 px-6 py-4 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/70"
+                    >
+                      <Image
+                        src={tool.src}
+                        alt={tool.name}
+                        width={20}
+                        height={20}
+                        className="opacity-85 shrink-0"
+                      />
+                      <span className="text-xs font-semibold uppercase tracking-[0.04em] text-white/90">
+                        {tool.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="space-y-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
-                Every deployment includes
-              </span>
-              <div className="grid gap-3 text-xs text-white/85 sm:grid-cols-2">
-                {capabilities.map((capability) => (
-                  <div
-                    key={capability.label}
-                    className="flex items-center gap-3 rounded-2xl border border-white/12 bg-black/75 px-4 py-3 uppercase tracking-[0.18em]"
-                  >
-                    <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-black/65 text-primary/70">
-                      {capability.icon}
-                    </span>
-                    {capability.label}
-                  </div>
-                ))}
+              <div className="space-y-5">
+                <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/65">
+                  Every Deployment Includes
+                </h4>
+                <div className="flex flex-wrap gap-3">
+                  {capabilities.map((capability) => (
+                    <div
+                      key={capability.label}
+                      className="flex min-w-[140px] flex-1 items-center gap-3 rounded-2xl border border-white/10 bg-background/60 px-4 py-3 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/70"
+                    >
+                      <span className="flex size-5 items-center justify-center rounded-md bg-[rgb(var(--brand-accent-rgb)/0.12)] text-[rgb(var(--brand-accent-rgb)/0.8)]">
+                        {React.cloneElement(capability.icon, { className: "size-3" })}
+                      </span>
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-white/90">
+                        {capability.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex justify-center md:justify-end">
+
+          {/* Right Animation - Wider Rectangle */}
+          <div className="mt-12 flex items-center justify-center lg:mt-0 lg:flex-1">
             <IntegrationsBeam />
           </div>
         </div>

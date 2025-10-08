@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
-import { Button } from "@/components/ui/button";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import {
   Form,
   FormControl,
@@ -28,6 +28,8 @@ import {
 } from "@/lib/schemas/contact";
 import { cn } from "@/lib/utils";
 import { ShineBorder } from "@/registry/magicui/shine-border";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 
 const defaultValues: ContactFormValues = {
   name: "",
@@ -111,15 +113,25 @@ export default function ContactSection() {
             transcripts, data flows, and compliance needs before proposing the pod that launches your agents.
           </p>
           <ul className="space-y-4 text-sm text-white/75">
-            {assurances.map((assurance) => (
+            {assurances.map((assurance, index) => (
               <li
                 key={assurance}
-                className="grid grid-cols-[auto,1fr] items-start gap-3"
+                className="flex items-start gap-3"
               >
-                <span className="flex size-8 items-center justify-center rounded-full border border-white/15 bg-[rgb(var(--brand-accent-rgb)/0.15)] text-white">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-white/15 bg-[rgb(var(--brand-accent-rgb)/0.15)] text-white">
                   <Check className="size-3.5" aria-hidden />
                 </span>
-                <span>{assurance}</span>
+                <TextAnimate
+                  as="p"
+                  className="flex-1 text-left"
+                  animation="slideRight"
+                  by="word"
+                  delay={0.15 + index * 0.05}
+                  duration={0.5}
+                  once
+                >
+                  {assurance}
+                </TextAnimate>
               </li>
             ))}
           </ul>
@@ -320,14 +332,17 @@ export default function ContactSection() {
               />
 
               <div className="space-y-2 lg:col-span-6">
-                <Button
+                <ShimmerButton
                   type="submit"
+                  borderRadius="999px"
+                  shimmerColor="#ffffff"
+                  shimmerDuration="2s"
                   className="w-full rounded-full bg-[rgb(var(--brand-accent-rgb))] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-black transition-colors hover:bg-[rgb(var(--brand-accent-rgb))]/90"
                   disabled={isSubmitting}
                   aria-busy={isSubmitting}
                 >
                   {isSubmitting ? "Sending…" : "Send my request"}
-                </Button>
+                </ShimmerButton>
                 <p className="text-center text-[0.7rem] uppercase tracking-[0.24em] text-white/40">
                   By submitting, you agree to our privacy practices. We never share your information.
                 </p>

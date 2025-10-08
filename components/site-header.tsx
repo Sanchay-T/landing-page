@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { CAL_EMBED_ID, CTA_LINKS } from "@/lib/marketing";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { CalTrigger } from "@/components/integrations/cal-trigger";
 
 const menuItem = [
   {
@@ -95,6 +95,25 @@ export function SiteHeader() {
 
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
 
+  const scrollToCalendar = () => {
+    const target = document.getElementById(CAL_EMBED_ID);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.open(CTA_LINKS.bookCall, "_blank", "noopener,noreferrer");
+  };
+
+  const handleScheduleClick = () => {
+    scrollToCalendar();
+  };
+
+  const handleMobileScheduleClick = () => {
+    scrollToCalendar();
+    setHamburgerMenuIsOpen(false);
+  };
+
   useEffect(() => {
     const html = document.querySelector("html");
     if (html) html.classList.toggle("overflow-hidden", hamburgerMenuIsOpen);
@@ -102,14 +121,22 @@ export function SiteHeader() {
 
   useEffect(() => {
     const closeHamburgerNavigation = () => setHamburgerMenuIsOpen(false);
+
+    let resizeTimeout: NodeJS.Timeout;
+    const debouncedClose = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(closeHamburgerNavigation, 150);
+    };
+
     window.addEventListener("orientationchange", closeHamburgerNavigation);
-    window.addEventListener("resize", closeHamburgerNavigation);
+    window.addEventListener("resize", debouncedClose, { passive: true });
 
     return () => {
+      clearTimeout(resizeTimeout);
       window.removeEventListener("orientationchange", closeHamburgerNavigation);
-      window.removeEventListener("resize", closeHamburgerNavigation);
+      window.removeEventListener("resize", debouncedClose);
     };
-  }, [setHamburgerMenuIsOpen]);
+  }, []);
 
   return (
     <>
@@ -126,15 +153,16 @@ export function SiteHeader() {
             <Link className="text-sm" href="/case-studies">
               Case Studies
             </Link>
-            <CalTrigger>
-              <Button
-                variant="ghost"
-                className="rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)] hover:bg-[linear-gradient(90deg,#13131a,#050508)]"
-                type="button"
-              >
-                Book a strategy call
-              </Button>
-            </CalTrigger>
+            <ShimmerButton
+              onClick={handleScheduleClick}
+              borderRadius="999px"
+              shimmerColor="rgb(250, 204, 21)"
+              shimmerDuration="2.4s"
+              className="rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)]"
+              type="button"
+            >
+              Book a strategy call
+            </ShimmerButton>
           </div>
           <button
             className="ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white backdrop-blur-sm md:hidden"
@@ -194,6 +222,21 @@ export function SiteHeader() {
               </motion.li>
             ))}
           </motion.ul>
+          <motion.div
+            variants={mobileLinkVar}
+            className="mt-10 flex flex-col gap-4 px-6 pb-12 md:hidden"
+          >
+            <ShimmerButton
+              onClick={handleMobileScheduleClick}
+              borderRadius="999px"
+              shimmerColor="rgb(250, 204, 21)"
+              shimmerDuration="2.4s"
+              className="border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-6 py-3 text-base font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)]"
+              type="button"
+            >
+              Book a strategy call
+            </ShimmerButton>
+          </motion.div>
         </motion.nav>
       </AnimatePresence>
     </>

@@ -1,11 +1,13 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button-variants";
+import { CAL_EMBED_ID, CTA_LINKS } from "@/lib/marketing";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
-import { SpinningText } from "@/components/magicui/spinning-text";
+import { SpinningText } from "@/registry/magicui/spinning-text";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { CalTrigger } from "@/components/integrations/cal-trigger";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { CalInlineEmbed } from "@/components/integrations/cal-inline-embed";
+import { TypingAnimation } from "@/components/ui/typing-animation";
 import { motion, useAnimation, useInView } from "motion/react";
 import {
   BarChart,
@@ -74,6 +76,26 @@ const shuffleArray = (array: any[]) => {
   return array;
 };
 
+const OrbitSpinner = ({ className }: { className?: string }) => (
+  <div
+    className={cn(
+      "relative flex h-36 w-36 items-center justify-center overflow-visible sm:h-40 sm:w-40",
+      className
+    )}
+  >
+    <div className="absolute inset-0 -m-10 -z-10 rounded-full bg-gradient-to-br from-background/70 via-background/90 to-background/70 backdrop-blur-lg shadow-[0_20px_80px_-20px_rgba(0,0,0,0.5)]" />
+    <span className="absolute z-10 size-2.5 rounded-full bg-[rgb(var(--brand-accent-rgb))]/90 shadow-[0_0_18px_rgba(var(--brand-accent-rgb),0.45)]" />
+    <SpinningText
+      duration={14}
+      radius={8}
+      className="block h-full w-full text-foreground/85"
+      textClassName="text-[0.84rem] font-medium uppercase"
+    >
+      SHIP • SCALE • GROW •
+    </SpinningText>
+  </div>
+);
+
 const Card = (card: { icon: JSX.Element; bg: JSX.Element }) => {
   const id = useId();
   const controls = useAnimation();
@@ -125,11 +147,21 @@ export default function CallToActionSection() {
     }
   }, []);
 
+  const handleBookCallClick = () => {
+    const target = document.getElementById(CAL_EMBED_ID);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.open(CTA_LINKS.bookCall, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <section id="cta">
       <div className="py-14">
-        <div className="flex w-full flex-col items-center justify-center">
-          <div className="relative flex w-full flex-col items-center justify-center overflow-visible px-4 py-16 sm:overflow-hidden sm:px-8 sm:py-20">
+        <div className="flex w-full flex-col items-center justify-center gap-16">
+          <div className="relative flex w-full flex-col items-center justify-center overflow-visible px-4 py-16 sm:overflow-visible sm:px-8 sm:py-20">
             <Marquee
               reverse
               className="-delay-[200ms] [--duration:20s]"
@@ -169,51 +201,83 @@ export default function CallToActionSection() {
               </div>
               <div className="z-10 mt-6 flex flex-col items-center text-center text-primary sm:mt-8">
                 <h1 className="text-3xl font-bold text-foreground sm:text-[2.1rem] lg:text-4xl">
-                  Ready to launch your Devonel agent?
+                  Ready to
+                  {" "}
+                  <TypingAnimation
+                    words={["launch", "scale", "optimize"]}
+                    className="ml-1 inline-flex text-foreground"
+                    typeSpeed={70}
+                    deleteSpeed={40}
+                    pauseDelay={1800}
+                    loop
+                    cursorStyle="underscore"
+                  />
+                  {" "}
+                  your Devonel agent?
                 </h1>
                 <p className="mt-3 max-w-xl text-sm text-muted-foreground sm:mt-4 sm:text-base">
                   Partner with our operators to map the playbook, integrate your
                   stack, and activate an autonomous agent that compounds your
                   growth.
                 </p>
-                <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
-                  <CalTrigger>
-                    <ShimmerButton
-                      className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
-                      shimmerColor="rgb(var(--brand-accent-rgb))"
-                      shimmerDuration="2.4s"
-                    >
-                      <span className="flex items-center gap-2">
-                        Book a strategy call
-                        <ChevronRight className="size-4" />
-                      </span>
-                    </ShimmerButton>
-                  </CalTrigger>
-                  <a
-                    href="#pricing"
-                    className={cn(
-                      buttonVariants({ variant: "outline", size: "lg" }),
-                      "rounded-[2rem]"
-                    )}
+                <div className="relative z-10 mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
+                  <ShimmerButton
+                    onClick={handleBookCallClick}
+                    borderRadius="999px"
+                    shimmerColor="rgb(250, 204, 21)"
+                    shimmerDuration="2.4s"
+                    className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
+                  >
+                    <span className="flex items-center gap-2">
+                      Book a strategy call
+                      <ChevronRight className="size-4" />
+                    </span>
+                  </ShimmerButton>
+                  <InteractiveHoverButton
+                    className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
+                    onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
                   >
                     View engagement plans
-                  </a>
+                  </InteractiveHoverButton>
                 </div>
-                <div className="pointer-events-none relative mt-14 flex h-32 w-32 items-center justify-center sm:mt-16">
-                  <span className="absolute size-2 rounded-full bg-[rgb(var(--brand-accent-rgb))]/80 shadow-[0_0_14px_rgba(var(--brand-accent-rgb),0.35)]" />
-                  <SpinningText
-                    duration={14}
-                    radius={38}
-                    className="size-full"
-                    textClassName="text-[10px] uppercase tracking-[0.32em] text-muted-foreground/60"
-                  >
-                    autonomous agents · automation ops · devonel studio ·
-                  </SpinningText>
-                </div>
+                <OrbitSpinner className="mt-6 sm:mt-9" />
               </div>
               <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-background opacity-40 blur-xl dark:bg-background" />
             </div>
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-background to-70% dark:to-background" />
+          </div>
+          <div className="w-full px-4 sm:px-8">
+            <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,20,0.92),rgba(5,5,10,0.95))] p-8 text-center shadow-[0_45px_140px_-60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-12">
+              <div className="mx-auto max-w-2xl">
+                <h2 className="text-2xl font-semibold text-white sm:text-[2.1rem]">
+                  Lock in your operator consult
+                </h2>
+                <p className="mt-3 text-sm text-white/70 sm:text-base">
+                  Meet 1:1 with our pod lead to audit your workflows, score automation opportunities, and draft a phased rollout game plan tailored to your stack.
+                </p>
+              </div>
+              <div className="mt-8 grid gap-4 text-white/80 sm:mt-10 sm:grid-cols-3">
+                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
+                  <span className="text-lg font-semibold text-white sm:text-xl">37% avg lift</span>
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
+                    in booked demos after 6 weeks
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
+                  <span className="text-lg font-semibold text-white sm:text-xl">18 active pods</span>
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
+                    across SaaS, services, and marketplaces
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
+                  <span className="text-lg font-semibold text-white sm:text-xl">&lt; 30 day go-live</span>
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
+                    operator-led rollout and training included
+                  </span>
+                </div>
+              </div>
+              <CalInlineEmbed frame={false} className="mt-8 sm:mt-10" />
+            </div>
           </div>
         </div>
       </div>

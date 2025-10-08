@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 
-import { HyperText } from "@/components/magicui/hyper-text";
 import { NumberTicker } from "@/components/magicui/number-ticker";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const stats = [
   {
@@ -31,14 +31,17 @@ export default function AboutSection() {
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary/80">
             Why Devonel
           </p>
-          <HyperText
+          <TextAnimate
             as="h2"
             className="text-3xl font-semibold leading-tight text-foreground md:text-4xl"
-            duration={900}
+            animation="blurInUp"
+            by="line"
+            duration={0.8}
+            delay={0.1}
+            once
           >
-            We’re an AI agent studio that pairs strategy with hands-on automation
-            engineering.
-          </HyperText>
+            We’re an AI agent studio that pairs strategy with hands-on automation engineering.
+          </TextAnimate>
           <p className="text-base text-muted-foreground md:text-lg">
             Devonel embeds with your team to map revenue-critical workflows,
             craft autonomous agents, and wire them into your existing stack. Our

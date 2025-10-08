@@ -247,36 +247,48 @@ export default function CallToActionSection() {
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-background to-70% dark:to-background" />
           </div>
           <div className="w-full px-4 sm:px-8">
-            <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,20,0.92),rgba(5,5,10,0.95))] p-8 text-center shadow-[0_45px_140px_-60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-12">
-              <div className="mx-auto max-w-2xl">
-                <h2 className="text-2xl font-semibold text-white sm:text-[2.1rem]">
+            <div className="mx-auto max-w-7xl rounded-[2.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,20,0.92),rgba(5,5,10,0.95))] p-6 shadow-[0_45px_140px_-60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-10 lg:p-12">
+              {/* Header Section */}
+              <div className="mb-6 text-center lg:mb-8">
+                <h2 className="text-2xl font-semibold text-white sm:text-3xl lg:text-[2.1rem]">
                   Lock in your operator consult
                 </h2>
-                <p className="mt-3 text-sm text-white/70 sm:text-base">
+                <p className="mx-auto mt-2 max-w-3xl text-sm text-white/70 sm:mt-3 sm:text-base">
                   Meet 1:1 with our pod lead to audit your workflows, score automation opportunities, and draft a phased rollout game plan tailored to your stack.
                 </p>
               </div>
-              <div className="mt-8 grid gap-4 text-white/80 sm:mt-10 sm:grid-cols-3">
-                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
-                  <span className="text-lg font-semibold text-white sm:text-xl">37% avg lift</span>
-                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
-                    in booked demos after 6 weeks
-                  </span>
+
+              {/* Main Content Grid - Side by Side on Desktop */}
+              <div className="grid gap-6 lg:grid-cols-[1fr,1.2fr] lg:gap-8">
+                {/* Left Column - Stats */}
+                <div className="flex flex-col justify-center gap-4">
+                  <div className="flex flex-col gap-3 sm:gap-4">
+                    <div className="group rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 transition-all hover:border-white/20 hover:bg-white/[0.06]">
+                      <span className="block text-xl font-semibold text-white sm:text-2xl">37% avg lift</span>
+                      <span className="mt-1 block text-xs uppercase tracking-[0.22em] text-white/60">
+                        in booked demos after 6 weeks
+                      </span>
+                    </div>
+                    <div className="group rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 transition-all hover:border-white/20 hover:bg-white/[0.06]">
+                      <span className="block text-xl font-semibold text-white sm:text-2xl">18 active pods</span>
+                      <span className="mt-1 block text-xs uppercase tracking-[0.22em] text-white/60">
+                        across SaaS, services, and marketplaces
+                      </span>
+                    </div>
+                    <div className="group rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4 transition-all hover:border-white/20 hover:bg-white/[0.06]">
+                      <span className="block text-xl font-semibold text-white sm:text-2xl">&lt; 30 day go-live</span>
+                      <span className="mt-1 block text-xs uppercase tracking-[0.22em] text-white/60">
+                        operator-led rollout and training included
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
-                  <span className="text-lg font-semibold text-white sm:text-xl">18 active pods</span>
-                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
-                    across SaaS, services, and marketplaces
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
-                  <span className="text-lg font-semibold text-white sm:text-xl">&lt; 30 day go-live</span>
-                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
-                    operator-led rollout and training included
-                  </span>
+
+                {/* Right Column - Calendar Embed */}
+                <div className="flex items-center">
+                  <CalInlineEmbed frame={false} className="w-full" />
                 </div>
               </div>
-              <CalInlineEmbed frame={false} className="mt-8 sm:mt-10" />
             </div>
           </div>
         </div>

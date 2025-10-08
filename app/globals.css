@@ -204,6 +204,16 @@
     animation: shine var(--duration, 14s) linear infinite;
     will-change: background-position;
   }
+
+  .animate-rainbow {
+    animation: var(--animate-rainbow);
+    background-size: 200% 200%;
+  }
+
+  .before\\:animate-rainbow::before {
+    animation: var(--animate-rainbow);
+    background-size: 200% 200%;
+  }
 }
 
 :root {

@@ -77,7 +77,7 @@ const industries = [
 ];
 
 const cardBase =
-  "group relative flex h-full flex-col gap-5 overflow-hidden rounded-4xl border border-white/10 bg-white/[0.06] p-7 shadow-[0_22px_65px_-48px_rgba(15,23,42,0.95)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.4)]";
+  "group relative flex h-full flex-col gap-5 overflow-hidden rounded-4xl border border-white/10 bg-white/[0.06] p-6 sm:p-7 shadow-[0_22px_65px_-48px_rgba(15,23,42,0.95)] transition-all duration-300 hover:border-[rgb(var(--brand-accent-rgb)/0.4)]";
 
 export default function IndustriesSection() {
   return (
@@ -102,7 +102,7 @@ export default function IndustriesSection() {
           We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across multiple verticals.
         </TextAnimate>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 auto-rows-[minmax(0,1fr)]">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 auto-rows-[minmax(0,1fr)]">
         {industries.map((industry, index) => (
           <motion.div
             key={industry.name}
@@ -121,7 +121,7 @@ export default function IndustriesSection() {
                   </p>
                   <TextAnimate
                     as="h3"
-                    className="text-xl font-semibold leading-tight text-white"
+                    className="text-xl font-semibold leading-tight text-white text-balance"
                     animation="slideUp"
                     by="text"
                     delay={index * 0.04}
@@ -131,7 +131,7 @@ export default function IndustriesSection() {
                   >
                     {industry.headline}
                   </TextAnimate>
-                  <p className="text-sm leading-relaxed text-white/70">
+                  <p className="text-sm leading-relaxed text-white/70 text-balance sm:text-base">
                     {industry.copy}
                   </p>
                 </div>
@@ -145,11 +145,11 @@ export default function IndustriesSection() {
                   />
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2.5">
                 {industry.highlights.map((highlight) => (
                   <span
                     key={highlight}
-                    className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/80"
+                    className="rounded-full border border-white/10 bg-white/10 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/85 sm:text-[11px]"
                   >
                     {highlight}
                   </span>

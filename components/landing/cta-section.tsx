@@ -1,11 +1,12 @@
 "use client";
 
+import { CAL_EMBED_ID, CTA_LINKS } from "@/lib/marketing";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
-import { SpinningText } from "@/components/magicui/spinning-text";
-import { RainbowButton } from "@/components/ui/rainbow-button";
+import { SpinningText } from "@/registry/magicui/spinning-text";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import { CalTrigger } from "@/components/integrations/cal-trigger";
+import { CalInlineEmbed } from "@/components/integrations/cal-inline-embed";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { motion, useAnimation, useInView } from "motion/react";
 import {
@@ -75,6 +76,26 @@ const shuffleArray = (array: any[]) => {
   return array;
 };
 
+const OrbitSpinner = ({ className }: { className?: string }) => (
+  <div
+    className={cn(
+      "relative flex h-36 w-36 items-center justify-center overflow-visible sm:h-40 sm:w-40",
+      className
+    )}
+  >
+    <div className="absolute inset-0 -m-10 -z-10 rounded-full bg-gradient-to-br from-background/70 via-background/90 to-background/70 backdrop-blur-lg shadow-[0_20px_80px_-20px_rgba(0,0,0,0.5)]" />
+    <span className="absolute z-10 size-2.5 rounded-full bg-[rgb(var(--brand-accent-rgb))]/90 shadow-[0_0_18px_rgba(var(--brand-accent-rgb),0.45)]" />
+    <SpinningText
+      duration={14}
+      radius={8}
+      className="block h-full w-full text-foreground/85"
+      textClassName="text-[0.84rem] font-medium uppercase"
+    >
+      SHIP • SCALE • GROW •
+    </SpinningText>
+  </div>
+);
+
 const Card = (card: { icon: JSX.Element; bg: JSX.Element }) => {
   const id = useId();
   const controls = useAnimation();
@@ -130,7 +151,7 @@ export default function CallToActionSection() {
     <section id="cta">
       <div className="py-14">
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="relative flex w-full flex-col items-center justify-center overflow-visible px-4 py-16 sm:overflow-hidden sm:px-8 sm:py-20">
+          <div className="relative flex w-full flex-col items-center justify-center overflow-visible px-4 py-16 sm:overflow-visible sm:px-8 sm:py-20">
             <Marquee
               reverse
               className="-delay-[200ms] [--duration:20s]"
@@ -191,15 +212,17 @@ export default function CallToActionSection() {
                 </p>
                 <div className="relative z-10 mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
                   <CalTrigger>
-                    <RainbowButton
-                      size="lg"
-                      className="rounded-full px-8 py-3 text-base font-semibold"
+                    <ShimmerButton
+                      borderRadius="999px"
+                      shimmerColor="rgb(250, 204, 21)"
+                      shimmerDuration="2.4s"
+                      className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
                     >
                       <span className="flex items-center gap-2">
                         Book a strategy call
                         <ChevronRight className="size-4" />
                       </span>
-                    </RainbowButton>
+                    </ShimmerButton>
                   </CalTrigger>
                   <InteractiveHoverButton
                     className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
@@ -208,20 +231,7 @@ export default function CallToActionSection() {
                     View engagement plans
                   </InteractiveHoverButton>
                 </div>
-                <div className="relative mt-14 flex h-32 w-32 items-center justify-center overflow-visible sm:h-36 sm:w-36 sm:mt-16">
-                  {/* Extended dark background - properly sized */}
-                  <div className="absolute inset-0 -m-14 -z-10 rounded-full bg-gradient-to-br from-background/70 via-background/90 to-background/70 backdrop-blur-lg shadow-[0_20px_80px_-20px_rgba(0,0,0,0.5)]" />
-
-                  <span className="absolute z-10 size-2.5 rounded-full bg-[rgb(var(--brand-accent-rgb))]/90 shadow-[0_0_18px_rgba(var(--brand-accent-rgb),0.45)]" />
-                  <SpinningText
-                    duration={15}
-                    radius={28}
-                    className="relative z-10 size-full text-muted-foreground/70"
-                    textClassName="text-[10px] uppercase tracking-[0.28em] sm:text-[11px] sm:tracking-[0.3em] font-semibold"
-                  >
-                    ship faster • automate everything • scale autonomously •
-                  </SpinningText>
-                </div>
+                <OrbitSpinner className="mt-6 sm:mt-9" />
               </div>
               <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-background opacity-40 blur-xl dark:bg-background" />
             </div>

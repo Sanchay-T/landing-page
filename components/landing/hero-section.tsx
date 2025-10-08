@@ -1,14 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
-import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { TypingAnimation } from "@/components/ui/typing-animation";
@@ -95,20 +95,28 @@ export default function HeroSection() {
           </Highlighter>
         </span>
         {" "}
-        audits transcripts live, tunes prompts in your stack, and keeps every agent on brand.
+        audits transcripts live, tunes prompts in your stack, and keeps every agent{" "}
+        <span className="relative inline-flex font-semibold text-white">
+          <Highlighter action="underline" color="#FF9800" strokeWidth={2} animationDuration={800}>
+            on brand
+          </Highlighter>
+        </span>
+        .
       </p>
 
       <div className="mb-8 mt-9 flex flex-col items-center justify-center gap-4 translate-y-[-1rem] animate-fade-in opacity-0 sm:mt-8 md:mt-10 md:flex-row [--animation-delay:600ms]">
         <CalTrigger>
-          <RainbowButton
-            size="lg"
-            className="rounded-full px-8 py-3 text-base font-semibold"
+          <ShimmerButton
+            borderRadius="999px"
+            shimmerColor="rgb(250, 204, 21)"
+            shimmerDuration="2.4s"
+            className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)]"
           >
             <span className="flex items-center gap-2">
               Book a strategy call
               <ArrowRightIcon className="size-4" />
             </span>
-          </RainbowButton>
+          </ShimmerButton>
         </CalTrigger>
         <InteractiveHoverButton
           className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
@@ -139,15 +147,23 @@ export default function HeroSection() {
             colorFrom="rgba(250,204,21,0.35)"
             colorTo="rgba(250,204,21,0.05)"
           />
-          <img
+          <Image
             src="/hero-dark.png"
             alt="Workflow automations preview"
+            width={1400}
+            height={900}
+            priority
             className="hidden h-full w-full rounded-[inherit] border border-white/10 object-cover dark:block"
+            quality={90}
           />
-          <img
+          <Image
             src="/hero-light.png"
             alt="Workflow automations preview"
+            width={1400}
+            height={900}
+            priority
             className="block h-full w-full rounded-[inherit] border border-white/20 object-cover dark:hidden"
+            quality={90}
           />
         </div>
       </div>

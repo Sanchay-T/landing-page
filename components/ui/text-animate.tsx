@@ -433,7 +433,7 @@ const TextAnimateBase = ({
             variants={finalVariants.item}
             custom={index * staggerTimings[by]}
             className={cn(
-              by === "line" ? "block" : "inline-block whitespace-pre",
+              by === "line" ? "block" : "inline whitespace-pre-wrap",
               by === "character" && "",
               segmentClassName,
             )}

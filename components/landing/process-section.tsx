@@ -621,46 +621,45 @@ export default function ProcessSection() {
             </div>
 
             {/* Badges in two columns */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div className="space-y-3">
-                <h4 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+              <div className="space-y-5">
+                <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/65">
                   Active Surfaces Today
                 </h4>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                <div className="grid grid-cols-2 gap-4">
                   {toolLogos.map((tool) => (
                     <div
                       key={tool.name}
-                      className="flex items-center gap-2 rounded-xl border border-white/10 bg-background/60 px-2.5 py-2 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/70"
+                      className="flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-background/60 px-6 py-4 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/70"
                     >
                       <Image
                         src={tool.src}
                         alt={tool.name}
-                        width={16}
-                        height={16}
-                        className="opacity-85"
-                        sizes="(max-width: 640px) 20px, 24px"
+                        width={20}
+                        height={20}
+                        className="opacity-85 shrink-0"
                       />
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/85 sm:text-[11px]">
+                      <span className="text-xs font-semibold uppercase tracking-[0.04em] text-white/90">
                         {tool.name}
                       </span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="space-y-3">
-                <h4 className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-primary/65">
+              <div className="space-y-5">
+                <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/65">
                   Every Deployment Includes
                 </h4>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {capabilities.map((capability) => (
                     <div
                       key={capability.label}
-                      className="flex min-w-[140px] flex-1 items-center gap-2 rounded-xl border border-white/10 bg-background/60 px-2.5 py-2 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/70"
+                      className="flex min-w-[140px] flex-1 items-center gap-3 rounded-2xl border border-white/10 bg-background/60 px-4 py-3 transition-all hover:border-[rgb(var(--brand-accent-rgb)/0.3)] hover:bg-background/70"
                     >
                       <span className="flex size-5 items-center justify-center rounded-md bg-[rgb(var(--brand-accent-rgb)/0.12)] text-[rgb(var(--brand-accent-rgb)/0.8)]">
                         {React.cloneElement(capability.icon, { className: "size-3" })}
                       </span>
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/85 sm:text-[11px]">
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-white/90">
                         {capability.label}
                       </span>
                     </div>

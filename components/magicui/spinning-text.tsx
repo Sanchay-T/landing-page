@@ -1,98 +1,118 @@
 "use client";
 
-import {
-  ComponentPropsWithoutRef,
-  CSSProperties,
-  useId,
-} from "react";
+import React from "react";
+import { motion, Transition, Variants, HTMLMotionProps } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
-interface SpinningTextProps extends ComponentPropsWithoutRef<"div"> {
+interface SpinningTextProps extends Omit<HTMLMotionProps<"div">, "children" | "transition" | "variants"> {
   children: string | string[];
   duration?: number;
   reverse?: boolean;
-  /**
-   * Radius of the circle path inside the SVG viewBox (0-45).
-   */
   radius?: number;
+  transition?: Transition;
+  variants?: {
+    container?: Variants;
+    item?: Variants;
+  };
   textClassName?: string;
 }
 
+const BASE_TRANSITION: Transition = {
+  repeat: Infinity,
+  ease: "linear",
+};
+
+const BASE_ITEM_VARIANTS: Variants = {
+  hidden: {
+    opacity: 1,
+  },
+  visible: {
+    opacity: 1,
+  },
+};
+
 export function SpinningText({
   children,
-  duration = 12,
+  duration = 10,
   reverse = false,
-  radius = 42,
+  radius = 5,
+  transition,
+  variants,
   className,
-  textClassName,
   style,
+  textClassName,
   ...props
 }: SpinningTextProps) {
   if (typeof children !== "string" && !Array.isArray(children)) {
-    throw new Error(
-      "SpinningText: children must be a string or array of strings"
-    );
+    throw new Error("children must be a string or an array of strings");
   }
 
-  const id = useId();
-  const content = Array.isArray(children)
-    ? children.join(" ").trim()
-    : children.trim();
-  const textContent = content.endsWith(" ") ? content : `${content} `;
+  if (Array.isArray(children)) {
+    if (!children.every((child) => typeof child === "string")) {
+      throw new Error("all elements in children array must be strings");
+    }
+    children = children.join("");
+  }
 
-  const clampedRadius = Math.min(Math.max(radius, 6), 45);
-  const pathDefinition = `M 50 50 m -${clampedRadius},0 a ${clampedRadius},${clampedRadius} 0 1,1 ${
-    clampedRadius * 2
-  },0 a ${clampedRadius},${clampedRadius} 0 1,1 -${clampedRadius * 2},0`;
+  const letters = children.split("");
+  letters.push(" ");
 
-  const animationStyles: CSSProperties = {
-    animation: `spinning-text-rotate ${duration}s linear infinite`,
-    animationDirection: reverse ? "reverse" : "normal",
-    willChange: "transform",
+  const finalTransition: Transition = {
+    ...BASE_TRANSITION,
+    ...transition,
+    duration: (transition as { duration?: number })?.duration ?? duration,
   };
 
-  const combinedStyle = style
-    ? ({ ...style, ...animationStyles } as CSSProperties)
-    : animationStyles;
+  const containerVariants: Variants = {
+    visible: { rotate: reverse ? -360 : 360 },
+    ...variants?.container,
+  };
 
-  const svgTextClasses = cn(
-    "fill-current",
-    textClassName ?? undefined
-  );
+  const itemVariants: Variants = {
+    ...BASE_ITEM_VARIANTS,
+    ...variants?.item,
+  };
 
   return (
-    <div
-      className={cn(
-        "relative inline-flex items-center justify-center",
-        className
-      )}
+    <motion.div
+      className={cn("relative inline-block", className)}
       style={{
-        animationName: "spinning-text-rotate",
-        animationDuration: `${duration}s`,
-        animationTimingFunction: "linear",
-        animationIterationCount: "infinite",
-        animationDirection: reverse ? "reverse" : "normal",
-        willChange: "transform",
-      } as React.CSSProperties}
-      data-spinning-text="true"
-      data-duration={duration}
+        ...style,
+      }}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      transition={finalTransition}
       {...props}
     >
-      <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
-        <defs>
-          <path id={id} d={pathDefinition} />
-        </defs>
-        <text
-          className={svgTextClasses}
-          style={{ fontSize: "1em", letterSpacing: "0.3em" }}
+      {letters.map((letter, index) => (
+        <motion.span
+          aria-hidden="true"
+          key={`${index}-${letter}`}
+          variants={itemVariants}
+          className={cn(
+            "absolute left-1/2 top-1/2 inline-block",
+            textClassName
+          )}
+          style={
+            {
+              "--index": index,
+              "--total": letters.length,
+              "--radius": radius,
+              transform: `
+                  translate(-50%, -50%)
+                  rotate(calc(360deg / var(--total) * var(--index)))
+                  translateY(calc(var(--radius, 5) * -1ch))
+                `,
+              transformOrigin: "center",
+            } as React.CSSProperties
+          }
         >
-          <textPath xlinkHref={`#${id}`} startOffset="0%">
-            {textContent}
-          </textPath>
-        </text>
-      </svg>
-      <span className="sr-only">{content}</span>
-    </div>
+          {letter}
+        </motion.span>
+      ))}
+      <span className="sr-only">{children}</span>
+    </motion.div>
   );
 }

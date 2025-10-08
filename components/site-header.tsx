@@ -1,6 +1,6 @@
 "use client";
 
-import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
@@ -102,14 +102,22 @@ export function SiteHeader() {
 
   useEffect(() => {
     const closeHamburgerNavigation = () => setHamburgerMenuIsOpen(false);
+
+    let resizeTimeout: NodeJS.Timeout;
+    const debouncedClose = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(closeHamburgerNavigation, 150);
+    };
+
     window.addEventListener("orientationchange", closeHamburgerNavigation);
-    window.addEventListener("resize", closeHamburgerNavigation);
+    window.addEventListener("resize", debouncedClose, { passive: true });
 
     return () => {
+      clearTimeout(resizeTimeout);
       window.removeEventListener("orientationchange", closeHamburgerNavigation);
-      window.removeEventListener("resize", closeHamburgerNavigation);
+      window.removeEventListener("resize", debouncedClose);
     };
-  }, [setHamburgerMenuIsOpen]);
+  }, []);
 
   return (
     <>
@@ -127,13 +135,15 @@ export function SiteHeader() {
               Case Studies
             </Link>
             <CalTrigger>
-              <RainbowButton
-                size="sm"
-                className="rounded-full px-4 py-1.5 text-sm font-semibold"
+              <ShimmerButton
+                borderRadius="999px"
+                shimmerColor="rgb(250, 204, 21)"
+                shimmerDuration="2.4s"
+                className="rounded-full border border-white/20 bg-[linear-gradient(90deg,#151519,#06060a)] px-4 py-1.5 text-sm font-semibold text-white shadow-[0_15px_45px_-30px_rgba(0,0,0,0.75)]"
                 type="button"
               >
                 Book a strategy call
-              </RainbowButton>
+              </ShimmerButton>
             </CalTrigger>
           </div>
           <button

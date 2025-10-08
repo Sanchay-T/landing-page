@@ -23,7 +23,7 @@ const industries = [
     name: "B2B SaaS",
     headline: "Keep pipelines warm between touchpoints",
     copy:
-      "Product-led growth teams lean on Devonel agents to qualify trials, answer technical blockers, and surface upsell signals.",
+      "Growth teams lean on Devonel agents to qualify trials, resolve blockers, and surface upsell signals.",
     highlights: ["Trial conversion", "Product education", "Expansion alerts"],
     logo: {
       src: "/industries/linear.svg",
@@ -56,7 +56,7 @@ const industries = [
     name: "Logistics & Delivery",
     headline: "Coordinate shipments before they bottleneck",
     copy:
-      "Ops agents orchestrate carrier handoffs, notify customers of delays, and sync inventory movements into your ERP stack.",
+      "Ops agents orchestrate carrier handoffs, flag delays fast, and sync movements in your ERP stack.",
     highlights: ["Carrier escalations", "Proactive alerts", "ERP updates"],
     logo: {
       src: "/industries/fedex.svg",
@@ -102,7 +102,7 @@ export default function IndustriesSection() {
           We adapt Devonel agent playbooks to match regulated processes, tone of voice, and complex integrations across multiple verticals.
         </TextAnimate>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 auto-rows-[minmax(0,1fr)]">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {industries.map((industry, index) => (
           <motion.div
             key={industry.name}

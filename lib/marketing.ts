@@ -1,4 +1,5 @@
-const fallbackUrl = "https://cal.com/devonel/strategy-call";
+const fallbackCalEvent = "devonel/ai-automation-consultation";
+const fallbackUrl = `https://cal.com/${fallbackCalEvent}`;
 
 export const CTA_LINKS = {
   bookCall:
@@ -7,4 +8,14 @@ export const CTA_LINKS = {
       : undefined) || fallbackUrl,
 };
 
-export const CAL_NAMESPACE = "devonel-book-call";
+export const CAL_EMBED_NAMESPACE =
+  (typeof process !== "undefined"
+    ? process.env.NEXT_PUBLIC_CAL_NAMESPACE
+    : undefined) || "ai-automation-consultation";
+
+export const CAL_EMBED_LINK =
+  (typeof process !== "undefined"
+    ? process.env.NEXT_PUBLIC_CAL_LINK
+    : undefined) || fallbackCalEvent;
+
+export const CAL_EMBED_ID = "schedule-consultation";

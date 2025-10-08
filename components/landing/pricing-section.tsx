@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
-import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
 
@@ -205,13 +205,15 @@ export default function PricingSection() {
                 </ul>
                 <div className="mt-auto">
                   {plan.highlight ? (
-                    <RainbowButton
-                      size="lg"
-                      className="w-full justify-center rounded-full py-3 text-sm font-semibold"
+                    <ShimmerButton
+                      borderRadius="999px"
+                      shimmerColor="#ffffff"
+                      shimmerDuration="2s"
+                      className="w-full justify-center rounded-full border border-white/10 bg-[linear-gradient(90deg,rgb(250,204,21),rgb(245,158,11))] py-3 text-sm font-semibold text-black"
                       onClick={() => onSubscribeClick(plan.id)}
                     >
                       {plan.cta ?? "Talk to us"}
-                    </RainbowButton>
+                    </ShimmerButton>
                   ) : (
                     <InteractiveHoverButton
                       className="w-full border-white/15 bg-white/10 text-white hover:bg-white/20 text-sm"

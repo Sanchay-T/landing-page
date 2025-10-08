@@ -183,8 +183,32 @@
       background-position: 200%;
     }
   }
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
+    }
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
 
   --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  --animate-spinning-text-rotate: spinning-text-rotate var(--duration, 12s) linear infinite;
 }
 
 @layer utilities {
@@ -213,6 +237,17 @@
   .before\\:animate-rainbow::before {
     animation: var(--animate-rainbow);
     background-size: 200% 200%;
+  }
+
+  .animate-spinning-text-rotate {
+    animation: var(--animate-spinning-text-rotate);
+    will-change: transform;
+  }
+
+  .animate-spinning-text-rotate text {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 

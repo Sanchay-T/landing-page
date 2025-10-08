@@ -337,15 +337,17 @@ export default function ContactSection() {
               />
 
               <div className="space-y-2 lg:col-span-6">
-                <button
+                <ShimmerButton
                   type="submit"
+                  borderRadius="999px"
+                  shimmerColor="rgb(250, 204, 21)"
+                  shimmerDuration="2.4s"
+                  className="w-full border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-white"
                   disabled={isSubmitting}
                   aria-busy={isSubmitting}
-                  className="group relative w-full overflow-hidden rounded-full border border-white/20 bg-gradient-to-r from-[rgb(var(--brand-accent-rgb))] to-[#f59e0b] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-black shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.3)] transition-all hover:shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span className="relative z-10">{isSubmitting ? "Sending…" : "Send my request"}</span>
-                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#f59e0b] to-[rgb(var(--brand-accent-rgb))] opacity-0 transition-opacity group-hover:opacity-100" />
-                </button>
+                  {isSubmitting ? "Sending…" : "Send my request"}
+                </ShimmerButton>
                 <p className="text-center text-[0.65rem] leading-tight uppercase tracking-[0.18em] text-white/40">
                   By submitting, you agree to our privacy practices. We never share your information.
                 </p>

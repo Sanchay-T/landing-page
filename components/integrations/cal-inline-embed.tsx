@@ -30,7 +30,7 @@ export function CalInlineEmbed({
 
       cal("ui", {
         hideEventTypeDetails: false,
-        layout: "month_view",
+        layout: "column_view",
         theme: "dark",
         styles: {
           branding: {
@@ -62,11 +62,11 @@ export function CalInlineEmbed({
         style={{
           width: "100%",
           height: "100%",
-          minHeight: frame ? "520px" : "480px",
+          minHeight: frame ? "520px" : "420px",
           overflow: "auto",
         }}
         config={{
-          layout: "month_view",
+          layout: "column_view",
         }}
       />
     </div>

@@ -95,7 +95,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
-      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,720px)] lg:items-start lg:gap-16">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,800px)] lg:items-start lg:gap-12">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
             <Sparkles className="size-4 text-[rgb(var(--brand-accent-rgb))]" aria-hidden />
@@ -146,16 +146,16 @@ export default function ContactSection() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl border border-white/12 bg-black/75 p-6 shadow-[0_30px_90px_-60px_rgba(15,23,42,0.9)] md:p-8">
+        <div className="relative overflow-hidden rounded-3xl border border-white/12 bg-black/75 p-5 shadow-[0_30px_90px_-60px_rgba(15,23,42,0.9)] md:p-6">
           <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />
           <div className="relative">
             <Form {...form}>
               <form
               onSubmit={form.handleSubmit(handleSubmit)}
-              className="grid gap-5 lg:grid-cols-6"
+              className="grid gap-4 lg:grid-cols-6"
               noValidate
             >
-              <div className="mb-2 lg:col-span-6">
+              <div className="mb-1 lg:col-span-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55">
                   Contact details
                 </p>
@@ -164,8 +164,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-3">
-                    <FormLabel className="text-sm font-medium text-white/85">Full name</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-xs font-medium text-white/85">Full name</FormLabel>
                     <FormControl>
                       <Input placeholder="Taylor Rivera" {...field} />
                     </FormControl>
@@ -177,8 +177,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-3">
-                    <FormLabel className="text-sm font-medium text-white/85">Work email</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-xs font-medium text-white/85">Work email</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="you@company.com" {...field} />
                     </FormControl>
@@ -190,8 +190,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="company"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-3">
-                    <FormLabel className="text-sm font-medium text-white/85">Company</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-xs font-medium text-white/85">Company</FormLabel>
                     <FormControl>
                       <Input placeholder="Devonel" {...field} />
                     </FormControl>
@@ -203,8 +203,8 @@ export default function ContactSection() {
                 control={form.control}
                 name="website"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-3">
-                    <FormLabel className="text-sm font-medium text-white/85">Website</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-3">
+                    <FormLabel className="text-xs font-medium text-white/85">Website</FormLabel>
                     <FormControl>
                       <Input placeholder="https://yourdomain.com" {...field} />
                     </FormControl>
@@ -213,7 +213,7 @@ export default function ContactSection() {
                 )}
               />
 
-              <div className="mb-2 mt-2 lg:col-span-6">
+              <div className="mb-1 mt-1 lg:col-span-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55">
                   Engagement snapshot
                 </p>
@@ -222,10 +222,10 @@ export default function ContactSection() {
                 control={form.control}
                 name="headcount"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-3">
+                  <FormItem className="space-y-2 lg:col-span-3">
                     <div className="flex items-center justify-between gap-3">
-                      <FormLabel className="text-sm font-medium text-white/85">Go-to-market headcount</FormLabel>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
+                      <FormLabel className="text-xs font-medium text-white/85">Go-to-market headcount</FormLabel>
+                      <span className="text-[9px] font-medium uppercase tracking-[0.2em] text-white/40">
                         Daily pod size
                       </span>
                     </div>
@@ -249,10 +249,10 @@ export default function ContactSection() {
                 control={form.control}
                 name="timeline"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-3">
+                  <FormItem className="space-y-2 lg:col-span-3">
                     <div className="flex items-center justify-between gap-3">
-                      <FormLabel className="text-sm font-medium text-white/85">Activation timeline</FormLabel>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
+                      <FormLabel className="text-xs font-medium text-white/85">Activation timeline</FormLabel>
+                      <span className="text-[9px] font-medium uppercase tracking-[0.2em] text-white/40">
                         Go-live window
                       </span>
                     </div>
@@ -277,14 +277,14 @@ export default function ContactSection() {
                 control={form.control}
                 name="focus"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-6">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <FormLabel className="text-sm font-medium text-white/85">Where do you need help first?</FormLabel>
-                      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
+                  <FormItem className="space-y-2 lg:col-span-6">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <FormLabel className="text-xs font-medium text-white/85">Where do you need help first?</FormLabel>
+                      <span className="text-[9px] font-medium uppercase tracking-[0.2em] text-white/40">
                         Choose up to three
                       </span>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {FOCUS_AREAS.map((area) => {
                         const selected = field.value?.includes(area);
                         return (
@@ -301,7 +301,7 @@ export default function ContactSection() {
                             }}
                             aria-pressed={selected}
                             className={cn(
-                              "rounded-full border px-3.5 py-2 text-[10.5px] font-semibold uppercase tracking-[0.22em] transition-colors whitespace-nowrap",
+                              "rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] transition-colors whitespace-nowrap",
                               selected
                                 ? "border-[rgb(var(--brand-accent-rgb))] bg-[rgb(var(--brand-accent-rgb)/0.18)] text-white"
                                 : "border-white/12 text-white/70 hover:border-white/30",
@@ -321,13 +321,13 @@ export default function ContactSection() {
                 control={form.control}
                 name="message"
                 render={({ field }) => (
-                  <FormItem className="space-y-2.5 lg:col-span-6">
-                    <FormLabel className="text-sm font-medium text-white/85">What should we know?</FormLabel>
+                  <FormItem className="space-y-2 lg:col-span-6">
+                    <FormLabel className="text-xs font-medium text-white/85">What should we know?</FormLabel>
                     <FormControl>
                       <Textarea
                         rows={2}
                         placeholder="Share the funnel leaks, KPIs, or integrations you're prioritizing."
-                        className="resize-none"
+                        className="resize-none text-sm"
                         {...field}
                       />
                     </FormControl>
@@ -336,19 +336,17 @@ export default function ContactSection() {
                 )}
               />
 
-              <div className="space-y-2.5 lg:col-span-6">
-                <ShimmerButton
+              <div className="space-y-2 lg:col-span-6">
+                <button
                   type="submit"
-                  borderRadius="999px"
-                  shimmerColor="#ffffff"
-                  shimmerDuration="2s"
-                  className="w-full rounded-full bg-[rgb(var(--brand-accent-rgb))] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-black transition-colors hover:bg-[rgb(var(--brand-accent-rgb))]/90"
                   disabled={isSubmitting}
                   aria-busy={isSubmitting}
+                  className="group relative w-full overflow-hidden rounded-full border border-white/20 bg-gradient-to-r from-[rgb(var(--brand-accent-rgb))] to-[#f59e0b] px-6 py-2.5 text-sm font-semibold uppercase tracking-[0.24em] text-black shadow-[0_0_20px_rgba(var(--brand-accent-rgb),0.3)] transition-all hover:shadow-[0_0_30px_rgba(var(--brand-accent-rgb),0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Sending…" : "Send my request"}
-                </ShimmerButton>
-                <p className="text-center text-[0.68rem] leading-snug uppercase tracking-[0.2em] text-white/40">
+                  <span className="relative z-10">{isSubmitting ? "Sending…" : "Send my request"}</span>
+                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#f59e0b] to-[rgb(var(--brand-accent-rgb))] opacity-0 transition-opacity group-hover:opacity-100" />
+                </button>
+                <p className="text-center text-[0.65rem] leading-tight uppercase tracking-[0.18em] text-white/40">
                   By submitting, you agree to our privacy practices. We never share your information.
                 </p>
               </div>

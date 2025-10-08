@@ -731,7 +731,8 @@ export function ConversationalAgentWidget() {
             conversationRef.current = null;
             persistConversation("completed").catch(() => undefined);
           },
-          onError: (message) => {
+          onError: (message, context) => {
+            console.error("[Concierge] Conversation error:", message, context);
             setErrorMessage(message);
             toast.error(message);
           },
@@ -764,12 +765,12 @@ export function ConversationalAgentWidget() {
         setIsMuted(false);
         await persistConversation("initiated");
         toast.success("Operator concierge connected.");
-            console.info("[Concierge] Conversation session started.");
-          } catch (error) {
-            console.error("Failed to start ElevenLabs conversation", error);
-            setErrorMessage(
-              error instanceof Error
-                ? error.message
+        console.info("[Concierge] Conversation session started.");
+      } catch (error) {
+        console.error("Failed to start ElevenLabs conversation", error);
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
             : "Microphone permissions blocked. Please enable access and try again.",
         );
         if (!triggeredByUser) {

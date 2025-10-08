@@ -5,6 +5,7 @@ import { useInView } from "framer-motion";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 
+import { CAL_EMBED_ID, CTA_LINKS } from "@/lib/marketing";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
 import { WordRotate } from "@/components/magicui/word-rotate";
@@ -14,11 +15,20 @@ import { TextAnimate } from "@/components/ui/text-animate";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { Highlighter } from "@/components/ui/highlighter";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { CalTrigger } from "@/components/integrations/cal-trigger";
 
 export default function HeroSection() {
   const mediaRef = useRef(null);
   const mediaInView = useInView(mediaRef, { once: true, margin: "-100px" });
+
+  const handleBookCallClick = () => {
+    const target = document.getElementById(CAL_EMBED_ID);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.open(CTA_LINKS.bookCall, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <section id="hero" className="relative mx-auto mt-32 max-w-[80rem] px-6 text-center md:px-8">
@@ -105,19 +115,18 @@ export default function HeroSection() {
       </p>
 
       <div className="mb-8 mt-9 flex flex-col items-center justify-center gap-4 translate-y-[-1rem] animate-fade-in opacity-0 sm:mt-8 md:mt-10 md:flex-row [--animation-delay:600ms]">
-        <CalTrigger>
-          <ShimmerButton
-            borderRadius="999px"
-            shimmerColor="rgb(250, 204, 21)"
-            shimmerDuration="2.4s"
-            className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)]"
-          >
-            <span className="flex items-center gap-2">
-              Book a strategy call
-              <ArrowRightIcon className="size-4" />
-            </span>
-          </ShimmerButton>
-        </CalTrigger>
+        <ShimmerButton
+          onClick={handleBookCallClick}
+          borderRadius="999px"
+          shimmerColor="rgb(250, 204, 21)"
+          shimmerDuration="2.4s"
+          className="border border-white/15 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white shadow-[0_20px_60px_-40px_rgba(0,0,0,0.8)]"
+        >
+          <span className="flex items-center gap-2">
+            Book a strategy call
+            <ArrowRightIcon className="size-4" />
+          </span>
+        </ShimmerButton>
         <InteractiveHoverButton
           className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
           onClick={() => document.getElementById("case-studies")?.scrollIntoView({ behavior: "smooth" })}

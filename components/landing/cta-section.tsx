@@ -147,10 +147,20 @@ export default function CallToActionSection() {
     }
   }, []);
 
+  const handleBookCallClick = () => {
+    const target = document.getElementById(CAL_EMBED_ID);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.open(CTA_LINKS.bookCall, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <section id="cta">
       <div className="py-14">
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center gap-16">
           <div className="relative flex w-full flex-col items-center justify-center overflow-visible px-4 py-16 sm:overflow-visible sm:px-8 sm:py-20">
             <Marquee
               reverse
@@ -211,19 +221,18 @@ export default function CallToActionSection() {
                   growth.
                 </p>
                 <div className="relative z-10 mt-8 flex flex-col items-center justify-center gap-4 sm:mt-10 lg:flex-row">
-                  <CalTrigger>
-                    <ShimmerButton
-                      borderRadius="999px"
-                      shimmerColor="rgb(250, 204, 21)"
-                      shimmerDuration="2.4s"
-                      className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
-                    >
-                      <span className="flex items-center gap-2">
-                        Book a strategy call
-                        <ChevronRight className="size-4" />
-                      </span>
-                    </ShimmerButton>
-                  </CalTrigger>
+                  <ShimmerButton
+                    onClick={handleBookCallClick}
+                    borderRadius="999px"
+                    shimmerColor="rgb(250, 204, 21)"
+                    shimmerDuration="2.4s"
+                    className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-base font-semibold text-white"
+                  >
+                    <span className="flex items-center gap-2">
+                      Book a strategy call
+                      <ChevronRight className="size-4" />
+                    </span>
+                  </ShimmerButton>
                   <InteractiveHoverButton
                     className="border-white/20 bg-white/5 text-white hover:bg-white/10 text-base px-8"
                     onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
@@ -236,6 +245,39 @@ export default function CallToActionSection() {
               <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-background opacity-40 blur-xl dark:bg-background" />
             </div>
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-b from-transparent to-background to-70% dark:to-background" />
+          </div>
+          <div className="w-full px-4 sm:px-8">
+            <div className="mx-auto max-w-5xl rounded-[2.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,20,0.92),rgba(5,5,10,0.95))] p-8 text-center shadow-[0_45px_140px_-60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-12">
+              <div className="mx-auto max-w-2xl">
+                <h2 className="text-2xl font-semibold text-white sm:text-[2.1rem]">
+                  Lock in your operator consult
+                </h2>
+                <p className="mt-3 text-sm text-white/70 sm:text-base">
+                  Meet 1:1 with our pod lead to audit your workflows, score automation opportunities, and draft a phased rollout game plan tailored to your stack.
+                </p>
+              </div>
+              <div className="mt-8 grid gap-4 text-white/80 sm:mt-10 sm:grid-cols-3">
+                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
+                  <span className="text-lg font-semibold text-white sm:text-xl">37% avg lift</span>
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
+                    in booked demos after 6 weeks
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
+                  <span className="text-lg font-semibold text-white sm:text-xl">18 active pods</span>
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
+                    across SaaS, services, and marketplaces
+                  </span>
+                </div>
+                <div className="flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-center sm:items-start sm:text-left">
+                  <span className="text-lg font-semibold text-white sm:text-xl">&lt; 30 day go-live</span>
+                  <span className="text-xs uppercase tracking-[0.24em] text-white/60">
+                    operator-led rollout and training included
+                  </span>
+                </div>
+              </div>
+              <CalInlineEmbed frame={false} className="mt-8 sm:mt-10" />
+            </div>
           </div>
         </div>
       </div>

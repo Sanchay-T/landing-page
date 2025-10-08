@@ -152,10 +152,10 @@ export default function ContactSection() {
             <Form {...form}>
               <form
               onSubmit={form.handleSubmit(handleSubmit)}
-              className="grid gap-5 lg:grid-cols-6"
+              className="grid gap-6 lg:grid-cols-6"
               noValidate
             >
-              <div className="lg:col-span-6">
+              <div className="mb-2 lg:col-span-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55">
                   Contact details
                 </p>
@@ -164,7 +164,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-3">
+                  <FormItem className="space-y-2.5 lg:col-span-3">
                     <FormLabel className="text-sm font-medium text-white/85">Full name</FormLabel>
                     <FormControl>
                       <Input placeholder="Taylor Rivera" {...field} />
@@ -177,7 +177,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-3">
+                  <FormItem className="space-y-2.5 lg:col-span-3">
                     <FormLabel className="text-sm font-medium text-white/85">Work email</FormLabel>
                     <FormControl>
                       <Input type="email" placeholder="you@company.com" {...field} />
@@ -190,7 +190,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="company"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-3">
+                  <FormItem className="space-y-2.5 lg:col-span-3">
                     <FormLabel className="text-sm font-medium text-white/85">Company</FormLabel>
                     <FormControl>
                       <Input placeholder="Devonel" {...field} />
@@ -203,7 +203,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="website"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-3">
+                  <FormItem className="space-y-2.5 lg:col-span-3">
                     <FormLabel className="text-sm font-medium text-white/85">Website</FormLabel>
                     <FormControl>
                       <Input placeholder="https://yourdomain.com" {...field} />
@@ -213,7 +213,7 @@ export default function ContactSection() {
                 )}
               />
 
-              <div className="lg:col-span-6">
+              <div className="mb-2 mt-2 lg:col-span-6">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-white/55">
                   Engagement snapshot
                 </p>
@@ -222,7 +222,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="headcount"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-3">
+                  <FormItem className="space-y-2.5 lg:col-span-3">
                     <div className="flex items-center justify-between gap-3">
                       <FormLabel className="text-sm font-medium text-white/85">Go-to-market headcount</FormLabel>
                       <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
@@ -249,7 +249,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="timeline"
                 render={({ field }) => (
-                  <FormItem className="space-y-2 lg:col-span-3">
+                  <FormItem className="space-y-2.5 lg:col-span-3">
                     <div className="flex items-center justify-between gap-3">
                       <FormLabel className="text-sm font-medium text-white/85">Activation timeline</FormLabel>
                       <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
@@ -277,7 +277,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="focus"
                 render={({ field }) => (
-                  <FormItem className="space-y-3 lg:col-span-6">
+                  <FormItem className="space-y-3.5 lg:col-span-6">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <FormLabel className="text-sm font-medium text-white/85">Where do you need help first?</FormLabel>
                       <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">
@@ -321,7 +321,7 @@ export default function ContactSection() {
                 control={form.control}
                 name="message"
                 render={({ field }) => (
-                  <FormItem className="space-y-3 lg:col-span-6">
+                  <FormItem className="space-y-3.5 lg:col-span-6">
                     <FormLabel className="text-sm font-medium text-white/85">What should we know?</FormLabel>
                     <FormControl>
                       <Textarea
@@ -336,7 +336,7 @@ export default function ContactSection() {
                 )}
               />
 
-              <div className="space-y-3 lg:col-span-6">
+              <div className="space-y-3.5 lg:col-span-6">
                 <ShimmerButton
                   type="submit"
                   borderRadius="999px"

@@ -390,3 +390,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+.agent-highlight {
+  position: relative;
+  box-shadow:
+    0 0 0 2px rgba(250, 204, 21, 0.55),
+    0 0 0 8px rgba(250, 204, 21, 0.14);
+  transition: box-shadow 0.4s ease;
+}
+
+.agent-highlight:after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 1px dashed rgba(250, 204, 21, 0.35);
+  pointer-events: none;
+}
+

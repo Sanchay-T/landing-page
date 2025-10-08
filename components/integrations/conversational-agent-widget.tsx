@@ -10,10 +10,20 @@ import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { QUALIFIER_STORAGE_KEY } from "@/lib/marketing";
-import { HEADCOUNT_OPTIONS, TIMELINE_OPTIONS } from "@/lib/schemas/contact";
+import { FOCUS_AREAS, HEADCOUNT_OPTIONS, TIMELINE_OPTIONS } from "@/lib/schemas/contact";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "devonel-conversation-widget";
+const AGENT_ENABLED_KEY = `${STORAGE_KEY}-enabled`;
+const CONTACT_SECTION_SELECTOR = "[data-contact-section]";
+const CONTACT_TOGGLE_SELECTOR = "[data-contact-toggle]";
+const CONTACT_FORM_SELECTOR = "#contact-intake";
+const CONTACT_SUBMIT_SELECTOR = "[data-contact-submit]";
+const CONTACT_FOCUS_SELECTOR = "[data-contact-focus-option]";
+
+const CONTACT_FIELD_NAMES = ["name", "email", "company", "website", "headcount", "timeline", "message"] as const;
+type ContactField = (typeof CONTACT_FIELD_NAMES)[number];
+const getContactFieldSelector = (field: ContactField) => `[data-contact-field="${field}"]`;
 
 type LeadDraft = {
   name: string;
@@ -147,6 +157,7 @@ export function ConversationalAgentWidget() {
   const [isPersisting, setIsPersisting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [autoStartAttempted, setAutoStartAttempted] = useState(false);
+  const [isAgentEnabled, setIsAgentEnabled] = useState(true);
 
   const conversationRef = useRef<Conversation | null>(null);
   const transcriptRef = useRef<TranscriptEntry[]>([]);
@@ -154,6 +165,8 @@ export function ConversationalAgentWidget() {
   const sessionIdRef = useRef<string | null>(null);
   const startedAtRef = useRef<string | null>(null);
   const autoStartTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const agentEnabledRef = useRef(true);
+  const supabaseAvailableRef = useRef(true);
 
   const leadHasSignal = useMemo(() => hasLeadSignal(lead), [lead]);
 
@@ -202,6 +215,186 @@ export function ConversationalAgentWidget() {
     });
   }, []);
 
+  const focusAreaLookup = useMemo(() => {
+    const entries = FOCUS_AREAS.map((area) => [area.toLowerCase(), area] as const);
+    return new Map(entries);
+  }, []);
+
+  const highlightElement = useCallback((element: HTMLElement | null) => {
+    if (!element || typeof window === "undefined") return;
+    element.classList.add("agent-highlight");
+    window.setTimeout(() => {
+      element.classList.remove("agent-highlight");
+    }, 1600);
+  }, []);
+
+  const openContactSectionTool = useCallback(
+    async (parameters?: { sectionId?: string; focusField?: ContactField }) => {
+      if (typeof window === "undefined" || typeof document === "undefined") {
+        throw new Error("Contact surface unavailable.");
+      }
+      const { sectionId = "contact", focusField } = parameters ?? {};
+      setIsOpen(true);
+
+      const targetSection =
+        (sectionId.startsWith("#")
+          ? document.querySelector<HTMLElement>(sectionId)
+          : document.getElementById(sectionId)) ??
+        document.querySelector<HTMLElement>(CONTACT_SECTION_SELECTOR);
+
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth", block: "center" });
+        highlightElement(targetSection);
+      }
+
+      const toggleButton = document.querySelector<HTMLButtonElement>(CONTACT_TOGGLE_SELECTOR);
+      if (toggleButton && toggleButton.getAttribute("aria-expanded") !== "true") {
+        toggleButton.click();
+      }
+
+      if (focusField) {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        const fieldNode = document.querySelector<HTMLElement>(getContactFieldSelector(focusField));
+        if (fieldNode) {
+          if ("focus" in fieldNode) {
+            (fieldNode as HTMLElement).focus();
+          }
+          highlightElement(fieldNode);
+        }
+      }
+
+      return "Contact intake opened.";
+    },
+    [highlightElement],
+  );
+
+  const updateLeadFromField = useCallback(
+    (field: ContactField, rawValue: string) => {
+      const value = rawValue.trim();
+      if (!value) return;
+      if (field === "name") {
+        updateLead({ name: value });
+      } else if (field === "email") {
+        updateLead({ email: value });
+      } else if (field === "company") {
+        updateLead({ company: value });
+      } else if (
+        field === "headcount" &&
+        HEADCOUNT_OPTIONS.includes(value as (typeof HEADCOUNT_OPTIONS)[number])
+      ) {
+        updateLead({ headcount: value });
+      } else if (
+        field === "timeline" &&
+        TIMELINE_OPTIONS.includes(value as (typeof TIMELINE_OPTIONS)[number])
+      ) {
+        updateLead({ timeline: value });
+      } else if (field === "message") {
+        updateLead({ notes: value });
+      }
+    },
+    [updateLead],
+  );
+
+  const fillContactFieldTool = useCallback(
+    async (parameters: { field?: string; value?: string } | null) => {
+      if (typeof document === "undefined") {
+        throw new Error("Unable to access the DOM.");
+      }
+      const fieldName = typeof parameters?.field === "string" ? parameters.field.toLowerCase() : null;
+      if (!fieldName || !CONTACT_FIELD_NAMES.includes(fieldName as ContactField)) {
+        throw new Error("Provide a valid contact field to update.");
+      }
+      const field = fieldName as ContactField;
+      const value = parameters?.value ?? "";
+      const node = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+        getContactFieldSelector(field),
+      );
+      if (!node) {
+        throw new Error(`Field ${field} is not present on the page.`);
+      }
+
+      if (node instanceof HTMLSelectElement) {
+        const option = Array.from(node.options).find(
+          (opt) => opt.value.toLowerCase() === value.toLowerCase(),
+        );
+        if (!option) {
+          throw new Error(`"${value}" is not an allowed option for ${field}.`);
+        }
+        node.value = option.value;
+        updateLeadFromField(field, option.value);
+      } else {
+        node.value = value;
+        updateLeadFromField(field, value);
+      }
+
+      node.dispatchEvent(new Event("input", { bubbles: true }));
+      node.dispatchEvent(new Event("change", { bubbles: true }));
+      if ("focus" in node) {
+        node.focus();
+      }
+      highlightElement(node);
+      return `Filled ${field} with "${value}".`;
+    },
+    [highlightElement, updateLeadFromField],
+  );
+
+  const setFocusAreasTool = useCallback(
+    async (parameters: { selections?: string[] } | null) => {
+      if (typeof document === "undefined") {
+        throw new Error("Unable to access the DOM.");
+      }
+      const desiredRaw = Array.isArray(parameters?.selections) ? parameters.selections : [];
+      const desired = new Set(
+        desiredRaw
+          .map((entry) => focusAreaLookup.get(entry.toLowerCase()) ?? entry)
+          .filter((entry) => focusAreaLookup.has(entry.toLowerCase())),
+      );
+
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>(CONTACT_FOCUS_SELECTOR));
+      if (buttons.length === 0) {
+        throw new Error("Focus picker is not present.");
+      }
+
+      buttons.forEach((button) => {
+        const area = button.dataset.contactFocusOption ?? button.textContent ?? "";
+        const shouldSelect = desired.has(area);
+        const isPressed = button.getAttribute("aria-pressed") === "true";
+        if (shouldSelect !== isPressed) {
+          button.click();
+        }
+      });
+
+      if (desired.size > 0) {
+        const firstMatch = buttons.find((button) => desired.has(button.dataset.contactFocusOption ?? ""));
+        if (firstMatch) {
+          highlightElement(firstMatch);
+        }
+      }
+
+      return `Focus areas synced to: ${Array.from(desired).join(", ") || "none"}.`;
+    },
+    [focusAreaLookup, highlightElement],
+  );
+
+  const submitContactFormTool = useCallback(async () => {
+    if (typeof document === "undefined") {
+      throw new Error("Unable to access the DOM.");
+    }
+    const form = document.querySelector<HTMLFormElement>(CONTACT_FORM_SELECTOR);
+    if (!form) {
+      throw new Error("Contact intake form is not rendered.");
+    }
+
+    const submitter = form.querySelector<HTMLButtonElement>(CONTACT_SUBMIT_SELECTOR);
+    if (submitter) {
+      submitter.click();
+    } else {
+      form.requestSubmit();
+    }
+
+    highlightElement(form);
+    return "Contact intake submitted.";
+  }, [highlightElement]);
   const addTranscriptEntry = useCallback(
     (entry: Omit<TranscriptEntry, "id" | "timestamp"> & { timestamp?: string }) => {
       setTranscript((prev) => {
@@ -245,9 +438,46 @@ export function ConversationalAgentWidget() {
   }, [hydrateFromStorage]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.sessionStorage.getItem(AGENT_ENABLED_KEY);
+    if (stored === "false") {
+      agentEnabledRef.current = false;
+      setIsAgentEnabled(false);
+      setAutoStartAttempted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    agentEnabledRef.current = isAgentEnabled;
+    if (typeof window === "undefined") return;
+    window.sessionStorage.setItem(AGENT_ENABLED_KEY, isAgentEnabled ? "true" : "false");
+  }, [isAgentEnabled]);
+
+  useEffect(() => {
     persistSessionState(transcriptRef.current, leadRef.current);
     persistQualifierContext(leadRef.current);
   }, [lead, persistQualifierContext, persistSessionState]);
+
+  useEffect(() => {
+    if (status !== "connected" || typeof window === "undefined") return;
+    const path = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    conversationRef.current?.sendContextualUpdate(`Visitor is viewing ${path}`);
+  }, [status]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const announceLocation = () => {
+      if (!conversationRef.current) return;
+      const path = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      conversationRef.current.sendContextualUpdate(`Visitor navigated to ${path}`);
+    };
+    window.addEventListener("hashchange", announceLocation);
+    window.addEventListener("popstate", announceLocation);
+    return () => {
+      window.removeEventListener("hashchange", announceLocation);
+      window.removeEventListener("popstate", announceLocation);
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -262,6 +492,9 @@ export function ConversationalAgentWidget() {
 
   const persistConversation = useCallback(
     async (statusUpdate: "initiated" | "in_progress" | "completed" | "abandoned" | "handoff") => {
+      if (!supabaseAvailableRef.current) {
+        return;
+      }
       if (!sessionIdRef.current) return;
       if (transcriptRef.current.length === 0 && !hasLeadSignal(leadRef.current)) {
         return;
@@ -318,15 +551,20 @@ export function ConversationalAgentWidget() {
           toast.info("Conversation snapshot synced.");
         }
       } catch (error) {
-        console.error("Failed to persist conversation", error);
-        toast.error(
-          error instanceof Error ? error.message : "We couldn’t sync the conversation. Please try again.",
-        );
+        const message =
+          error instanceof Error ? error.message : "We couldn’t sync the conversation. Please try again.";
+        if (message.includes("Supabase is not configured")) {
+          console.info("Skipping conversation persistence: Supabase credentials missing.");
+          supabaseAvailableRef.current = false;
+        } else {
+          console.error("Failed to persist conversation", error);
+          toast.error(message);
+        }
       } finally {
         setIsPersisting(false);
       }
     },
-    [lead],
+    [],
   );
 
   const stopConversation = useCallback(
@@ -352,17 +590,91 @@ export function ConversationalAgentWidget() {
     [isEnding, persistConversation],
   );
 
+  const disableAgent = useCallback(
+    async (
+      statusUpdate: "completed" | "abandoned" = "abandoned",
+      options?: { endSession?: boolean },
+    ) => {
+      console.info("[Concierge] Disabling agent", {
+        statusUpdate,
+        endSession: options?.endSession ?? false,
+        hasConversation: Boolean(conversationRef.current),
+      });
+      if (!agentEnabledRef.current && !conversationRef.current) {
+        setAutoStartAttempted(true);
+        return;
+      }
+      agentEnabledRef.current = false;
+      setIsAgentEnabled(false);
+      setAutoStartAttempted(true);
+      const shouldEndSession = options?.endSession ?? false;
+      const conversation = conversationRef.current;
+      if (conversation) {
+        conversation.setMicMuted(true);
+        setIsMuted(true);
+        try {
+          conversation.setVolume({ volume: 0 });
+        } catch {
+          // noop in environments where volume control is unavailable
+        }
+        if (shouldEndSession) {
+          await stopConversation(statusUpdate);
+        }
+      }
+    },
+    [stopConversation],
+  );
+
+  const buildClientTools = useCallback(
+    () => ({
+      openContactSection: openContactSectionTool,
+      updateContactField: fillContactFieldTool,
+      syncFocusAreas: setFocusAreasTool,
+      submitContactForm: submitContactFormTool,
+      toggleVoiceAgent: async (parameters?: { enabled?: boolean }) => {
+        if (parameters?.enabled === false) {
+          await disableAgent("abandoned", { endSession: false });
+          return "Voice concierge disabled.";
+        }
+        if (parameters?.enabled === true) {
+          console.info("[Concierge] toggleVoiceAgent enabled request received.");
+          agentEnabledRef.current = true;
+          setIsAgentEnabled(true);
+          const conversation = conversationRef.current;
+          if (conversation) {
+            try {
+              conversation.setVolume({ volume: 1 });
+            } catch {
+              // ignore if volume control unsupported
+            }
+            conversation.setMicMuted(false);
+            setIsMuted(false);
+            return "Voice concierge remains active.";
+          }
+          setAutoStartAttempted(false);
+          return "Voice concierge remains active.";
+        }
+        console.info("[Concierge] toggleVoiceAgent noop for payload", parameters);
+        return "No change to voice concierge state.";
+      },
+    }),
+    [disableAgent, fillContactFieldTool, openContactSectionTool, setFocusAreasTool, submitContactFormTool],
+  );
+
   const handleMessage = useCallback(
     ({ message, source }: { message: string; source: Role }) => {
       if (!message?.trim()) return;
       const role = source === "ai" ? "agent" : "user";
-      addTranscriptEntry({ role, content: message.trim() });
-      if (role === "user") {
+      if (role === "agent") {
+        console.info("[Concierge] Agent message:", message);
+      } else {
+        console.info("[Concierge] User transcript:", message);
         const clues = extractLeadClues(message, leadRef.current);
         if (clues) {
           updateLead(clues);
         }
       }
+      addTranscriptEntry({ role, content: message.trim() });
     },
     [addTranscriptEntry, updateLead],
   );
@@ -370,6 +682,14 @@ export function ConversationalAgentWidget() {
   const startConversation = useCallback(
     async (triggeredByUser: boolean) => {
       if (isStarting || conversationRef.current) return;
+      if (!agentEnabledRef.current) {
+        if (triggeredByUser) {
+          toast.message("Voice concierge is disabled. Toggle it on to resume.");
+        }
+        console.info("[Concierge] Conversation start blocked because agent is disabled.");
+        setAutoStartAttempted(true);
+        return;
+      }
       setIsStarting(true);
       setErrorMessage(null);
       if (!sessionIdRef.current) {
@@ -397,10 +717,15 @@ export function ConversationalAgentWidget() {
         const conversation = await Conversation.startSession({
           connectionType: "webrtc",
           conversationToken: token,
-          onStatusChange: ({ status: nextStatus }) => setStatus(nextStatus),
+          clientTools: buildClientTools(),
+          onStatusChange: ({ status: nextStatus }) => {
+            console.info("[Concierge] Status change:", nextStatus);
+            setStatus(nextStatus);
+          },
           onModeChange: ({ mode: nextMode }) => setMode(nextMode),
           onMessage: handleMessage,
-          onDisconnect: () => {
+          onDisconnect: (details) => {
+            console.warn("[Concierge] Conversation disconnected", details);
             setStatus("disconnected");
             setMode("listening");
             conversationRef.current = null;
@@ -410,18 +735,41 @@ export function ConversationalAgentWidget() {
             setErrorMessage(message);
             toast.error(message);
           },
+          onUnhandledClientToolCall: (clientToolCall) => {
+            console.warn("Unhandled client tool call", clientToolCall);
+            toast.message(
+              clientToolCall?.tool_name
+                ? `Agent requested an unavailable client tool: ${clientToolCall.tool_name}`
+                : "Agent requested an unavailable client tool.",
+            );
+          },
+          onAgentToolResponse: ({ tool_name, is_error }) => {
+            if (is_error) {
+              toast.error(`Agent tool ${tool_name ?? "client tool"} reported an error.`);
+            }
+          },
+          onError: (message, context) => {
+            console.error("[Concierge] Conversation error:", message, context);
+          },
         });
         conversationRef.current = conversation;
+        try {
+          conversation.setVolume({ volume: 1 });
+        } catch {
+          // not supported in older SDKs
+        }
+        conversation.setMicMuted(false);
         setStatus("connected");
         setMode("listening");
         setIsMuted(false);
         await persistConversation("initiated");
         toast.success("Operator concierge connected.");
-      } catch (error) {
-        console.error("Failed to start ElevenLabs conversation", error);
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
+            console.info("[Concierge] Conversation session started.");
+          } catch (error) {
+            console.error("Failed to start ElevenLabs conversation", error);
+            setErrorMessage(
+              error instanceof Error
+                ? error.message
             : "Microphone permissions blocked. Please enable access and try again.",
         );
         if (!triggeredByUser) {
@@ -440,16 +788,42 @@ export function ConversationalAgentWidget() {
         setAutoStartAttempted(true);
       }
     },
-    [handleMessage, persistConversation, isStarting],
+    [buildClientTools, handleMessage, persistConversation, isStarting],
   );
+
+  const enableAgent = useCallback(async () => {
+    agentEnabledRef.current = true;
+    setIsAgentEnabled(true);
+    const conversation = conversationRef.current;
+    if (conversation) {
+      try {
+        conversation.setVolume({ volume: 1 });
+      } catch {
+        // ignore if volume control unsupported
+      }
+      conversation.setMicMuted(false);
+      setIsMuted(false);
+      return;
+    }
+    if (!isStarting) {
+      setAutoStartAttempted(false);
+      await startConversation(true);
+    }
+  }, [isStarting, startConversation]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (autoStartAttempted) return;
+    if (autoStartAttempted || !isAgentEnabled) return;
     autoStartTimerRef.current = setTimeout(() => {
       startConversation(false).catch(() => undefined);
     }, 1600);
-  }, [autoStartAttempted, startConversation]);
+    return () => {
+      if (autoStartTimerRef.current) {
+        clearTimeout(autoStartTimerRef.current);
+        autoStartTimerRef.current = null;
+      }
+    };
+  }, [autoStartAttempted, isAgentEnabled, startConversation]);
 
   const toggleMute = useCallback(() => {
     const conversation = conversationRef.current;
@@ -458,6 +832,28 @@ export function ConversationalAgentWidget() {
     conversation.setMicMuted(nextMuted);
     setIsMuted(nextMuted);
   }, [isMuted]);
+
+  useEffect(() => {
+    let rafId: number | null = null;
+    const sampleVolume = () => {
+      const conversation = conversationRef.current;
+      if (conversation && typeof conversation.getInputVolume === "function") {
+        const volume = conversation.getInputVolume();
+        if (volume > 0) {
+          console.info("[Concierge] Input volume", volume);
+        }
+      }
+      rafId = window.requestAnimationFrame(sampleVolume);
+    };
+    if (typeof window !== "undefined") {
+      rafId = window.requestAnimationFrame(sampleVolume);
+    }
+    return () => {
+      if (rafId !== null && typeof window !== "undefined") {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
 
   const widgetStatusLabel = useMemo(() => {
     switch (status) {
@@ -570,6 +966,37 @@ export function ConversationalAgentWidget() {
                 {isMuted ? <MicOff className="size-4" /> : <Mic className="size-4" />}
               </button>
             </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-xs">
+            <div className="flex flex-col">
+              <span className="font-semibold uppercase tracking-[0.24em] text-white/70">Voice agent</span>
+              <span className="text-sm text-white">
+                {isAgentEnabled ? "Active by default" : "Disabled for this visitor"}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                if (isAgentEnabled) {
+                  console.info("[Concierge] Manual agent toggle: disable");
+                  disableAgent("abandoned", { endSession: true }).catch(() => undefined);
+                } else {
+                  console.info("[Concierge] Manual agent toggle: enable");
+                  enableAgent().catch(() => undefined);
+                }
+              }}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-3 py-2 text-xs font-semibold uppercase tracking-[0.24em] transition",
+                isAgentEnabled
+                  ? "border-rose-400/40 bg-rose-500/10 text-rose-100 hover:border-rose-400/60"
+                  : "border-emerald-400/40 bg-emerald-500/10 text-emerald-100 hover:border-emerald-400/60",
+              )}
+              disabled={isStarting || isEnding}
+            >
+              {isAgentEnabled ? <MicOff className="size-4" /> : <Mic className="size-4" />}
+              {isAgentEnabled ? "Mute agent" : "Enable agent"}
+            </button>
           </div>
 
           <div className="h-48 overflow-y-auto rounded-2xl border border-white/10 bg-black/60 p-3 text-xs text-white/85">

@@ -166,7 +166,11 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8">
+    <section
+      id="contact"
+      data-contact-section
+      className="mx-auto mt-32 max-w-7xl px-6 md:mt-40 md:px-8"
+    >
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,560px)] lg:items-start lg:gap-16">
         <div className="space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
@@ -230,6 +234,7 @@ export default function ContactSection() {
                 className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-white transition-colors hover:border-white/25"
                 aria-expanded={isExpanded}
                 aria-controls="contact-intake"
+                data-contact-toggle
               >
                 {isExpanded ? "Hide intake" : "Open intake"}
                 <ChevronDown
@@ -271,7 +276,7 @@ export default function ContactSection() {
                       <FormItem className="space-y-2 lg:col-span-3">
                         <FormLabel className="text-sm font-medium text-white/85">Full name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Taylor Rivera" {...field} />
+                          <Input data-contact-field="name" placeholder="Taylor Rivera" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -284,7 +289,12 @@ export default function ContactSection() {
                       <FormItem className="space-y-2 lg:col-span-3">
                         <FormLabel className="text-sm font-medium text-white/85">Work email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="you@company.com" {...field} />
+                          <Input
+                            data-contact-field="email"
+                            type="email"
+                            placeholder="you@company.com"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -297,7 +307,7 @@ export default function ContactSection() {
                       <FormItem className="space-y-2 lg:col-span-3">
                         <FormLabel className="text-sm font-medium text-white/85">Company</FormLabel>
                         <FormControl>
-                          <Input placeholder="Devonel" {...field} />
+                          <Input data-contact-field="company" placeholder="Devonel" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -310,7 +320,11 @@ export default function ContactSection() {
                       <FormItem className="space-y-2 lg:col-span-3">
                         <FormLabel className="text-sm font-medium text-white/85">Website</FormLabel>
                         <FormControl>
-                          <Input placeholder="https://yourdomain.com" {...field} />
+                          <Input
+                            data-contact-field="website"
+                            placeholder="https://yourdomain.com"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -336,6 +350,7 @@ export default function ContactSection() {
                         <FormControl>
                           <select
                             {...field}
+                            data-contact-field="headcount"
                             className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                           >
                             {HEADCOUNT_OPTIONS.map((option) => (
@@ -363,6 +378,7 @@ export default function ContactSection() {
                         <FormControl>
                           <select
                             {...field}
+                            data-contact-field="timeline"
                             className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                           >
                             {TIMELINE_OPTIONS.map((option) => (
@@ -410,6 +426,7 @@ export default function ContactSection() {
                                     ? "border-[rgb(var(--brand-accent-rgb))] bg-[rgb(var(--brand-accent-rgb)/0.18)] text-white"
                                     : "border-white/12 text-white/70 hover:border-white/30",
                                 )}
+                                data-contact-focus-option={area}
                               >
                                 {area}
                               </button>
@@ -431,6 +448,7 @@ export default function ContactSection() {
                             rows={5}
                             placeholder="Share funnel leaks, KPIs, and integrations we should review before proposing automations."
                             className="resize-none text-sm"
+                            data-contact-field="message"
                             {...field}
                           />
                         </FormControl>
@@ -454,6 +472,7 @@ export default function ContactSection() {
                       shimmerColor="rgb(250, 204, 21)"
                       shimmerDuration="2.4s"
                       className="border border-white/10 bg-[linear-gradient(90deg,#151519,#06060a)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white"
+                      data-contact-submit
                     >
                       <span className="flex items-center gap-2">
                         {isSubmitting ? "Sending…" : "Send intake"}

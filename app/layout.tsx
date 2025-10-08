@@ -35,7 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <ConversationalAgentWidget />
+          {process.env.NEXT_PUBLIC_ENABLE_VOICE_AGENT === "true" && <ConversationalAgentWidget />}
           <Toaster />
           <Analytics />
         </ThemeProvider>

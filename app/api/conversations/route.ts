@@ -12,10 +12,7 @@ export async function POST(request: Request) {
     const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !supabaseServiceRoleKey) {
-      return NextResponse.json(
-        { error: "Supabase is not configured for conversational logging." },
-        { status: 500 },
-      );
+      return NextResponse.json({ status: "skipped" }, { status: 200 });
     }
 
     const payload = {

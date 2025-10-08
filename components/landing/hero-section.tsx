@@ -12,6 +12,7 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { TextAnimate } from "@/components/ui/text-animate";
 import { TypingAnimation } from "@/components/ui/typing-animation";
+import { Highlighter } from "@/components/ui/highlighter";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import { CalTrigger } from "@/components/integrations/cal-trigger";
 
@@ -50,7 +51,7 @@ export default function HeroSection() {
         </TextShimmer>
       </div>
 
-      <h1 className="pt-6 pb-1 text-5xl font-medium leading-[1.2] tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
+      <h1 className="pt-6 pb-1 text-5xl font-medium leading-[1.15] tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
         <TextAnimate
           as="span"
           className="block"
@@ -64,8 +65,8 @@ export default function HeroSection() {
           Deploy AI Agents
         </TextAnimate>
         <WordRotate
-          className="mt-3"
-          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
+          className="mt-1 sm:mt-3"
+          textClassName="bg-gradient-to-br from-white from-30% to-white/40 bg-clip-text text-5xl font-medium leading-[1.1] tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
           words={[
             "Close Loops",
             "Filter Leads",
@@ -76,7 +77,7 @@ export default function HeroSection() {
 
       <TextAnimate
         as="p"
-        className="mb-8 mt-10 text-lg tracking-tight text-gray-400 md:text-xl text-balance sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10"
+        className="mt-10 text-lg tracking-tight text-gray-300 md:text-xl text-balance sm:mt-4 md:-mt-4 lg:-mt-8 xl:-mt-10"
         animation="blurInUp"
         by="word"
         delay={0.4}
@@ -85,8 +86,19 @@ export default function HeroSection() {
       >
         Operator-led automation for revenue, success, and support.
       </TextAnimate>
+      <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-white/85 text-balance md:mt-6 md:text-base lg:text-lg">
+        A
+        {" "}
+        <span className="relative inline-flex font-semibold text-white">
+          <Highlighter color="#F59E0B" strokeWidth={2.4} animationDuration={720}>
+            human operator pod
+          </Highlighter>
+        </span>
+        {" "}
+        audits transcripts live, tunes prompts in your stack, and keeps every agent on brand.
+      </p>
 
-      <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:600ms]">
+      <div className="mb-8 mt-9 flex flex-col items-center justify-center gap-4 translate-y-[-1rem] animate-fade-in opacity-0 sm:mt-8 md:mt-10 md:flex-row [--animation-delay:600ms]">
         <CalTrigger>
           <RainbowButton
             size="lg"

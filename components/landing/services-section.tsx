@@ -70,7 +70,7 @@ export default function ServicesSection() {
         </TextAnimate>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {cards.map((card, index) => (
           <motion.article
             key={card.title}
@@ -79,7 +79,7 @@ export default function ServicesSection() {
             viewport={{ once: true, margin: "-120px" }}
             transition={{ duration: 0.45, delay: index * 0.05, ease: "easeOut" }}
             className={cn(
-              "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 hover:border-[rgb(var(--brand-accent-rgb)/0.3)] transition-all duration-300",
+              "group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-white/10 bg-background/70 p-6 sm:p-7 hover:border-[rgb(var(--brand-accent-rgb)/0.3)] transition-all duration-300",
               card.className,
               card.featured && "border-[rgb(var(--brand-accent-rgb)/0.2)]"
             )}
@@ -98,7 +98,7 @@ export default function ServicesSection() {
               <div className="flex items-center gap-2">
                 <TextAnimate
                   as="h3"
-                  className="text-xl font-semibold text-foreground"
+                  className="text-xl font-semibold text-foreground text-balance"
                   animation="slideUp"
                   by="text"
                   delay={index * 0.05}
@@ -114,7 +114,7 @@ export default function ServicesSection() {
                   </span>
                 ) : null}
               </div>
-              <p className="text-sm leading-6 text-muted-foreground">{card.description}</p>
+              <p className="text-sm leading-6 text-muted-foreground text-balance sm:text-base">{card.description}</p>
             </div>
             {card.media ? (
               <motion.div

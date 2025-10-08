@@ -35,8 +35,6 @@ export function CalInlineEmbed({
         styles: {
           branding: {
             brandColor: "rgb(var(--brand-accent-rgb))",
-            textColor: "rgba(255,255,255,0.92)",
-            backgroundColor: "#050507",
           },
         },
       });

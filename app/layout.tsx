@@ -1,3 +1,4 @@
+import { ConversationalAgentWidget } from "@/components/integrations/conversational-agent-widget";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <ConversationalAgentWidget />
           <Toaster />
           <Analytics />
         </ThemeProvider>

@@ -60,9 +60,86 @@ async function testValidationError() {
   assert.ok(Array.isArray(data.issues) && data.issues.length > 0, "issues returned");
 }
 
+async function testSupabasePersistence() {
+  const validPayload = {
+    name: "Taylor Rivera",
+    email: "taylor@example.com",
+    company: "Devonel",
+    website: "https://devonel.ai",
+    headcount: HEADCOUNT_OPTIONS[0],
+    timeline: TIMELINE_OPTIONS[0],
+    focus: [FOCUS_AREAS[0]],
+    message: "We need a pod to automate inbound lead filtering and scoring.",
+  };
+
+  const originalFetch = global.fetch;
+  const calls: Array<{ url: string; options?: RequestInit }> = [];
+  const SUPABASE_URL = "https://example.supabase.co";
+  const SUPABASE_KEY = "service-role-key";
+  process.env.SUPABASE_URL = SUPABASE_URL;
+  process.env.SUPABASE_SERVICE_ROLE_KEY = SUPABASE_KEY;
+
+  global.fetch = (async (url: RequestInfo | URL, options?: RequestInit) => {
+    calls.push({ url: String(url), options });
+    return new Response(JSON.stringify([{ id: 42 }]), { status: 201 });
+  }) as typeof fetch;
+
+  try {
+    const response = await invokeContactRoute(validPayload);
+    assert.equal(response.status, 200, "valid submission should succeed with Supabase");
+    assert.equal(calls.length, 1, "one request sent to Supabase");
+    const [call] = calls;
+    assert.equal(call.url, `${SUPABASE_URL}/rest/v1/contact_intakes`, "contact intakes endpoint used");
+    assert.equal(call.options?.method, "POST");
+    const headers = new Headers(call.options?.headers);
+    assert.equal(headers.get("apikey"), SUPABASE_KEY, "apikey header set");
+    assert.equal(headers.get("Authorization"), `Bearer ${SUPABASE_KEY}`, "auth header set");
+  } finally {
+    global.fetch = originalFetch;
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+  }
+}
+
+async function testSupabaseFailure() {
+  const validPayload = {
+    name: "Taylor Rivera",
+    email: "taylor@example.com",
+    company: "Devonel",
+    website: "https://devonel.ai",
+    headcount: HEADCOUNT_OPTIONS[0],
+    timeline: TIMELINE_OPTIONS[0],
+    focus: [FOCUS_AREAS[0]],
+    message: "We need a pod to automate inbound lead filtering and scoring.",
+  };
+
+  const originalFetch = global.fetch;
+  process.env.SUPABASE_URL = "https://example.supabase.co";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "service-role-key";
+
+  global.fetch = (async () =>
+    new Response(JSON.stringify({ message: "not allowed" }), { status: 401 })) as typeof fetch;
+
+  try {
+    const response = await invokeContactRoute(validPayload);
+    assert.equal(response.status, 502, "supabase failure should bubble as 502");
+    const data = (await response.json()) as { error?: string };
+    assert.equal(
+      data.error,
+      "We couldn't store your request just yet. Our operators have been notified.",
+    );
+  } finally {
+    global.fetch = originalFetch;
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+  }
+}
+
 async function run() {
   await testValidSubmission();
   await testValidationError();
+  await testSupabasePersistence();
+  await testSupabaseFailure();
   console.log("contact route tests passed");
 }
 

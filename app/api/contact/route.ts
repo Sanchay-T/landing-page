@@ -23,6 +23,34 @@ export async function POST(request: Request) {
       userAgent: request.headers.get("user-agent"),
     };
 
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (supabaseUrl && supabaseServiceRoleKey) {
+      const supabaseResponse = await fetch(`${supabaseUrl}/rest/v1/contact_intakes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: supabaseServiceRoleKey,
+          Authorization: `Bearer ${supabaseServiceRoleKey}`,
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify({
+          ...submission,
+          focus: submission.focus,
+        }),
+      });
+
+      if (!supabaseResponse.ok) {
+        const errorBody = await supabaseResponse.text();
+        console.error("Supabase contact persistence failed", errorBody);
+        return NextResponse.json(
+          { error: "We couldn't store your request just yet. Our operators have been notified." },
+          { status: 502 },
+        );
+      }
+    }
+
     const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
     if (webhookUrl) {
       const response = await fetch(webhookUrl, {

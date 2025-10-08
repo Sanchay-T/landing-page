@@ -14,12 +14,18 @@ interface CalInlineEmbedProps {
   className?: string;
   id?: string;
   frame?: boolean;
+  prefill?: {
+    email?: string;
+    name?: string;
+    notes?: string;
+  } | null;
 }
 
 export function CalInlineEmbed({
   className,
   id = CAL_EMBED_ID,
   frame = true,
+  prefill,
 }: CalInlineEmbedProps) {
   useEffect(() => {
     let mounted = true;
@@ -67,6 +73,13 @@ export function CalInlineEmbed({
         }}
         config={{
           layout: "column_view",
+          ...(prefill && (prefill.email || prefill.name || prefill.notes)
+            ? {
+                prefill: {
+                  ...prefill,
+                },
+              }
+            : {}),
         }}
       />
     </div>

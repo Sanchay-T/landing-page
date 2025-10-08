@@ -19,3 +19,5 @@ export const CAL_EMBED_LINK =
     : undefined) || fallbackCalEvent;
 
 export const CAL_EMBED_ID = "schedule-consultation";
+
+export const QUALIFIER_STORAGE_KEY = "devonel-qualifier-context";

@@ -1,6 +1,9 @@
 "use client";
 
-import { CAL_EMBED_ID, CTA_LINKS } from "@/lib/marketing";
+import { FormEvent, useEffect, useId, useMemo, useRef, useState } from "react";
+
+import { Input } from "@/components/ui/input";
+import { CAL_EMBED_ID, CTA_LINKS, QUALIFIER_STORAGE_KEY } from "@/lib/marketing";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/magicui/marquee";
 import { SpinningText } from "@/registry/magicui/spinning-text";
@@ -18,7 +21,6 @@ import {
   Rss,
   Shield,
 } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
 
 const tiles = [
   {
@@ -75,6 +77,31 @@ const shuffleArray = (array: any[]) => {
   }
   return array;
 };
+
+const qualifierPriorities = [
+  {
+    value: "launch-first-agent",
+    label: "Launch my first agent",
+    description: "You’re mapping a net-new workflow and need hands-on build support.",
+  },
+  {
+    value: "scale-new-workflows",
+    label: "Scale into more workflows",
+    description: "You already have traction and want pods to expand coverage fast.",
+  },
+  {
+    value: "optimize-existing",
+    label: "Optimize agents in production",
+    description: "You need operator tuning, QA, and better analytics on what’s live now.",
+  },
+];
+
+const qualifierHeadcounts = [
+  { value: "1-10", label: "1-10" },
+  { value: "11-50", label: "11-50" },
+  { value: "51-200", label: "51-200" },
+  { value: "200+", label: "200+" },
+];
 
 const OrbitSpinner = ({ className }: { className?: string }) => (
   <div
@@ -136,6 +163,15 @@ export default function CallToActionSection() {
   const [randomTiles2, setRandomTiles2] = useState<typeof tiles>([]);
   const [randomTiles3, setRandomTiles3] = useState<typeof tiles>([]);
   const [randomTiles4, setRandomTiles4] = useState<typeof tiles>([]);
+  const [priority, setPriority] = useState<string>("");
+  const [teamSize, setTeamSize] = useState<string>("");
+  const [qualifierEmail, setQualifierEmail] = useState<string>("");
+  const [prefillData, setPrefillData] = useState<{
+    email?: string;
+    notes?: string;
+  } | null>(null);
+  const [submissionState, setSubmissionState] = useState<"idle" | "completed">("idle");
+  const [qualifierError, setQualifierError] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -144,6 +180,36 @@ export default function CallToActionSection() {
       setRandomTiles2(shuffleArray([...tiles]));
       setRandomTiles3(shuffleArray([...tiles]));
       setRandomTiles4(shuffleArray([...tiles]));
+      const stored = window.sessionStorage.getItem(QUALIFIER_STORAGE_KEY);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored) as {
+            priority?: string;
+            teamSize?: string;
+            email?: string;
+            notes?: string;
+          };
+          if (parsed.priority) {
+            setPriority(parsed.priority);
+          }
+          if (parsed.teamSize) {
+            setTeamSize(parsed.teamSize);
+          }
+          if (parsed.email) {
+            setQualifierEmail(parsed.email);
+          }
+          if (parsed.notes || parsed.email) {
+            setPrefillData({
+              email: parsed.email,
+              notes: parsed.notes,
+            });
+            setSubmissionState("completed");
+          }
+        } catch (error) {
+          console.warn("Failed to parse stored qualifier context", error);
+          window.sessionStorage.removeItem(QUALIFIER_STORAGE_KEY);
+        }
+      }
     }
   }, []);
 
@@ -155,6 +221,70 @@ export default function CallToActionSection() {
     }
 
     window.open(CTA_LINKS.bookCall, "_blank", "noopener,noreferrer");
+  };
+
+  const emailIsValid = useMemo(() => {
+    if (!qualifierEmail) return false;
+    return /.+@.+\..+/.test(qualifierEmail.trim());
+  }, [qualifierEmail]);
+
+  const handleSelectPriority = (value: string) => {
+    setPriority(value);
+    setSubmissionState("idle");
+    setQualifierError(null);
+  };
+
+  const handleSelectTeamSize = (value: string) => {
+    setTeamSize(value);
+    setSubmissionState("idle");
+    setQualifierError(null);
+  };
+
+  const handleEmailChange = (value: string) => {
+    setQualifierEmail(value);
+    setSubmissionState("idle");
+    if (qualifierError) {
+      setQualifierError(null);
+    }
+  };
+
+  const handleQualifierSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmedEmail = qualifierEmail.trim();
+    if (!priority || !teamSize) {
+      setQualifierError("Select your priority and team size.");
+      return;
+    }
+    if (!emailIsValid) {
+      setQualifierError("Add a work email so we can prep your consult.");
+      return;
+    }
+
+    const notes = `Top priority: ${qualifierPriorities.find((item) => item.value === priority)?.label ?? priority}\nTeam size: ${teamSize}`;
+    const payload = {
+      email: trimmedEmail,
+      notes,
+    };
+    setPrefillData(payload);
+    setSubmissionState("completed");
+    setQualifierError(null);
+
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem(
+        QUALIFIER_STORAGE_KEY,
+        JSON.stringify({
+          priority,
+          teamSize,
+          email: trimmedEmail,
+          notes,
+        }),
+      );
+    }
+
+    requestAnimationFrame(() => {
+      const target = document.getElementById(CAL_EMBED_ID);
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
   };
 
   return (
@@ -248,43 +378,146 @@ export default function CallToActionSection() {
           </div>
           <div className="w-full px-4 sm:px-8">
             <div className="mx-auto max-w-6xl rounded-[2.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,20,0.92),rgba(5,5,10,0.95))] p-6 shadow-[0_45px_140px_-60px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:p-8 lg:p-10">
-              {/* Header and Stats in Horizontal Layout */}
-              <div className="grid gap-6 lg:grid-cols-[1.2fr,1fr] lg:gap-8">
-                {/* Left: Heading & Description */}
-                <div className="flex flex-col justify-center text-center lg:text-left">
-                  <h2 className="text-2xl font-semibold text-white sm:text-3xl lg:text-[2rem]">
-                    Lock in your operator consult
-                  </h2>
-                  <p className="mt-3 text-sm text-white/70 sm:text-base lg:mt-4">
-                    Meet 1:1 with our pod lead to audit your workflows, score automation opportunities, and draft a phased rollout game plan tailored to your stack.
-                  </p>
-                </div>
-
-                {/* Right: Stats Grid */}
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                  <div className="group flex flex-col gap-1 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-center transition-all hover:border-white/20 hover:bg-white/[0.06] lg:text-left">
-                    <span className="text-lg font-semibold text-white">37% avg lift</span>
-                    <span className="text-[0.68rem] uppercase tracking-[0.2em] text-white/60">
-                      in booked demos after 6 weeks
-                    </span>
-                  </div>
-                  <div className="group flex flex-col gap-1 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-center transition-all hover:border-white/20 hover:bg-white/[0.06] lg:text-left">
-                    <span className="text-lg font-semibold text-white">18 active pods</span>
-                    <span className="text-[0.68rem] uppercase tracking-[0.2em] text-white/60">
-                      across SaaS, services, marketplaces
-                    </span>
-                  </div>
-                  <div className="group flex flex-col gap-1 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-center transition-all hover:border-white/20 hover:bg-white/[0.06] lg:text-left">
-                    <span className="text-lg font-semibold text-white">&lt; 30 day go-live</span>
-                    <span className="text-[0.68rem] uppercase tracking-[0.2em] text-white/60">
-                      operator-led rollout included
-                    </span>
-                  </div>
-                </div>
+              <div className="space-y-6 text-center lg:text-left">
+                <h2 className="text-2xl font-semibold text-white sm:text-3xl lg:text-[2rem]">
+                  Lock in your operator consult
+                </h2>
+                <p className="text-sm text-white/70 sm:text-base">
+                  Meet 1:1 with our pod lead to audit your workflows, score automation opportunities, and draft a phased rollout game plan tailored to your stack.
+                </p>
               </div>
 
-              {/* Calendar Embed */}
-              <CalInlineEmbed frame={false} className="mt-6 lg:mt-8" />
+              <form
+                onSubmit={handleQualifierSubmit}
+                className="mt-6 space-y-5 rounded-[1.75rem] border border-white/12 bg-[#121216] p-5 shadow-[0_25px_100px_-60px_rgba(15,15,25,0.65)] transition-all sm:p-6"
+              >
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/60">
+                    Step 1 • Share context
+                  </p>
+                  {submissionState === "completed" ? (
+                    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1 text-[0.7rem] font-medium text-emerald-100">
+                      <span className="size-2 rounded-full bg-emerald-300" aria-hidden />
+                      Context attached
+                    </span>
+                  ) : (
+                    <span className="text-xs text-white/55">
+                      We’ll carry these answers into your booking notes.
+                    </span>
+                  )}
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-white/85">
+                    What do you want to tackle first?
+                  </p>
+                  <div className="grid gap-3 md:grid-cols-3">
+                    {qualifierPriorities.map((option) => {
+                      const isActive = priority === option.value;
+                      return (
+                        <label
+                          key={option.value}
+                          className={cn(
+                            "group relative flex cursor-pointer flex-col gap-2 rounded-2xl border border-white/12 bg-[#15151c] p-4 text-left transition-all",
+                            "hover:border-white/25 hover:bg-[#1a1a22]",
+                            isActive
+                              ? "border-white/30 bg-[#1f1f28] shadow-[0_20px_80px_-60px_rgba(148,163,184,0.45)]"
+                              : null,
+                          )}
+                        >
+                          <input
+                            type="radio"
+                            name="qualifier-priority"
+                            value={option.value}
+                            checked={isActive}
+                            onChange={() => handleSelectPriority(option.value)}
+                            className="sr-only"
+                          />
+                          <span className="text-sm font-semibold text-white">
+                            {option.label}
+                          </span>
+                          <span className="text-xs text-white/70">
+                            {option.description}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,240px)]">
+                  <div className="space-y-3">
+                    <p className="text-sm font-medium text-white/85">
+                      Team size working with the agent pod
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {qualifierHeadcounts.map((option) => {
+                        const isActive = teamSize === option.value;
+                        return (
+                          <label
+                            key={option.value}
+                            className={cn(
+                              "cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                              isActive
+                                ? "border-white/30 bg-[#1f1f28] text-white"
+                                : "border-white/15 bg-[#15151c] text-white/75 hover:border-white/25 hover:bg-[#1a1a22] hover:text-white",
+                            )}
+                          >
+                            <input
+                              type="radio"
+                              name="qualifier-headcount"
+                              value={option.value}
+                              checked={isActive}
+                              onChange={() => handleSelectTeamSize(option.value)}
+                              className="sr-only"
+                            />
+                            {option.label}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-sm font-medium text-white/85" htmlFor="qualifier-email">
+                      Work email for the invite
+                    </label>
+                    <Input
+                      id="qualifier-email"
+                      type="email"
+                      inputMode="email"
+                      placeholder="you@company.com"
+                      value={qualifierEmail}
+                      onChange={(event) => handleEmailChange(event.target.value)}
+                      className="border-white/12 bg-[#1a1a21] text-white placeholder:text-white/45 focus-visible:border-white/30"
+                      autoComplete="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="text-xs text-rose-300">
+                    {qualifierError}
+                  </div>
+                  <ShimmerButton
+                    type="submit"
+                    disabled={submissionState === "completed" && !qualifierError}
+                    borderRadius="999px"
+                    shimmerColor="rgb(250, 204, 21)"
+                    shimmerDuration="2.4s"
+                    className="border border-white/15 bg-[linear-gradient(90deg,#14141a,#06060a)] px-6 py-2.5 text-sm font-semibold text-white disabled:opacity-80"
+                  >
+                    {submissionState === "completed" ? "Context saved" : "Attach context"}
+                  </ShimmerButton>
+                </div>
+              </form>
+
+              <div className="mt-6 lg:mt-8">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/60">
+                  Step 2 • Lock your time
+                </p>
+                <CalInlineEmbed frame={false} className="mt-3" prefill={prefillData} />
+              </div>
             </div>
           </div>
         </div>

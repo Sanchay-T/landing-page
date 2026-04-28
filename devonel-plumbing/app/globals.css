@@ -334,10 +334,10 @@ nav {
 .ledger-foot span:last-child { text-align: right; color: var(--valve); white-space: nowrap; }
 .proof-side {
   background: var(--ink); color: var(--paper); padding: 36px 30px;
-  display: flex; flex-direction: column; justify-content: space-between; min-width: 0;
-  gap: 48px;
+  display: flex; flex-direction: column; min-width: 0;
+  gap: 32px;
 }
-.proof-side-top { display: flex; flex-direction: column; gap: 32px; }
+.proof-side-top { display: flex; flex-direction: column; gap: 28px; }
 .proof-side .bignum-block { display: flex; flex-direction: column; gap: 10px; }
 .proof-side .bignum {
   font-family: 'Newsreader', serif; font-size: 84px; line-height: .9;

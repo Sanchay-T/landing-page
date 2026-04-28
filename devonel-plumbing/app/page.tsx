@@ -300,26 +300,28 @@ export default function Page() {
             </div>
           </div>
           <aside className="proof-side">
-            <div className="bignum-block">
-              <span className="bignum-cap">— ledger total · 12 mo —</span>
-              <div className="bignum">
-                $<span className="bignum-num">1.18</span>
-                <em className="bignum-suffix">M</em>
-              </div>
-              <span className="bignum-cap">recurring · re-engineered out of payroll &amp; rework</span>
-            </div>
-            <div className="stat-mini">
-              <div>
-                <div className="v">
-                  14<em>/14</em>
+            <div className="proof-side-top">
+              <div className="bignum-block">
+                <span className="bignum-cap">— ledger total · 12 mo —</span>
+                <div className="bignum">
+                  $<span className="bignum-num">1.18</span>
+                  <em className="bignum-suffix">M</em>
                 </div>
-                <span className="k">drives shipped</span>
+                <span className="bignum-cap">recurring · re-engineered out of payroll &amp; rework</span>
               </div>
-              <div>
-                <div className="v">
-                  162<em>hr</em>
+              <div className="stat-mini">
+                <div>
+                  <div className="v">
+                    14<em>/14</em>
+                  </div>
+                  <span className="k">drives shipped</span>
                 </div>
-                <span className="k">hr / wk freed</span>
+                <div>
+                  <div className="v">
+                    162<em>hr</em>
+                  </div>
+                  <span className="k">hr / wk freed</span>
+                </div>
               </div>
             </div>
             <div className="quote">

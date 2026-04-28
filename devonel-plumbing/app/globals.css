@@ -1094,6 +1094,31 @@ nav {
   .hp-rect-fig-2,
   .hp-rect-fig-3 { --pf: 1; }
 
+  /* Mobile-only handoff: headline fades 0.00→0.05, then figure fades
+     0.06→0.12. There's no scroll position where both render at >0.4
+     opacity, so they never visually clash. After 0.12 figure stays fully
+     visible until 0.32 when it crossfades to fig-2 / fig-3. */
+  .hero--pinned .hp-rect-fig-1 {
+    opacity: clamp(0,
+      min(
+        calc((var(--p, 0) - 0.06) * 17),
+        calc((0.34 - var(--p, 0)) * 25)
+      ),
+    1);
+  }
+  .hero--pinned .hp-text-chapter.hp-text-1 {
+    opacity: clamp(0, calc((0.05 - var(--p, 0)) * 20), 1);
+  }
+
+  /* Specificity-lock the mobile headline size so no later 0,1,0 rule can
+     leak desktop's 48px back in. Slightly tighter clamp keeps the three
+     lines within ~120px of vertical space at 360–820px wide. */
+  .hero--pinned .hp-headline {
+    font-size: clamp(20px, 5.6vw, 28px);
+    line-height: 1.06;
+    letter-spacing: -.02em;
+  }
+
   .hp-eyebrow { font-size: 9px; letter-spacing: .14em; gap: 8px; }
   .hp-eyebrow .swatch { width: 9px; height: 9px; }
   .hp-headline {

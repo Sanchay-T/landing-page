@@ -41,37 +41,47 @@ export function MobilePinnedHero({ className = "" }: Props) {
       className={`mh ${className}`}
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-paper">
-        {/* Top floating chrome — subtle frame so the user always knows
-            where they are in the storyboard. */}
-        <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between font-mono text-[9.5px] tracking-[0.16em] uppercase text-ink-2 pointer-events-none">
-          <span className="flex items-center gap-2 bg-paper/95 backdrop-blur-sm border border-ink/40 px-2 py-1">
-            <span className="size-1.5 rounded-full bg-valve animate-pulse" />
-            Devonel · Studio
+        {/* Mobile-only nav header — replaces the desktop TopStrip + Nav so
+            the hero gets the full viewport. Logo + Book Intake CTA + scene
+            label that updates with scroll position. */}
+        <header className="absolute top-0 left-0 right-0 z-30 grid grid-cols-[auto_1fr_auto] items-center gap-3 px-4 py-3 border-b border-ink bg-paper/95 backdrop-blur-sm pointer-events-auto">
+          <a className="flex items-center gap-2 font-serif font-semibold text-[15px] text-ink">
+            <svg viewBox="0 0 32 32" className="size-5" aria-hidden>
+              <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <line x1="3" y1="16" x2="29" y2="16" stroke="currentColor" strokeWidth="1.5" />
+              <line x1="16" y1="3" x2="16" y2="29" stroke="currentColor" strokeWidth="1.5" />
+              <circle cx="16" cy="16" r="3" fill="var(--color-valve)" />
+            </svg>
+            Devonel
+          </a>
+          <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 text-center truncate">
+            <b className="mh-label" data-scene="0">Vol II · No 14</b>
+            <b className="mh-label" data-scene="1">Fig 01 · Intake leakage</b>
+            <b className="mh-label" data-scene="2">Fig 02 · KYC backlog</b>
+            <b className="mh-label" data-scene="3">Fig 03 · Returns triage</b>
           </span>
-          <span className="bg-paper/95 backdrop-blur-sm border border-ink/40 px-2 py-1 min-w-[100px] text-right">
-            <b className="mh-label" data-scene="0">VOL II · NO 14</b>
-            <b className="mh-label" data-scene="1">FIG 01</b>
-            <b className="mh-label" data-scene="2">FIG 02</b>
-            <b className="mh-label" data-scene="3">FIG 03</b>
-          </span>
-        </div>
+          <a className="bg-ink text-paper font-mono text-[10px] tracking-[0.16em] uppercase px-3 py-2 whitespace-nowrap">
+            Book →
+          </a>
+        </header>
 
-        {/* Scene 0 — headline / intro */}
-        <div className="mh-scene mh-scene-0 absolute inset-0 flex flex-col justify-end px-6 pb-24 pt-20 gap-6 z-10">
+        {/* Scene 0 — headline / intro. Centered vertically so it fills the
+            screen impactfully on phones (no awkward dead space). */}
+        <div className="mh-scene mh-scene-0 absolute inset-0 flex flex-col justify-center px-6 pt-20 pb-24 gap-6 z-10">
           <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3">
             <span className="size-3 bg-valve" aria-hidden />
-            <span>Vol. II · No. 14 · Process plumbing &amp; automation</span>
+            <span>Process plumbing &amp; automation</span>
           </div>
-          <h1 className="font-serif font-medium text-[clamp(40px,11.5vw,64px)] leading-[1.0] tracking-[-0.025em] flex flex-col">
-            <span>Your business <em className="not-italic italic font-medium text-valve">leaks</em></span>
-            <span>through the seams</span>
-            <span>between <span className="italic text-water">tools</span>.</span>
+          <h1 className="font-serif font-medium text-[clamp(38px,10.5vw,64px)] leading-[1.0] tracking-[-0.025em] flex flex-col">
+            <span className="whitespace-nowrap">Your business <em className="not-italic italic font-medium text-valve">leaks</em></span>
+            <span className="whitespace-nowrap">through the seams</span>
+            <span className="whitespace-nowrap">between <span className="italic text-water">tools</span>.</span>
           </h1>
           <p className="text-[15px] leading-[1.55] text-ink-2 max-w-[42ch]">
             <strong className="text-ink font-semibold">Devonel is a process re-engineering studio.</strong>{" "}
             We map the work, find where it&apos;s spilling, and weld it back together — with automations that actually hold pressure under real volume.
           </p>
-          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-2 mt-2">
+          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-2 mt-1">
             <span className="size-1 bg-ink-2 rounded-full animate-pulse" />
             Scroll to inspect ↓
           </div>
@@ -138,7 +148,7 @@ type FigSceneProps = {
 function MhFigureScene({ index, eyebrow, title, children }: FigSceneProps) {
   return (
     <div
-      className={`mh-scene mh-scene-${index} absolute inset-0 flex flex-col px-5 pt-14 pb-20 gap-3 z-10`}
+      className={`mh-scene mh-scene-${index} absolute inset-0 flex flex-col px-5 pt-20 pb-20 gap-3 z-10`}
       style={PF_FULL}
     >
       <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink flex items-center gap-3">

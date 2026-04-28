@@ -1196,3 +1196,59 @@ nav {
   .hero-blueprint-figure svg { opacity: .15; }
   .hero-blueprint-stamp { position: static; margin-top: 24px; }
 }
+
+/* =============================================================
+   MobilePinnedHero — full-screen pin-and-scroll on phone/tablet
+   (lg:hidden gate; ≥1024px uses DesktopPinnedHero instead).
+   ~25 lines, scoped under `.mh-` prefix to avoid colliding with
+   anything else. The component sets --p (0–1) on `.mh` itself
+   per RAF tick; CSS below derives per-scene opacity + parallax.
+   Scenes: 0 headline · 1 FIG.01 · 2 FIG.02 · 3 FIG.03
+   ============================================================= */
+.mh { height: 500svh; position: relative; }
+.mh-scene { transition: opacity .12s linear; pointer-events: none; will-change: opacity, transform; }
+[data-scene="0"] .mh-scene-0,
+[data-scene="1"] .mh-scene-1,
+[data-scene="2"] .mh-scene-2,
+[data-scene="3"] .mh-scene-3 { pointer-events: auto; }
+
+.mh-scene-0 {
+  opacity: clamp(0, calc((0.20 - var(--p, 0)) * 14), 1);
+  transform: translateY(calc(var(--p, 0) * -20px));
+}
+.mh-scene-1 {
+  opacity: clamp(0, min(calc((var(--p, 0) - 0.18) * 14), calc((0.50 - var(--p, 0)) * 14)), 1);
+  transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.18) * 14), 1) * 0.04));
+}
+.mh-scene-2 {
+  opacity: clamp(0, min(calc((var(--p, 0) - 0.46) * 14), calc((0.76 - var(--p, 0)) * 14)), 1);
+  transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.46) * 14), 1) * 0.04));
+}
+.mh-scene-3 {
+  opacity: clamp(0, calc((var(--p, 0) - 0.72) * 14), 1);
+  transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.72) * 14), 1) * 0.04));
+}
+
+.mh-progress { width: calc(var(--p, 0) * 100%); transition: width .12s linear; }
+
+.mh-label,
+.mh-hint { display: none; }
+[data-scene="0"] .mh-label[data-scene="0"],
+[data-scene="1"] .mh-label[data-scene="1"],
+[data-scene="2"] .mh-label[data-scene="2"],
+[data-scene="3"] .mh-label[data-scene="3"],
+[data-scene="0"] .mh-hint[data-scene="0"],
+[data-scene="1"] .mh-hint[data-scene="1"],
+[data-scene="2"] .mh-hint[data-scene="2"],
+[data-scene="3"] .mh-hint[data-scene="3"] { display: inline; }
+
+[data-scene="0"] .mh-dot[data-scene="0"],
+[data-scene="1"] .mh-dot[data-scene="1"],
+[data-scene="2"] .mh-dot[data-scene="2"],
+[data-scene="3"] .mh-dot[data-scene="3"] { background: var(--ink); }
+
+/* The .vf-label-stat is the gold italic stat at the bottom of each VFigure
+   SVG (viewBox y=660). On mobile-pinned it collides with the floating
+   progress chrome at bottom-3. Hide it inside .mh-scene only — desktop
+   .hp-rect-fig still shows it. */
+.mh-scene .vf-label-stat { display: none; }

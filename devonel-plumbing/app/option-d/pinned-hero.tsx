@@ -1,10 +1,10 @@
 import { DesktopPinnedHero } from "./desktop-pinned-hero";
-import { MobileHero } from "./mobile-hero";
+import { MobilePinnedHero } from "./mobile-pinned-hero";
 
 export function PinnedHero() {
   return (
     <>
-      <MobileHero className="lg:hidden" />
+      <MobilePinnedHero className="lg:hidden" />
       <DesktopPinnedHero className="hidden lg:block" />
     </>
   );

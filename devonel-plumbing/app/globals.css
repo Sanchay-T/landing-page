@@ -1,3 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper:    #eef0eb;
+  --color-grid:     #cdd4ca;
+  --color-ink:      #0e1410;
+  --color-ink-2:    #2c3530;
+  --color-rule:     #9aa39a;
+  --color-pipe:     #0e1410;
+  --color-valve:    #c8451c;
+  --color-water:    #2962d6;
+  --color-steam:    #7e8d83;
+  --color-gold:     #c39a3c;
+  --color-bg-stamp: #dfe3dc;
+
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+  --font-sans:  "Inter", ui-sans-serif, system-ui;
+
+  --breakpoint-lg: 1024px;
+}
+
 :root {
   --paper: #eef0eb;
   --grid: #cdd4ca;
@@ -39,7 +61,10 @@ body {
 
 h1, h2, h3, h4 { margin: 0; font-weight: 500; }
 p { margin: 0; }
-a { color: inherit; text-decoration: none; }
+/* `a { color: inherit }` removed — Tailwind v4 preflight already provides
+   `a { color: inherit; text-decoration: inherit }` in @layer base, which lets
+   per-element utilities like `text-paper` override on <a> tags. The bare rule
+   here was unlayered and beat all utility classes in the cascade. */
 
 /* ============ NAV ============ */
 .topstrip { border-bottom: 1.5px solid var(--ink); background: var(--paper); }
@@ -644,7 +669,10 @@ nav {
   letter-spacing: .18em; text-transform: uppercase; color: var(--ink-2);
 }
 /* =============================================================
-   Option D — single 3-chapter pinned hero
+   Option D — desktop pinned hero (≥1024px only)
+   Mobile/tablet (≤1023px) uses <MobileHero> with Tailwind utilities;
+   the @media (max-width: 1100px) block that used to live below has been
+   removed in favor of that component.
    Left = editorial text (3 chapters crossfade)
    Right = portrait rectangle holding 3 stacked vertical figures
    Chapters: 1 (0.00–0.34 Intake leakage) · 2 (0.34–0.66 KYC) · 3 (0.66–1 Returns)
@@ -957,233 +985,6 @@ nav {
 [data-chapter="2"] .hp-hint .hp-hint-scroll { opacity: 0; }
 [data-chapter="2"] .hp-hint .hp-hint-done { opacity: 1; color: var(--valve); }
 
-/* ----- Mobile ≤ 1100px: full-screen diagram, scroll-driven build -----
-   Covers phones, iPad-portrait, and any small-laptop / DevTools-emulated
-   viewport. Above 1100px desktops keep the 2-col text+rect layout.
-   The figure fills the entire viewport. Chrome shrinks to floating corner
-   badges. Editorial headline appears briefly during chapter 1, then fades
-   so the diagram becomes the entire experience. Same --p / --pf drive
-   the same chapter crossfades and figure builds as desktop. */
-@media (max-width: 1100px) {
-  .hero--pinned {
-    height: 700vh;
-    padding: 0 !important;
-  }
-  .hero-pinned-sticky {
-    position: sticky; top: 0;
-    height: 100svh;          /* small viewport — survives iOS toolbar */
-    padding: 0;
-    overflow: hidden;
-    background:
-      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
-      var(--paper);
-    background-blend-mode: multiply;
-  }
-
-  /* ---- Top status: floating top-left badge with current chapter ---- */
-  .hp-statusbar {
-    position: absolute; top: 14px; left: 14px; right: auto;
-    width: auto; height: auto;
-    display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
-    grid-template-columns: none;
-    padding: 0;
-    background: transparent; border: 0;
-    z-index: 5;
-    pointer-events: none;
-  }
-  .hp-statusbar-id {
-    display: inline-flex; gap: 6px;
-    font-size: 8.5px; letter-spacing: .14em; color: var(--ink-2);
-  }
-  .hp-statusbar-id .dot { width: 5px; height: 5px; }
-  .hp-statusbar-stage {
-    position: relative; min-width: 0; height: auto; text-align: left;
-    background: rgba(238, 240, 235, .9);
-    backdrop-filter: blur(4px);
-    border: 1px solid var(--ink);
-    padding: 4px 8px;
-  }
-  .hp-stage-label {
-    position: relative; left: auto; right: auto; top: auto;
-    font-size: 10px; letter-spacing: .14em;
-    color: var(--ink); font-weight: 600;
-  }
-  /* Reset positioned-stack so only the active label takes up space */
-  .hp-stage-label[data-chapter] { display: none; }
-  [data-chapter="0"] .hp-stage-label[data-chapter="0"],
-  [data-chapter="1"] .hp-stage-label[data-chapter="1"],
-  [data-chapter="2"] .hp-stage-label[data-chapter="2"] { display: inline; opacity: 1; }
-  .hp-statusbar-meta { display: none; }
-
-  /* ---- Stage = full viewport; figure fills it ---- */
-  .hp-stage {
-    inset: 0; padding: 0;
-    display: block;
-  }
-
-  /* ---- Figure rect = full screen, no border, no header ---- */
-  .hp-rect {
-    position: absolute; inset: 0;
-    border: 0; background: transparent;
-    clip-path: none;
-  }
-  .hp-rect-head { display: none; }
-  .hp-rect-body {
-    position: absolute; inset: 0;
-    padding: 64px 18px 60px;     /* clearance for floating chrome top + bottom */
-    display: block;
-  }
-  .hp-rect-fig {
-    position: absolute; inset: 64px 18px 60px;
-    display: flex; align-items: center; justify-content: center;
-    /* opacity formulas from desktop still apply — figures crossfade with scroll */
-  }
-
-  /* ---- Editorial text overlay: chapter 1 headline shown briefly,
-          chapters 2 + 3 hidden so figures speak for themselves ---- */
-  .hp-text {
-    position: absolute;
-    inset: 64px 18px auto 18px;
-    height: auto;
-    display: block;
-    z-index: 4;
-    pointer-events: none;
-  }
-  /* Force chapter 1 into normal flow so its eyebrow + headline stack from the
-     top of .hp-text instead of getting flex-centered around y=0 of a 0-height
-     parent (the absolute-inset:0 + height:auto combo otherwise overflows the
-     content both above and below the anchor, which is what was overlapping the
-     floating FIG.01 statusbar badge with the headline). */
-  .hp-text-chapter {
-    padding: 0;
-    position: static;
-    inset: auto;
-    justify-content: flex-start;
-    gap: 10px;
-  }
-  .hp-text-chapter > .hp-sub,
-  .hp-text-chapter > .hp-cta,
-  .hp-text-chapter > .hp-mini-stats {
-    display: none;
-  }
-  /* Chapter 1 ("Your business leaks…") fades out by p=0.10 — short editorial intro.
-     Boost specificity to beat desktop's `.hp-text-chapter.hp-text-N` rule. */
-  .hp-text-chapter.hp-text-1 {
-    opacity: clamp(0, calc((0.10 - var(--p, 0)) * 14), 1);
-  }
-  /* Chapters 2 + 3 hidden on mobile — the diagram + chapter label is enough */
-  .hp-text-chapter.hp-text-2,
-  .hp-text-chapter.hp-text-3 { display: none; }
-
-  /* Statusbar moves to bottom-left corner so it can't collide with the
-     chapter-1 headline that now lives at the top-left of the figure rect. */
-  .hp-statusbar {
-    top: auto;
-    bottom: 36px;
-    left: 14px;
-  }
-
-  /* On mobile we skip the per-element line-draw choreography — at scroll=0
-     the figure must look intentional, not like a half-rendered pile of
-     debris (leak dots, marker arrowheads, valve hatch-fill all paint
-     regardless of stroke-dashoffset). Pin --pf=1 so every figure renders
-     fully drawn from the start; chapter crossfades still drive which figure
-     is visible via .hp-rect-fig-N opacity. */
-  .hp-rect-fig-1,
-  .hp-rect-fig-2,
-  .hp-rect-fig-3 { --pf: 1; }
-
-  /* Mobile-only handoff: headline fades 0.00→0.05, then figure fades
-     0.06→0.12. There's no scroll position where both render at >0.4
-     opacity, so they never visually clash. After 0.12 figure stays fully
-     visible until 0.32 when it crossfades to fig-2 / fig-3. */
-  .hero--pinned .hp-rect-fig-1 {
-    opacity: clamp(0,
-      min(
-        calc((var(--p, 0) - 0.06) * 17),
-        calc((0.34 - var(--p, 0)) * 25)
-      ),
-    1);
-  }
-  .hero--pinned .hp-text-chapter.hp-text-1 {
-    opacity: clamp(0, calc((0.05 - var(--p, 0)) * 20), 1);
-  }
-
-  /* Specificity-lock the mobile headline size so no later 0,1,0 rule can
-     leak desktop's 48px back in. Slightly tighter clamp keeps the three
-     lines within ~120px of vertical space at 360–820px wide. */
-  .hero--pinned .hp-headline {
-    font-size: clamp(20px, 5.6vw, 28px);
-    line-height: 1.06;
-    letter-spacing: -.02em;
-  }
-
-  .hp-eyebrow { font-size: 9px; letter-spacing: .14em; gap: 8px; }
-  .hp-eyebrow .swatch { width: 9px; height: 9px; }
-  .hp-headline {
-    font-size: clamp(22px, 6.4vw, 32px);
-    line-height: 1.04; letter-spacing: -.02em;
-    margin-top: 8px;
-  }
-
-  /* ---- Bottom chrome: floating thin progress + dot indicator ---- */
-  .hp-bottombar {
-    position: absolute; bottom: 14px; left: 14px; right: 14px;
-    height: auto; padding: 0;
-    display: flex; gap: 12px; align-items: center;
-    grid-template-columns: none;
-    background: transparent; border: 0;
-    z-index: 5;
-    font-size: 9px; letter-spacing: .12em;
-  }
-  .hp-figdots {
-    display: flex; gap: 6px; flex: 0 0 auto;
-    font-size: 0;
-  }
-  .hp-figdots span { gap: 0; font-size: 0; }
-  .hp-figdots span i {
-    width: 18px; height: 18px;
-    font-size: 8px;
-    background: rgba(238, 240, 235, .85);
-  }
-  .hp-progress {
-    flex: 1 1 auto;
-    height: 4px;
-    background:
-      repeating-linear-gradient(90deg,
-        transparent 0,
-        transparent calc(33% - 1px),
-        var(--ink-2) calc(33% - 1px),
-        var(--ink-2) 33%,
-        transparent 33%,
-        transparent calc(66% - 1px),
-        var(--ink-2) calc(66% - 1px),
-        var(--ink-2) 66%,
-        transparent 66%
-      ),
-      rgba(0, 0, 0, .12);
-  }
-  .hp-hint {
-    flex: 0 0 auto;
-    background: rgba(238, 240, 235, .85);
-    backdrop-filter: blur(4px);
-    border: 1px solid var(--ink);
-    padding: 3px 6px;
-    font-size: 8.5px;
-  }
-  .hp-hint span {
-    font-size: 8.5px;
-    white-space: nowrap;
-    position: static; transform: none;
-    color: var(--ink); font-weight: 600;
-  }
-  .hp-hint .hp-hint-scroll,
-  .hp-hint .hp-hint-done { display: none; }
-  [data-chapter="0"] .hp-hint .hp-hint-scroll,
-  [data-chapter="1"] .hp-hint .hp-hint-scroll { display: inline; }
-  [data-chapter="2"] .hp-hint .hp-hint-done { display: inline; color: var(--valve); }
-}
 
 /* ----- 1101–1280px: tighter desktop columns ----- */
 @media (max-width: 1280px) and (min-width: 1101px) {

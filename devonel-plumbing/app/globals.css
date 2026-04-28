@@ -955,12 +955,14 @@ nav {
 [data-chapter="2"] .hp-hint .hp-hint-scroll { opacity: 0; }
 [data-chapter="2"] .hp-hint .hp-hint-done { opacity: 1; color: var(--valve); }
 
-/* ----- Mobile ≤ 900px: full-screen diagram, scroll-driven build -----
+/* ----- Mobile ≤ 1100px: full-screen diagram, scroll-driven build -----
+   Covers phones, iPad-portrait, and any small-laptop / DevTools-emulated
+   viewport. Above 1100px desktops keep the 2-col text+rect layout.
    The figure fills the entire viewport. Chrome shrinks to floating corner
    badges. Editorial headline appears briefly during chapter 1, then fades
    so the diagram becomes the entire experience. Same --p / --pf drive
    the same chapter crossfades and figure builds as desktop. */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .hero--pinned {
     height: 700vh;
     padding: 0 !important;
@@ -1127,8 +1129,8 @@ nav {
   [data-chapter="2"] .hp-hint .hp-hint-done { display: inline; color: var(--valve); }
 }
 
-/* ----- 901–1280px: tighter columns ----- */
-@media (max-width: 1280px) and (min-width: 901px) {
+/* ----- 1101–1280px: tighter desktop columns ----- */
+@media (max-width: 1280px) and (min-width: 1101px) {
   .hp-stage { grid-template-columns: minmax(0, 1fr) minmax(340px, 400px); gap: 32px; padding: 32px; }
   .hp-headline { font-size: clamp(40px, 4.4vw, 60px); }
 }

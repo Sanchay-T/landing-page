@@ -11,56 +11,6 @@ function chapterFor(p: number): number {
   return 2;
 }
 
-function dumpDiag(el: HTMLElement, p: number, label: string) {
-  const cs = getComputedStyle(el);
-  const rect = (sel: string) => {
-    const node = el.querySelector(sel) as HTMLElement | SVGElement | null;
-    if (!node) return `${sel}: <missing>`;
-    const r = (node as HTMLElement).getBoundingClientRect();
-    const o = getComputedStyle(node as Element).opacity;
-    return `${sel}: x=${Math.round(r.left)} y=${Math.round(r.top)} w=${Math.round(r.width)} h=${Math.round(r.height)} op=${o}`;
-  };
-  const fig1 = el.querySelector(".hp-rect-fig-1") as HTMLElement | null;
-  const fig2 = el.querySelector(".hp-rect-fig-2") as HTMLElement | null;
-  const fig3 = el.querySelector(".hp-rect-fig-3") as HTMLElement | null;
-  const pf = (n: HTMLElement | null) => (n ? getComputedStyle(n).getPropertyValue("--pf").trim() : "?");
-  const svg = el.querySelector(".hp-rect-fig-1 .vf-svg") as SVGElement | null;
-  const visibleChildren: string[] = [];
-  if (svg) {
-    svg.querySelectorAll("*").forEach((c) => {
-      const cls = (c as Element).getAttribute("class") || (c.tagName);
-      const cstyle = getComputedStyle(c as Element);
-      const op = parseFloat(cstyle.opacity);
-      const dash = parseFloat(cstyle.strokeDashoffset);
-      const fill = cstyle.fill;
-      const hasInk = (op > 0.05) && (isNaN(dash) || dash < 0.95);
-      const hasFill = fill && fill !== "none" && op > 0.05;
-      if (hasInk || hasFill) {
-        visibleChildren.push(`${cls}{op=${op.toFixed(2)} dash=${isNaN(dash)?"-":dash.toFixed(2)} fill=${fill}}`);
-      }
-    });
-  }
-  // eslint-disable-next-line no-console
-  console.log(
-    `[devonel-diag ${label}]\n` +
-      `  vw=${window.innerWidth} vh=${window.innerHeight} dpr=${window.devicePixelRatio}\n` +
-      `  --p=${p.toFixed(4)} chapter=${el.dataset.chapter} matchesMobileMQ=${matchMedia("(max-width: 1100px)").matches}\n` +
-      `  --pf{1,2,3}= ${pf(fig1)} | ${pf(fig2)} | ${pf(fig3)}\n` +
-      `  ${rect(".hp-statusbar")}\n` +
-      `  ${rect(".hp-stage")}\n` +
-      `  ${rect(".hp-rect")}\n` +
-      `  ${rect(".hp-rect-body")}\n` +
-      `  ${rect(".hp-rect-fig-1")}\n` +
-      `  ${rect(".hp-rect-fig-1 .vf-svg")}\n` +
-      `  ${rect(".hp-text")}\n` +
-      `  ${rect(".hp-text-1")}\n` +
-      `  visibleSvgChildren(${visibleChildren.length}):\n    ${visibleChildren.slice(0, 12).join("\n    ")}\n` +
-      `  hp-rect-fig position=${fig1 ? getComputedStyle(fig1).position : "?"} inset=${fig1 ? getComputedStyle(fig1).inset : "?"}\n` +
-      `  vf-svg sizing= ${svg ? `viewBox=${(svg as SVGSVGElement).getAttribute("viewBox")} clientW=${(svg as SVGSVGElement).clientWidth} clientH=${(svg as SVGSVGElement).clientHeight}` : "?"}\n` +
-      `  hero--pinned cs height=${cs.height} pad=${cs.padding}`
-  );
-}
-
 export function PinnedHero() {
   const stageRef = useRef<HTMLDivElement>(null);
   const tCodeRef = useRef<HTMLSpanElement>(null);
@@ -70,7 +20,6 @@ export function PinnedHero() {
     if (!el) return;
 
     let raf = 0;
-    let lastChapter = -1;
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
@@ -80,30 +29,13 @@ export function PinnedHero() {
         const progress = total > 0 ? scrolled / total : 0;
 
         el.style.setProperty("--p", String(progress));
-        const ch = chapterFor(progress);
-        el.dataset.chapter = String(ch);
+        el.dataset.chapter = String(chapterFor(progress));
 
         if (tCodeRef.current) tCodeRef.current.textContent = `t = ${Math.round(progress * 100)}%`;
-
-        if (ch !== lastChapter) {
-          lastChapter = ch;
-          dumpDiag(el, progress, `chapter-${ch}`);
-        }
       });
     };
 
     onScroll();
-    // Initial dump after styles settle
-    setTimeout(() => dumpDiag(el, 0, "mount"), 60);
-    setTimeout(() => dumpDiag(el, 0, "mount+500"), 500);
-    // Expose helper for manual inspection
-    (window as unknown as { __devonelDebug?: () => void }).__devonelDebug = () => {
-      const r = el.getBoundingClientRect();
-      const total = el.offsetHeight - window.innerHeight;
-      const scrolled = Math.min(Math.max(-r.top, 0), total);
-      const p = total > 0 ? scrolled / total : 0;
-      dumpDiag(el, p, "manual");
-    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);

@@ -1050,7 +1050,18 @@ nav {
     z-index: 4;
     pointer-events: none;
   }
-  .hp-text-chapter { padding: 0; }
+  /* Force chapter 1 into normal flow so its eyebrow + headline stack from the
+     top of .hp-text instead of getting flex-centered around y=0 of a 0-height
+     parent (the absolute-inset:0 + height:auto combo otherwise overflows the
+     content both above and below the anchor, which is what was overlapping the
+     floating FIG.01 statusbar badge with the headline). */
+  .hp-text-chapter {
+    padding: 0;
+    position: static;
+    inset: auto;
+    justify-content: flex-start;
+    gap: 10px;
+  }
   .hp-text-chapter > .hp-sub,
   .hp-text-chapter > .hp-cta,
   .hp-text-chapter > .hp-mini-stats {
@@ -1064,6 +1075,24 @@ nav {
   /* Chapters 2 + 3 hidden on mobile — the diagram + chapter label is enough */
   .hp-text-chapter.hp-text-2,
   .hp-text-chapter.hp-text-3 { display: none; }
+
+  /* Statusbar moves to bottom-left corner so it can't collide with the
+     chapter-1 headline that now lives at the top-left of the figure rect. */
+  .hp-statusbar {
+    top: auto;
+    bottom: 36px;
+    left: 14px;
+  }
+
+  /* On mobile we skip the per-element line-draw choreography — at scroll=0
+     the figure must look intentional, not like a half-rendered pile of
+     debris (leak dots, marker arrowheads, valve hatch-fill all paint
+     regardless of stroke-dashoffset). Pin --pf=1 so every figure renders
+     fully drawn from the start; chapter crossfades still drive which figure
+     is visible via .hp-rect-fig-N opacity. */
+  .hp-rect-fig-1,
+  .hp-rect-fig-2,
+  .hp-rect-fig-3 { --pf: 1; }
 
   .hp-eyebrow { font-size: 9px; letter-spacing: .14em; gap: 8px; }
   .hp-eyebrow .swatch { width: 9px; height: 9px; }

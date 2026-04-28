@@ -1,14 +1,14 @@
-import { TopStrip, Nav, SchematicFigure, LowerSections } from "./_lib/shared";
-import { Animations } from "./animations";
+import { TopStrip, Nav, SchematicFigure, LowerSections } from "../_lib/shared";
+import { Animations } from "../animations";
 
-export default function Page() {
+export default function OptionA() {
   return (
     <>
       <TopStrip />
       <Nav />
 
-      {/* =================== HERO (classic) =================== */}
-      <section className="hero">
+      {/* =================== HERO (compact) =================== */}
+      <section className="hero hero--compact">
         <div className="hero-eyebrow">
           <span className="swatch"></span>
           <span>Vol. II · No. 14 · Process plumbing &amp; automation</span>

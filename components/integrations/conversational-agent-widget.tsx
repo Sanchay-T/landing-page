@@ -749,9 +749,6 @@ export function ConversationalAgentWidget() {
               toast.error(`Agent tool ${tool_name ?? "client tool"} reported an error.`);
             }
           },
-          onError: (message, context) => {
-            console.error("[Concierge] Conversation error:", message, context);
-          },
         });
         conversationRef.current = conversation;
         try {

@@ -323,6 +323,20 @@ export default function Page() {
                   <span className="k">hr / wk freed</span>
                 </div>
               </div>
+              <div className="stat-mini">
+                <div>
+                  <div className="v">
+                    9<em> ind.</em>
+                  </div>
+                  <span className="k">industries served</span>
+                </div>
+                <div>
+                  <div className="v">
+                    11<em>wk</em>
+                  </div>
+                  <span className="k">avg. payback</span>
+                </div>
+              </div>
             </div>
             <div className="quote">
               &quot;They came in expecting to install software. They left having deleted three of ours, and the right

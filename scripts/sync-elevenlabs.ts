@@ -21,6 +21,8 @@ if (!agentId) {
   process.exit(1);
 }
 
+const ensuredAgentId = agentId;
+
 type ClientToolSpec = {
   name: string;
   description: string;
@@ -131,12 +133,25 @@ type ToolRecord = {
   name: string;
 };
 
+function getClientToolName(tool: Awaited<ReturnType<ElevenLabsClient["conversationalAi"]["tools"]["list"]>>["tools"][number]) {
+  if (tool.toolConfig.type !== "client") {
+    return null;
+  }
+
+  return "name" in tool.toolConfig && typeof tool.toolConfig.name === "string"
+    ? tool.toolConfig.name
+    : null;
+}
+
 async function upsertClientTools(client: ElevenLabsClient): Promise<ToolRecord[]> {
   const existingToolsResponse = await client.conversationalAi.tools.list();
   const existing = new Map(
     existingToolsResponse.tools
-      .filter((tool) => tool.toolConfig.type === "client")
-      .map((tool) => [tool.toolConfig.name, tool]),
+      .map((tool) => {
+        const toolName = getClientToolName(tool);
+        return toolName ? [toolName, tool] : null;
+      })
+      .filter((entry): entry is [string, (typeof existingToolsResponse.tools)[number]] => Boolean(entry)),
   );
 
   const ensured: ToolRecord[] = [];
@@ -171,7 +186,7 @@ async function ensureAgentToolAssignments(
   client: ElevenLabsClient,
   toolIds: string[],
 ): Promise<void> {
-  const agent = await client.conversationalAi.agents.get(agentId);
+  const agent = await client.conversationalAi.agents.get(ensuredAgentId);
   const existingPrompt = agent.conversationConfig?.agent?.prompt ?? {};
   const currentIds = new Set(existingPrompt.toolIds ?? []);
   let didChange = false;
@@ -185,7 +200,7 @@ async function ensureAgentToolAssignments(
 
   const nextToolIds = Array.from(currentIds);
 
-  await client.conversationalAi.agents.update(agentId, {
+  await client.conversationalAi.agents.update(ensuredAgentId, {
     conversationConfig: {
       agent: {
         prompt: {
@@ -204,7 +219,7 @@ async function ensureAgentToolAssignments(
     },
   });
 
-  console.log(`Updated agent ${agentId} with ${nextToolIds.length} tool IDs and ensured voice mode.`);
+  console.log(`Updated agent ${ensuredAgentId} with ${nextToolIds.length} tool IDs and ensured voice mode.`);
 }
 
 async function main() {

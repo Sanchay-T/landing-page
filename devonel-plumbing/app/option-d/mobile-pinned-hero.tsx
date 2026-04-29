@@ -73,7 +73,7 @@ export function MobilePinnedHero({ className = "" }: Props) {
               <span className="size-3 bg-valve" aria-hidden />
               <span>Process plumbing &amp; automation</span>
             </div>
-            <h1 className="font-serif font-medium text-[clamp(54px,14.5vw,80px)] leading-[0.9] tracking-[-0.035em] flex flex-col mt-6">
+            <h1 className="font-serif font-medium text-[clamp(54px,14.5vw,80px)] leading-[0.95] tracking-[-0.035em] flex flex-col mt-12">
               <span>Your business</span>
               <span className="italic font-medium text-valve">leaks</span>
               <span>through the</span>

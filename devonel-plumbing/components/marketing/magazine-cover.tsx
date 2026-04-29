@@ -23,18 +23,20 @@ export type MagazineCoverProps = {
 };
 
 const TOKENS = {
-  "--cover-px": "24px",
-  "--cover-pt": "80px",
-  "--cover-pb": "96px",
-  "--cover-eyebrow-gap": "80px",
-  "--cover-headline-leading": "0.95",
-  "--cover-headline-size": "clamp(54px, 14.5vw, 80px)",
+  containerType: "size",
+  containerName: "cover",
+  "--cover-px": "max(20px, 5cqi)",
+  "--cover-pt": "max(64px, 10cqb)",
+  "--cover-pb": "max(48px, 8cqb)",
+  "--cover-eyebrow-gap": "clamp(24px, 7cqb, 80px)",
+  "--cover-headline-leading": "0.92",
+  "--cover-headline-size": "min(14.5cqi, 8cqb)",
   "--cover-headline-tracking": "-0.035em",
-  "--cover-lede-gap": "28px",
-  "--cover-lede-size": "18px",
+  "--cover-lede-gap": "clamp(12px, 2.5cqb, 28px)",
+  "--cover-lede-size": "clamp(14px, 4cqi, 18px)",
   "--cover-lede-leading": "1.5",
-  "--cover-stats-gap": "24px",
-  "--cover-stat-value-size": "24px",
+  "--cover-stats-gap": "clamp(20px, 4cqb, 44px)",
+  "--cover-stat-value-size": "clamp(20px, 5.8cqi, 26px)",
 } as CSSProperties;
 
 export function MagazineCover({ eyebrow, headline, lede, stats, className }: MagazineCoverProps) {
@@ -46,7 +48,7 @@ export function MagazineCover({ eyebrow, headline, lede, stats, className }: Mag
         className,
       )}
     >
-      <div className="flex-1 flex flex-col justify-center min-h-0">
+      <div className="flex-1 flex flex-col [justify-content:safe_center] min-h-0 overflow-hidden">
         <Eyebrow>{eyebrow}</Eyebrow>
         <DisplayHeadline lines={headline} />
         <Lede lead={lede.lead} rest={lede.rest} />

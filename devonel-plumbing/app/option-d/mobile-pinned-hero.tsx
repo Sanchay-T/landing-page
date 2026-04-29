@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { VFigure1, VFigure2, VFigure3 } from "../_lib/vertical-figures";
-
-const PF_FULL = { "--pf": "1" } as CSSProperties;
 
 type Props = { className?: string };
 
@@ -65,25 +63,35 @@ export function MobilePinnedHero({ className = "" }: Props) {
           </a>
         </header>
 
-        {/* Scene 0 — headline / intro. Centered vertically so it fills the
-            screen impactfully on phones (no awkward dead space). */}
-        <div className="mh-scene mh-scene-0 absolute inset-0 flex flex-col justify-center px-6 pt-20 pb-24 gap-6 z-10">
-          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3">
+        {/* Scene 0 — headline / intro. Top-aligned with stats teaser at
+            the bottom so the screen feels filled without dead space. */}
+        <div className="mh-scene mh-scene-0 absolute inset-0 flex flex-col px-6 pt-20 pb-24 z-10">
+          <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3 mt-6">
             <span className="size-3 bg-valve" aria-hidden />
             <span>Process plumbing &amp; automation</span>
           </div>
-          <h1 className="font-serif font-medium text-[clamp(38px,10.5vw,64px)] leading-[1.0] tracking-[-0.025em] flex flex-col">
+          <h1 className="font-serif font-medium text-[clamp(44px,12vw,72px)] leading-[0.96] tracking-[-0.03em] flex flex-col mt-7">
             <span className="whitespace-nowrap">Your business <em className="not-italic italic font-medium text-valve">leaks</em></span>
             <span className="whitespace-nowrap">through the seams</span>
             <span className="whitespace-nowrap">between <span className="italic text-water">tools</span>.</span>
           </h1>
-          <p className="text-[15px] leading-[1.55] text-ink-2 max-w-[42ch]">
+          <p className="text-[17px] leading-[1.55] text-ink-2 max-w-[40ch] mt-7">
             <strong className="text-ink font-semibold">Devonel is a process re-engineering studio.</strong>{" "}
-            We map the work, find where it&apos;s spilling, and weld it back together — with automations that actually hold pressure under real volume.
+            We map the work, find where it&apos;s spilling, and weld it back together — automations that hold pressure under real volume.
           </p>
-          <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-2 mt-1">
-            <span className="size-1 bg-ink-2 rounded-full animate-pulse" />
-            Scroll to inspect ↓
+          <div className="mt-auto pt-6 border-t border-ink/15 grid grid-cols-3 gap-4">
+            <div>
+              <div className="font-serif font-medium text-[24px] leading-none text-valve">$214k</div>
+              <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">Intake recovered</div>
+            </div>
+            <div>
+              <div className="font-serif font-medium text-[24px] leading-none text-valve">9d→14h</div>
+              <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">KYC backlog</div>
+            </div>
+            <div>
+              <div className="font-serif font-medium text-[24px] leading-none text-valve">2.3d→4h</div>
+              <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">Returns triage</div>
+            </div>
           </div>
         </div>
 
@@ -149,7 +157,6 @@ function MhFigureScene({ index, eyebrow, title, children }: FigSceneProps) {
   return (
     <div
       className={`mh-scene mh-scene-${index} absolute inset-0 flex flex-col px-5 pt-20 pb-20 gap-3 z-10`}
-      style={PF_FULL}
     >
       <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink flex items-center gap-3">
         <span className="size-2.5 bg-valve" aria-hidden />

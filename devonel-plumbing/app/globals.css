@@ -1219,14 +1219,17 @@ nav {
 .mh-scene-1 {
   opacity: clamp(0, min(calc((var(--p, 0) - 0.18) * 14), calc((0.50 - var(--p, 0)) * 14)), 1);
   transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.18) * 14), 1) * 0.04));
+  --pf: clamp(0, calc((var(--p, 0) - 0.20) / 0.20), 1);
 }
 .mh-scene-2 {
   opacity: clamp(0, min(calc((var(--p, 0) - 0.46) * 14), calc((0.76 - var(--p, 0)) * 14)), 1);
   transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.46) * 14), 1) * 0.04));
+  --pf: clamp(0, calc((var(--p, 0) - 0.48) / 0.20), 1);
 }
 .mh-scene-3 {
   opacity: clamp(0, calc((var(--p, 0) - 0.72) * 14), 1);
   transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.72) * 14), 1) * 0.04));
+  --pf: clamp(0, calc((var(--p, 0) - 0.74) / 0.22), 1);
 }
 
 .mh-progress { width: calc(var(--p, 0) * 100%); transition: width .12s linear; }
@@ -1252,3 +1255,27 @@ nav {
    progress chrome at bottom-3. Hide it inside .mh-scene only — desktop
    .hp-rect-fig still shows it. */
 .mh-scene .vf-label-stat { display: none; }
+
+/* On mobile-pinned, .vf-pipe lines have markerEnd arrowheads attached at
+   their endpoint. SVG markers ignore stroke-dashoffset so the arrowhead
+   renders even when the line hasn't drawn yet — orphaned ▼ symbols
+   floating in empty space. Fix: drop the line-draw on pipes (mobile only),
+   fade pipe + marker in together via opacity tied to --pf. Boxes still
+   line-draw. Desktop .hp-rect-fig is unaffected. */
+.mh-scene .vf-svg .vf-pipe {
+  stroke-dashoffset: 0;
+  opacity: clamp(0, calc((var(--pf, 0) - var(--start, 0)) * 7), 1);
+  transition: opacity .12s linear;
+}
+
+/* .vf-valve-ring uses fill="url(#vf-hatch)" — the stroke-dashoffset rule
+   hides the ring outline but the hatched fill renders immediately. Gate
+   the fill with fill-opacity tied to --pf so the hatch appears with the
+   ring outline. */
+.mh-scene .vf-svg .vf-valve-ring {
+  fill-opacity: clamp(0, calc((var(--pf, 0) - var(--start, 0)) * 5), 1);
+}
+
+/* .vf-leak (the red leak dots) uses transform: scale tied to --pf, but
+   the fill is solid — at scale(0) the dot is invisible, but as --pf
+   grows the dot pops in. Already works correctly. No override needed. */

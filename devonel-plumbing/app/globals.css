@@ -1227,19 +1227,19 @@ nav {
   transform: translateY(calc(var(--p, 0) * -20px));
 }
 .mh-scene-1 {
-  opacity: clamp(0, min(calc((var(--p, 0) - 0.18) * 14), calc((0.50 - var(--p, 0)) * 14)), 1);
+  opacity: clamp(0, min(calc((var(--p, 0) - 0.18) * 14), calc((0.52 - var(--p, 0)) * 14)), 1);
   transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.18) * 14), 1) * 0.04));
-  --pf: clamp(0, calc((var(--p, 0) - 0.20) / 0.20), 1);
+  --pf: clamp(0, calc((var(--p, 0) - 0.20) / 0.30), 1);
 }
 .mh-scene-2 {
-  opacity: clamp(0, min(calc((var(--p, 0) - 0.46) * 14), calc((0.76 - var(--p, 0)) * 14)), 1);
+  opacity: clamp(0, min(calc((var(--p, 0) - 0.46) * 14), calc((0.78 - var(--p, 0)) * 14)), 1);
   transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.46) * 14), 1) * 0.04));
-  --pf: clamp(0, calc((var(--p, 0) - 0.48) / 0.20), 1);
+  --pf: clamp(0, calc((var(--p, 0) - 0.48) / 0.30), 1);
 }
 .mh-scene-3 {
   opacity: clamp(0, calc((var(--p, 0) - 0.72) * 14), 1);
   transform: scale(calc(0.96 + clamp(0, calc((var(--p, 0) - 0.72) * 14), 1) * 0.04));
-  --pf: clamp(0, calc((var(--p, 0) - 0.74) / 0.22), 1);
+  --pf: clamp(0, calc((var(--p, 0) - 0.74) / 0.26), 1);
 }
 
 .mh-progress { width: calc(var(--p, 0) * 100%); transition: width .12s linear; }
@@ -1274,8 +1274,25 @@ nav {
    line-draw. Desktop .hp-rect-fig is unaffected. */
 .mh-scene .vf-svg .vf-pipe {
   stroke-dashoffset: 0;
-  opacity: clamp(0, calc((var(--pf, 0) - var(--start, 0)) * 7), 1);
-  transition: opacity .12s linear;
+  opacity: clamp(0, calc((var(--pf, 0) - var(--start, 0)) * 4), 1);
+  transition: none;
+  will-change: opacity;
+}
+
+/* Mobile only: slow per-element line-draw + remove transition lag so the
+   stroke maps 1:1 to scroll position. The default 0.15s transition
+   collides with the RAF-driven --p update — every scroll tick triggers a
+   separate animation, making the reveal feel laggy. With transition:
+   none the stroke-dashoffset re-derives from scroll on every frame, so
+   draw speed is exactly scroll speed. The * 3 multiplier (was * 5) makes
+   each individual line take longer relative to its --pf window, giving
+   the small-step gradual reveal the user wants. */
+.mh-scene .vf-svg .vf-box,
+.mh-scene .vf-svg .vf-divider,
+.mh-scene .vf-svg .vf-valve-ring {
+  stroke-dashoffset: clamp(0, calc(1 - (var(--pf, 0) - var(--start, 0)) * 3), 1);
+  transition: none;
+  will-change: stroke-dashoffset;
 }
 
 /* .vf-valve-ring uses fill="url(#vf-hatch)" — the stroke-dashoffset rule
@@ -1283,7 +1300,19 @@ nav {
    the fill with fill-opacity tied to --pf so the hatch appears with the
    ring outline. */
 .mh-scene .vf-svg .vf-valve-ring {
-  fill-opacity: clamp(0, calc((var(--pf, 0) - var(--start, 0)) * 5), 1);
+  fill-opacity: clamp(0, calc((var(--pf, 0) - var(--start, 0)) * 4), 1);
+}
+
+/* Same transition-lag fix for the other animated bits: router/leak/label/
+   valve handle. Their reveal formulas already exist on the global
+   .vf-svg rules — we only need to drop the transition for direct scroll
+   mapping on mobile. */
+.mh-scene .vf-svg .vf-router,
+.mh-scene .vf-svg .vf-label,
+.mh-scene .vf-svg .vf-leak,
+.mh-scene .vf-svg .vf-valve-handle {
+  transition: none;
+  will-change: opacity, transform;
 }
 
 /* .vf-leak (the red leak dots) uses transform: scale tied to --pf, but

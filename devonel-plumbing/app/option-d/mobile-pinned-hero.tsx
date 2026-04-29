@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { VFigure1, VFigure2, VFigure3 } from "../_lib/vertical-figures";
+import { MagazineCover } from "@/components/marketing/magazine-cover";
 
 type Props = { className?: string };
 
@@ -63,43 +64,28 @@ export function MobilePinnedHero({ className = "" }: Props) {
           </a>
         </header>
 
-        {/* Scene 0 — headline / intro. Eyebrow + headline + body are
-            vertically centered in the space above the stats teaser, so the
-            block reads as the cover of a printed issue rather than top-
-            aligned. Stats stay anchored to the bottom. */}
-        <div className="mh-scene mh-scene-0 absolute inset-0 flex flex-col px-6 pt-20 pb-24 z-10">
-          <div className="flex-1 flex flex-col justify-center min-h-0">
-            <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3">
-              <span className="size-3 bg-valve" aria-hidden />
-              <span>Process plumbing &amp; automation</span>
-            </div>
-            <h1 className="font-serif font-medium text-[clamp(54px,14.5vw,80px)] leading-[0.95] tracking-[-0.035em] flex flex-col mt-20">
-              <span>Your business</span>
-              <span className="italic font-medium text-valve">leaks</span>
-              <span>through the</span>
-              <span>seams between</span>
-              <span><span className="italic text-water">tools</span>.</span>
-            </h1>
-            <p className="text-[18px] leading-[1.5] text-ink-2 max-w-[40ch] mt-7">
-              <strong className="text-ink font-semibold">Devonel is a process re-engineering studio.</strong>{" "}
-              We map the work, find where it&apos;s spilling, and weld it back together — automations that hold pressure under real volume.
-            </p>
-          </div>
-          <div className="pt-6 border-t border-ink/15 grid grid-cols-3 gap-4">
-            <div>
-              <div className="font-serif font-medium text-[24px] leading-none text-valve">$214k</div>
-              <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">Intake recovered</div>
-            </div>
-            <div>
-              <div className="font-serif font-medium text-[24px] leading-none text-valve">9d→14h</div>
-              <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">KYC backlog</div>
-            </div>
-            <div>
-              <div className="font-serif font-medium text-[24px] leading-none text-valve">2.3d→4h</div>
-              <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">Returns triage</div>
-            </div>
-          </div>
-        </div>
+        {/* Scene 0 — magazine cover. All spacing/typography lives in
+            <MagazineCover>; iterate there, not here. */}
+        <MagazineCover
+          className="mh-scene mh-scene-0 absolute inset-0 z-10"
+          eyebrow="Process plumbing & automation"
+          headline={[
+            { text: "Your business" },
+            { text: "leaks", accent: "valve", italic: true },
+            { text: "through the" },
+            { text: "seams between" },
+            { text: "tools.", accent: "water", italic: true },
+          ]}
+          lede={{
+            lead: "Devonel is a process re-engineering studio.",
+            rest: "We map the work, find where it's spilling, and weld it back together — automations that hold pressure under real volume.",
+          }}
+          stats={[
+            { value: "$214k", label: "Intake recovered" },
+            { value: "9d→14h", label: "KYC backlog" },
+            { value: "2.3d→4h", label: "Returns triage" },
+          ]}
+        />
 
         {/* Scenes 1–3 — the three case-study diagrams */}
         <MhFigureScene

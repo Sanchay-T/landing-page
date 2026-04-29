@@ -112,8 +112,12 @@ export function MobilePinnedHero({ className = "" }: Props) {
           <VFigure3 />
         </MhFigureScene>
 
+        {/* Bottom paper fade — keeps diagrams from bleeding into the
+            progress chrome zone below. */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-paper via-paper/95 to-transparent z-20 pointer-events-none" />
+
         {/* Bottom progress bar + scene dots */}
-        <div className="absolute bottom-3 left-3 right-3 z-30 flex items-center gap-3 pointer-events-none">
+        <div className="absolute bottom-4 left-3 right-3 z-30 flex items-center gap-3 pointer-events-none">
           <div className="flex gap-1.5">
             {[0, 1, 2, 3].map((i) => (
               <span
@@ -148,7 +152,7 @@ type FigSceneProps = {
 function MhFigureScene({ index, eyebrow, title, children }: FigSceneProps) {
   return (
     <div
-      className={`mh-scene mh-scene-${index} absolute inset-0 flex flex-col px-5 pt-20 pb-20 gap-3 z-10`}
+      className={`mh-scene mh-scene-${index} absolute inset-0 flex flex-col px-5 pt-[clamp(56px,9svh,80px)] pb-[clamp(96px,16svh,128px)] gap-3 z-10`}
     >
       <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ink flex items-center gap-3">
         <span className="size-2.5 bg-valve" aria-hidden />

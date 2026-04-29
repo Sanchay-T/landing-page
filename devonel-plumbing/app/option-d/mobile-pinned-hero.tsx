@@ -63,25 +63,29 @@ export function MobilePinnedHero({ className = "" }: Props) {
           </a>
         </header>
 
-        {/* Scene 0 — headline / intro. Top-aligned with stats teaser at
-            the bottom so the screen feels filled without dead space. */}
+        {/* Scene 0 — headline / intro. Eyebrow + headline + body are
+            vertically centered in the space above the stats teaser, so the
+            block reads as the cover of a printed issue rather than top-
+            aligned. Stats stay anchored to the bottom. */}
         <div className="mh-scene mh-scene-0 absolute inset-0 flex flex-col px-6 pt-20 pb-24 z-10">
-          <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3 mt-6">
-            <span className="size-3 bg-valve" aria-hidden />
-            <span>Process plumbing &amp; automation</span>
+          <div className="flex-1 flex flex-col justify-center min-h-0">
+            <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3">
+              <span className="size-3 bg-valve" aria-hidden />
+              <span>Process plumbing &amp; automation</span>
+            </div>
+            <h1 className="font-serif font-medium text-[clamp(54px,14.5vw,80px)] leading-[0.9] tracking-[-0.035em] flex flex-col mt-6">
+              <span>Your business</span>
+              <span className="italic font-medium text-valve">leaks</span>
+              <span>through the</span>
+              <span>seams between</span>
+              <span><span className="italic text-water">tools</span>.</span>
+            </h1>
+            <p className="text-[18px] leading-[1.5] text-ink-2 max-w-[40ch] mt-7">
+              <strong className="text-ink font-semibold">Devonel is a process re-engineering studio.</strong>{" "}
+              We map the work, find where it&apos;s spilling, and weld it back together — automations that hold pressure under real volume.
+            </p>
           </div>
-          <h1 className="font-serif font-medium text-[clamp(54px,14.5vw,80px)] leading-[0.9] tracking-[-0.035em] flex flex-col mt-7">
-            <span>Your business</span>
-            <span className="italic font-medium text-valve">leaks</span>
-            <span>through the</span>
-            <span>seams between</span>
-            <span><span className="italic text-water">tools</span>.</span>
-          </h1>
-          <p className="text-[18px] leading-[1.5] text-ink-2 max-w-[40ch] mt-8">
-            <strong className="text-ink font-semibold">Devonel is a process re-engineering studio.</strong>{" "}
-            We map the work, find where it&apos;s spilling, and weld it back together — automations that hold pressure under real volume.
-          </p>
-          <div className="mt-auto pt-6 border-t border-ink/15 grid grid-cols-3 gap-4">
+          <div className="pt-6 border-t border-ink/15 grid grid-cols-3 gap-4">
             <div>
               <div className="font-serif font-medium text-[24px] leading-none text-valve">$214k</div>
               <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">Intake recovered</div>

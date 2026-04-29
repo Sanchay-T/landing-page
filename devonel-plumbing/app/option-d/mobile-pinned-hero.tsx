@@ -38,7 +38,7 @@ export function MobilePinnedHero({ className = "" }: Props) {
       data-scene="0"
       className={`mh ${className}`}
     >
-      <div className="sticky top-0 h-[100svh] overflow-hidden bg-paper">
+      <div className="mh-stage sticky top-0 h-[100svh] overflow-hidden">
         {/* Mobile-only nav header — replaces the desktop TopStrip + Nav so
             the hero gets the full viewport. Logo + Book Intake CTA + scene
             label that updates with scroll position. */}
@@ -70,12 +70,14 @@ export function MobilePinnedHero({ className = "" }: Props) {
             <span className="size-3 bg-valve" aria-hidden />
             <span>Process plumbing &amp; automation</span>
           </div>
-          <h1 className="font-serif font-medium text-[clamp(44px,12vw,72px)] leading-[0.96] tracking-[-0.03em] flex flex-col mt-7">
-            <span className="whitespace-nowrap">Your business <em className="not-italic italic font-medium text-valve">leaks</em></span>
-            <span className="whitespace-nowrap">through the seams</span>
-            <span className="whitespace-nowrap">between <span className="italic text-water">tools</span>.</span>
+          <h1 className="font-serif font-medium text-[clamp(54px,14.5vw,80px)] leading-[0.9] tracking-[-0.035em] flex flex-col mt-7">
+            <span>Your business</span>
+            <span className="italic font-medium text-valve">leaks</span>
+            <span>through the</span>
+            <span>seams between</span>
+            <span><span className="italic text-water">tools</span>.</span>
           </h1>
-          <p className="text-[17px] leading-[1.55] text-ink-2 max-w-[40ch] mt-7">
+          <p className="text-[18px] leading-[1.5] text-ink-2 max-w-[40ch] mt-8">
             <strong className="text-ink font-semibold">Devonel is a process re-engineering studio.</strong>{" "}
             We map the work, find where it&apos;s spilling, and weld it back together — automations that hold pressure under real volume.
           </p>

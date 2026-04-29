@@ -1206,6 +1206,16 @@ nav {
    Scenes: 0 headline · 1 FIG.01 · 2 FIG.02 · 3 FIG.03
    ============================================================= */
 .mh { height: 500svh; position: relative; }
+/* Mobile sticky pane carries the same 24px editorial grid as the body —
+   bg-paper alone hides the body grid behind it, so we re-paint the same
+   pattern on the pane to keep the magazine feel on phones. */
+.mh-stage {
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/24px 24px,
+    var(--paper);
+  background-blend-mode: multiply;
+}
 .mh-scene { transition: opacity .12s linear; pointer-events: none; will-change: opacity, transform; }
 [data-scene="0"] .mh-scene-0,
 [data-scene="1"] .mh-scene-1,

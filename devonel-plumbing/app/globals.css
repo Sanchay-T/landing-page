@@ -1205,7 +1205,7 @@ nav {
    per RAF tick; CSS below derives per-scene opacity + parallax.
    Scenes: 0 headline · 1 FIG.01 · 2 FIG.02 · 3 FIG.03
    ============================================================= */
-.mh { height: 500svh; position: relative; }
+.mh { height: 440svh; position: relative; }
 /* Mobile sticky pane carries the same 24px editorial grid as the body —
    bg-paper alone hides the body grid behind it, so we re-paint the same
    pattern on the pane to keep the magazine feel on phones. */

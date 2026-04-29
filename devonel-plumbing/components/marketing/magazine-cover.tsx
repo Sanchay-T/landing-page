@@ -29,7 +29,7 @@ const TOKENS = {
   "--cover-pt": "max(64px, 10cqb)",
   "--cover-pb": "max(48px, 8cqb)",
   "--cover-eyebrow-gap": "clamp(24px, 7cqb, 80px)",
-  "--cover-headline-leading": "0.92",
+  "--cover-headline-leading": "1.0",
   "--cover-headline-size": "min(14.5cqi, 8cqb)",
   "--cover-headline-tracking": "-0.035em",
   "--cover-lede-gap": "clamp(12px, 2.5cqb, 28px)",

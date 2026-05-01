@@ -357,6 +357,8 @@ export function ContactSection() {
           <div className="contact-row"><span className="k">Studio</span><span className="v">Devonel · San Francisco + remote</span></div>
           <div className="contact-row"><span className="k">Email</span><span className="v">hello@devonel.studio</span></div>
           <div className="contact-row"><span className="k">Pod</span><span className="v">06 named operators</span></div>
+          <div className="contact-row"><span className="k">Operator</span><span className="v">Charan Rao · Mumbai</span></div>
+          <div className="contact-row"><span className="k">Operator</span><span className="v">Jitendra Singha · Delhi</span></div>
           <div className="contact-row"><span className="k">Open</span><span className="v">2 of 4 slots · Q3 2026</span></div>
           <div className="contact-row"><span className="k">Cycle</span><span className="v">4 wks build + 90 days care</span></div>
           <div className="contact-row"><span className="k">Fee</span><span className="v">flat · $48k–$120k</span></div>

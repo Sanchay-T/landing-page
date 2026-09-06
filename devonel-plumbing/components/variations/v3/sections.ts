@@ -28,9 +28,9 @@ export type V3Section = {
 
 export const sections: readonly V3Section[] = [
   { id: "hero", label: "Top", inNav: false, built: true },
-  { id: "proof", label: "Proof of work", inNav: true, built: false },
-  { id: "services", label: "What you buy", inNav: true, built: false },
-  { id: "work", label: "Case studies", inNav: true, built: false },
+  { id: "proof", label: "Proof of work", inNav: true, built: true },
+  { id: "services", label: "What you buy", inNav: true, built: true },
+  { id: "work", label: "Case studies", inNav: true, built: true },
   { id: "process", label: "How we work", inNav: true, built: false },
   { id: "founders", label: "Who you work with", inNav: true, built: false },
   { id: "engagement", label: "How a quote works", inNav: true, built: false },

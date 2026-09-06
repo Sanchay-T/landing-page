@@ -10,6 +10,13 @@ type V3NavProps = {
    * section never means editing this file.
    */
   sections: readonly V3Section[];
+  /**
+   * What every anchor is relative to. Empty on the variation page itself, where
+   * `#work` is a jump within the document. A sub page such as
+   * `/v3/work/jewelo` passes `"/v3"`, so the same bar reads as a way back to
+   * the section it came from instead of pointing at ids that are not there.
+   */
+  base?: string;
 };
 
 /**
@@ -24,12 +31,16 @@ type V3NavProps = {
  * scroller that runs to both screen edges. Every label is `white-space: nowrap`
  * and the row scroll-snaps, so a label is never wrapped or cut mid-word on a
  * 360px phone; it scrolls out of view whole.
+ *
+ * The same bar serves the sub pages. They pass `base="/v3"` so every anchor
+ * leaves the sub page and lands on the matching section of the variation, which
+ * is why no route under `/v3` needs a nav of its own.
  */
-export function V3Nav({ sections }: V3NavProps) {
+export function V3Nav({ sections, base = "" }: V3NavProps) {
   return (
     <header className="v3-nav">
       <div className="v3-nav__bar">
-        <a className="v3-nav__brand" href="#hero">
+        <a className="v3-nav__brand" href={`${base}#hero`}>
           <Mark className="v3-nav__mark" />
           <span className="v3-nav__wordmark">Devonel</span>
         </a>
@@ -39,7 +50,7 @@ export function V3Nav({ sections }: V3NavProps) {
             <ul className="v3-nav__list">
               {sections.map((section) => (
                 <li key={section.id}>
-                  <a className="v3-nav__link" href={`#${section.id}`}>
+                  <a className="v3-nav__link" href={`${base}#${section.id}`}>
                     {section.label}
                   </a>
                 </li>

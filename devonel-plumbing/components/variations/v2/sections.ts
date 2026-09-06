@@ -20,5 +20,13 @@ export type V2Section = {
 
 export const sections: readonly V2Section[] = [
   { id: "hero", label: "hero" },
+  { id: "proof", label: "proof" },
   { id: "services", label: "services" },
+  { id: "work", label: "work" },
+  { id: "process", label: "process" },
+  { id: "founders", label: "founders" },
+  { id: "engagement", label: "engagement" },
+  { id: "faq", label: "faq" },
+  // Last by contract: this one is the eof block that closes the buffer.
+  { id: "footer", label: "eof" },
 ];

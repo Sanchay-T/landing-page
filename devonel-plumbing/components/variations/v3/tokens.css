@@ -786,3 +786,1144 @@
     gap: clamp(1rem, 1.6vw, 1.75rem);
   }
 }
+
+/* -------------------------------------------------------------- 9. services */
+
+/* The short-viewport arm in section 1 shrinks --v3-size-lead so the hero's CTA
+   clears a 390px tall window. A section that scrolls does not want that: at
+   844x390 it set the outcome line smaller than the scope line under it. The
+   unshrunk ramp is kept here under its own name for every section below the
+   hero to size a lead line from. */
+.v3 {
+  --v3-size-lead-full: clamp(1.0625rem, 0.86rem + 0.85vw, 1.4375rem);
+}
+
+/* Section rhythm for every block below the hero: half a section gap on each
+   side. Two stacked sections then sit exactly one --v3-space-section apart
+   rather than two, and whichever section happens to be last still ends with
+   air under it instead of on a cut line. */
+.v3-svc {
+  padding-block: calc(var(--v3-space-section) / 2);
+}
+
+/* 9a. the section head. It keeps the shell's left edge, column 1, so the
+   indented list below reads as its contents. */
+.v3-svc__headline {
+  margin-top: 0.875rem;
+  max-width: var(--v3-measure);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  /* One step down from the hero's 144 cut: at 32 to 60px the display cut's
+     hairlines go spindly on a dark ground, and 96 keeps the contrast without
+     losing the thin strokes. */
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.v3-svc__lead {
+  margin-top: 1.125rem;
+}
+
+/* 9b. the five scenes. A vertical sequence of full-width rows on the section's
+   own hairlines: the set opens on one rule and every row closes on another, so
+   the list reads as a ledger rather than as five cards. */
+.v3-svc__list {
+  margin-top: clamp(2.5rem, 1.9rem + 2.4vw, 4.5rem);
+  border-top: 1px solid var(--v3-line);
+}
+
+/* The row is the 6 column grid itself, so the numerals line up down the page at
+   every width and the rhythm holds when a row runs one line longer than its
+   neighbour. Row gap is overridden here because inside a row the numeral and
+   its name are one unit, not two blocks. */
+.v3-svc__row {
+  align-items: start;
+  row-gap: 0.5rem;
+  border-bottom: 1px solid var(--v3-line);
+  padding-block: clamp(1.75rem, 1.3rem + 1.9vw, 3rem);
+}
+
+/* The index. Large, and muted to 34% white, which lands at 3.6:1 on the base
+   and clears AA for text this size while staying far enough under the ink ramp
+   to read as an index mark rather than as a heading. */
+.v3-svc__index {
+  grid-column: 1 / -1;
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 2rem + 1.8vw, 4rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: rgb(244 242 238 / 0.34);
+  transition: color var(--v3-dur-hover) var(--v3-ease);
+}
+
+.v3-svc__body {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.v3-svc__name {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  /* The text cut would flatten the contrast that makes this face the point of
+     the direction; the display cut would thin it at 24px. 72 is the middle. */
+  font-variation-settings: "opsz" 72;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.2rem + 1.35vw, 2.375rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--v3-ink);
+  text-wrap: balance;
+  transition:
+    color var(--v3-dur-hover) var(--v3-ease),
+    text-shadow var(--v3-dur-hover) var(--v3-ease);
+}
+
+/* The outcome: the one line that says what the buyer ends up with, so it holds
+   full ink and the 45rem measure while the scope under it steps back. */
+.v3-svc__outcome {
+  margin-top: 0.625rem;
+  max-width: var(--v3-measure);
+  font-size: var(--v3-size-lead-full);
+  line-height: var(--v3-leading-lead);
+  color: var(--v3-ink);
+  text-wrap: pretty;
+}
+
+.v3-svc__scope {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+  max-width: var(--v3-measure);
+  color: var(--v3-ink-muted);
+  text-wrap: pretty;
+}
+
+/* 9c. the hover primitive in its text form. The glow the CTA carries as a box
+   shadow, applied to type: the scene under the pointer takes the amber light
+   and warms its numeral. Nothing lifts, scales or moves. It is guarded on a
+   real pointer so a tap on a phone cannot leave a row lit with no way to
+   unlight it, and the rows carry no link, so nothing here is the only route to
+   anything. */
+@media (hover: hover) {
+  .v3-svc__row:hover .v3-svc__name {
+    color: var(--v3-amber);
+    text-shadow: 0 0 2.5rem rgb(224 162 74 / 0.45);
+  }
+
+  .v3-svc__row:hover .v3-svc__index {
+    color: rgb(224 162 74 / 0.62);
+  }
+}
+
+/* 9d. the standing lines. True of all five builds, so they close the sequence
+   once instead of repeating inside every row. Three equal columns are the 6
+   column grid read in pairs: with the same gutter between them, 3 x (2 columns
+   + 1 gutter) is exactly the six. */
+.v3-svc__terms {
+  display: grid;
+  row-gap: 0.75rem;
+  column-gap: var(--v3-gutter);
+  margin-top: var(--v3-space-block);
+  max-width: var(--v3-measure);
+}
+
+.v3-svc__term {
+  color: var(--v3-ink-muted);
+  text-wrap: pretty;
+}
+
+/* From 768px the numeral moves out of the text and into the first column of the
+   six, where it stays for every row at every width above this. */
+@media (min-width: 48rem) {
+  .v3-svc__row {
+    row-gap: 0;
+  }
+
+  .v3-svc__index {
+    grid-column: 1 / span 1;
+  }
+
+  .v3-svc__body {
+    grid-column: 2 / span 5;
+  }
+}
+
+/* The three standing lines only earn their own columns once each one holds two
+   or three lines of type; below this they read better stacked. */
+@media (min-width: 64rem) {
+  .v3-svc__terms {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-svc__name,
+  .v3-svc__index {
+    transition: none;
+  }
+}
+
+/* ===========================================================================
+   Case studies. Owns `#work` on the variation page and the whole of the sub
+   page at `/v3/work/jewelo`.
+
+   Every class here is namespaced `.v3-work*` or `.v3-study*` so it cannot
+   collide with a class appended by another section. Nothing new is declared as
+   a token: colour, type, space, motion and the measure all come from section 1
+   above, and the two shared helpers `.v3-bleed` and `.v3-measure` do the
+   bleeding and the measure.
+
+   The one composition rule this section is built on: the picture is the frame
+   and the type sits at the TOP of it, which is the deliberate inversion of the
+   hero, where the type sits at the bottom. Same film, opposite end of the
+   shot, so the two full-bleed plates on the page never read as the same
+   layout. The plate also drops the hero's mesh gradient and god rays: the only
+   layers over the still here are one scrim and the grain.
+   =========================================================================== */
+
+/* --------------------------------------------------- shared to both routes */
+
+/* The section head. One display size for every heading below the hero h1, so
+   the page has exactly two display steps. */
+.v3-work__headline,
+.v3-study__title {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+  max-width: var(--v3-measure);
+}
+
+/* A row of small facts under a title: tags, dateline, industry. Set as one
+   sentence rather than as chips, because that is how COPY.md writes it. */
+.v3-work__tags,
+.v3-study__tags {
+  font-size: var(--v3-size-small);
+  line-height: 1.5;
+  color: var(--v3-ink-2);
+  max-width: var(--v3-measure);
+}
+
+/* Running text. One step below the page ink so a long block reads as body and
+   the display stays the brightest thing in the frame. */
+.v3-work__prose,
+.v3-study__prose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: var(--v3-measure);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* The stack, and any other list of plain words. No logos anywhere on this
+   site, so the separator is a hairline and the words carry themselves. */
+.v3-work__stack,
+.v3-study__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 0.875rem;
+  max-width: var(--v3-measure);
+}
+
+.v3-work__stack > li,
+.v3-study__stack > li {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-2);
+}
+
+.v3-work__stack > li::after,
+.v3-study__stack > li::after {
+  content: "";
+  width: 1px;
+  height: 0.8125rem;
+  background: var(--v3-line-strong);
+}
+
+.v3-work__stack > li:last-child::after,
+.v3-study__stack > li:last-child::after {
+  display: none;
+}
+
+/* The one text link on this section, and the sub page's only navigation back.
+   It is the hover primitive applied to a rule instead of to a box: the same
+   light coming up, on the one element that is a line and not a panel. */
+.v3-work__more,
+.v3-study__back {
+  align-self: start;
+  display: inline-block;
+  padding-bottom: 0.3125rem;
+  border-bottom: 1px solid rgb(224 162 74 / 0.42);
+  color: var(--v3-ink);
+  transition:
+    color var(--v3-dur-hover) var(--v3-ease),
+    border-color var(--v3-dur-hover) var(--v3-ease);
+}
+
+.v3-work__more:hover,
+.v3-work__more:focus-visible,
+.v3-study__back:hover,
+.v3-study__back:focus-visible {
+  color: var(--v3-amber);
+  border-bottom-color: var(--v3-amber);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-work__more,
+  .v3-study__back {
+    transition: none;
+  }
+}
+
+/* The pull quote. The amber rule is the only place amber touches running text
+   on this section, so the client's own words are what it marks. */
+.v3-work__quote,
+.v3-study__quote {
+  border-left: 2px solid var(--v3-amber);
+  padding-left: clamp(0.875rem, 0.6rem + 0.8vw, 1.375rem);
+  max-width: var(--v3-measure);
+}
+
+.v3-work__quote p,
+.v3-study__quote p {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 48;
+  font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.75rem);
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--v3-ink);
+  text-wrap: pretty;
+}
+
+.v3-work__quote footer,
+.v3-study__quote footer {
+  margin-top: 0.625rem;
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+}
+
+/* ------------------------------------------------------- the section #work */
+
+.v3-work {
+  padding-block: var(--v3-space-section);
+}
+
+.v3-work__head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  padding-bottom: var(--v3-space-block);
+}
+
+/* --- the plate: one full-bleed render with the outcome title over its top. */
+
+.v3-work__plate {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-start;
+  /* Fixed aspect at every width, so `object-fit: cover` keeps the crop the
+     designer chose from a 360 phone to a 2560 ultrawide instead of letting the
+     band grow into a full screen of velvet. Portrait on a phone, 16:9 from a
+     tablet, cinemascope from a laptop. */
+  aspect-ratio: 4 / 5;
+  overflow: clip;
+  background: var(--v3-base);
+}
+
+@media (min-width: 48rem) {
+  .v3-work__plate {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (min-width: 75rem) {
+  .v3-work__plate {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+.v3-work__plate img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 62% down the source is the pendant. With the band taking a third of the
+     frame's height on a wide screen, this is what keeps the subject inside the
+     crop and clear of the title block above it. */
+  object-position: 50% 62%;
+}
+
+/* Top down, and darkest at the left where the title sits. The hero's scrim
+   runs the other way; this is the same picture treatment read upside down. */
+.v3-work__plate-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgb(7 8 10 / 0.93) 0%,
+      rgb(7 8 10 / 0.82) 24%,
+      rgb(7 8 10 / 0.4) 56%,
+      rgb(7 8 10 / 0.18) 80%,
+      rgb(7 8 10 / 0.46) 100%
+    ),
+    linear-gradient(to right, rgb(7 8 10 / 0.44) 0%, rgb(7 8 10 / 0) 58%);
+}
+
+.v3-work__plate-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: var(--v3-grain);
+  background-size: 220px 220px;
+  opacity: var(--v3-grain-opacity);
+  pointer-events: none;
+}
+
+.v3-work__plate-inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--v3-shell);
+  margin-inline: auto;
+  padding: clamp(1.25rem, 0.7rem + 1.7vw, 2.75rem) var(--v3-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.v3-work__plate-title {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 1.05rem + 2.9vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  /* A rem cap, never a `ch` cap: Fraunces runs about a quarter wide of the
+     character box, so a `ch` measure here would set 30% long. */
+  max-width: 46rem;
+  text-wrap: balance;
+}
+
+/* --- the filmstrip: the four presentation views the product returns. */
+
+.v3-work__strip-head {
+  padding-top: var(--v3-space-block);
+  padding-bottom: 1rem;
+}
+
+.v3-work__strip {
+  display: grid;
+  /* A phone scrolls the strip sideways rather than stacking four frames into a
+     column that is taller than the section it proves. Every frame snaps. */
+  grid-auto-flow: column;
+  grid-auto-columns: 62vw;
+  gap: var(--v3-gutter);
+  margin-inline: calc(-1 * var(--v3-gutter));
+  padding-inline: var(--v3-gutter);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--v3-gutter);
+  scrollbar-width: none;
+}
+
+.v3-work__strip::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .v3-work__strip {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow-x: visible;
+  }
+}
+
+.v3-work__frame {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.v3-work__frame-media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: clip;
+  border: 1px solid var(--v3-line);
+  background: var(--v3-base-lift);
+}
+
+.v3-work__frame-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* --- the dossier: the case set as production notes, term beside text. */
+
+.v3-work__dossier {
+  margin-top: var(--v3-space-section);
+  border-bottom: 1px solid var(--v3-line);
+}
+
+.v3-work__row {
+  display: grid;
+  gap: 0.625rem 2.5rem;
+  padding-block: var(--v3-space-block);
+  border-top: 1px solid var(--v3-line);
+}
+
+@media (min-width: 60rem) {
+  .v3-work__row {
+    grid-template-columns: 11rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.v3-work__term {
+  font-size: var(--v3-size-small);
+  line-height: 1.4;
+  color: var(--v3-ink);
+}
+
+.v3-work__def {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.v3-work__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: var(--v3-space-block);
+}
+
+/* --- the two open files: quieter rows, no pictures, because there is nothing
+       real to show yet and a mocked dashboard would be a lie. */
+
+.v3-work__minor {
+  margin-top: var(--v3-space-section);
+  border-bottom: 1px solid var(--v3-line);
+}
+
+.v3-work__case {
+  display: grid;
+  gap: 1.125rem 3rem;
+  padding-block: var(--v3-space-block);
+  border-top: 1px solid var(--v3-line);
+}
+
+@media (min-width: 60rem) {
+  .v3-work__case {
+    grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.v3-work__case-title {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 48;
+  font-weight: 400;
+  font-size: clamp(1.1875rem, 1.05rem + 0.55vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.014em;
+  text-wrap: balance;
+}
+
+.v3-work__case-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.v3-work__case-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* Status is content here, not decoration: the section headline counts one
+   shipped and two in build, so each file states which it is. Filled square is
+   delivered, hollow square is still open. One hue, two states. */
+.v3-work__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+}
+
+.v3-work__status::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--v3-amber);
+}
+
+.v3-work__status--open::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--v3-amber);
+}
+
+/* ----------------------------------------------------------------- 10. proof */
+
+/* The title card. After the hero takes the film frame there is one cinematic
+   form left that is not another frame: the card that comes after the cut. Black
+   ground, two numerals cut large in amber Fraunces, Geist under them, and one
+   dark editorial still bleeding off the right edge of the screen.
+
+   Rhythm follows section 9: half a section gap each side, so proof and services
+   sit exactly one --v3-space-section apart rather than two. */
+.v3-proof {
+  padding-block: calc(var(--v3-space-section) / 2);
+}
+
+/* Three blocks in one 6 column grid: the head, the still, the numbers. Under
+   1024px they are one column in that order, so the still lands as a full bleed
+   band between the title and the counts. */
+.v3-proof__inner {
+  align-items: start;
+}
+
+.v3-proof__head,
+.v3-proof__plate,
+.v3-proof__body {
+  grid-column: 1 / -1;
+}
+
+/* 10a. the head. Same display cut, size and rhythm as .v3-svc__headline, so
+   every section title on this variation is one tier: the hero owns 144 and
+   10rem, a section owns 96 and 3.75rem. When the last section lands these two
+   rules are the same rule and should be lifted into one role. */
+.v3-proof__title {
+  margin-top: 0.875rem;
+  max-width: var(--v3-measure);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.v3-proof__lead {
+  margin-top: 1.125rem;
+}
+
+/* 10b. the still. It has to leave the frame rather than stop at a corner, so it
+   is never given an edge of its own: no border, no radius, no shadow. On a
+   phone it runs the full width of the screen and fades out top and bottom into
+   the base; from 1024px it sits in the last two columns, runs off the right of
+   the screen, and fades out to the left into the type instead. */
+.v3-proof__plate {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  aspect-ratio: 16 / 9;
+  /* 16:9 of the whole screen is 475px at 844x390, which is the entire phone
+     landscape viewport, so the band is also capped against the viewport: the
+     ratio decides the shape, this decides how much of the screen one still is
+     ever allowed to take. */
+  max-block-size: min(22rem, 46svh);
+  background-color: var(--v3-base);
+}
+
+/* The pendant sits in the lower half of this render, so a wide thin band cut
+   from the middle of it is all chain and no subject: at 844x390 the crop came
+   out empty. 68% keeps the pendant inside the frame at every band height the
+   stacked layout produces, and it costs nothing above 1024px, where the plate
+   is close enough to the file's own 4:5 that there is almost nothing to crop. */
+.v3-proof__still {
+  z-index: 0;
+  object-fit: cover;
+  object-position: 50% 68%;
+}
+
+.v3-proof__plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    var(--v3-base) 0%,
+    rgb(7 8 10 / 0) 26%,
+    rgb(7 8 10 / 0) 76%,
+    var(--v3-base) 100%
+  );
+  pointer-events: none;
+}
+
+/* The same film grain the hero plate carries, so the two images on this page
+   share one surface instead of reading as a render next to a photograph. */
+.v3-proof__plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: var(--v3-grain);
+  background-size: 220px 220px;
+  opacity: var(--v3-grain-opacity);
+  pointer-events: none;
+}
+
+/* 10c. the counts. An equal column grid with exactly two items, which is what
+   keeps this row out of the failure listed in 03-design-research section 5:
+   two items can only ever be one across or two across, so there is no third
+   arrangement to go ragged at 820 or at 1180, and the columns are 1fr, so a
+   count going from one digit to three does not move the caption beside it. */
+.v3-proof__counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  column-gap: var(--v3-gutter);
+  row-gap: var(--v3-space-block);
+  /* Everything in this column ends on the same 45rem measure: the dateline
+     above, the counts, and the rule under them all stop together rather than at
+     three different lengths. */
+  max-width: var(--v3-measure);
+  margin-top: 1.375rem;
+}
+
+.v3-proof__count {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+/* The one place on the page where amber is the resting colour of type: these
+   two numbers are the section. 9.0:1 on the base. */
+.v3-proof__num {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" var(--v3-opsz-display);
+  font-weight: 400;
+  font-size: clamp(3.75rem, 2.1rem + 5.2vw, 7.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  color: var(--v3-amber);
+  /* Fraunces ships no tabular set, so the figures are pinned twice: asked for
+     here in case the metric matched fallback has them, and enforced by the
+     equal column track above, which is what actually holds the layout still. */
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.v3-proof__note {
+  max-width: 22rem;
+  font-size: var(--v3-size-small);
+  line-height: 1.5;
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* 10d. the dateline. It sits above the counts, not below them, so the sixteen
+   lands directly under the first of the two dates and reads as the length of
+   that rule. The hero says the same two dates as a sentence one section up, so
+   here they carry no words of their own: bare dates on a span is a measurement,
+   the hero's line is a statement, and the page never prints the same sentence
+   twice. The labels stay on one line at every width and the rule takes what is
+   left. */
+.v3-proof__dates {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  max-width: var(--v3-measure);
+  font-size: var(--v3-size-caption);
+  letter-spacing: 0.055em;
+  color: var(--v3-ink-muted);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.v3-proof__date {
+  white-space: nowrap;
+}
+
+.v3-proof__span {
+  flex: 1 1 1.5rem;
+  min-width: 1rem;
+  height: 1px;
+  background: var(--v3-line-strong);
+}
+
+/* The rule is a picture of the word, so the word itself is still said, just not
+   drawn: a reader hears "11 August 2026 to 27 August 2026". */
+.v3-proof__to {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 10e. the rest of the sourced counts. COPY.md lists five; the Nightshift note
+   gives the numeral treatment to two, so the other three stay on the page as
+   sentences: one above the numerals as the lead, two here. */
+.v3-proof__also {
+  display: grid;
+  gap: 0.5rem;
+  max-width: var(--v3-measure);
+  margin-top: var(--v3-space-block);
+  padding-top: 1.125rem;
+  border-top: 1px solid var(--v3-line);
+}
+
+.v3-proof__also li {
+  font-size: var(--v3-size-small);
+  line-height: 1.55;
+  color: var(--v3-ink-muted);
+  text-wrap: pretty;
+}
+
+/* The one secondary action COPY.md sanctions. It is a text link, not a second
+   pill: the amber pill is the primary CTA's alone on this variation. */
+.v3-proof__more {
+  display: inline-block;
+  margin-top: 1.5rem;
+  font-size: var(--v3-size-small);
+  color: var(--v3-amber);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+  text-decoration-color: rgb(224 162 74 / 0.42);
+  transition: text-decoration-color var(--v3-dur-hover) var(--v3-ease);
+}
+
+.v3-proof__more:hover,
+.v3-proof__more:focus-visible {
+  text-decoration-color: var(--v3-amber);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-proof__more {
+    transition: none;
+  }
+}
+
+/* From 1024px the still moves out of the stack and into the last two columns,
+   where it spans both text rows and runs off the right of the screen: the
+   gutter, plus whatever the shell is centred inside. The type keeps the left
+   four columns and its 45rem measure. */
+@media (min-width: 64rem) {
+  .v3-proof__head {
+    grid-column: 1 / 5;
+    grid-row: 1;
+  }
+
+  .v3-proof__body {
+    grid-column: 1 / 5;
+    grid-row: 2;
+  }
+
+  .v3-proof__plate {
+    grid-column: 5 / -1;
+    grid-row: 1 / span 2;
+    align-self: stretch;
+    width: auto;
+    aspect-ratio: auto;
+    min-height: 24rem;
+    max-block-size: none;
+    margin-inline: 0 calc(-1 * (max(0px, (100vw - var(--v3-shell)) / 2) + var(--v3-gutter)));
+  }
+
+  /* Three edges have to go, not one. The still runs off the right of the screen
+     on its own, but left, top and bottom are cuts through a lit photograph, and
+     a hard corner there turns a bleed back into a pasted rectangle. */
+  .v3-proof__plate::before {
+    background:
+      linear-gradient(
+        to right,
+        var(--v3-base) 0%,
+        rgb(7 8 10 / 0.62) 22%,
+        rgb(7 8 10 / 0) 62%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--v3-base) 0%,
+        rgb(7 8 10 / 0) 18%,
+        rgb(7 8 10 / 0) 74%,
+        var(--v3-base) 100%
+      );
+  }
+}
+
+/* ------------------------------------------- the sub page /v3/work/jewelo */
+
+/* The sub page is the same film seen closer: it opens on black with the title
+   set on the ground rather than over a picture, drops one full-bleed macro
+   frame under it, then runs the studio's own screens as a contact sheet. That
+   ordering is what keeps it from reading as a second copy of the section. */
+
+.v3-study {
+  padding-top: calc(var(--v3-nav-h) + var(--v3-space-block));
+  padding-bottom: var(--v3-space-section);
+}
+
+.v3-study__head {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  padding-bottom: var(--v3-space-block);
+}
+
+.v3-study__crumb {
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+  transition: color var(--v3-dur-hover) var(--v3-ease);
+}
+
+.v3-study__crumb:hover,
+.v3-study__crumb:focus-visible {
+  color: var(--v3-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-study__crumb {
+    transition: none;
+  }
+}
+
+/* The opening plate. No type over it, so it needs no scrim: the screenshot of
+   the object is allowed to be as bright as the object was. */
+.v3-study__plate {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: clip;
+  background: var(--v3-base-lift);
+}
+
+@media (min-width: 48rem) {
+  .v3-study__plate {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (min-width: 75rem) {
+  .v3-study__plate {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+.v3-study__plate img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+
+.v3-study__figcap {
+  padding-top: 0.875rem;
+}
+
+.v3-study__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v3-space-block);
+  padding-top: var(--v3-space-section);
+}
+
+.v3-study__h {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(1.375rem, 1.14rem + 0.95vw, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.016em;
+  max-width: var(--v3-measure);
+  text-wrap: balance;
+}
+
+/* The flow. Numbered because it really is a sequence: this is the order the
+   customer moves through the studio, not a decorative index. */
+.v3-study__steps {
+  border-bottom: 1px solid var(--v3-line);
+}
+
+.v3-study__step {
+  display: grid;
+  gap: 0.375rem 2rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--v3-line);
+}
+
+@media (min-width: 48rem) {
+  .v3-study__step {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.v3-study__step-n {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 48;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--v3-amber);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.v3-study__step-t {
+  max-width: var(--v3-measure);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* The contact sheet. Real screens off the shipped product, each at its own
+   native aspect so nothing is cropped and no browser chrome is drawn round
+   them, which would make a real screenshot look staged. */
+.v3-study__gallery {
+  display: grid;
+  gap: var(--v3-space-block) var(--v3-gutter);
+}
+
+@media (min-width: 56rem) {
+  .v3-study__gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.v3-study__shot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.v3-study__shot--wide {
+  grid-column: 1 / -1;
+}
+
+.v3-study__shot-media {
+  position: relative;
+  aspect-ratio: 1440 / 822;
+  overflow: clip;
+  border: 1px solid var(--v3-line);
+  background: var(--v3-base-lift);
+}
+
+.v3-study__shot--queue .v3-study__shot-media {
+  aspect-ratio: 920 / 460;
+}
+
+.v3-study__shot--console .v3-study__shot-media {
+  aspect-ratio: 1440 / 322;
+}
+
+.v3-study__shot-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dated rows. Two facts and one open item, which is every date the sources
+   carry for this build. */
+.v3-study__timeline {
+  border-bottom: 1px solid var(--v3-line);
+}
+
+.v3-study__t-row {
+  display: grid;
+  gap: 0.375rem 2.5rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--v3-line);
+}
+
+@media (min-width: 48rem) {
+  .v3-study__t-row {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.v3-study__t-date {
+  font-size: var(--v3-size-small);
+  line-height: 1.4;
+  color: var(--v3-ink);
+  font-variant-numeric: lining-nums;
+}
+
+.v3-study__t-text {
+  max-width: var(--v3-measure);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+.v3-study__cta {
+  margin-top: var(--v3-space-section);
+  padding-top: var(--v3-space-section);
+  border-top: 1px solid var(--v3-line);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.v3-study__cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem 1.25rem;
+}
+
+.v3-study__cta-support {
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+}
+
+.v3-study__channel {
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-2);
+}
+
+.v3-study__channel a {
+  border-bottom: 1px solid var(--v3-line-strong);
+}
+
+.v3-study__foot {
+  padding-top: var(--v3-space-block);
+}

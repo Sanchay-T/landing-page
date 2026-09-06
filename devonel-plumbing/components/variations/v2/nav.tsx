@@ -17,8 +17,11 @@ import type { V2Section } from "./sections";
  * moves that mark. With JavaScript off, or before hydration, the rail is a
  * plain list of working anchors with the first one marked.
  */
-export function Nav({ sections }: { sections: readonly V2Section[] }) {
-  const [activeId, setActiveId] = useState(sections[0]?.id ?? "");
+export function Nav({ sections, base = "" }: { sections: readonly V2Section[]; base?: string }) {
+  // On a sub-page the rail is an index of the page it links back to, and none
+  // of its entries is the current one. The counter says so with `--` rather
+  // than pointing at a section this page is not showing.
+  const [activeId, setActiveId] = useState(base ? "" : (sections[0]?.id ?? ""));
 
   useEffect(() => {
     const nodes = sections
@@ -54,10 +57,7 @@ export function Nav({ sections }: { sections: readonly V2Section[] }) {
     return () => observer.disconnect();
   }, [sections]);
 
-  const activeIndex = Math.max(
-    0,
-    sections.findIndex((section) => section.id === activeId)
-  );
+  const activeIndex = sections.findIndex((section) => section.id === activeId);
   const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
@@ -68,7 +68,7 @@ export function Nav({ sections }: { sections: readonly V2Section[] }) {
           {sections.map((section, i) => (
             <li key={section.id}>
               <a
-                href={`#${section.id}`}
+                href={`${base}#${section.id}`}
                 className="v2-nav-link v2-inv"
                 aria-current={section.id === activeId ? "true" : undefined}
               >
@@ -87,7 +87,7 @@ export function Nav({ sections }: { sections: readonly V2Section[] }) {
           <span className="v2-meter-fill" />
         </span>
         <p className="v2-nav-count">
-          <span className="v2-nav-count-n">{pad(activeIndex + 1)}</span>
+          <span className="v2-nav-count-n">{activeIndex < 0 ? "--" : pad(activeIndex + 1)}</span>
           {`/${pad(sections.length)}`}
         </p>
       </div>

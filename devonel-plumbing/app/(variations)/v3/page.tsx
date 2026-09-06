@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { V3Hero, V3Nav, navSections } from "@/components/variations/v3";
+import {
+  V3Hero,
+  V3Nav,
+  V3Proof,
+  V3Services,
+  V3Work,
+  navSections,
+} from "@/components/variations/v3";
 // The whole design system for this variation. Scoped under `.v3`, so it cannot
 // reach another route.
 import "@/components/variations/v3/tokens.css";
@@ -30,6 +37,9 @@ export default function Page() {
       <V3Nav sections={navSections()} />
       <main>
         <V3Hero />
+        <V3Proof />
+        <V3Services />
+        <V3Work />
       </main>
     </div>
   );

@@ -7,4 +7,7 @@
 
 export { V3Nav } from "./nav";
 export { V3Hero } from "./hero";
+export { V3Work } from "./work";
+export { V3Proof } from "./proof";
+export { V3Services } from "./services";
 export { sections, navSections, type V3Section } from "./sections";

@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
-import { Hero, Nav, Services, sections } from "@/components/variations/v2";
+import {
+  Engagement,
+  Faq,
+  Footer,
+  Founders,
+  Hero,
+  Nav,
+  Process,
+  Proof,
+  Services,
+  Work,
+  sections,
+} from "@/components/variations/v2";
 import "@/components/variations/v2/tokens.css";
 
 /**
@@ -25,11 +37,17 @@ export default function Page() {
       <div className="v2-shell">
         <main className="v2-main">
           <Hero />
+          <Proof />
           <Services />
+          <Work />
+          <Process />
+          <Founders />
+          <Engagement />
+          <Faq />
         </main>
 
-        {/* Closes the buffer. It stays last as sections are appended above it. */}
-        <div className="v2-rule" data-label="eof" aria-hidden="true" />
+        {/* The eof block. It stays last as sections are appended inside <main> above. */}
+        <Footer />
       </div>
     </div>
   );

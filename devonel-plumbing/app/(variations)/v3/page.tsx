@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import {
+  V3Engagement,
+  V3Founders,
   V3Hero,
   V3Nav,
+  V3Process,
   V3Proof,
   V3Services,
   V3Work,
@@ -40,6 +43,9 @@ export default function Page() {
         <V3Proof />
         <V3Services />
         <V3Work />
+        <V3Process />
+        <V3Founders />
+        <V3Engagement />
       </main>
     </div>
   );

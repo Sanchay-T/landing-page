@@ -1725,7 +1725,7 @@
 }
 
 .v2-foot > .v2-measure {
-  padding-block-end: calc(var(--v2-pad-y) + 3.5rem);
+  padding-block-end: calc(var(--v2-pad-y) + 4rem);
 }
 
 @media (min-width: 1440px) {
@@ -1835,15 +1835,17 @@
   .v2-foot-row + .v2-foot-row {
     margin-block-start: 0.5lh;
   }
-
-  .v2-foot-mail {
-    margin-inline-start: 0;
-  }
 }
 
 /* Short viewports, matching every section above: the rhythm halves so the whole
    record, both listings and the resting prompt stay on one landscape screen. */
 @media (max-height: 480px) {
+  /* --v2-pad-y halves here, so the clearance under the pill has to grow back:
+     the pill is a fixed 40px whatever the viewport does. */
+  .v2-foot > .v2-measure {
+    padding-block-end: calc(var(--v2-pad-y) + 5rem);
+  }
+
   .v2-foot-rec {
     margin-block-start: 0.5lh;
   }
@@ -1853,6 +1855,140 @@
   }
 
   .v2-foot-prompt {
+    margin-block-start: 0.8lh;
+  }
+}
+
+/* ------------------------------------------------------------- 5g. contact */
+
+/* The final CTA. Every block above prints and stops; this one prints and then
+   waits, so the section is built around a single live prompt.
+
+   Two display lines and nothing else large: the recap in --v2-text and the
+   prompt in --v2-accent. The caret sits inside the prompt line, so `1ch` and
+   `1em` resolve against the display size and the block grows to match it
+   without a token of its own. That block is the largest accent on the page and
+   the only one at display size, which is the whole point of the section.
+
+   Everything between the two display lines is deliberately small: terms, one
+   quotation, one attribution. The reader has already had nine sections of
+   argument, so the finale is two headlines with fine print between them.
+
+   Colour budget is unchanged. The accent is on the CTA and its caret only; the
+   quotation is --v2-text, its attribution and both notes are --v2-dim. */
+
+.v2-ct-h {
+  margin-block-start: 0.8lh;
+  font-size: var(--v2-t-3);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--v2-lh-tight);
+  text-wrap: pretty;
+}
+
+/* One sentence per printed line, which is how a program writes and what keeps
+   the recap from stranding two words on a second row at display size. */
+.v2-ct-h-line {
+  display: block;
+}
+
+.v2-ct-body {
+  margin-block-start: 1lh;
+  text-wrap: pretty;
+}
+
+.v2-ct-body + .v2-ct-body {
+  margin-block-start: 0;
+}
+
+.v2-ct-proof {
+  margin-block-start: 1.2lh;
+}
+
+.v2-ct-quote {
+  text-wrap: pretty;
+}
+
+/* Hanging indent on the attribution, same 2ch column the engagement values
+   use, so a wrapped attribution lands under its own text and never under the
+   dash that marks it. */
+.v2-ct-by {
+  padding-inline-start: 2ch;
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+  line-height: 1.5;
+  text-indent: -2ch;
+  text-wrap: pretty;
+}
+
+.v2-ct-cta {
+  margin-block-start: 1.6lh;
+}
+
+/* The prompt the session ends at. Set at display size, and left to soft-wrap
+   the way a terminal does: the prompt string and the typed input are separated
+   by an ordinary space, so when the line is longer than the measure the input
+   drops whole to the next row instead of breaking mid-phrase. At 1440 the
+   80ch measure is 768px and this line wants 973px, so it always wraps on
+   desktop, which makes the break predictable rather than width-dependent. */
+.v2-ct-prompt {
+  font-size: var(--v2-t-3);
+  line-height: var(--v2-lh-tight);
+}
+
+/* The link and its caret are one unbreakable token. Without this the caret is
+   its own break opportunity and can end up alone on a third line. */
+.v2-ct-input {
+  white-space: nowrap;
+}
+
+/* A display line above needs more air under it than the 0.4lh `.v2-note`
+   carries by default; the second note keeps that default and stays paired. */
+.v2-ct-prompt + .v2-ct-note {
+  margin-block-start: 0.8lh;
+}
+
+/* Phones. Below this width the display size cannot hold the 30 characters of
+   `press enter to send your brief` inside the measure (at 390 it wants 396px
+   and has 356px), so the prompt folds back to body size, where the whole line
+   fits on one row. Same three sizes, one of them chosen by width. */
+@media (max-width: 599px) {
+  .v2-ct-prompt {
+    font-size: var(--v2-t-2);
+    font-weight: 600;
+    line-height: var(--v2-lh);
+  }
+
+  /* Clearance for the review switcher. It is a fixed 40px pill 12px off the
+     bottom-right corner, so anything in the last 52px of the viewport is under
+     it. Measured at 390: the mailbox link is the lowest interactive thing in
+     the block and this puts it 89px clear of the document foot, so the pill
+     cannot cover it even if the contact block is the last thing on the page.
+     Kept to 1.5rem so the gap still reads as the same air every other section
+     leaves before the next rule rather than as a hole. */
+  .v2-ct > .v2-measure {
+    padding-block-end: calc(var(--v2-pad-y) + 1.5rem);
+  }
+}
+
+/* Short viewports, matching the hero and the engagement file: the display size
+   has already folded back to body size, so the rhythm around it halves and the
+   recap, the terms, the proof and the prompt all sit on one landscape screen. */
+@media (max-height: 480px) {
+  .v2-ct-h {
+    margin-block-start: 0.5lh;
+    font-weight: 600;
+  }
+
+  .v2-ct-body {
+    margin-block-start: 0.5lh;
+  }
+
+  .v2-ct-proof {
+    margin-block-start: 0.6lh;
+  }
+
+  .v2-ct-cta {
     margin-block-start: 0.8lh;
   }
 }

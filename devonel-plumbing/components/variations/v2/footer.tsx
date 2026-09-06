@@ -173,7 +173,7 @@ export function Footer() {
         </ul>
 
         <p className="v2-foot-prompt v2-print" style={printStep(PROMPT_STEP)}>
-          <span className="v2-prompt">~/devonel $</span>
+          <span className="v2-prompt">~/devonel $</span>{" "}
           <span className="v2-caret" aria-hidden="true" />
         </p>
       </div>

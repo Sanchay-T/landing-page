@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  Contact,
   Engagement,
   Faq,
   Footer,
@@ -44,6 +45,7 @@ export default function Page() {
           <Founders />
           <Engagement />
           <Faq />
+          <Contact />
         </main>
 
         {/* The eof block. It stays last as sections are appended inside <main> above. */}

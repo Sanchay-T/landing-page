@@ -10,4 +10,7 @@ export { V3Hero } from "./hero";
 export { V3Work } from "./work";
 export { V3Proof } from "./proof";
 export { V3Services } from "./services";
+export { V3Process } from "./process";
+export { V3Founders } from "./founders";
+export { V3Engagement } from "./engagement";
 export { sections, navSections, type V3Section } from "./sections";

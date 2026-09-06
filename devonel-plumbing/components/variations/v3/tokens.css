@@ -1927,3 +1927,602 @@
 .v3-study__foot {
   padding-top: var(--v3-space-block);
 }
+
+/* ===========================================================================
+   Founders. Owns `#founders` on the variation page.
+
+   Every class here is namespaced `.v3-founders*` so it cannot collide with a
+   class appended by another section, and nothing new is declared as a token:
+   colour, type, space, the measure and the entrance all come from section 1
+   above.
+
+   The form is the film's end credits. There is no founder photograph in this
+   repo and none is invented, so the portrait's slot is held by a credit glyph:
+   one Fraunces letter, faintly amber, with a soft halo. Besides the CTA pill it
+   is the only glow on the page, which is the whole reason it can carry a block
+   with no cards, no borders around the credits and no avatars in it.
+   =========================================================================== */
+
+/* Same rhythm as every block below the hero: half a section gap each side, so
+   two stacked sections sit exactly one --v3-space-section apart. */
+.v3-founders {
+  padding-block: calc(var(--v3-space-section) / 2);
+}
+
+/* The head matches the services head exactly. One display size for every
+   heading under the hero h1 keeps the page reading as one film. */
+.v3-founders__headline {
+  margin-top: 0.875rem;
+  max-width: var(--v3-measure);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.v3-founders__lead {
+  margin-top: 1.125rem;
+  max-width: var(--v3-measure);
+}
+
+/* The credit slate. The one small-caps line in the section, sitting on the
+   hairline that opens the credits, the way a card in a film's end roll names
+   what is about to be listed. */
+.v3-founders__slate {
+  margin-top: clamp(2.5rem, 1.9rem + 2.4vw, 4.5rem);
+  padding-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-top: 1px solid var(--v3-line);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  color: var(--v3-ink-2);
+}
+
+/* The two credits. Full width and stacked below 768px, three columns each of
+   the six above it. Row gap is set here rather than taken from the grid: two
+   stacked credits need more air between them than two blocks of text do. */
+.v3-founders__credits {
+  margin-top: clamp(2rem, 1.6rem + 1.6vw, 3.25rem);
+  row-gap: clamp(3rem, 2.3rem + 2.8vw, 4.5rem);
+}
+
+.v3-founders__credit {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* The credit glyph, where a portrait would be. Amber at 62% is 3.95:1 on the
+   base, which clears AA for text this size, and it is aria-hidden anyway: the
+   name under it carries the letter. The halo is wide and low alpha so it reads
+   as light in the room rather than as a drop shadow. */
+.v3-founders__initial {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 144;
+  font-weight: 400;
+  font-size: clamp(4.5rem, 3.1rem + 6.2vw, 7.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+  color: rgb(224 162 74 / 0.62);
+  text-shadow: 0 0 3rem rgb(224 162 74 / 0.3);
+}
+
+/* The name. Long enough that it has to be told how to break: it may fall to a
+   second line at the space, and never inside a word, so "Thalnerkar" cannot be
+   torn in half on a 360px phone. */
+.v3-founders__name {
+  margin-top: clamp(1rem, 0.85rem + 0.6vw, 1.5rem);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 72;
+  font-weight: 400;
+  font-size: clamp(1.625rem, 1.31rem + 1.25vw, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--v3-ink);
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: balance;
+}
+
+/* The city. The one place on this page where the cold blue carries type rather
+   than sitting under an image at low alpha; measured 6.7:1 on the base. */
+.v3-founders__place {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  color: var(--v3-cold);
+}
+
+/* Role first at full ink, then the second line stepping back, so the credit has
+   the same two-tier reading as a services row. */
+.v3-founders__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: clamp(1rem, 0.85rem + 0.6vw, 1.375rem);
+  max-width: var(--v3-measure);
+  text-wrap: pretty;
+}
+
+.v3-founders__lines > p:first-child {
+  color: var(--v3-ink);
+}
+
+.v3-founders__lines > p + p {
+  color: var(--v3-ink-muted);
+}
+
+/* The rule that shuts the block. It carries the border rather than the line of
+   type inside it, so it runs the full width of the shell exactly like the rule
+   the credit slate opens on; a measure-wide rule under a shell-wide one reads
+   as an unfinished line. */
+.v3-founders__foot {
+  margin-top: clamp(2.5rem, 1.9rem + 2.4vw, 4.5rem);
+  padding-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-top: 1px solid var(--v3-line);
+}
+
+.v3-founders__standing {
+  max-width: var(--v3-measure);
+  font-size: var(--v3-size-lead-full);
+  line-height: var(--v3-leading-lead);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* From 768px the two credits take three columns each of the six, which is the
+   only split this block ever makes. */
+@media (min-width: 48rem) {
+  .v3-founders__credit {
+    grid-column: span 3;
+  }
+}
+
+/* ===========================================================================
+   Engagement. Owns `#engagement` on the variation page.
+
+   Every class here is namespaced `.v3-eng*` so it cannot collide with a block
+   appended by another section, and nothing new is declared as a token: colour,
+   type, space, the measure and the three motion primitives all come from
+   section 1 above.
+
+   This is the one place on the variation where a border draws a box. The
+   direction bans cards, so the box is built as a shared lattice instead of four
+   detached panels: one hairline rectangle divided by hairlines, the way the
+   cells of a printed rate card are divided, so the four quadrants read as one
+   document. No fill, no radius, no shadow and no colour inside it. The pill
+   below keeps the page's only radius and its only glow.
+   =========================================================================== */
+
+/* Section rhythm, the convention set in section 9: half a section gap each
+   side, so engagement sits exactly one --v3-space-section from the block above
+   it and still ends with air under it if it is the last thing on the page. */
+.v3-eng {
+  padding-block: calc(var(--v3-space-section) / 2);
+}
+
+/* The section head. Same display cut, size and rhythm as .v3-svc__headline and
+   .v3-proof__title: the hero owns opsz 144 at 10rem, every section below it
+   owns opsz 96 at 3.75rem, so the page has exactly two display steps. */
+.v3-eng__headline {
+  margin-top: 0.875rem;
+  max-width: var(--v3-measure);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Sized from --v3-size-lead-full, not --v3-size-lead: the short-viewport arm in
+   section 1 shrinks the lead ramp so the hero's CTA clears a 390px tall window,
+   and a section that scrolls does not want that shrink. */
+.v3-eng__lead {
+  margin-top: 1.125rem;
+  max-width: var(--v3-measure);
+  font-size: var(--v3-size-lead-full);
+  line-height: var(--v3-leading-lead);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* The document column. Narrower than the shell on purpose: the card is an
+   object on the page, not a band across it, and 64rem keeps each panel's term
+   inside a comfortable measure at every width above 1024px. */
+.v3-eng__doc {
+  margin-top: clamp(2.5rem, 1.9rem + 2.4vw, 4rem);
+  max-width: 64rem;
+}
+
+.v3-eng__caption {
+  font-size: var(--v3-size-small);
+  line-height: 1.4;
+  color: var(--v3-ink-muted);
+}
+
+.v3-eng__card {
+  margin-top: 0.875rem;
+  border: 1px solid var(--v3-line);
+}
+
+/* One column on a phone, the 2x2 lattice from 768px. The panels carry the
+   dividing rules themselves rather than sitting in a gap, so there is no gap to
+   let the ground through and the card stays one shape. */
+.v3-eng__ways {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.v3-eng__way {
+  min-width: 0;
+  padding: clamp(1.375rem, 1.05rem + 1.15vw, 2.125rem);
+  /* Every panel closes on a rule. In one column that is the divider to the next
+     panel; in two columns the pair closes the row. Either way the last one is
+     the rule the binding term sets on. */
+  border-bottom: 1px solid var(--v3-line);
+}
+
+.v3-eng__name {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  /* The same middle cut the service names use: the display cut goes spindly at
+     this size on a dark ground, the text cut throws away the contrast that
+     makes this face the point of the direction. */
+  font-variation-settings: "opsz" 72;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 1.1rem + 0.62vw, 1.75rem);
+  line-height: 1.14;
+  letter-spacing: -0.014em;
+  color: var(--v3-ink);
+  text-wrap: balance;
+}
+
+.v3-eng__term {
+  margin-top: 0.5rem;
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* The term that binds all four. It holds full ink where the four terms above it
+   sit one step back, so its scope is carried by weight instead of by a label. */
+.v3-eng__binding {
+  padding: clamp(1.375rem, 1.05rem + 1.15vw, 2.125rem);
+  color: var(--v3-ink);
+  text-wrap: pretty;
+}
+
+/* The two standing conditions. True whichever way the client picks, so they
+   close the document once, outside the card, set as plain lines in the muted
+   tier: the same idiom as .v3-svc__terms, which is what stops a second run of
+   rules reading as a second card. */
+.v3-eng__conditions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: var(--v3-space-block);
+  max-width: var(--v3-measure);
+  color: var(--v3-ink-muted);
+}
+
+.v3-eng__condition {
+  text-wrap: pretty;
+}
+
+.v3-eng__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem 1.25rem;
+  margin-top: var(--v3-space-block);
+}
+
+.v3-eng__support {
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+}
+
+/* The lattice. Two columns, and the left of each pair carries the vertical
+   rule, so the card is divided by exactly one hairline in each direction. */
+@media (min-width: 48rem) {
+  .v3-eng__ways {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v3-eng__way:nth-child(odd) {
+    border-right: 1px solid var(--v3-line);
+  }
+}
+
+/* ===========================================================================
+   Process. Owns `#process` on the variation page.
+
+   The night schedule: one amber hairline down the left of the content grid
+   with a glowing node at every phase, the way a call sheet marks the hours of
+   a shoot. Every class here is namespaced `.v3-sched*`, and nothing new is
+   declared as a page token: colour, type, space, motion and the measure all
+   come from section 1.
+
+   Two composition rules this section is built on:
+     1. The marker sits BESIDE its own line, never above it, so the node stays
+        next to the phase name on a 390px phone and the schedule never needs to
+        become a horizontal scroller.
+     2. The rail is complete before anything animates. The static spine is the
+        finished rail; the scroll primitive only drives the bright light that
+        runs down it, so reduced motion and a browser without scroll timelines
+        both land on a drawn rail rather than an unfinished one.
+   =========================================================================== */
+
+.v3-sched {
+  /* The rail track: the column the node and the gate tick live in. It is the
+     left edge of the content grid, and the running text starts one gap to the
+     right of it and holds the 45rem measure from there. */
+  --v3-sched-node: 0.75rem;
+  --v3-sched-rail: clamp(1.75rem, 0.85rem + 3.2vw, 4.25rem);
+  --v3-sched-gap: clamp(0.875rem, 0.6rem + 1vw, 1.75rem);
+  --v3-sched-name-size: clamp(1.5rem, 1.2rem + 1.35vw, 2.375rem);
+  /* The vertical beat between phases: the hours between calls on the sheet. */
+  --v3-sched-step-gap: clamp(2.25rem, 1.7rem + 2.2vw, 3.75rem);
+
+  /* Half a section gap on each side, so two stacked sections sit exactly one
+     --v3-space-section apart rather than two. */
+  padding-block: calc(var(--v3-space-section) / 2);
+}
+
+/* 11a. the section head. Same two display steps the rest of the page uses. */
+.v3-sched__headline {
+  margin-top: 0.875rem;
+  max-width: var(--v3-measure);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* The short-viewport arm in section 1 shrinks --v3-size-lead so the hero CTA
+   clears a 390px tall window. This section scrolls, so it sizes from the
+   unshrunk ramp instead and the lead stays above the body at 844x390. */
+.v3-sched__lead {
+  margin-top: 1.125rem;
+  font-size: var(--v3-size-lead-full);
+}
+
+/* 11b. the rail. The wrapper is the positioning context for both hairlines and
+   the row rhythm for the phases plus the open end after them. `isolation`
+   keeps the two absolutely positioned lines in their own stacking context so
+   the nodes can sit above them with a local z-index and nothing on the page
+   outside this section is reordered. */
+.v3-sched__rail {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  row-gap: var(--v3-sched-step-gap);
+  margin-top: clamp(2.5rem, 1.9rem + 2.4vw, 4.5rem);
+}
+
+.v3-sched__list {
+  display: grid;
+  row-gap: var(--v3-sched-step-gap);
+}
+
+/* The spine: the finished rail. It is static CSS with no animation on it, so
+   this is what a reader sees at every scroll position, under reduced motion,
+   and in a browser with no scroll timelines. Both ends fade rather than stop,
+   because the schedule starts before the first node and runs past the last. */
+.v3-sched__spine {
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  left: calc(var(--v3-sched-node) / 2 - 0.5px);
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgb(224 162 74 / 0) 0%,
+    rgb(224 162 74 / 0.26) 5%,
+    rgb(224 162 74 / 0.26) 93%,
+    rgb(224 162 74 / 0) 100%
+  );
+}
+
+/* The light that runs down the spine: the scroll primitive's one use outside
+   the hero. Its static transform is scaleY(1), the fully drawn state, and the
+   keyframes below only take it there from a visible floor, so nothing here can
+   leave the rail looking unfinished. The head of the light always fades out,
+   which is what makes a partly drawn rail read as light travelling rather than
+   as a line that stopped. */
+.v3-sched__draw {
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  left: calc(var(--v3-sched-node) / 2 - 0.5px);
+  width: 1px;
+  transform-origin: 50% 0;
+  transform: scaleY(1);
+  background: linear-gradient(
+    to bottom,
+    rgb(224 162 74 / 0.9) 0%,
+    rgb(224 162 74 / 0.72) 62%,
+    rgb(224 162 74 / 0) 100%
+  );
+  box-shadow: 0 0 0.9rem rgb(224 162 74 / 0.4);
+}
+
+@keyframes v3-sched-draw {
+  from {
+    transform: scaleY(0.22);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* The same scroll primitive as the hero, on this section's own view timeline
+   rather than the root one, so the light tracks the schedule past the window
+   instead of the first viewport. The reduced-motion arm in section 6 already
+   cancels `.v3-scroll` with `!important`, so no extra guard is needed here. */
+.v3-sched__draw.v3-scroll {
+  animation-name: v3-sched-draw;
+  animation-timeline: view(block);
+  animation-range: cover 0% cover 58%;
+}
+
+/* 11c. the step. Two grids, one per line that owns a marker: the gate line and
+   the phase line. Each one puts its marker in the rail track and its words in
+   the next, so the marker and its words are always on the same row and the
+   phone layout is the desktop layout with smaller numbers. */
+.v3-sched__gate,
+.v3-sched__phase {
+  display: grid;
+  grid-template-columns: var(--v3-sched-rail) minmax(0, 1fr);
+  column-gap: var(--v3-sched-gap);
+  align-items: start;
+}
+
+.v3-sched__gate {
+  margin-bottom: 0.875rem;
+}
+
+/* The gate tick: a cold blue dash across the rail. Cold blue is the water in
+   this palette and it appears nowhere else in this section, so the money is the
+   one thing on the schedule that is not amber. 6.7:1 on the base, so it carries
+   a sentence. It is centred on the spine, which is why it starts left of the
+   track. */
+.v3-sched__tick {
+  position: relative;
+  z-index: 1;
+  grid-column: 1;
+  justify-self: start;
+  width: 1.375rem;
+  height: 1px;
+  margin-left: calc(var(--v3-sched-node) / 2 - 0.6875rem);
+  /* Sized from the gate text so the dash lands on that line's cap centre at
+     every width, with no magic pixel value to re-tune when the ramp moves. */
+  font-size: var(--v3-size-small);
+  margin-top: calc(0.66em - 0.5px);
+  background: var(--v3-cold);
+  box-shadow: 0 0 0.75rem rgb(111 143 255 / 0.6);
+}
+
+.v3-sched__gate-text {
+  grid-column: 2;
+  max-width: var(--v3-measure);
+  font-size: var(--v3-size-small);
+  line-height: 1.35;
+  color: var(--v3-cold);
+  text-wrap: pretty;
+}
+
+/* The node. The only glow in the section and the only round thing on the page
+   besides the CTA pill. The first ring is the page ground: it punches the spine
+   out from behind the node so the light reads as passing through a station
+   rather than under a dot. */
+.v3-sched__node {
+  position: relative;
+  z-index: 1;
+  grid-column: 1;
+  justify-self: start;
+  box-sizing: border-box;
+  width: var(--v3-sched-node);
+  height: var(--v3-sched-node);
+  border-radius: 50%;
+  background: var(--v3-amber);
+  /* Sized from the phase name so the node lands on its cap centre at every
+     width, the same trick the gate tick uses. */
+  font-size: var(--v3-sched-name-size);
+  margin-top: calc(0.55em - var(--v3-sched-node) / 2);
+  box-shadow:
+    0 0 0 0.3125rem var(--v3-base),
+    0 0 0 calc(0.3125rem + 1px) rgb(224 162 74 / 0.3),
+    0 0 1.75rem rgb(224 162 74 / 0.45);
+}
+
+/* The open end. After handover the schedule either continues on a retainer or
+   stops, so the last node is hollow: the one marker on the rail that is not a
+   thing you have bought. */
+.v3-sched__node--open {
+  background: var(--v3-base);
+  border: 1.5px solid rgb(224 162 74 / 0.85);
+  box-shadow:
+    0 0 0 0.3125rem var(--v3-base),
+    0 0 1.25rem rgb(224 162 74 / 0.3);
+}
+
+.v3-sched__name {
+  grid-column: 2;
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  /* The middle cut, as elsewhere below the hero: the display cut goes spindly
+     at this size on a dark ground and the text cut loses the contrast that is
+     the point of the face. */
+  font-variation-settings: "opsz" 72;
+  font-weight: 400;
+  font-size: var(--v3-sched-name-size);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--v3-ink);
+  text-wrap: balance;
+}
+
+.v3-sched__body {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  max-width: var(--v3-measure);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+/* The first line of a phase is the one the buyer is scanning for, so it holds
+   full ink and the lines under it step back one tier. */
+.v3-sched__body > p:first-child {
+  color: var(--v3-ink);
+}
+
+/* 11d. the two rules. They hold across every phase, so they close the schedule
+   off the rail instead of repeating inside it. Indented to the text column so
+   they read as the note at the foot of the call sheet. */
+.v3-sched__rules {
+  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  margin-left: calc(var(--v3-sched-rail) + var(--v3-sched-gap));
+  padding-top: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  border-top: 1px solid var(--v3-line);
+  max-width: var(--v3-measure);
+}
+
+/* Set in the body face, not the display face: it is a note, not a phase, and
+   nothing on the rail should be mistaken for a fifth thing you buy. */
+.v3-sched__rules-title {
+  font-family: var(--v3-font-body);
+  font-size: var(--v3-size-body);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--v3-ink);
+}
+
+.v3-sched__rules-list {
+  display: grid;
+  row-gap: 0.5rem;
+  margin-top: 0.625rem;
+  color: var(--v3-ink-muted);
+}
+
+.v3-sched__rule {
+  text-wrap: pretty;
+}

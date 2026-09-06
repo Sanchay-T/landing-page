@@ -27,6 +27,7 @@ export const sections: readonly V2Section[] = [
   { id: "founders", label: "founders" },
   { id: "engagement", label: "engagement" },
   { id: "faq", label: "faq" },
+  { id: "contact", label: "contact" },
   // Last by contract: this one is the eof block that closes the buffer.
   { id: "footer", label: "eof" },
 ];

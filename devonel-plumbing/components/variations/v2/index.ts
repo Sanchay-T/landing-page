@@ -54,6 +54,7 @@ export { Process } from "./process";
 export { Founders } from "./founders";
 export { Engagement } from "./engagement";
 export { Faq } from "./faq";
+export { Contact } from "./contact";
 export { Footer } from "./footer";
 export { sections } from "./sections";
 export type { V2Section } from "./sections";

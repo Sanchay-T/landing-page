@@ -147,14 +147,16 @@ export function V3Process() {
         </div>
 
         <div className="v3-sched__rules v3-enter" style={delay(600)}>
-          <h3 className="v3-sched__rules-title">Two rules that do not move.</h3>
-          <ul className="v3-sched__rules-list" role="list">
-            {RULES.map((rule) => (
-              <li className="v3-sched__rule" key={rule}>
-                {rule}
-              </li>
-            ))}
-          </ul>
+          <div className="v3-sched__rules-inner">
+            <h3 className="v3-sched__rules-title">Two rules that do not move.</h3>
+            <ul className="v3-sched__rules-list" role="list">
+              {RULES.map((rule) => (
+                <li className="v3-sched__rule" key={rule}>
+                  {rule}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

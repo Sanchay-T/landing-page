@@ -2312,7 +2312,15 @@
   isolation: isolate;
   display: grid;
   row-gap: var(--v3-sched-step-gap);
-  margin-top: clamp(2.5rem, 1.9rem + 2.4vw, 4.5rem);
+  margin-top: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  /* The schedule opens on a rule that spans the whole shell, the way the case
+     studies above it do. The running text holds the 45rem measure, so without
+     this the section would be a narrow column floating in the left third of a
+     2560 window while every section around it carried the page's full width.
+     The spine starts inside the padding box, just under the rule, so the two
+     meet at a corner. */
+  border-top: 1px solid var(--v3-line);
+  padding-top: clamp(2rem, 1.6rem + 1.6vw, 3.25rem);
 }
 
 .v3-sched__list {
@@ -2500,9 +2508,15 @@
    they read as the note at the foot of the call sheet. */
 .v3-sched__rules {
   margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
-  margin-left: calc(var(--v3-sched-rail) + var(--v3-sched-gap));
   padding-top: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+  /* The closing rule, full shell width like the opening one, so the schedule
+     sits between two lines rather than trailing off. */
   border-top: 1px solid var(--v3-line);
+}
+
+/* The words inside it stay in the text column and the measure. */
+.v3-sched__rules-inner {
+  margin-left: calc(var(--v3-sched-rail) + var(--v3-sched-gap));
   max-width: var(--v3-measure);
 }
 

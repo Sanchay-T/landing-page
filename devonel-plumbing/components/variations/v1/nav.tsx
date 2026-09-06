@@ -20,8 +20,18 @@ const REVISED = "Revised 7 Sep 2026";
  *
  * Links are generated from `sections`, so the index can never point at a
  * section that is not on the page.
+ *
+ * `hrefBase` is empty on /v1, where a bare `#id` is correct. A sub-page such as
+ * /v1/work/jewelo passes "/v1", which makes every index link an absolute
+ * `/v1#id` so the masthead still works as the way back to the front page.
  */
-export function V1Nav({ sections }: { sections: readonly V1Section[] }) {
+export function V1Nav({
+  sections,
+  hrefBase = "",
+}: {
+  sections: readonly V1Section[];
+  hrefBase?: string;
+}) {
   return (
     <header className="v1-masthead">
       {/* Running head, set to the screen edges the way a printed page sets it.
@@ -51,7 +61,7 @@ export function V1Nav({ sections }: { sections: readonly V1Section[] }) {
           <ul className="v1-masthead__list">
             {sections.map((section) => (
               <li key={section.id}>
-                <a href={`#${section.id}`} className="v1-navlink v1-underline">
+                <a href={`${hrefBase}#${section.id}`} className="v1-navlink v1-underline">
                   {section.label}
                 </a>
               </li>

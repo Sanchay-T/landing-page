@@ -723,3 +723,1930 @@
     justify-content: space-between;
   }
 }
+
+/* ----------------------------------------------------------------- 10. work */
+
+/* Proof of work: the case study section on /v1 and the full article at
+   /v1/work/jewelo. The roles in the first half of this block (story head,
+   crosshead, prose, dateline, status, figure, spread, colophon) are the
+   article furniture both surfaces share; the `.v1-work__*` and `.v1-case__*`
+   rules after them are the two layouts that arrange it.
+
+   Still no cards, no radius, no shadow, no fill. A screenshot gets a hairline
+   box because a near-white screenshot needs an edge against warm paper, which
+   is the same reason a printed page rules its plates. */
+
+/* An inside story runs one step under the front page headline. */
+.v1-storyhead {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 72;
+  font-weight: 620;
+  font-size: var(--v1-display-2);
+  line-height: 1.06;
+  letter-spacing: -0.014em;
+  text-wrap: balance;
+  color: var(--v1-ink);
+}
+
+/* Crosshead: the short bold line a paper sets over a group of paragraphs.
+   Body face, sentence case, on the hairline that separates it from the copy
+   above. Deliberately not a fourth uppercase label: the kicker already carries
+   the one caps line each section is allowed. */
+.v1-crosshead {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 24;
+  font-weight: 700;
+  font-size: var(--v1-text-base);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--v1-ink);
+  padding-top: var(--v1-s3);
+  border-top: 1px solid var(--v1-ink);
+}
+
+/* Long-form body. Serif, because this variation is a newspaper and the only
+   sans on the page is the mechanical small type. */
+.v1-prose {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-body);
+  font-size: var(--v1-text-base);
+  line-height: 1.62;
+  color: var(--v1-ink-2);
+  text-wrap: pretty;
+  /* One column layouts run the full shell, which at 820px is an 85 character
+     line. Capped in rem rather than ch: Fraunces sets a wide figure, so 68ch
+     measured out at 85 characters of real copy. 38rem is about 70. The grid
+     columns are far narrower than this, so the cap only bites where it is
+     needed. */
+  max-width: 38rem;
+}
+
+.v1-prose > p + p {
+  margin-top: var(--v1-s3);
+}
+
+/* The tags line under a story headline. */
+.v1-dateline {
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  letter-spacing: 0.03em;
+  color: var(--v1-ink-3);
+}
+
+/* Where a case is not finished, the page says so on its own ruled line in the
+   editorial accent, so an in progress case can never be read as a shipped one. */
+.v1-status {
+  margin-top: var(--v1-s4);
+  padding-top: var(--v1-s2);
+  border-top: 1px solid var(--v1-accent);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--v1-accent);
+}
+
+/* ---- figures ---- */
+
+/* The four render spread. One pendant photographed four ways, kept in the
+   product's own order, cropped to a single 4:5 plate so the row sets to the
+   grid the way a printed photo spread does. Three of the four files are 4:5
+   natively, so only the on-neck frame is cropped, and symmetrically. */
+.v1-spread__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--v1-gutter);
+  row-gap: var(--v1-s5);
+}
+
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-spread__row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.v1-spread__frame {
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+/* Both dimensions are set, which is also what keeps next/image quiet about a
+   single modified axis. */
+.v1-spread__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.v1-spread__cap {
+  display: flex;
+  gap: var(--v1-s2);
+  margin-top: var(--v1-s3);
+  padding-top: var(--v1-s2);
+  border-top: 1px solid var(--v1-rule);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--v1-ink-3);
+}
+
+/* The renders arrive in a fixed order, so the row really is a sequence and
+   the numbers carry information rather than decoration. */
+.v1-spread__n {
+  flex: none;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-caption);
+  font-size: var(--v1-text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--v1-ink);
+}
+
+.v1-spread__note {
+  margin-top: var(--v1-s4);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.45;
+  color: var(--v1-ink-3);
+}
+
+/* A plate: one screenshot, ruled, with its caption under the rule. */
+.v1-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--v1-rule);
+}
+
+.v1-plate figcaption {
+  margin-top: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--v1-ink-3);
+}
+
+/* ---- lists ---- */
+
+/* The stack, set the way a colophon sets its types: one line per name, ruled. */
+.v1-colophon {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--v1-gutter);
+  margin-top: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.7;
+  color: var(--v1-ink-2);
+}
+
+.v1-colophon > li {
+  border-top: 1px solid var(--v1-rule-2);
+}
+
+/* The two names on the top row sit under the crosshead's own rule. */
+.v1-colophon > li:nth-child(-n + 2) {
+  border-top: 0;
+}
+
+/* A link set as running text rather than a button. */
+.v1-textlink {
+  color: var(--v1-accent);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.v1-textlink:hover {
+  color: var(--v1-accent-2);
+}
+
+/* --------------------------------------------------- 10a. work on the front */
+
+.v1-work {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+.v1-work__inner {
+  position: relative;
+}
+
+.v1-work__title {
+  margin-top: var(--v1-s4);
+  max-width: 22ch;
+}
+
+.v1-work__lead {
+  margin-top: var(--v1-s7);
+}
+
+.v1-work__deck {
+  margin-top: var(--v1-s4);
+}
+
+.v1-work__dateline {
+  margin-top: var(--v1-s4);
+}
+
+.v1-work__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-s5);
+}
+
+.v1-work__spread {
+  margin-top: var(--v1-s6);
+}
+
+.v1-work__body {
+  margin-top: var(--v1-s6);
+}
+
+.v1-work__col > * + * {
+  margin-top: var(--v1-s3);
+}
+
+.v1-work__col > .v1-crosshead + .v1-prose {
+  margin-top: var(--v1-s3);
+}
+
+.v1-work__more {
+  margin-top: var(--v1-s7);
+  padding-top: var(--v1-s3);
+  border-top: 1px solid var(--v1-ink);
+}
+
+.v1-work__showcases {
+  margin-top: var(--v1-s5);
+}
+
+.v1-work__case > * + * {
+  margin-top: var(--v1-s3);
+}
+
+.v1-work__folio {
+  margin-top: var(--v1-section-y);
+}
+
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-work__story {
+    grid-column: 1 / span 8;
+  }
+
+  .v1-work__rail {
+    grid-column: 9 / span 4;
+  }
+
+  .v1-work__col:nth-child(1) {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-work__col:nth-child(2) {
+    grid-column: 5 / span 4;
+  }
+
+  .v1-work__col:nth-child(3) {
+    grid-column: 9 / span 4;
+  }
+
+  .v1-work__case:nth-child(1) {
+    grid-column: 1 / span 6;
+  }
+
+  .v1-work__case:nth-child(2) {
+    grid-column: 7 / span 6;
+  }
+}
+
+/* ------------------------------------------------------ 10b. the case story */
+
+.v1-case {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+.v1-case__inner {
+  position: relative;
+}
+
+.v1-case__head {
+  margin-top: var(--v1-s4);
+}
+
+.v1-case__deck {
+  margin-top: var(--v1-s5);
+}
+
+.v1-case__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-s5);
+}
+
+.v1-case__spread {
+  margin-top: var(--v1-s6);
+}
+
+.v1-case__section {
+  margin-top: var(--v1-s7);
+}
+
+.v1-case__section > .v1-crosshead + * {
+  margin-top: var(--v1-s4);
+}
+
+/* The walkthrough. Each row is one step of the flow: its number and text on
+   the left, the screenshots that prove it on the right, a hairline between
+   rows. The steps happen in a fixed order, so they are numbered. */
+.v1-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--v1-s4);
+  column-gap: var(--v1-gutter);
+  padding-block: var(--v1-s5);
+  border-top: 1px solid var(--v1-rule);
+}
+
+.v1-step__n {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 600;
+  font-size: var(--v1-text-lg);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--v1-accent);
+}
+
+.v1-step__text {
+  margin-top: var(--v1-s3);
+}
+
+.v1-step__plates {
+  display: grid;
+  gap: var(--v1-s5);
+}
+
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-step {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .v1-step__side {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-step__plates {
+    grid-column: 5 / span 8;
+  }
+
+  .v1-case__story {
+    grid-column: 1 / span 8;
+  }
+
+  .v1-case__rail {
+    grid-column: 9 / span 4;
+  }
+
+  .v1-case__half:nth-child(1) {
+    grid-column: 1 / span 6;
+  }
+
+  .v1-case__half:nth-child(2) {
+    grid-column: 7 / span 6;
+  }
+}
+
+.v1-case__quote {
+  margin-top: var(--v1-s7);
+}
+
+.v1-case__cta {
+  margin-top: var(--v1-s7);
+  max-width: 34rem;
+}
+
+.v1-case__back {
+  margin-top: var(--v1-s6);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  letter-spacing: 0.03em;
+}
+
+.v1-case__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* ------------------------------------------------------------- 11. services */
+
+/* Section 3 of the page, "What you buy". Numbered 11 because sections are
+   appended in the order they are built, not in page order.
+
+   The digest page. Headline block in the left seven columns, standfirst in the
+   outer four opening on a drop cap, then the five offers set as ruled columns
+   of type. It carries no .v1-colrules layer: five offer columns cannot line up
+   with twelve grid rules, and two rule systems crossing each other would read
+   as noise rather than as structure. The offer rules are the structure here.
+
+   Every vertical rule uses the .v1-colrules trick of pulling itself half a
+   gutter left, so the hairline lands in the middle of the gutter instead of
+   hugging the text it precedes. */
+
+.v1-services {
+  padding-block: var(--v1-section-y);
+}
+
+/* One step under the front page headline. Everything else about the headline,
+   including the optical size axis, comes from .v1-display. */
+.v1-services__title {
+  margin-top: var(--v1-s4);
+  font-size: var(--v1-display-2);
+}
+
+/* The drop cap. Three lines deep, in the one editorial accent, opening the
+   only paragraph on the page that is set as a standfirst. */
+.v1-services__standfirst::first-letter {
+  float: left;
+  margin-right: 0.06em;
+  padding-top: 0.05em;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-display);
+  font-weight: 620;
+  font-size: 3.1em;
+  line-height: 0.78;
+  color: var(--v1-accent);
+}
+
+/* ---- the five offers */
+
+/* One column of offers on a phone, divided by hairlines the way a paper sets a
+   single narrow column. The list opens on an ink rule and the standing notes
+   close it on another, so the block reads as one ruled table of offers. */
+.v1-services__list {
+  margin-top: var(--v1-s7);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--v1-ink);
+}
+
+.v1-service {
+  padding-block: var(--v1-s5);
+}
+
+.v1-service + .v1-service {
+  border-top: 1px solid var(--v1-rule);
+}
+
+/* The index figure. The headline announces five, so the numeral answers "which
+   of the five is this", which is information rather than ornament. */
+.v1-service__n {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-caption);
+  font-weight: 600;
+  font-size: var(--v1-text-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--v1-accent);
+}
+
+.v1-service__name {
+  margin-top: var(--v1-s2);
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 600;
+  font-size: var(--v1-text-lg);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+  color: var(--v1-ink);
+}
+
+/* The outcome line: what the buyer gets, which is the sentence this whole
+   section exists to deliver, so it stays in ink and in the serif. */
+.v1-service__outcome {
+  margin-top: var(--v1-s3);
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-body);
+  font-size: var(--v1-text-base);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--v1-ink);
+}
+
+/* Scope, set in the sans a paper keeps for its supporting matter. */
+.v1-service__detail {
+  margin-top: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-sm);
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--v1-ink-2);
+}
+
+/* ---- the standing notes under the grid */
+
+.v1-services__notes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--v1-ink);
+}
+
+.v1-services__note {
+  padding-block: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-sm);
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--v1-ink-2);
+}
+
+.v1-services__note + .v1-services__note {
+  border-top: 1px solid var(--v1-rule);
+}
+
+.v1-services__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* Tablet and phone landscape: two columns of offers, and three notes across.
+   Five offers into two columns would leave a hole in the last row, so the
+   fifth runs the full measure as the foot of the block instead of trailing
+   off beside blank paper. */
+@media (min-width: 45rem) {
+  .v1-services__notes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+
+  .v1-services__note + .v1-services__note {
+    border-top: 0;
+    border-left: 1px solid var(--v1-rule);
+    margin-left: calc(var(--v1-gutter) / -2);
+    padding-left: calc(var(--v1-gutter) / 2);
+  }
+}
+
+@media (min-width: 45rem) and (max-width: 63.9375rem) {
+  .v1-services__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+
+  .v1-service:nth-child(2n) {
+    border-left: 1px solid var(--v1-rule);
+    margin-left: calc(var(--v1-gutter) / -2);
+    padding-left: calc(var(--v1-gutter) / 2);
+  }
+
+  /* Second cell of the first row starts on the list's own ink rule. */
+  .v1-service:nth-child(2) {
+    border-top: 0;
+  }
+
+  .v1-service:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Broadsheet: five columns of type, one offer each, divided by hairlines. The
+   measure lands near thirty characters, which is a newspaper column, so the
+   offer headline drops one step to sit inside it. */
+@media (min-width: 64rem) {
+  .v1-services__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+
+  .v1-service + .v1-service {
+    border-top: 0;
+    border-left: 1px solid var(--v1-rule);
+    margin-left: calc(var(--v1-gutter) / -2);
+    padding-left: calc(var(--v1-gutter) / 2);
+  }
+
+  .v1-service__name {
+    font-size: var(--v1-text-md);
+  }
+}
+
+/* The headline block and the standfirst in the 12 column grid. Repeat of the
+   grid query in section 3, so the two always change together. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-services__head {
+    grid-column: 1 / span 7;
+  }
+
+  .v1-services__standfirst {
+    grid-column: 9 / span 4;
+    align-self: end;
+  }
+}
+
+/* A showcase runs at the size a paper sets a second story: the same cut, one
+   step down, so the lead keeps the top of the section to itself. */
+.v1-storyhead--sm {
+  font-variation-settings: "opsz" 32;
+  font-size: var(--v1-text-lg);
+  line-height: 1.14;
+  letter-spacing: -0.008em;
+}
+
+/* A crosshead opening a new group inside a column needs air above it, more
+   than the paragraph rhythm the column sets by default. */
+.v1-work__col > * + .v1-crosshead,
+.v1-case__section > * + .v1-crosshead {
+  margin-top: var(--v1-s5);
+}
+
+.v1-work__case > * + .v1-status {
+  margin-top: var(--v1-s4);
+}
+
+/* ---------------------------------------------------------------- 11. proof */
+
+/* The ledger strip: a market table, set the way a paper sets one. An ink rule
+   over it, a hairline between every entry, figures in tabular numerals so the
+   column reads down as a column. Nothing is enclosed, because the counts are
+   the studio's own evidence and a ledger is rules and whitespace.
+
+   No column rules behind this section. A five entry table standing on the page
+   grid's twelve hairlines would be two grids arguing; the table brings its own.
+
+   The table is one entry per row up to the broadsheet width and five across
+   above it, and never anything in between. Five is prime, so every two, three
+   or four column arrangement of it ends in a ragged last row. */
+
+.v1-proof {
+  padding-block: var(--v1-section-y);
+
+  /* Scoped here rather than added to the shared token block: it sizes one
+     thing, the figures in this table, and nothing else on the page sets type
+     at this scale. */
+  --v1-figure: clamp(2.125rem, 1.5rem + 2.6vw, 3.75rem);
+}
+
+/* Head and pointer sit on the same baseline row, so the pointer lands on the
+   rule the table opens with instead of floating in the outer column. */
+.v1-proof__top {
+  align-items: end;
+}
+
+/* One step under the front page headline, the same step `.v1-services__title`
+   takes. A strip whose head shouts as loud as the nameplate buries the table,
+   and the table is the evidence this section exists to show. */
+.v1-proof__title {
+  margin-top: var(--v1-s4);
+  font-size: var(--v1-display-2);
+}
+
+.v1-proof__more {
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-sm);
+}
+
+.v1-figures {
+  margin-top: var(--v1-s5);
+  border-top: 1px solid var(--v1-ink);
+}
+
+/* Narrow: an entry per row, figure right aligned in a fixed column so the
+   numerals line up down the page whether the entry reads 1 or 25+. The column
+   is sized from the figure itself, so the two never drift apart. */
+.v1-figures__row {
+  display: grid;
+  grid-template-columns: calc(var(--v1-figure) * 1.75) minmax(0, 1fr);
+  column-gap: var(--v1-s4);
+  align-items: baseline;
+  padding-block: var(--v1-s3) var(--v1-s4);
+  border-bottom: 1px solid var(--v1-rule-2);
+}
+
+.v1-figures__n {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: end;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 48;
+  font-weight: 600;
+  font-size: var(--v1-figure);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  /* The whole point of a table of figures. Fraunces ships no tabular set of
+     its own, so the column above does the real work: a fixed track sized off
+     the figure with the numerals set to one edge of it. The declaration stays
+     because it costs nothing and starts working the day the face gains tnum. */
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--v1-ink);
+}
+
+.v1-figures__term {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 600;
+  font-size: var(--v1-text-md);
+  line-height: 1.2;
+  letter-spacing: -0.008em;
+  color: var(--v1-ink);
+}
+
+.v1-figures__note {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: var(--v1-s1);
+  max-width: 46ch;
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--v1-ink-3);
+}
+
+.v1-proof__folio {
+  margin-top: var(--v1-s2);
+}
+
+/* Broadsheet: the five entries across, hairlines between them, and the three
+   lines of every entry sharing rows through subgrid so the terms sit on one
+   line across the table and the notes start on one line under them however
+   many lines the longest note runs to. Without subgrid support the entries
+   simply set their own rows, which is untidier but never broken. */
+@media (min-width: 1024px) {
+  .v1-figures {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: var(--v1-gutter);
+    border-bottom: 1px solid var(--v1-rule);
+  }
+
+  .v1-figures__row {
+    grid-row: span 3;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    column-gap: 0;
+    padding-block: var(--v1-s4) var(--v1-s5);
+    border-bottom: 0;
+  }
+
+  /* The hairline is centred in the real gutter, and the padding gives back the
+     width the negative margin took, so the text does not move to make room. */
+  .v1-figures__row + .v1-figures__row {
+    border-left: 1px solid var(--v1-rule);
+    margin-left: calc(var(--v1-gutter) / -2);
+    padding-left: calc(var(--v1-gutter) / 2);
+  }
+
+  .v1-figures__n {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .v1-figures__term {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: var(--v1-s2);
+  }
+
+  .v1-figures__note {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: var(--v1-s2);
+    max-width: none;
+  }
+}
+
+/* Repeat of the grid query in section 3: the section head in the first eight
+   columns, the pointer to the story in the outer four. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-proof__head {
+    grid-column: 1 / span 8;
+  }
+
+  .v1-proof__more {
+    grid-column: 9 / span 4;
+    justify-self: end;
+    text-align: right;
+  }
+}
+
+.v1-case__dateline {
+  margin-top: var(--v1-s4);
+}
+
+.v1-case__half > .v1-crosshead + * {
+  margin-top: var(--v1-s4);
+}
+
+/* -------------------------------------------------- founders: the staff box */
+
+/* Section 6 of the canonical list: who you are hiring, and will they be on the
+   call. A newspaper answers it in the staff box on the editorial page, a ruled
+   block of bylines closed by an imprint line, so that is the form here.
+
+   The head and the imprint centre from the same 45rem breakpoint the nameplate
+   centres at, so the staff box reads as the masthead's twin near the foot of
+   the page. The bylines between them stay left aligned, because they are copy
+   rather than a nameplate.
+
+   There is no founder photography in this repo, so the portrait slot is filled
+   the way print fills it: a large initial in the display cut of the same serif,
+   hanging in its own column. No fill, no ring, no box, so it stays a printed
+   initial and never reads as an avatar. */
+
+.v1-founders {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+.v1-founders__inner {
+  position: relative;
+}
+
+.v1-founders__title {
+  margin-top: var(--v1-s4);
+}
+
+.v1-founders__deck {
+  margin-top: var(--v1-s4);
+}
+
+.v1-founders__box {
+  margin-top: var(--v1-s7);
+}
+
+/* ---- one byline ---- */
+
+/* The initial hangs beside the whole byline, and its column is sized from the
+   type token rather than from the glyph, so both names start at the same x
+   whatever letter they begin with. */
+.v1-byline {
+  --v1-initial: clamp(2.5rem, 5.4vw, 3.75rem);
+  display: grid;
+  grid-template-columns: calc(var(--v1-initial) * 0.78) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--v1-s4);
+  padding-top: var(--v1-s4);
+  border-top: 1px solid var(--v1-ink);
+  /* Two bylines side by side are stretched to a common height by the outer
+     grid. Without this the spare height is shared out between these two rows
+     and the shorter byline's copy floats away from its name. */
+  align-content: start;
+}
+
+/* Every child is placed by hand. Auto-placement would drop the roles under the
+   initial, into a column one letter wide. */
+.v1-byline__initial {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-display);
+  font-weight: 620;
+  font-size: var(--v1-initial);
+  /* Tight enough that the cap sits on the same optical line as the name. */
+  line-height: 0.74;
+  letter-spacing: -0.02em;
+  color: var(--v1-ink);
+}
+
+.v1-byline__id {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.v1-byline__name {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 600;
+  font-size: var(--v1-text-lg);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  /* A long name breaks between its parts rather than orphaning a syllable. */
+  text-wrap: balance;
+  hyphens: none;
+  color: var(--v1-ink);
+}
+
+.v1-byline__city {
+  margin-top: var(--v1-s1);
+}
+
+.v1-byline__roles {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: var(--v1-s3);
+  padding-top: var(--v1-s3);
+  border-top: 1px solid var(--v1-rule);
+  /* Caps the measure where a byline runs the full width of a tablet. */
+  max-width: 58ch;
+}
+
+/* ---- the imprint ---- */
+
+.v1-founders__imprint {
+  margin-top: var(--v1-s7);
+  padding-top: var(--v1-s4);
+  border-top: 1px solid var(--v1-ink);
+}
+
+.v1-founders__standing {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-quote);
+  font-weight: 500;
+  font-size: var(--v1-text-lg);
+  line-height: 1.26;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  max-width: 36ch;
+  color: var(--v1-ink);
+}
+
+.v1-founders__folio {
+  margin-top: var(--v1-section-y);
+}
+
+@media (min-width: 45rem) {
+  .v1-founders__head {
+    text-align: center;
+  }
+
+  .v1-founders__title,
+  .v1-founders__deck {
+    margin-inline: auto;
+  }
+
+  .v1-founders__standing {
+    margin-inline: auto;
+    text-align: center;
+  }
+}
+
+/* Repeat of the grid query in section 3. Two bylines, six columns each. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-byline:nth-child(1) {
+    grid-column: 1 / span 6;
+  }
+
+  .v1-byline:nth-child(2) {
+    grid-column: 7 / span 6;
+  }
+}
+
+/* ------------------------------------------ engagement: rates and terms */
+
+/* How a quote works, set as the rate card page of a trade paper.
+
+   A printed rate card is a ruled tariff with a column of money in it. This one
+   cannot have that column, by rule: no figure, currency or range appears
+   anywhere in this repo. So the tariff carries terms where a rate card carries
+   rates, and the headline says so in its first four words rather than leaving a
+   reader hunting for a number that is not there.
+
+   Still rules and whitespace only. The horizontal hairlines between the lines
+   of the tariff are drawn here; the vertical rules that separate the term from
+   its terms are the page's own column rules showing through from behind, which
+   is why this section drops <ColumnRules /> in and why the tariff sits on the
+   same 12 column grid as everything else. */
+
+.v1-engagement {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+/* Sits above the column rules, which are absolutely positioned behind it. */
+.v1-engagement__inner {
+  position: relative;
+}
+
+/* Full measure rather than the two column head the sections above use: this
+   section's structure is the table under it, so the lead stays a plain stack. */
+.v1-engagement__title {
+  margin-top: var(--v1-s4);
+  max-width: 22ch;
+}
+
+.v1-engagement__deck {
+  margin-top: var(--v1-s5);
+}
+
+/* ---- the tariff ---- */
+
+.v1-tariff {
+  margin-top: var(--v1-s7);
+}
+
+/* One line of the tariff. Term over terms in one column on a phone, term and
+   terms side by side from the broadsheet width, hairline above each line.
+   Document order is the order COPY.md lists the four in and it is never
+   reordered by the layout, so what stacks on a phone is what reads on paper. */
+.v1-tariff__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--v1-s2);
+  column-gap: var(--v1-gutter);
+  padding-block: var(--v1-s4);
+  border-top: 1px solid var(--v1-rule);
+}
+
+.v1-tariff__term {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 620;
+  font-size: var(--v1-text-lg);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  color: var(--v1-ink);
+}
+
+/* Caps the measure before the column does, so the terms never run to the full
+   eight columns on a wide screen. */
+.v1-tariff__terms {
+  max-width: 54ch;
+}
+
+/* The minimum that applies to all four, on the rule that closes the table,
+   which is where a printed rate card sets the terms that govern every line. */
+.v1-tariff__condition {
+  padding-top: var(--v1-s3);
+  border-top: 1px solid var(--v1-ink);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.45;
+  color: var(--v1-ink-2);
+}
+
+/* ---- the foot: two conditions and the paid notice ---- */
+
+.v1-engagement__foot {
+  margin-top: var(--v1-s7);
+}
+
+.v1-engagement__note > .v1-crosshead + .v1-prose {
+  margin-top: var(--v1-s3);
+}
+
+/* The notice keeps its own height instead of stretching to the tallest cell in
+   the row, so a short advertisement reads as an advertisement. */
+.v1-engagement__cta {
+  align-self: start;
+}
+
+.v1-engagement__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* Broadsheet layout. Repeat of the grid query in section 3. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-tariff__row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .v1-tariff__term {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-tariff__terms {
+    grid-column: 5 / span 8;
+  }
+
+  .v1-engagement__note:nth-child(1) {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-engagement__note:nth-child(2) {
+    grid-column: 5 / span 4;
+  }
+
+  .v1-engagement__cta {
+    grid-column: 9 / span 4;
+  }
+}
+
+/* ------------------------------------------- process: the four phases */
+
+/* How we work, set as a ruled schedule with the engagement drawn down its
+   left edge.
+
+   The figure is one continuous vertical line crossed by a bar before each
+   phase and forking at the end, built from per row segments so the line can
+   never drift out of register with the phase it belongs to: each row owns the
+   piece of line beside it, and the rail runs edge to edge of the row so the
+   pieces meet across the hairline. That also means nothing here needs a
+   horizontal timeline, which is the failure this section is warned about at
+   390px in docs/goal/03-design-research.md section 5.
+
+   Still rules and whitespace only: the row hairlines and the drawn line are
+   the whole apparatus, and the one enclosed shape on the page stays the
+   classified box in other sections. */
+
+.v1-process {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+/* Sits above the column rules, which are absolutely positioned behind it. */
+.v1-process__inner {
+  position: relative;
+}
+
+.v1-process__title {
+  margin-top: var(--v1-s4);
+  max-width: 22ch;
+}
+
+.v1-process__deck {
+  margin-top: var(--v1-s5);
+}
+
+.v1-process__keytext {
+  margin-top: var(--v1-s3);
+  max-width: 48ch;
+}
+
+/* ---- the timeline ---- */
+
+.v1-phases {
+  margin-top: var(--v1-s7);
+}
+
+/* One phase. Rail, head, prose. On a phone the rail runs down the left of a
+   single stacked column; from the broadsheet width the rail widens into its
+   own two columns of the grid and the text keeps its measure beside it. The
+   hairline is the full width of the row either way, so the section reads as a
+   printed schedule and the blank outer columns read as its margin. */
+.v1-phase {
+  display: grid;
+  /* The rail is a fixed 3rem at every width because the figure inside it is
+     authored at 48 user units wide: keeping the horizontal scale at 1 is what
+     keeps the drawn hairline a hairline and the dash honest. See the note in
+     process.tsx. It still grows with text zoom, since it is set in rem. */
+  grid-template-columns: 3rem minmax(0, 1fr);
+  column-gap: var(--v1-s4);
+  border-top: 1px solid var(--v1-rule);
+}
+
+/* The drawn rail. No padding: the line has to touch both hairlines of its row
+   or the figure breaks into pieces. Ink colour here is the line, the gate
+   overrides it to the editorial accent, because the payment gate is the one
+   claim this section's headline makes. */
+.v1-phase__mark {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  color: var(--v1-ink-3);
+}
+
+.v1-phase__gate {
+  display: block;
+  flex: none;
+  width: 3rem;
+  height: 2rem;
+  color: var(--v1-accent);
+}
+
+/* Absorbs whatever height the prose beside it takes. */
+.v1-phase__stem {
+  display: block;
+  flex: 1 1 auto;
+  width: 3rem;
+  height: auto;
+  min-height: var(--v1-s5);
+}
+
+.v1-phase__fork {
+  display: block;
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+}
+
+/* The numeral and the phase name are one element, so nothing can put a step
+   number on a different line from the step it names. */
+.v1-phase__head {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--v1-s3);
+  padding-top: var(--v1-s4);
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 620;
+  font-size: var(--v1-text-lg);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  color: var(--v1-ink);
+}
+
+/* The folio numeral the v1 tone note asks for on each phase. */
+.v1-phase__n {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--v1-accent);
+}
+
+/* Measured in rem, not ch: one ch of Fraunces is far narrower than its average
+   letter, so a ch based measure sets about 90 characters to the line here. */
+.v1-phase__text {
+  grid-column: 2;
+  grid-row: 2;
+  max-width: 34rem;
+  padding-top: var(--v1-s3);
+  padding-bottom: var(--v1-s6);
+}
+
+/* Where the line ends. Closed by its own hairline so the schedule is a closed
+   table rather than a list trailing off into the standing rules under it. */
+.v1-phase--end {
+  border-bottom: 1px solid var(--v1-rule);
+}
+
+/* ---- the standing rules ---- */
+
+.v1-process__standing {
+  margin-top: var(--v1-s7);
+}
+
+.v1-process__rules {
+  margin-top: var(--v1-s4);
+  row-gap: var(--v1-s4);
+}
+
+.v1-process__rule {
+  max-width: 48ch;
+}
+
+.v1-process__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* Broadsheet layout. Repeat of the grid query in section 3. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-process__story {
+    grid-column: 1 / span 8;
+  }
+
+  .v1-process__key {
+    grid-column: 9 / span 4;
+  }
+
+  /* The rows sit on the page's own 12 columns, so the schedule lines up with
+     the column rules showing through behind it. The rail keeps its fixed
+     width inside the first column and the name moves out of the prose into a
+     shoulder head, which is the layout change from the phone: figure, name,
+     text, instead of figure and a stacked column. */
+  .v1-phase {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+
+  .v1-phase__mark {
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+    justify-self: start;
+  }
+
+  .v1-phase__head {
+    grid-column: 2 / span 3;
+  }
+
+  .v1-phase__text {
+    grid-column: 5 / span 8;
+    grid-row: 1;
+    /* Sets the first line of the prose on the same optical line as the head
+       beside it, which top alignment alone does not do across two sizes. */
+    padding-top: calc(var(--v1-s4) + var(--v1-s1));
+  }
+
+  .v1-process__rule:nth-child(1) {
+    grid-column: 1 / span 6;
+  }
+
+  .v1-process__rule:nth-child(2) {
+    grid-column: 7 / span 6;
+  }
+}
+
+/* The furniture ledger runs one step under the front page ledger. At the
+   widest viewports the display size wrapped "27 Aug 2026" onto two lines
+   inside a four column rail, and a date that breaks reads as a broken table. */
+.v1-work__rail .v1-ledger__v,
+.v1-case__rail .v1-ledger__v {
+  font-size: var(--v1-text-md);
+}
+
+/* The line that reads the two dates back as one number. */
+.v1-case__span {
+  margin-top: var(--v1-s3);
+}
+
+.v1-case__quote figcaption {
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------- faq: the queries column */
+
+/* Before you pay, set as a trade paper queries page.
+
+   Seven questions as bold serif running heads on hairlines, answers in body
+   serif under them, running in two ruled columns from the broadsheet width the
+   way a notices page is set. The vertical rule between the two columns is the
+   page's own column rule showing through from behind, which is why this
+   section drops <ColumnRules /> in and puts its two columns on the same 12
+   column grid as every other section.
+
+   Each query is a native <details>. Its <summary> is keyboard operable and
+   focusable with no JavaScript, and it takes the page's own focus ring from
+   the base layer. The affordance is a hairline plus hanging in the margin,
+   drawn from the same 1px rule as every other division here; opening rotates
+   the upright bar flat, so the plus becomes a minus without introducing a new
+   shape. Nothing is animated except that bar: the answer appears at once, so
+   motion changes how finished the marker looks and never whether an answer is
+   there.
+
+   Still rules and whitespace only. No card, no fill, no radius, no shadow. */
+
+.v1-faq {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+/* Sits above the column rules, which are absolutely positioned behind it. */
+.v1-faq__inner {
+  position: relative;
+}
+
+.v1-faq__title {
+  margin-top: var(--v1-s4);
+  /* Long enough for the headline to hold two lines and short enough that it
+     never runs past the left column of queries underneath it. */
+  max-width: 26ch;
+}
+
+/* ---- the queries ---- */
+
+.v1-queries {
+  margin-top: var(--v1-s7);
+  /* The hanging margin the marker sits in. One value drives the marker track
+     and the answer indent, so the answer always starts on the same vertical as
+     the question text, at every width. */
+  --v1-query-hang: 1.125rem;
+  --v1-query-indent: calc(var(--v1-query-hang) + var(--v1-s3));
+}
+
+/* One column of the notices page. display:contents below the broadsheet width,
+   so the seven queries flatten into one list in document order. */
+.v1-queries__col {
+  display: contents;
+}
+
+.v1-query {
+  border-top: 1px solid var(--v1-rule);
+}
+
+/* A row of the page, not a control: no fill, no border of its own, and the
+   default disclosure triangle removed in every engine so the hanging plus is
+   the only marker. */
+.v1-query__summary {
+  display: block;
+  padding-block: var(--v1-s4);
+  cursor: pointer;
+  list-style: none;
+}
+
+.v1-query__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The question, set as a running head with the marker hanging beside it. */
+.v1-query__q {
+  display: grid;
+  grid-template-columns: var(--v1-query-hang) minmax(0, 1fr);
+  column-gap: var(--v1-s3);
+  align-items: start;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 620;
+  font-size: var(--v1-text-lg);
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+  color: var(--v1-ink);
+}
+
+/* The plus. One line box tall, so its bars centre on the first line of the
+   question at any type size. */
+.v1-query__mark {
+  position: relative;
+  display: block;
+  block-size: 1lh;
+}
+
+.v1-query__mark::before,
+.v1-query__mark::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  block-size: 1px;
+  translate: 0 -0.5px;
+  background: var(--v1-ink);
+}
+
+/* The upright bar of the plus. Flat when the query is open, which reads as the
+   minus that closes it. */
+.v1-query__mark::after {
+  rotate: 90deg;
+  transition: rotate var(--v1-dur-hover) var(--v1-ease-out);
+}
+
+.v1-query[open] .v1-query__mark::after {
+  rotate: 0deg;
+}
+
+/* The hover primitive: the rule grows under the question, left to right.
+   justify-self shrinks the cell to the words, so the rule underlines the
+   question rather than running the width of the column, where a full measure
+   hairline would be read as another division between queries. A question long
+   enough to wrap fills the column anyway and the rule closes it. */
+.v1-query__q .v1-underline {
+  justify-self: start;
+  max-inline-size: 100%;
+}
+
+.v1-query__summary:hover .v1-underline::after {
+  transform: scaleX(1);
+}
+
+/* The answer, indented under the question the way a printed reply is set.
+   The measure is capped here rather than left to .v1-prose, whose 68ch is
+   wider than a query answer should run on an ultrawide screen. */
+.v1-queries .v1-query__a {
+  padding-inline-start: var(--v1-query-indent);
+  padding-bottom: var(--v1-s5);
+  max-width: calc(60ch + var(--v1-query-indent));
+}
+
+.v1-faq__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* The marker travels only when the reader has not asked for stillness. The
+   plus and the minus are both static states, so nothing is lost. */
+@media (prefers-reduced-motion: reduce) {
+  .v1-query__mark::after {
+    transition: none;
+  }
+}
+
+/* Broadsheet layout. Repeat of the grid query in section 3. Two columns of
+   queries, each an independent block: a shared grid would put the first query
+   of each column in the same row and open a hole beside every open answer. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-queries {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    align-items: start;
+  }
+
+  .v1-queries__col {
+    display: block;
+  }
+
+  .v1-queries__col:nth-child(1) {
+    grid-column: 1 / span 6;
+  }
+
+  .v1-queries__col:nth-child(2) {
+    grid-column: 7 / span 6;
+  }
+}
+
+/* --------------------------------------------- footer: the colophon */
+
+/* Section 10 of the canonical list, set as the colophon a paper closes on
+   rather than as a footer.
+
+   Every part of it is the masthead's furniture reused in reverse order and at
+   half the size: the double rule inverted so thick comes first, the same
+   mark + wordmark lockup, the same small sans standing type, the same running
+   rail at the screen edge. The only value this block introduces is a retuned
+   --v1-wordmark; every colour, space, type step and hairline is an existing
+   token. No column rules, because the twelve rules belong to the sections that
+   carry the argument, and no folio number, because a colophon is where the
+   page stops rather than another page in it. */
+
+.v1-foot {
+  /* Half the nameplate: the colophon prints the same wordmark the front page
+     prints, at the size a paper prints it in the end matter. */
+  --v1-wordmark: clamp(1.375rem, 0.9rem + 1.9vw, 2.25rem);
+  margin-top: var(--v1-section-y);
+}
+
+/* The masthead's double rule inverted. Thin over thick opens a page, thick
+   over thin closes one. */
+.v1-foot__rule {
+  block-size: 9px;
+  border-top: 4px solid var(--v1-ink);
+  border-bottom: 1px solid var(--v1-ink);
+}
+
+.v1-foot__body {
+  padding-block: var(--v1-s6);
+}
+
+/* ---- the imprint ---- */
+
+.v1-foot__lockup {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.4rem, 1.1vw, 0.7rem);
+}
+
+.v1-foot__mark {
+  flex: none;
+  inline-size: clamp(1.125rem, 2vw, 1.5rem);
+  block-size: auto;
+  color: var(--v1-accent);
+}
+
+.v1-foot__signoff {
+  max-width: 34ch;
+  margin-top: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--v1-ink-2);
+  text-wrap: pretty;
+}
+
+.v1-foot__where {
+  max-width: 34ch;
+  margin-top: var(--v1-s4);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.6;
+  color: var(--v1-ink-3);
+  text-wrap: pretty;
+}
+
+/* ---- a standing head over a column ---- */
+
+/* Every column names itself. A footer that collapses to one column can then
+   never strand a heading above someone else's list, which is the one way this
+   block breaks at 390. */
+.v1-foot__head {
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v1-ink-3);
+  padding-bottom: var(--v1-s2);
+  border-bottom: 1px solid var(--v1-ink);
+}
+
+.v1-foot__col > * + * {
+  margin-top: var(--v1-s4);
+}
+
+/* ---- contact ---- */
+
+/* The only action in the colophon, so it takes the one step of emphasis this
+   block spends: the serif, one size up, and the page's own hover rule. */
+.v1-foot__email {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-deck);
+  font-weight: 500;
+  font-size: var(--v1-text-md);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--v1-ink);
+  /* break-word, never anywhere: `anywhere` also drives the column's min-content
+     width down to one character, which is what tears the address into a line
+     ending in a single letter. */
+  overflow-wrap: break-word;
+}
+
+/* The short landscape arm of the broadsheet grid hands the address a three
+   column slot barely wider than the address itself, so it steps down one size
+   there rather than wrapping. */
+@media (max-height: 560px) {
+  .v1-foot__email {
+    font-size: var(--v1-text-base);
+  }
+}
+
+/* ---- the index ---- */
+
+/* Ruled rows, the way an index is set. Multi-column rather than a grid: an
+   index is read down a column and on to the next one, and a grid flows across
+   the row, which puts every second entry in the wrong place. A column width
+   rather than a column count, because the array this reads from grows as
+   sections land, so the tracks find their own number at every width instead of
+   being told one. */
+.v1-foot__index {
+  columns: 13rem;
+  column-gap: var(--v1-gutter);
+}
+
+.v1-foot__index > li {
+  break-inside: avoid;
+  border-top: 1px solid var(--v1-rule-2);
+}
+
+.v1-foot__link,
+.v1-foot__edition {
+  display: inline-block;
+  padding-block: var(--v1-s2) var(--v1-s1);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.35;
+  color: var(--v1-ink-2);
+  text-decoration: none;
+}
+
+.v1-foot__link:hover,
+.v1-foot__edition:hover {
+  color: var(--v1-ink);
+}
+
+/* ---- the editions ---- */
+
+.v1-foot__editions {
+  padding-block: var(--v1-s5);
+  border-top: 1px solid var(--v1-rule);
+}
+
+.v1-foot__editionlist {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--v1-s5);
+  margin-top: var(--v1-s2);
+}
+
+/* The edition you are reading is named, not linked. */
+.v1-foot__edition--current {
+  color: var(--v1-ink);
+  font-weight: 500;
+}
+
+/* ---- the small print ---- */
+
+/* Set in the margin. The rule runs to the screen edge and the type stops at the
+   content cap, the masthead index bar's arrangement, so an ultrawide window
+   reads as a wide page margin instead of two sentences in opposite corners. */
+.v1-foot__rail {
+  border-top: 1px solid var(--v1-ink);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  line-height: 1.5;
+  color: var(--v1-ink-3);
+}
+
+.v1-foot__railinner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--v1-s2) var(--v1-s5);
+  padding-top: var(--v1-s4);
+  /* Room under the last line so the page ends in paper, and so the review pill
+     in the corner never sits on the small print. */
+  padding-bottom: calc(var(--v1-s7) + var(--v1-s4));
+}
+
+.v1-foot__legal {
+  max-width: 76ch;
+}
+
+.v1-foot__revised {
+  flex: none;
+}
+
+/* Broadsheet layout. Repeat of the grid query in section 3: the imprint in the
+   first four columns, contact in three, the index in the remaining five. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-foot__imprint {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-foot__col--contact {
+    grid-column: 5 / span 3;
+  }
+
+  .v1-foot__col--index {
+    grid-column: 8 / span 5;
+  }
+}
+
+/* ------------------------------------------- contact: the closing notice */
+
+/* The final CTA, set as the classified page a paper closes on.
+
+   Rules and whitespace only, as everywhere else. The section opens on a heavy
+   accent rule run to the screen edge, the way the nameplate rule is, and the
+   announcement under it is one ruled row rather than a panel: the notice's own
+   ink rules top and bottom, the three cells sitting between them. The one
+   enclosed shape is the classified box, which is the button, and its 5px accent
+   top border is the same rule as the band at the top of the section, so the ad
+   and the page it is printed on read as one piece.
+
+   Nothing here is a card, a fill or a colour panel: the accent is a 5px rule
+   and a link colour, and the paper underneath is untouched.
+
+   Mobile and the review chrome: the switcher pill is fixed in the bottom right
+   of every variation (it removes itself under ?chrome=0, which is how the
+   design shots are taken). The button is the fourth thing in the section on a
+   phone, so an anchor jump to #contact lands it in the upper half of the
+   screen, and the closing folio carries clearance so the last of the small
+   print never sits under the pill either. */
+
+.v1-contact {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+/* Full bleed: 5px of accent across the window, with nothing inside it. */
+.v1-contact__band {
+  block-size: 0;
+  border-top: 5px solid var(--v1-accent);
+}
+
+/* Sits above the column rules, which are absolutely positioned behind it. */
+.v1-contact__inner {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+/* Full measure rather than the two column head other sections use: the
+   structure of this section is the announcement under it, so the lead is a
+   plain stack and the headline gets the whole page to break across. */
+.v1-contact__title {
+  margin-top: var(--v1-s4);
+  max-width: 20ch;
+}
+
+.v1-contact__deck {
+  margin-top: var(--v1-s5);
+}
+
+/* ---- the announcement ---- */
+
+/* Its own grid, repeating the definition in section 3, so the three cells land
+   on the page's real columns and the column rules show through between them.
+   Ink rules close it top and bottom, which is what makes it an announcement
+   rather than a block with a background. */
+.v1-notice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--v1-s5);
+  column-gap: var(--v1-gutter);
+  margin-top: var(--v1-s7);
+  padding-block: var(--v1-s5);
+  border-top: 1px solid var(--v1-ink);
+  border-bottom: 1px solid var(--v1-ink);
+}
+
+/* The advertisement keeps its own height instead of stretching to the tallest
+   cell in the row, the way a paid notice does on a classified page, and it
+   keeps a column's width in the one column arm: run to the full 820px measure
+   it stopped reading as an advertisement and started reading as a banner. The
+   cap is under a phone's content width, so 360 and 390 are unchanged, and it
+   is narrower than four columns at every broadsheet width, so it never bites
+   there either. */
+.v1-contact__cta {
+  align-self: start;
+  max-width: 26rem;
+}
+
+/* The page's largest classified box, because this is the page's one decision
+   point. Same rules, same accent top, more room and a bigger line. */
+.v1-classified--lg {
+  padding: var(--v1-s5);
+}
+
+.v1-classified--lg .v1-classified__label {
+  font-variation-settings: "opsz" 48;
+  font-size: var(--v1-display-2);
+}
+
+/* Short viewports (phone landscape) run the label back down to the standard
+   classified size and close the gaps in the lead, so the button is not pushed
+   off a 390px tall screen by its own headline. */
+@media (max-height: 560px) {
+  .v1-classified--lg .v1-classified__label {
+    font-size: var(--v1-text-lg);
+  }
+
+  .v1-classified--lg {
+    padding: var(--v1-s4);
+  }
+
+  .v1-contact__deck {
+    margin-top: var(--v1-s4);
+  }
+
+  .v1-notice {
+    margin-top: var(--v1-s5);
+    padding-block: var(--v1-s4);
+  }
+}
+
+/* ---- the contact lines, set as small print ---- */
+
+.v1-contact__line {
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.5;
+  color: var(--v1-ink-2);
+  max-width: 36ch;
+}
+
+.v1-contact__line + .v1-contact__line {
+  margin-top: var(--v1-s3);
+  padding-top: var(--v1-s3);
+  border-top: 1px solid var(--v1-rule);
+}
+
+/* ---- the proof beside the button ---- */
+
+.v1-contact__proof {
+  align-self: start;
+}
+
+.v1-contact__proof blockquote {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-quote);
+  font-weight: 500;
+  font-size: var(--v1-text-lg);
+  line-height: 1.26;
+  letter-spacing: -0.008em;
+  text-wrap: pretty;
+  color: var(--v1-ink);
+}
+
+/* Attribution marked by a short rule instead of a dash, the same mark the
+   front page pull-quote uses, per the no em dash rule in the voice contract. */
+.v1-contact__proof figcaption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--v1-s3);
+  margin-top: var(--v1-s4);
+  font-size: var(--v1-text-xs);
+  line-height: 1.4;
+  color: var(--v1-ink-3);
+  text-wrap: pretty;
+}
+
+.v1-contact__proof figcaption::before {
+  content: "";
+  flex: none;
+  width: 1.5rem;
+  height: 1px;
+  translate: 0 -0.32em;
+  background: var(--v1-ink-3);
+}
+
+.v1-contact__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* Clearance under the closing rule wherever the fixed switcher pill sits over
+   the page: a phone, or any short viewport. */
+@media (max-width: 719px), (max-height: 560px) {
+  .v1-contact__folio {
+    margin-bottom: var(--v1-s8);
+  }
+}
+
+/* Broadsheet layout. Repeat of the grid query in section 3. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-notice {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .v1-contact__cta {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-contact__lines {
+    grid-column: 5 / span 3;
+  }
+
+  .v1-contact__proof {
+    grid-column: 8 / span 5;
+  }
+}

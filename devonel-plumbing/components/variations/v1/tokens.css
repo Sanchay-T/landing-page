@@ -258,7 +258,8 @@
   line-height: 1.5;
   color: var(--v1-ink-2);
   text-wrap: pretty;
-  max-width: 48ch;
+  /* 64 characters at 1280, 70 at 820. See MEASURE above. */
+  max-width: 38rem;
 }
 
 .v1-caption {
@@ -522,7 +523,20 @@
        dash length works at any rendered width, and repeat the same geometry
        as .v1-draw__under so the figure is never missing, only unfinished.
        Use it only inside a section on a page long enough to scroll: a scroll
-       driven draw sitting on a screen that cannot scroll freezes part way. */
+       driven draw sitting on a screen that cannot scroll freezes part way.
+
+       Two conditions this dasharray depends on, both easy to break later:
+
+         1. pathLength="100" is required, not optional. The dash length below
+            is the literal number 100, so without pathLength the dash is 100
+            user units of whatever the path actually measures, and a long path
+            draws as a dotted line while a short one is solid from the start.
+         2. The <svg> must not be scaled non-uniformly. A viewBox stretched to
+            a different aspect ratio scales the stroke with it, so the dash
+            length no longer matches the path length and the figure never
+            closes. If a figure has to stretch, put vector-effect:
+            non-scaling-stroke on the drawn paths, which takes the stroke and
+            its dashes out of the user space transform. */
     .v1-draw__ink {
       stroke-dasharray: 100;
       animation-name: v1-draw;
@@ -620,27 +634,30 @@
   border-bottom: 1px solid var(--v1-rule);
 }
 
+/* The index and the paid notice sit on the same top line: the index wraps
+   under itself, the notice keeps the corner, the way an index block and a
+   boxed advertisement share the head of a page. */
 .v1-masthead__index {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   gap: var(--v1-s4);
   padding-block: var(--v1-s2);
 }
 
-/* Scrolls sideways instead of collapsing behind a menu button. */
+/* An index, not a rail. Ten entries never fit on one line at any width this
+   page supports, so they wrap onto as many lines as the measure needs and each
+   entry stays whole. It does not scroll sideways, which cut "Proof of work"
+   in half on a phone, and it does not collapse behind a menu button, which a
+   printed page has no equivalent for. The hairline each link already carries
+   is what rules the wrapped lines, so a two line index reads as an index. */
 .v1-masthead__list {
   display: flex;
-  align-items: center;
-  gap: var(--v1-s5);
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--v1-s5);
+  row-gap: var(--v1-s1);
   min-width: 0;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-
-.v1-masthead__list::-webkit-scrollbar {
-  display: none;
 }
 
 .v1-masthead__list > li {
@@ -649,6 +666,26 @@
 
 .v1-masthead__cta {
   flex: none;
+}
+
+/* The compact index, under the broadsheet width.
+
+   Ten entries wrap to five lines beside the nameplate at 360px, and every line
+   of masthead pushes the hero's call to action closer to the fold, so below
+   720px the masthead prints the five marked `compact` in ./sections.ts and the
+   colophon at the foot of the page keeps the full ten. The paid notice goes
+   with them: the hero carries the same classified box one screen down and
+   above the fold, and its 120px of width here is what forced the five onto a
+   third line. Both come back at 720px, in the same markup. */
+@media (max-width: 44.9375rem) {
+  .v1-masthead__index {
+    padding-block: var(--v1-s1);
+  }
+
+  .v1-masthead__list > li:not([data-compact]),
+  .v1-masthead__cta {
+    display: none;
+  }
 }
 
 /* ----------------------------------------------------------------- 9. hero */
@@ -773,13 +810,25 @@
   line-height: 1.62;
   color: var(--v1-ink-2);
   text-wrap: pretty;
-  /* One column layouts run the full shell, which at 820px is an 85 character
-     line. Capped in rem rather than ch: Fraunces sets a wide figure, so 68ch
-     measured out at 85 characters of real copy. 38rem is about 70. The grid
-     columns are far narrower than this, so the cap only bites where it is
-     needed. */
   max-width: 38rem;
 }
+
+/* MEASURE. The one rule for every cap on a line of reading text in this file.
+
+   Reading measure is capped in rem, never in ch. One ch is the width of the
+   figure zero, and in both faces on this page that figure runs about 1.4x the
+   average letter, so a `54ch` cap sets a 79 character line, not a 54 character
+   one: measured on the rendered page, ch to average letter is 1.38 on the
+   Fraunces deck, 1.45 on Fraunces body and 1.42 on Geist small print. Every
+   measure cap below is therefore written in rem, sized from the rendered
+   average letter to land between 60 and 70 characters at the widths where it
+   bites, and re-checked at 820px as well as at 1280px because these faces are
+   fluid and the character count moves with them.
+
+   The exception, and the only one: a cap on a fluid display headline, such as
+   .v1-work__title or .v1-faq__title. That is a line-break control and not a
+   reading measure, and it has to track the headline's own font size, which is
+   exactly what ch does and rem cannot. Those stay in ch. */
 
 .v1-prose > p + p {
   margin-top: var(--v1-s3);
@@ -935,8 +984,18 @@
   position: relative;
 }
 
+/* One step under the front page headline, the step every section head on this
+   page takes. Only the nameplate's own headline runs at display-1: a paper has
+   one banner line per front page, and a section head that matches it turns the
+   spread into a second front page. Everything else about the headline,
+   including the optical size axis, comes from .v1-display.
+
+   The cap stays in ch: it is a line-break control on a fluid headline, not a
+   reading measure, so it has to track the font size the way ch does. Measure
+   caps on running text are in rem instead; see the note over .v1-prose. */
 .v1-work__title {
   margin-top: var(--v1-s4);
+  font-size: var(--v1-display-2);
   max-width: 22ch;
 }
 
@@ -1458,7 +1517,7 @@
   grid-column: 2;
   grid-row: 2;
   margin-top: var(--v1-s1);
-  max-width: 46ch;
+  max-width: 24rem;
   font-family: var(--font-sans);
   font-size: var(--v1-text-xs);
   line-height: 1.45;
@@ -1643,7 +1702,7 @@
   padding-top: var(--v1-s3);
   border-top: 1px solid var(--v1-rule);
   /* Caps the measure where a byline runs the full width of a tablet. */
-  max-width: 58ch;
+  max-width: 33rem;
 }
 
 /* ---- the imprint ---- */
@@ -1662,7 +1721,7 @@
   line-height: 1.26;
   letter-spacing: -0.01em;
   text-wrap: balance;
-  max-width: 36ch;
+  max-width: 38rem;
   color: var(--v1-ink);
 }
 
@@ -1724,9 +1783,13 @@
 }
 
 /* Full measure rather than the two column head the sections above use: this
-   section's structure is the table under it, so the lead stays a plain stack. */
+   section's structure is the table under it, so the lead stays a plain stack.
+   Sized at display-2, the one step every section head on this page takes; only
+   the nameplate's own headline runs at display-1. The ch cap is a line-break
+   control on a fluid headline, not a reading measure; see .v1-work__title. */
 .v1-engagement__title {
   margin-top: var(--v1-s4);
+  font-size: var(--v1-display-2);
   max-width: 22ch;
 }
 
@@ -1738,6 +1801,14 @@
 
 .v1-tariff {
   margin-top: var(--v1-s7);
+}
+
+/* Fraunces sets its descenders on the floor of the line box, and the first
+   line of the tariff draws its hairline on that floor, so the "y" of "Four
+   ways to work with us" sat on the rule at 1024px and up. One line of
+   clearance under the head, which is what a printed table leaves anyway. */
+.v1-tariff > .v1-crosshead {
+  padding-bottom: var(--v1-s2);
 }
 
 /* One line of the tariff. Term over terms in one column on a phone, term and
@@ -1767,7 +1838,7 @@
 /* Caps the measure before the column does, so the terms never run to the full
    eight columns on a wide screen. */
 .v1-tariff__terms {
-  max-width: 54ch;
+  max-width: 32rem;
 }
 
 /* The minimum that applies to all four, on the rule that closes the table,
@@ -1866,7 +1937,7 @@
 
 .v1-process__keytext {
   margin-top: var(--v1-s3);
-  max-width: 48ch;
+  max-width: 24rem;
 }
 
 /* ---- the timeline ---- */
@@ -1981,7 +2052,7 @@
 }
 
 .v1-process__rule {
-  max-width: 48ch;
+  max-width: 33rem;
 }
 
 .v1-process__folio {
@@ -2280,7 +2351,7 @@
 }
 
 .v1-foot__signoff {
-  max-width: 34ch;
+  max-width: 18rem;
   margin-top: var(--v1-s3);
   font-family: var(--font-sans);
   font-size: var(--v1-text-xs);
@@ -2291,7 +2362,7 @@
 }
 
 .v1-foot__where {
-  max-width: 34ch;
+  max-width: 18rem;
   margin-top: var(--v1-s4);
   font-family: var(--font-sans);
   font-size: var(--v1-text-xs);
@@ -2429,7 +2500,7 @@
 }
 
 .v1-foot__legal {
-  max-width: 76ch;
+  max-width: 23rem;
 }
 
 .v1-foot__revised {
@@ -2493,9 +2564,17 @@
 
 /* Full measure rather than the two column head other sections use: the
    structure of this section is the announcement under it, so the lead is a
-   plain stack and the headline gets the whole page to break across. */
+   plain stack and the headline gets the whole page to break across.
+
+   Sized at display-2, the one step every section head on this page takes. Only
+   the nameplate's own headline runs at display-1: a paper prints one banner
+   line per front page, and a closing recap set at the same size reads as a
+   second front page rather than as the end of this one. The ch cap is a
+   line-break control on a fluid headline, not a reading measure; see the
+   MEASURE note over .v1-prose. */
 .v1-contact__title {
   margin-top: var(--v1-s4);
+  font-size: var(--v1-display-2);
   max-width: 20ch;
 }
 
@@ -2533,14 +2612,20 @@
 }
 
 /* The page's largest classified box, because this is the page's one decision
-   point. Same rules, same accent top, more room and a bigger line. */
+   point. Same rules, same accent top, more room and a bigger line.
+
+   One step under the section head above it, not level with it. Every section
+   head on this page runs at display-2, so a label at display-2 would tie the
+   headline it sits under and the reader would meet two first lines. This step
+   still puts it well clear of every other classified on the page, which run at
+   text-lg. */
 .v1-classified--lg {
   padding: var(--v1-s5);
 }
 
 .v1-classified--lg .v1-classified__label {
   font-variation-settings: "opsz" 48;
-  font-size: var(--v1-display-2);
+  font-size: var(--v1-text-quote);
 }
 
 /* Short viewports (phone landscape) run the label back down to the standard
@@ -2572,7 +2657,7 @@
   font-size: var(--v1-text-xs);
   line-height: 1.5;
   color: var(--v1-ink-2);
-  max-width: 36ch;
+  max-width: 19rem;
 }
 
 .v1-contact__line + .v1-contact__line {

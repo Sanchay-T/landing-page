@@ -374,8 +374,11 @@ Commercial lead on proposals and go-to-market [brief 2].
 - **Monthly retainer.** Running, monitoring, fixes and the next scope after launch [brief 5].
 - **Revenue share.** Optional, on top of the fee, never instead of it [brief 5][brief 9.5].
 
+Minimum commitment up front on every engagement [brief 5].
+
+*That line is a term of all four, so it sets with the list above, on the rule that closes it. Moved out of "What we do not do" on 2026-09-07: a minimum commitment is something Devonel requires, not something it refuses to do, and reading it as an exclusion inverts the sentence.*
+
 **What we do not do** [brief 5]
-Minimum commitment up front on every engagement.
 No unpaid multi-month starts.
 
 **Costs we pass through.**

@@ -48,9 +48,22 @@ export const RENDERS = [
  * The render spread: four plates in a row, each cropped to one 4:5 box so the
  * row sets to the grid the way a printed photo spread does.
  *
- * Lazy by default, which is safe here: `scripts/shots.mjs` captures the full
- * page rather than the viewport, so a below-the-fold plate is loaded and
- * present in every verification screenshot. Confirmed against both settings.
+ * All four plates carry `priority`, which loads them eagerly.
+ *
+ * next/image lazy loads by default and a lazy plate never loads in a full page
+ * screenshot: the capture is taken at scroll 0, the spread sits far below the
+ * fold, and the intersection observer that would fetch it never fires. The
+ * verification for this project is those screenshots, so four empty bordered
+ * boxes is what the proof showed. Eager is also the honest setting for this
+ * figure: it is the evidence the section exists to present, and all four
+ * together are 173 KB at native size, far less at the width `sizes` gives a
+ * phone.
+ *
+ * It is all four and not only the first because the four frames render at the
+ * same size, so which one the browser names its largest contentful paint moves
+ * with the viewport: next/image asked for `priority` on the third at 820px and
+ * on the first everywhere else. One figure, one setting, and no dev warning
+ * left at any width in the matrix.
  */
 export function RenderSpread({ sizes }: { sizes: string }) {
   return (
@@ -65,6 +78,7 @@ export function RenderSpread({ sizes }: { sizes: string }) {
                 width={render.width}
                 height={render.height}
                 sizes={sizes}
+                priority
               />
             </span>
             <figcaption className="v1-spread__cap">

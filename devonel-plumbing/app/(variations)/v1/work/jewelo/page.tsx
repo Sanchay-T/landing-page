@@ -1,32 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ContactCTA } from "@/components/ds/contact-cta";
-import {
-  ColumnRules,
-  RenderSpread,
-  STACK,
-  V1Nav,
-  type V1Section,
-} from "@/components/variations/v1";
+import { ColumnRules, RenderSpread, SECTIONS, STACK, V1Nav } from "@/components/variations/v1";
 // The same design system the front page uses, scoped under `.v1`.
 import "@/components/variations/v1/tokens.css";
 import { contactLabel } from "@/lib/site";
-
-/**
- * The masthead index on an inside page.
- *
- * It mirrors the `sections` array in `app/(variations)/v1/page.tsx`, and it is
- * passed `hrefBase="/v1"` so every link resolves to `/v1#id` instead of an
- * anchor on this page. Add a row here whenever /v1 gains a section, and never
- * add one that /v1 does not render: a masthead link to a section that is not
- * there is a dead link.
- */
-const sections: readonly V1Section[] = [
-  { id: "hero", label: "Front page" },
-  { id: "proof", label: "Proof of work" },
-  { id: "services", label: "What you buy" },
-  { id: "work", label: "Case studies" },
-];
 
 /**
  * The screenshots, in the order the flow runs.
@@ -98,9 +76,20 @@ const PLATE_SIZES = "(min-width: 1280px) 790px, (min-width: 1024px) 62vw, 92vw";
 /**
  * One ruled screenshot with its caption under the rule.
  *
- * Lazy by default. The seven plates total 175 KB at native size and far less
- * at the width a phone requests, and `scripts/shots.mjs` captures the full page
- * rather than the viewport, so every one of them is in the proof screenshot.
+ * Every plate carries `priority`, which loads it eagerly.
+ *
+ * next/image lazy loads by default and a lazy plate never loads in a full page
+ * screenshot: the capture is taken at scroll 0, every plate below the first is
+ * off screen, and the intersection observer that would fetch it never fires.
+ * The verification for this project is those screenshots, so five of the seven
+ * plates read as empty bordered boxes. The seven total 175 KB at native size
+ * and far less at the width a phone requests, so eager is also the right
+ * setting for a page whose whole argument is the screens.
+ *
+ * It is every plate and not only the first because they all render at the same
+ * width, so which one the browser names its largest contentful paint moves
+ * with the viewport: next/image asked for `priority` on the first at most
+ * widths and on the second at 1280px. One page of screens, one setting.
  */
 function Plate({ plate }: { plate: Plate }) {
   return (
@@ -111,6 +100,7 @@ function Plate({ plate }: { plate: Plate }) {
         width={plate.width}
         height={plate.height}
         sizes={PLATE_SIZES}
+        priority
       />
       <figcaption>{plate.caption}</figcaption>
     </figure>
@@ -168,7 +158,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="v1">
-      <V1Nav sections={sections} hrefBase="/v1" />
+      <V1Nav sections={SECTIONS} hrefBase="/v1" />
 
       <main>
         <article className="v1-case">

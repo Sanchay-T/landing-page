@@ -60,8 +60,8 @@ export function MagazineCover({ eyebrow, headline, lede, stats, className }: Mag
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-ink-2 flex items-center gap-3">
-      <span className="size-3 bg-valve" aria-hidden />
+    <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--ink-2)] flex items-center gap-3">
+      <span className="size-3 bg-[var(--valve)]" aria-hidden />
       <span>{children}</span>
     </div>
   );
@@ -79,8 +79,8 @@ function DisplayHeadline({ lines }: { lines: HeadlineLine[] }) {
           className={cn(
             "block",
             line.italic && "italic font-medium",
-            line.accent === "valve" && "text-valve",
-            line.accent === "water" && "text-water",
+            line.accent === "valve" && "text-[var(--valve)]",
+            line.accent === "water" && "text-[var(--water)]",
           )}
         >
           {line.text}
@@ -94,9 +94,9 @@ function Lede({ lead, rest }: { lead: string; rest: string }) {
   return (
     <p
       style={{ marginTop: "var(--cover-lede-gap)", textWrap: "pretty" }}
-      className="text-[length:var(--cover-lede-size)] [line-height:var(--cover-lede-leading)] text-ink-2 max-w-[40ch]"
+      className="text-[length:var(--cover-lede-size)] [line-height:var(--cover-lede-leading)] text-[var(--ink-2)] max-w-[40ch]"
     >
-      <strong className="text-ink font-semibold">{lead}</strong> {rest}
+      <strong className="text-[var(--ink)] font-semibold">{lead}</strong> {rest}
     </p>
   );
 }
@@ -105,14 +105,14 @@ function StatTeaser({ stats }: { stats: [Stat, Stat, Stat] }) {
   return (
     <div
       style={{ paddingTop: "var(--cover-stats-gap)" }}
-      className="border-t border-ink/15 grid grid-cols-3 gap-4"
+      className="border-t border-[var(--ink)]/15 grid grid-cols-3 gap-4"
     >
       {stats.map((s, i) => (
         <div key={i}>
-          <div className="font-serif font-medium text-[length:var(--cover-stat-value-size)] leading-none text-valve">
+          <div className="font-serif font-medium text-[length:var(--cover-stat-value-size)] leading-none text-[var(--valve)]">
             {s.value}
           </div>
-          <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-ink-2 mt-1.5">
+          <div className="font-mono text-[9px] tracking-[0.18em] uppercase text-[var(--ink-2)] mt-1.5">
             {s.label}
           </div>
         </div>

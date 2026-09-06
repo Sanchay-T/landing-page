@@ -8,7 +8,7 @@ const options = [
     desc: "Same layout as the original, but the headline shrinks (clamp 48–76px) and paddings tighten so the schematic is visible above the fold without scrolling.",
     effort: "LOW",
     impact: "HIGH",
-    href: "/option-a",
+    href: "/legacy/option-a",
     cta: "Open compact →",
   },
   {
@@ -17,7 +17,7 @@ const options = [
     desc: "Two-column hero. Headline + CTAs on the left, the routing schematic on the right replacing the spec sheet. The diagram is the first thing you see, animating on load.",
     effort: "MEDIUM",
     impact: "HIGH",
-    href: "/option-b",
+    href: "/legacy/option-b",
     cta: "Open side-by-side →",
   },
   {
@@ -26,7 +26,7 @@ const options = [
     desc: "The full routing diagram fills the viewport as a translucent backdrop. Headline and CTAs sit over it. Boldest, most editorial — the diagram is the page.",
     effort: "MEDIUM",
     impact: "MAX",
-    href: "/option-c",
+    href: "/legacy/option-c",
     cta: "Open blueprint →",
   },
   {
@@ -35,7 +35,7 @@ const options = [
     desc: "Sticky hero. As you scroll the first viewport, the headline fades and the schematic builds itself in the same frame. Cinematic; one extra scroll-tick before the page proper begins.",
     effort: "HIGH",
     impact: "MAX",
-    href: "/option-d",
+    href: "/legacy/option-d",
     cta: "Open pinned →",
   },
 ] as const;

@@ -4,3 +4,8 @@ out/
 *.tsbuildinfo
 .env*.local
 .DS_Store
+.next-build/
+
+# Local-only screenshot and audit evidence (JSON lighthouse reports may be committed)
+docs/goal/shots/
+docs/goal/lighthouse/*.html

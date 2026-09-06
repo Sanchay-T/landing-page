@@ -1,0 +1,725 @@
+/* ===========================================================================
+   Variation 1 - Broadsheet. The whole design system in one file.
+
+   Everything is scoped under `.v1`, so importing this file cannot leak into
+   another variation and a later tweak to colour, type, spacing, grid or motion
+   is one edit here rather than a sweep through sections.
+
+   Direction is pinned by docs/goal/03-design-research.md section 4:
+   warm paper, near-black ink, one deep blue editorial accent, hairline rules,
+   a 12 column grid with visible column rules, radius 0, shadow none, light
+   only. Divisions on this page are rules and whitespace. There are no cards,
+   no shadows and no gradients anywhere below.
+
+   Sections in this file
+     1. tokens        colour, type, space, motion
+     2. base          the .v1 surface, focus, headings reset
+     3. layout        shell, bleed, 12 column grid, column rules
+     4. rules         hairline, ink and double rules
+     5. type roles    kicker, wordmark, display, deck, quote, folio, ledger
+     6. components    classified ad box, index links
+     7. motion        one entrance, one hover, one scroll primitive
+   =========================================================================== */
+
+/* --------------------------------------------------------------- 1. tokens */
+
+.v1 {
+  /* Colour. Light only, by direction. Contrast against paper, sRGB:
+     ink 16.8:1, ink-2 8.6:1, ink-3 5.3:1, accent 9.2:1. All body and label
+     text clears AA at its size; rule tints are non-text and decorative. */
+  --v1-paper: #f6f1e7;
+  --v1-paper-2: #efe8d9;
+  --v1-ink: #141210;
+  --v1-ink-2: #4a443a;
+  --v1-ink-3: #6b6357;
+  --v1-accent: #1d3a8a;
+  --v1-accent-2: #152c68;
+  --v1-rule: #b8b0a2;
+  --v1-rule-2: #d6cfc1;
+
+  /* Type. Two families: Fraunces for everything editorial, Geist for the
+     small mechanical labels a newspaper sets in sans. Fraunces is loaded with
+     its optical size axis, so display sizes get the high contrast Didone cut
+     and captions get the sturdy small cut from the same file. */
+  --v1-opsz-display: 144;
+  --v1-opsz-quote: 48;
+  --v1-opsz-deck: 20;
+  /* Long-form body. Fraunces wants opsz near the rendered point size, so body
+     prose gets its own axis value rather than borrowing the deck's. */
+  --v1-opsz-body: 16;
+  --v1-opsz-caption: 14;
+
+  --v1-text-2xs: clamp(0.6875rem, 0.664rem + 0.1vw, 0.75rem);
+  --v1-text-xs: clamp(0.75rem, 0.726rem + 0.1vw, 0.8125rem);
+  --v1-text-sm: clamp(0.8125rem, 0.774rem + 0.17vw, 0.9375rem);
+  --v1-text-base: clamp(1rem, 0.962rem + 0.16vw, 1.0625rem);
+  --v1-text-md: clamp(1.0625rem, 0.98rem + 0.36vw, 1.3125rem);
+  --v1-text-lg: clamp(1.25rem, 1.1rem + 0.64vw, 1.6875rem);
+  --v1-text-quote: clamp(1.375rem, 1.19rem + 0.79vw, 1.9375rem);
+  --v1-wordmark: clamp(2.25rem, 1.35rem + 3.75vw, 4.5rem);
+  --v1-display-1: clamp(2.25rem, 1.05rem + 5.4vw, 6rem);
+  /* One step under the front page headline: the size an inside story runs at. */
+  --v1-display-2: clamp(1.5rem, 1.02rem + 2.15vw, 2.75rem);
+
+  /* Space. One 4px based scale; section rhythm is fluid. */
+  --v1-s1: 0.25rem;
+  --v1-s2: 0.5rem;
+  --v1-s3: 0.75rem;
+  --v1-s4: 1rem;
+  --v1-s5: 1.5rem;
+  --v1-s6: 2rem;
+  --v1-s7: 3rem;
+  --v1-s8: 4rem;
+  --v1-section-y: clamp(1.5rem, 3.4vw, 3.25rem);
+
+  /* Grid. Content stops at 1280; rules and running heads run to the screen
+     edge so an ultrawide page reads as wide margins, not as abandonment. */
+  --v1-max: 1280px;
+  --v1-edge: clamp(1rem, 3vw, 2.5rem);
+  --v1-gutter: clamp(1rem, 1.9vw, 1.75rem);
+
+  /* Radius and shadow are tokens so the ban is explicit, not accidental. */
+  --v1-radius: 0;
+  --v1-shadow: none;
+
+  /* Motion. One curve, three durations. */
+  --v1-ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --v1-dur-enter: 500ms;
+  --v1-dur-hover: 180ms;
+  --v1-dur-draw: 900ms;
+}
+
+/* Short viewports (phone landscape, small laptops in split screen) get a
+   smaller nameplate and headline so the lead of the page still fits. */
+@media (max-height: 560px) {
+  .v1 {
+    --v1-wordmark: clamp(1.75rem, 0.9rem + 2.6vw, 2.75rem);
+    --v1-display-1: clamp(1.75rem, 0.95rem + 3.4vw, 3.25rem);
+    --v1-section-y: clamp(1rem, 2vw, 1.75rem);
+  }
+}
+
+/* ----------------------------------------------------------------- 2. base */
+
+.v1 {
+  color-scheme: light;
+  background-color: var(--v1-paper);
+  color: var(--v1-ink);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-base);
+  line-height: 1.55;
+  /* Paper reaches the bottom of the window before the page is long. */
+  min-height: 100svh;
+  /* Rules are drawn to the viewport edge; never let one open a scrollbar. */
+  overflow-x: clip;
+}
+
+/* :where() keeps the reset at zero specificity for the element part, so any
+   component class below can set a margin without needing !important or a
+   longer selector. Dropping the :where() breaks spacing everywhere. */
+.v1 :where(h1, h2, h3, p, figure, blockquote, dl, dt, dd, ul, ol) {
+  margin: 0;
+}
+
+.v1 :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+.v1 :focus-visible {
+  outline: 2px solid var(--v1-accent);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------- 3. layout */
+
+/* Content column: centred, capped, gutters at the screen edge. */
+.v1-shell {
+  width: 100%;
+  max-width: var(--v1-max);
+  margin-inline: auto;
+  padding-inline: var(--v1-edge);
+}
+
+/* Runs to the screen edge instead of the content cap. Used by running heads
+   and rules so the widest screens read as a printed page, not a stranded card. */
+.v1-bleed {
+  width: 100%;
+  padding-inline: var(--v1-edge);
+}
+
+/* The grid. One column on phones, 12 columns from the broadsheet breakpoint.
+   The breakpoint is width OR a short landscape viewport, because at 844x390 a
+   single column pushes the CTA off the screen. Every place that needs the
+   12 column layout repeats exactly this query. */
+.v1-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--v1-s6);
+}
+
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    row-gap: var(--v1-s5);
+  }
+}
+
+/* Visible column rules. A decorative layer that shares the grid definition
+   above, so the hairlines always sit in the middle of a real gutter instead of
+   drifting against the content. Hidden on one column layouts, where twelve
+   rules across 390px would be noise rather than structure. */
+.v1-colrules {
+  display: none;
+}
+
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-colrules {
+    display: grid;
+    position: absolute;
+    inset: 0;
+    max-width: var(--v1-max);
+    margin-inline: auto;
+    padding-inline: var(--v1-edge);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    pointer-events: none;
+  }
+
+  .v1-colrules > i {
+    border-left: 1px solid var(--v1-rule-2);
+    margin-left: calc(var(--v1-gutter) / -2);
+  }
+
+  /* The outermost rule would sit in the page margin, not in a gutter. */
+  .v1-colrules > i:first-child {
+    border-left-color: transparent;
+  }
+}
+
+/* ---------------------------------------------------------------- 4. rules */
+
+.v1-rule-hair {
+  border-top: 1px solid var(--v1-rule);
+}
+
+.v1-rule-ink {
+  border-top: 1px solid var(--v1-ink);
+}
+
+/* Thin over thick: the rule a nameplate sits on. */
+.v1-rule-double {
+  block-size: 9px;
+  border-top: 1px solid var(--v1-ink);
+  border-bottom: 4px solid var(--v1-ink);
+}
+
+/* ----------------------------------------------------------- 5. type roles */
+
+/* Kicker: the line a newspaper sets above a headline. Sans, small, accent,
+   with the rule that separates it from the story. */
+.v1-kicker {
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--v1-accent);
+  padding-bottom: var(--v1-s3);
+  border-bottom: 1px solid var(--v1-rule);
+}
+
+.v1-wordmark {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-display);
+  font-weight: 700;
+  font-size: var(--v1-wordmark);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--v1-ink);
+}
+
+.v1-display {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-display);
+  font-weight: 620;
+  font-size: var(--v1-display-1);
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+  color: var(--v1-ink);
+}
+
+.v1-deck {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-deck);
+  font-size: var(--v1-text-md);
+  line-height: 1.5;
+  color: var(--v1-ink-2);
+  text-wrap: pretty;
+  max-width: 48ch;
+}
+
+.v1-caption {
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.45;
+  color: var(--v1-ink-3);
+}
+
+/* Running head and folio. One pattern for the small type that tells you where
+   you are on the page: place and date at the top, section and page number at
+   the foot of every section. */
+.v1-folio {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--v1-s4);
+  padding-block: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v1-ink-3);
+}
+
+.v1-folio--ruled {
+  border-top: 1px solid var(--v1-rule);
+}
+
+.v1-folio__n {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-caption);
+  font-size: var(--v1-text-sm);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--v1-ink);
+}
+
+/* Pull-quote. Rules above and below, attribution marked by a short rule
+   instead of a dash, per the no em dash rule in the voice contract. */
+.v1-pullquote {
+  border-top: 3px solid var(--v1-ink);
+  border-bottom: 1px solid var(--v1-rule);
+  padding-block: var(--v1-s4) var(--v1-s4);
+}
+
+.v1-pullquote blockquote {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" var(--v1-opsz-quote);
+  font-weight: 500;
+  font-size: var(--v1-text-quote);
+  line-height: 1.24;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+  color: var(--v1-ink);
+}
+
+.v1-pullquote figcaption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--v1-s3);
+  margin-top: var(--v1-s4);
+  font-size: var(--v1-text-xs);
+  line-height: 1.4;
+  color: var(--v1-ink-3);
+}
+
+.v1-pullquote figcaption::before {
+  content: "";
+  flex: none;
+  width: 1.5rem;
+  height: 1px;
+  translate: 0 -0.32em;
+  background: var(--v1-ink-3);
+}
+
+/* Ledger: a ruled two cell table of a label over a date or a number. The
+   studio's own evidence, set the way a paper sets a market table. */
+.v1-ledger {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--v1-ink);
+}
+
+.v1-ledger__cell {
+  padding-block: var(--v1-s3) var(--v1-s1);
+  padding-right: var(--v1-s4);
+}
+
+.v1-ledger__cell + .v1-ledger__cell {
+  border-left: 1px solid var(--v1-rule);
+  padding-left: var(--v1-s4);
+}
+
+.v1-ledger__k {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-2xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--v1-ink-3);
+}
+
+.v1-ledger__v {
+  display: block;
+  margin-top: var(--v1-s1);
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 600;
+  font-size: var(--v1-text-lg);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--v1-ink);
+}
+
+/* ----------------------------------------------------------- 6. components */
+
+/* The classified ad box. The only enclosed shape on the page: hairline sides
+   on bare paper with the heavy accent rule a paid notice is set under. No
+   fill, no radius, no shadow, so it stays an advertisement and not a card. */
+.v1-classified {
+  display: block;
+  border: 1px solid var(--v1-ink);
+  border-top: 5px solid var(--v1-accent);
+  border-radius: var(--v1-radius);
+  box-shadow: var(--v1-shadow);
+  padding: var(--v1-s4);
+  color: var(--v1-ink);
+  text-decoration: none;
+  transition: border-color var(--v1-dur-hover) var(--v1-ease-out);
+}
+
+.v1-classified:hover {
+  border-color: var(--v1-accent);
+}
+
+.v1-classified__label {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 32;
+  font-weight: 600;
+  font-size: var(--v1-text-lg);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.v1-classified__support {
+  display: block;
+  margin-top: var(--v1-s3);
+  padding-top: var(--v1-s3);
+  border-top: 1px solid var(--v1-rule);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  line-height: 1.45;
+  color: var(--v1-ink-2);
+}
+
+.v1-classified--sm {
+  padding: var(--v1-s2) var(--v1-s3);
+  border-top-width: 3px;
+}
+
+.v1-classified--sm .v1-classified__label {
+  font-variation-settings: "opsz" 20;
+  font-size: var(--v1-text-sm);
+}
+
+/* Section index links in the masthead. A hairline at rest so they read as
+   links without hover, ink growing over it on hover and focus. */
+.v1-navlink {
+  display: inline-block;
+  padding-block: var(--v1-s1);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v1-ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--v1-rule);
+}
+
+.v1-navlink:hover {
+  color: var(--v1-ink);
+}
+
+/* --------------------------------------------------------------- 7. motion */
+
+/* Three primitives, and nothing else moves on this page.
+
+   entrance  .v1-reveal     an 8px rise mapped to scroll position, so nothing
+                            animates on load
+   hover     .v1-underline  a rule grows left to right under the label
+   scroll    .v1-draw       line art inks itself in via stroke-dashoffset
+
+   Rule for both scroll primitives: motion may change how finished a thing
+   looks, never whether it is there. A scroll driven animation reads its
+   progress from the real scroll position, and a full page screenshot is taken
+   at scroll 0 without scrolling, so anything hidden below the fold is hidden in
+   the screenshot too. Verification for this project is those screenshots, so:
+
+     - the entrance moves, it does not fade. Below the fold it sits 8px low,
+       which is invisible in a capture and legible to a reader.
+     - drawn figures ship a static underlay in rule colour with the inked line
+       drawn over it, so an undrawn figure reads as pencil, never as missing.
+
+   Both are declared inside @supports and inside a no-preference query, so a
+   browser without scroll driven animations and a reader who asked for reduced
+   motion both get the finished state with nothing moved and nothing hidden. */
+
+@keyframes v1-reveal {
+  from {
+    transform: translateY(8px);
+    animation-timing-function: var(--v1-ease-out);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes v1-draw {
+  from {
+    stroke-dashoffset: 100;
+    animation-timing-function: var(--v1-ease-out);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The pencil underlay. Always drawn, never animated. */
+.v1-draw__under {
+  stroke: var(--v1-rule);
+  fill: none;
+}
+
+.v1-draw__ink {
+  stroke: currentColor;
+  fill: none;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .v1-reveal {
+      animation-name: v1-reveal;
+      animation-duration: auto;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      /* Ranges are measured in `entry`, whose length is the element itself
+         rather than the viewport. That keeps progress independent of window
+         height, and it means anything already fully on screen is already
+         finished, including on a page too short to scroll. */
+      animation-range: entry 0% entry 40%;
+    }
+
+    /* For the line art figures later sections bring: mark the finished
+       strokes .v1-draw__ink and give each one pathLength="100" so a single
+       dash length works at any rendered width, and repeat the same geometry
+       as .v1-draw__under so the figure is never missing, only unfinished.
+       Use it only inside a section on a page long enough to scroll: a scroll
+       driven draw sitting on a screen that cannot scroll freezes part way. */
+    .v1-draw__ink {
+      stroke-dasharray: 100;
+      animation-name: v1-draw;
+      animation-duration: auto;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+.v1-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.v1-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.14em;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--v1-dur-hover) var(--v1-ease-out);
+}
+
+.v1-underline:hover::after,
+.v1-underline:focus-visible::after,
+.v1-classified:hover .v1-underline::after,
+.v1-classified:focus-visible .v1-underline::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v1-underline::after {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------- 8. masthead */
+
+/* The nameplate, the dateline and the index of what is on the page. Its
+   horizontal rules run to the screen edge while its content stops at the
+   content cap, so a 2560px window reads as a wide page margin. */
+
+.v1-masthead__rail {
+  padding-block: var(--v1-s2);
+}
+
+@media (max-width: 25rem) {
+  .v1-masthead__revised {
+    display: none;
+  }
+}
+
+.v1-masthead__name {
+  padding-block: var(--v1-s5) var(--v1-s4);
+}
+
+.v1-masthead__lockup {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1.4vw, 0.9rem);
+}
+
+.v1-masthead__mark {
+  flex: none;
+  inline-size: clamp(1.5rem, 3vw, 2.375rem);
+  block-size: auto;
+  color: var(--v1-accent);
+}
+
+.v1-masthead__deck {
+  margin-top: var(--v1-s3);
+  font-family: var(--font-sans);
+  font-size: var(--v1-text-xs);
+  letter-spacing: 0.03em;
+  color: var(--v1-ink-2);
+  text-wrap: balance;
+}
+
+@media (min-width: 45rem) {
+  .v1-masthead__name {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+.v1-masthead__indexbar {
+  border-top: 1px solid var(--v1-ink);
+  border-bottom: 1px solid var(--v1-rule);
+}
+
+.v1-masthead__index {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--v1-s4);
+  padding-block: var(--v1-s2);
+}
+
+/* Scrolls sideways instead of collapsing behind a menu button. */
+.v1-masthead__list {
+  display: flex;
+  align-items: center;
+  gap: var(--v1-s5);
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.v1-masthead__list::-webkit-scrollbar {
+  display: none;
+}
+
+.v1-masthead__list > li {
+  flex: none;
+}
+
+.v1-masthead__cta {
+  flex: none;
+}
+
+/* ----------------------------------------------------------------- 9. hero */
+
+.v1-hero {
+  position: relative;
+  padding-top: var(--v1-section-y);
+}
+
+/* Sits above the column rules, which are absolutely positioned behind it. */
+.v1-hero__inner {
+  position: relative;
+}
+
+.v1-hero__head {
+  margin-top: var(--v1-s4);
+}
+
+.v1-hero__deck {
+  margin-top: var(--v1-s5);
+}
+
+.v1-hero__ledger {
+  margin-top: var(--v1-s5);
+  max-width: 34rem;
+}
+
+.v1-hero__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-s6);
+}
+
+.v1-hero__folio {
+  margin-top: var(--v1-section-y);
+}
+
+/* One column layouts run tighter, so the CTA still clears the fold on a
+   360x780 phone with the masthead above it. */
+@media (max-width: 45rem) {
+  .v1-masthead__name {
+    padding-block: var(--v1-s4) var(--v1-s3);
+  }
+
+  .v1-grid {
+    row-gap: var(--v1-s5);
+  }
+
+  .v1-hero__ledger {
+    margin-top: var(--v1-s4);
+  }
+}
+
+/* Broadsheet layout: the lead story in eight columns, the paid notice and the
+   client's words in the outer four. Repeat of the grid query in section 3. */
+@media (min-width: 1024px), (min-width: 720px) and (max-height: 560px) {
+  .v1-hero__story {
+    grid-column: 1 / span 8;
+  }
+
+  .v1-hero__rail {
+    grid-column: 9 / span 4;
+  }
+}
+
+/* On a full width screen the lead story is much taller than the outer column,
+   so the notice is set to the top of the column and the quote to the foot of
+   it, and the two columns end on the same rule instead of leaving the outer
+   one trailing off into blank paper. */
+@media (min-width: 1024px) {
+  .v1-hero__rail {
+    justify-content: space-between;
+  }
+}

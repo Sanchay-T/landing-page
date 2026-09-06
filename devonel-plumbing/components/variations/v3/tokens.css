@@ -1,0 +1,788 @@
+/* ===========================================================================
+   Variation 3 - Nightshift. The whole design system in one file.
+
+   Everything is scoped under `.v3`, so importing this file cannot leak into
+   another variation and a later tweak to colour, type, space, grid or motion is
+   one edit here rather than a sweep through sections.
+
+   Direction is pinned by docs/goal/03-design-research.md section 4:
+   dark only, `#07080a` base, warm amber highlight, cold blue for water, 8%
+   white hairlines, a high contrast serif display over Geist body, a full-bleed
+   16:9 film frame, then a 6 column content grid with 160px section gaps.
+   Images bleed. Text stays in a 45rem measure.
+
+   Runway was unavailable on this run (docs/goal/ASSET-QUEUE.md), so the moving
+   image is the documented fallback: a real dark editorial product render under
+   a dark scrim, a CSS mesh gradient, a masked god ray band, and an SVG
+   feTurbulence grain. Nothing here is a placeholder; the video slot is an empty
+   <video> that shows its poster until a src is added.
+
+   Sections in this file
+     1. tokens      colour, type, space, radius, glow, motion
+     2. base        the .v3 surface, element reset, focus, selection
+     3. layout      shell, full bleed, the 6 column content grid
+     4. type roles  display, lead, body, eyebrow, caption
+     5. components  the pill, the hairline, the anchor link
+     6. motion      one entrance, one hover, one scroll primitive
+     7. hero        the film frame and its layers
+     8. nav         the floating bar
+   =========================================================================== */
+
+/* --------------------------------------------------------------- 1. tokens */
+
+.v3 {
+  /* Colour. Dark only: there is no light mode in this direction, so no token
+     below has a second value and no section needs a media query for theme. */
+  --v3-base: #07080a; /* the ground, and the only page background */
+  --v3-base-lift: #0b0d11; /* a panel that must read as raised, one step only */
+  --v3-amber: #e0a24a; /* the warm highlight: CTA, rules that carry meaning */
+  --v3-cold: #6f8fff; /* the cold counterpoint, used at low alpha in light only */
+  --v3-line: rgb(255 255 255 / 0.08); /* the hairline, 8% white */
+  --v3-line-strong: rgb(255 255 255 / 0.18); /* a hairline that has to be seen */
+
+  /* Text ramp. Every tier measured against --v3-base:
+       ink        #f4f2ee  17.9:1
+       ink-2      #c9ccd2  12.5:1
+       ink-muted  #a8adb6   8.9:1  <- the AA safe muted tier, body legal
+     Nothing dimmer than ink-muted is allowed to carry a sentence. The muted
+     tier is set two steps above the 4.5:1 line on purpose: over the hero plate
+     the ground is a photograph plus an amber mesh, not the flat base, and it
+     was measured at 4.6:1 there against the brightest pixel under the type. */
+  --v3-ink: #f4f2ee;
+  --v3-ink-2: #c9ccd2;
+  --v3-ink-muted: #a8adb6;
+  /* Ink for anything sitting on the amber pill. 9.0:1 on #e0a24a. */
+  --v3-on-amber: #07080a;
+
+  /* Type. Two families, both already in the project budget:
+       Fraunces via --font-serif for display, Geist via --font-sans for the rest.
+     Fraunces is the point of the direction, so it is set at a display optical
+     size where the thick/thin contrast is at its highest. */
+  --v3-font-display: var(--font-serif);
+  --v3-font-body: var(--font-sans);
+  --v3-opsz-display: 144; /* the display cut: highest stroke contrast */
+  --v3-opsz-text: 14; /* the text cut: opened up, for anything under 24px */
+
+  /* Display runs 96px at a 1280 laptop to 160px on a wide desktop and clamps
+     down to 40px on a 360 phone, where four lines is the ceiling. */
+  --v3-size-display: clamp(2.5rem, 8vw, 10rem);
+  --v3-size-lead: clamp(1.0625rem, 0.86rem + 0.85vw, 1.4375rem);
+  --v3-size-body: clamp(1rem, 0.95rem + 0.2vw, 1.0625rem);
+  --v3-size-small: 0.8125rem;
+  --v3-size-caption: 0.75rem;
+
+  --v3-leading-display: 0.96;
+  --v3-leading-lead: 1.45;
+  --v3-leading-body: 1.65;
+  --v3-tracking-display: -0.022em;
+  --v3-tracking-body: 0.005em;
+
+  /* Measure. Fraunces makes `ch` about a quarter too wide, so every measure on
+     this page is a rem value, never a ch value. 45rem is the 720px measure the
+     direction asks for. */
+  --v3-measure: 45rem;
+  --v3-measure-tight: 34rem;
+
+  /* Space. Section gaps run 80px on a phone to 160px on a desktop. */
+  --v3-space-section: clamp(5rem, 2.29rem + 7.14vw, 10rem);
+  --v3-space-block: clamp(2rem, 1.46rem + 1.43vw, 3rem);
+  --v3-gutter: clamp(1.25rem, 0.68rem + 1.52vw, 3rem);
+  --v3-shell: 82.5rem; /* 1320px: the content shell below the hero */
+  --v3-shell-hero: 90rem; /* 1440px: the film frame gets a wider title block */
+
+  /* Radius. Large pills for the CTA, and nothing else on the page is rounded. */
+  --v3-radius-pill: 999px;
+
+  /* Glow. This is the only variation allowed a glow, and it is always a soft
+     low alpha halo in amber or cold blue, never a grey drop shadow. */
+  --v3-glow-amber: 0 0 0 1px rgb(224 162 74 / 0.34), 0 0.75rem 2.5rem -0.75rem rgb(224 162 74 / 0.4);
+  --v3-glow-amber-strong: 0 0 0 1px rgb(224 162 74 / 0.6),
+    0 1rem 3.5rem -0.5rem rgb(224 162 74 / 0.66);
+  --v3-glow-cold: 0 0 0 1px rgb(111 143 255 / 0.28), 0 0.75rem 2.5rem -0.75rem rgb(111 143 255 / 0.34);
+
+  /* Motion. Three primitives, no more: one entrance, one hover, one scroll.
+     The entrance never starts from zero opacity, so nothing on this page is
+     ever missing from the DOM's painted state. */
+  --v3-ease: cubic-bezier(0.22, 0.61, 0.24, 1);
+  --v3-dur-enter: 900ms;
+  --v3-dur-hover: 320ms;
+  --v3-opacity-floor: 0.6;
+
+  /* Film grain. SVG feTurbulence, desaturated, tiled at 220px so a 2560 wide
+     frame costs one small filter instead of a full-viewport one. */
+  --v3-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+  --v3-grain-opacity: 0.05;
+
+  /* The floating bar reserves its own height so the hero can clear it. */
+  --v3-nav-h: 5.5rem; /* two rows: brand + CTA, then the anchor scroller */
+}
+
+@media (min-width: 73rem) {
+  .v3 {
+    --v3-nav-h: 4rem; /* one row */
+  }
+}
+
+/* Short viewports (phone landscape at 844x390 is the worst case) get a smaller
+   display and tighter rhythm so the CTA stays above the fold. */
+@media (max-height: 32rem) {
+  .v3 {
+    --v3-size-display: clamp(1.75rem, 3.9vw, 2.75rem);
+    --v3-size-lead: 0.9375rem;
+    --v3-space-block: 1rem;
+  }
+}
+
+/* ----------------------------------------------------------------- 2. base */
+
+.v3 {
+  color-scheme: dark;
+  background-color: var(--v3-base);
+  color: var(--v3-ink);
+  font-family: var(--v3-font-body);
+  font-size: var(--v3-size-body);
+  line-height: var(--v3-leading-body);
+  letter-spacing: var(--v3-tracking-body);
+  font-variation-settings: "opsz" var(--v3-opsz-text);
+  /* The page is dark from the first paint, including the area past the end of
+     the document on a short page. */
+  min-height: 100svh;
+  overflow-x: clip;
+}
+
+/* Element resets use :where() so they carry zero specificity and any component
+   class below wins without an override war. */
+.v3 :where(h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd) {
+  margin: 0;
+}
+
+.v3 :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+.v3 :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.v3 :where(img, video, svg) {
+  display: block;
+  max-width: 100%;
+}
+
+.v3 :where(section[id], footer[id]) {
+  /* Anchor jumps must land below the floating bar, not under it. */
+  scroll-margin-top: var(--v3-nav-h);
+}
+
+.v3 :where(:focus-visible) {
+  outline: 2px solid var(--v3-amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.v3 ::selection {
+  background: var(--v3-amber);
+  color: var(--v3-on-amber);
+}
+
+/* --------------------------------------------------------------- 3. layout */
+
+/* The shell every section below the hero sits in. */
+.v3-shell {
+  width: 100%;
+  max-width: var(--v3-shell);
+  margin-inline: auto;
+  padding-inline: var(--v3-gutter);
+}
+
+/* The 6 column content grid. Images may span the full six and bleed past the
+   shell; running text never leaves the 45rem measure. */
+.v3-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--v3-gutter);
+  row-gap: var(--v3-space-block);
+}
+
+@media (min-width: 48rem) {
+  .v3-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Anything that must run edge to edge inside a shell-padded parent. */
+.v3-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+}
+
+/* The measure. Used on every paragraph of running text on the page. */
+.v3-measure {
+  max-width: var(--v3-measure);
+}
+
+/* ------------------------------------------------------------ 4. type roles */
+
+.v3-display {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" var(--v3-opsz-display);
+  font-weight: 400;
+  font-size: var(--v3-size-display);
+  line-height: var(--v3-leading-display);
+  letter-spacing: var(--v3-tracking-display);
+  text-wrap: balance;
+}
+
+.v3-lead {
+  font-size: var(--v3-size-lead);
+  line-height: var(--v3-leading-lead);
+  color: var(--v3-ink-2);
+  text-wrap: pretty;
+}
+
+.v3-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--v3-size-small);
+  line-height: 1.3;
+  /* One step above the muted tier: on the hero this line sits high in the frame
+     where the plate is at its lightest, and measured against the brightest
+     pixel under it the muted tier fell to 3.95:1 there. */
+  color: var(--v3-ink-2);
+}
+
+/* The rule that opens the eyebrow. It is the one place amber appears as a
+   line, so it reads as the studio's mark on the sentence rather than as
+   decoration. */
+.v3-eyebrow::before {
+  content: "";
+  flex: none;
+  width: 1.75rem;
+  height: 1px;
+  background: var(--v3-amber);
+}
+
+.v3-caption {
+  font-size: var(--v3-size-caption);
+  line-height: 1.55;
+  color: var(--v3-ink-muted);
+}
+
+/* ------------------------------------------------------------ 5. components */
+
+/* The CTA. The only pill on the page and the only glowing thing on it. */
+.v3-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.6875rem 1.625rem;
+  border: 0;
+  border-radius: var(--v3-radius-pill);
+  background: var(--v3-amber);
+  color: var(--v3-on-amber);
+  font-family: var(--v3-font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.002em;
+  white-space: nowrap;
+}
+
+.v3-pill--sm {
+  min-height: 2.25rem;
+  padding: 0.375rem 1.0625rem;
+  font-size: 0.875rem;
+}
+
+/* A hairline that spans whatever it is put in. */
+.v3-rule {
+  height: 1px;
+  border: 0;
+  background: var(--v3-line);
+}
+
+/* ---------------------------------------------------------------- 6. motion */
+
+/* 6a. Entrance. One primitive, used everywhere something arrives.
+   It starts at a visible 0.6 opacity, never at 0, so a screenshot taken mid
+   animation still shows the whole page. Motion here changes how finished the
+   page looks, never whether a thing is there. */
+@keyframes v3-enter {
+  from {
+    opacity: var(--v3-opacity-floor);
+    transform: translate3d(0, 0.75rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.v3-enter {
+  animation: v3-enter var(--v3-dur-enter) var(--v3-ease) both;
+  animation-delay: var(--v3-enter-delay, 0ms);
+}
+
+/* 6b. Hover. One primitive: the glow intensifies. No lift, no colour change,
+   no scale, so a pointer and a keyboard get the same signal. */
+.v3-glow {
+  box-shadow: var(--v3-glow-amber);
+  transition: box-shadow var(--v3-dur-hover) var(--v3-ease);
+}
+
+.v3-glow:hover,
+.v3-glow:focus-visible {
+  box-shadow: var(--v3-glow-amber-strong);
+}
+
+/* 6c. Scroll. One primitive: the hero visual drifts and its light crossfades
+   as the first viewport scrolls away. Three beats, no more. It is driven by a
+   scroll timeline, so it costs no scroll listener, it is inert once the hero
+   is off screen, and at scroll 0 every layer is already at full visibility,
+   which is what a full page screenshot captures. */
+@keyframes v3-plate-drift {
+  from {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(0, -3.5%, 0);
+  }
+}
+
+@keyframes v3-mesh-beats {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1.02);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate3d(-2%, -3%, 0) scale(1.07);
+  }
+  100% {
+    opacity: 0.94;
+    transform: translate3d(1.5%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes v3-rays-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(6%, -9%, 0);
+    opacity: 0.72;
+  }
+}
+
+.v3-scroll {
+  animation-duration: auto;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  animation-timeline: scroll(root block);
+  animation-range: 0 100svh;
+}
+
+/* Which keyframes each layer of the film frame runs on that one timeline.
+   Every `from` here is also that layer's static transform in section 7, so a
+   browser without scroll timelines, and a reader who asked for reduced motion,
+   both land on exactly the frame a reader sees while the hero is in view. */
+.v3-hero__media.v3-scroll {
+  animation-name: v3-plate-drift;
+}
+
+.v3-hero__mesh.v3-scroll {
+  animation-name: v3-mesh-beats;
+}
+
+.v3-hero__rays.v3-scroll {
+  animation-name: v3-rays-drift;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Nothing disappears and nothing moves. The entrance holds its finished
+     state; the scroll layers fall back to the static transform each one carries
+     in section 7, which is their scroll-0 frame. */
+  .v3-enter,
+  .v3-scroll {
+    animation-name: none !important;
+    animation-timeline: auto !important;
+    opacity: 1;
+  }
+
+  .v3-glow {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ 7. hero */
+
+.v3-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* A film frame, not a screen filler. 16:9 where there is room, never 100vh,
+     never taller than 90svh, and always at least 60svh so it reads as a frame
+     rather than a banner. Because it is a min-height the content can push it
+     taller, so no line is ever cut off. */
+  min-height: max(60svh, min(90svh, 56.25vw));
+  padding-block: calc(var(--v3-nav-h) + var(--v3-space-block)) var(--v3-space-block);
+  overflow: clip;
+}
+
+/* 7a. the plate: every layer of the film frame, in paint order. */
+.v3-hero__plate {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  background: var(--v3-base);
+}
+
+.v3-hero__media {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.06);
+  will-change: transform;
+}
+
+.v3-hero__media :where(img, video) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 46%;
+}
+
+/* The real still is the bottom plate: priority loaded and responsive, so the
+   frame is painted even in a first-viewport capture. */
+.v3-hero__still {
+  z-index: 0;
+}
+
+/* The queued Runway loop sits on top of the still and shows the same frame as
+   its poster until a src lands. See docs/goal/ASSET-QUEUE.md slot V3-01. */
+.v3-hero__video {
+  z-index: 1;
+}
+
+/* The dark overlay. The still runs at about 40% brightness at the top of the
+   frame and goes almost to black where the type sits, so every line below
+   clears AA against the base colour rather than against a photograph. */
+.v3-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(
+      to top,
+      rgb(7 8 10 / 0.97) 0%,
+      rgb(7 8 10 / 0.95) 22%,
+      rgb(7 8 10 / 0.88) 52%,
+      rgb(7 8 10 / 0.71) 78%,
+      rgb(7 8 10 / 0.57) 100%
+    ),
+    radial-gradient(125% 90% at 50% 30%, rgb(7 8 10 / 0) 20%, rgb(7 8 10 / 0.66) 100%);
+}
+
+/* The mesh gradient: two amber pools and one cold blue, all at low alpha,
+   screened over the still so they read as light in the room, not as a filter. */
+.v3-hero__mesh {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    radial-gradient(58% 68% at 12% 84%, rgb(224 162 74 / 0.34), transparent 68%),
+    radial-gradient(48% 60% at 86% 16%, rgb(111 143 255 / 0.24), transparent 70%),
+    radial-gradient(78% 92% at 62% 112%, rgb(224 162 74 / 0.16), transparent 74%);
+  mix-blend-mode: screen;
+  /* The scroll-0 frame of v3-mesh-beats, so nothing shifts when the timeline
+     attaches and nothing is missing when it cannot. */
+  transform: scale(1.02);
+  will-change: transform, opacity;
+}
+
+/* The god rays: one rotated band of parallel light shafts, masked to a soft
+   pool near the top left so the frame has a source. */
+.v3-hero__rays {
+  position: absolute;
+  inset: -35%;
+  z-index: 4;
+  /* Two periods at slightly different angles, each ramping in and out with no
+     hard stop, so the shafts read as light rather than as printed stripes. */
+  background:
+    repeating-linear-gradient(
+      101deg,
+      rgb(255 246 228 / 0) 0,
+      rgb(255 246 228 / 0.055) 2.6rem,
+      rgb(255 246 228 / 0) 5.4rem
+    ),
+    repeating-linear-gradient(
+      97deg,
+      rgb(255 246 228 / 0) 0,
+      rgb(255 246 228 / 0.032) 1.1rem,
+      rgb(255 246 228 / 0) 3.9rem
+    );
+  -webkit-mask-image: radial-gradient(58% 74% at 24% 8%, #000 0%, transparent 72%);
+  mask-image: radial-gradient(58% 74% at 24% 8%, #000 0%, transparent 72%);
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+/* The type shelf. The mesh and the rays are painted over the scrim, so they
+   lift the ground wherever their light pools, including under the small text at
+   the bottom of the card. This last fade goes over both of them and takes the
+   lower half back down, which is what keeps every line at AA without dimming
+   the picture in the top half of the frame. */
+.v3-hero__plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  background: linear-gradient(
+    to top,
+    rgb(7 8 10 / 0.6) 0%,
+    rgb(7 8 10 / 0.3) 22%,
+    rgb(7 8 10 / 0) 48%
+  );
+  pointer-events: none;
+}
+
+.v3-hero__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background-image: var(--v3-grain);
+  background-size: 220px 220px;
+  opacity: var(--v3-grain-opacity);
+  pointer-events: none;
+}
+
+/* 7b. the title card. Bottom aligned, left set, ragged right. */
+.v3-hero__inner {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  max-width: var(--v3-shell-hero);
+  margin-inline: auto;
+  padding-inline: var(--v3-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--v3-space-block);
+}
+
+/* No max-width here on purpose: the hero shell already caps the line at 1440px,
+   which is where the display size stops growing, so the headline breaks into
+   two or three lines on every width without a second measure to keep in sync. */
+.v3-hero__title {
+  margin-top: 0.75rem;
+}
+
+.v3-hero__lead {
+  max-width: var(--v3-measure);
+}
+
+.v3-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem 1.25rem;
+}
+
+.v3-hero__support {
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+}
+
+/* 7c. the proof line, on the hero's baseline rule, full bleed. */
+.v3-hero__proof {
+  position: relative;
+  z-index: 6;
+  margin-top: var(--v3-space-block);
+  border-top: 1px solid var(--v3-line);
+  padding-top: 0.875rem;
+}
+
+.v3-hero__proof-inner {
+  width: 100%;
+  max-width: var(--v3-shell-hero);
+  margin-inline: auto;
+  padding-inline: var(--v3-gutter);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem 2.5rem;
+}
+
+.v3-hero__dates {
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-2);
+  font-variant-numeric: lining-nums;
+}
+
+.v3-hero__quote {
+  flex: 1 1 22rem;
+  font-size: var(--v3-size-small);
+  color: var(--v3-ink-muted);
+  text-wrap: pretty;
+}
+
+.v3-hero__quote-said {
+  font-weight: 400;
+  color: var(--v3-ink-2);
+}
+
+@media (min-width: 64rem) {
+  .v3-hero__proof-inner {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .v3-hero__quote {
+    flex: 0 1 auto;
+    text-align: right;
+  }
+}
+
+/* ------------------------------------------------------------------- 8. nav */
+
+.v3-nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 30;
+  background: rgb(7 8 10 / 0.62);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border-bottom: 1px solid var(--v3-line);
+}
+
+.v3-nav__bar {
+  width: 100%;
+  max-width: var(--v3-shell-hero);
+  margin-inline: auto;
+  padding-inline: var(--v3-gutter);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "brand cta"
+    "anchors anchors";
+  align-items: center;
+  column-gap: 1rem;
+}
+
+.v3-nav__brand {
+  grid-area: brand;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5625rem;
+  height: 3.25rem;
+  color: var(--v3-ink);
+}
+
+.v3-nav__mark {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--v3-ink);
+  flex: none;
+}
+
+.v3-nav__wordmark {
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 36;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.v3-nav__cta {
+  grid-area: cta;
+  justify-self: end;
+}
+
+.v3-nav__anchors {
+  grid-area: anchors;
+  min-width: 0;
+  /* The row scrolls sideways rather than wrapping or truncating: every label
+     keeps `white-space: nowrap`, so no label is ever broken across lines or cut
+     with an ellipsis, and each one snaps to the gutter when scrolled. The mask
+     softens the right edge into the bar instead of chopping the label that runs
+     past it, which is also the affordance that says the row scrolls. It stays
+     on at every width because the anchor list grows as sections land. */
+  margin-inline: calc(-1 * var(--v3-gutter));
+  /* Room for a focus ring inside a scroll container, taken back out again so
+     the bar keeps its height. */
+  padding-block: 0.5rem;
+  margin-block: -0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--v3-gutter);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
+}
+
+.v3-nav__anchors::-webkit-scrollbar {
+  display: none;
+}
+
+.v3-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 1.375rem;
+  padding-inline: var(--v3-gutter);
+  padding-bottom: 0.625rem;
+  width: max-content;
+}
+
+.v3-nav__link {
+  scroll-snap-align: start;
+  display: block;
+  white-space: nowrap;
+  font-size: var(--v3-size-small);
+  line-height: 1.2;
+  color: var(--v3-ink-muted);
+  transition: color var(--v3-dur-hover) var(--v3-ease);
+}
+
+.v3-nav__link:hover,
+.v3-nav__link:focus-visible {
+  color: var(--v3-ink);
+}
+
+/* One row from 1168px up. Below that the anchors get their own row: the ten
+   canonical labels need about 815px of their own, and folding earlier would
+   push them into the CTA. */
+@media (min-width: 73rem) {
+  .v3-nav__bar {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "brand anchors cta";
+    column-gap: 2rem;
+  }
+
+  .v3-nav__brand {
+    height: 4rem;
+  }
+
+  .v3-nav__anchors {
+    margin-inline: 0;
+  }
+
+  .v3-nav__list {
+    padding-inline: 0;
+    padding-bottom: 0;
+    gap: clamp(1rem, 1.6vw, 1.75rem);
+  }
+}

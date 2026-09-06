@@ -1,0 +1,825 @@
+/* ---------------------------------------------------------------------------
+   Variation 2 - Terminal. The whole design system, scoped to `.v2`.
+
+   One family, three sizes, five colours, no images. Everything on the page is
+   type: rules are runs of "-", the section index is an ASCII file tree, the
+   caret is a 1ch block. Nothing here may be an <img> or a background image.
+
+   Dark only on purpose. This direction has no light mode: a shell session that
+   flips to paper is a different idea, so there is no `prefers-color-scheme`
+   branch to keep in sync.
+
+   Reading order of this file:
+     1  tokens        colour, type, spacing, motion
+     2  reset         element-level, all wrapped in :where() so classes win
+     3  grid          shell, rail offset, 80ch measure, full-width rules
+     4  primitives    print (entrance), inverse video (hover), meter (scroll)
+     5  components    nav rail / top strip, hero
+     6  reduced motion
+
+   Two rules that bit this project already and still apply here:
+     - element resets go through :where(), or a component class loses to a bare
+       tag selector and the spacing collapses;
+     - motion may change how finished a thing looks, never whether it is there.
+       No opacity-0 initial state exists in this file. `v2-print` moves type a
+       fraction of a line; a screenshot caught mid-animation is still readable.
+
+   `ch` and `lh` spacing caveat: a custom property is substituted at the point
+   of use, so `3ch` measures against the font-size of the element it lands on.
+   Every spacing token here is applied to an element sitting at --v2-t-2 or
+   --v2-t-1. Keep it that way.
+   --------------------------------------------------------------------------- */
+
+.v2 {
+  /* -- colour ------------------------------------------------------------
+     Contrast measured against --v2-ink:
+       --v2-text    15.8:1   body and headings
+       --v2-dim      5.6:1   secondary text, clears AA at every size
+       --v2-accent  10.0:1   caret, live counters, CTA. Nothing else.
+       --v2-rule     1.7:1   dashed rules and hairlines only, never text.
+     The accent budget is the point of the palette. If a third thing turns
+     green the page stops pointing at the CTA. */
+  --v2-ink: #0b0b0b;
+  --v2-text: #e8e6df;
+  --v2-dim: #8b8880;
+  --v2-rule: #3f3d39;
+  --v2-accent: #38d27a;
+
+  /* -- type --------------------------------------------------------------
+     One family and exactly three sizes. Adding a fourth is a direction
+     change, not a styling tweak. */
+  --v2-t-1: 0.8125rem; /* 13px, fixed: prompts, status lines, chrome */
+  --v2-t-2: clamp(0.875rem, 0.8rem + 0.32vw, 1rem); /* 14 -> 16px, body */
+  --v2-t-3: clamp(1.375rem, 1.02rem + 1.55vw, 2.5rem); /* 22 -> 40px, display */
+  --v2-lh: 1.6;
+  --v2-lh-tight: 1.15;
+
+  /* -- spacing -----------------------------------------------------------
+     Across the page in `ch`, down the page in `lh`, because a monospace grid
+     already has both units and they stay true when the type scales. */
+  --v2-gut: 3ch;
+  --v2-measure: 80ch;
+  --v2-rail-w: 13rem;
+  --v2-frame: calc(var(--v2-measure) + var(--v2-gut) * 2);
+  --v2-pad-y: 2lh;
+  --v2-block: 1lh;
+
+  /* -- motion ------------------------------------------------------------
+     steps() only. No easing curve appears anywhere in this file. */
+  --v2-step-print: steps(3, end);
+  --v2-step-swap: steps(2, end);
+  --v2-step-meter: steps(12, end);
+  --v2-dur-print: 240ms;
+  --v2-dur-swap: 90ms;
+  --v2-print-stagger: 90ms;
+
+  /* -- the rule run ------------------------------------------------------
+     One long string of "-" that every full-width rule pulls from, so the
+     character is a one-line edit. Long enough to cross 2560px at 13px mono. */
+  --v2-rule-run: "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+
+  /* radius 0, shadow none, no gradient: there is nothing to declare. */
+}
+
+/* --------------------------------------------------------------- 1. ground */
+
+.v2 {
+  position: relative;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  background-color: var(--v2-ink);
+  color: var(--v2-text);
+  color-scheme: dark;
+  font-family: var(--font-mono);
+  font-size: var(--v2-t-2);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  line-height: var(--v2-lh);
+}
+
+/* The body under this page is the shared light surface. Paint the whole canvas
+   so overscroll, a short page and a full-height screenshot are all ink. */
+.v2::before {
+  position: fixed;
+  z-index: -1;
+  background-color: var(--v2-ink);
+  content: "";
+  inset: 0;
+}
+
+/* ---------------------------------------------------------------- 2. reset */
+
+.v2 :where(h1, h2, h3, p, ul, ol, li, figure, blockquote, pre) {
+  margin: 0;
+  padding: 0;
+}
+
+.v2 :where(ul, ol) {
+  list-style: none;
+}
+
+.v2 :where(a) {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+}
+
+/* The shared focus ring is near-black and would vanish on ink. */
+.v2 :focus-visible {
+  outline: 2px solid var(--v2-accent);
+  outline-offset: 3px;
+}
+
+/* ----------------------------------------------------------------- 3. grid */
+
+.v2-shell {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.v2-main {
+  position: relative;
+  flex: 1;
+}
+
+/* The measure: 80 characters of body type, centred, with a gutter either side
+   that is itself measured in characters. */
+.v2-measure {
+  width: 100%;
+  max-width: var(--v2-frame);
+  margin-inline: auto;
+  padding-inline: var(--v2-gut);
+  font-size: var(--v2-t-2);
+}
+
+.v2-section > .v2-measure {
+  padding-block: var(--v2-pad-y);
+}
+
+/* Full-width rule with the section name set into it, the only divider in the
+   system. Edge to edge on purpose: at 2560 the centred measure would otherwise
+   float in the middle of nothing, and this rule plus the rail bound the page.
+   Reused by every later section: one <div class="v2-rule" data-label="...">. */
+.v2-rule {
+  display: flex;
+  overflow: hidden;
+  align-items: baseline;
+  color: var(--v2-rule);
+  font-size: var(--v2-t-1);
+  line-height: 1.5;
+  user-select: none;
+  white-space: pre;
+}
+
+.v2-rule::before {
+  padding-inline-start: var(--v2-gut);
+  color: var(--v2-dim);
+  content: "--[ " attr(data-label) " ]";
+  flex: none;
+}
+
+.v2-rule::after {
+  overflow: hidden;
+  content: var(--v2-rule-run);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Past 1440 the measure is a small share of the viewport, so two hairlines run
+   the height of the buffer and tie the full-width rules above and below it
+   together. 1px lines in rule colour, no image and no gradient. */
+@media (min-width: 1440px) {
+  .v2-main::before,
+  .v2-main::after {
+    position: absolute;
+    width: 1px;
+    background-color: var(--v2-rule);
+    content: "";
+    inset-block: 0;
+  }
+
+  .v2-main::before {
+    left: calc(50% - var(--v2-frame) / 2);
+  }
+
+  .v2-main::after {
+    right: calc(50% - var(--v2-frame) / 2);
+  }
+}
+
+/* From 1024 the rail is fixed to the left edge, so the page body moves over by
+   its width. Below that the rail is a top strip and takes no horizontal room. */
+@media (min-width: 1024px) {
+  .v2-shell {
+    padding-inline-start: var(--v2-rail-w);
+  }
+}
+
+/* ----------------------------------------------------------- 4. primitives */
+
+/* Entrance. Blocks step up into place like lines printing to a buffer. No
+   opacity is animated, so the text is legible at every frame, in a screenshot,
+   and with JavaScript off. */
+@keyframes v2-print {
+  from {
+    transform: translateY(0.5lh);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.v2-print {
+  animation: v2-print var(--v2-dur-print) var(--v2-step-print) both;
+  animation-delay: calc(var(--v2-print-i, 0) * var(--v2-print-stagger));
+}
+
+/* Hover. Inverse video: foreground and background trade places in two frames. */
+.v2-inv {
+  transition:
+    background-color var(--v2-dur-swap) var(--v2-step-swap),
+    color var(--v2-dur-swap) var(--v2-step-swap);
+}
+
+.v2-inv:hover,
+.v2-inv:focus-visible {
+  background-color: var(--v2-text);
+  color: var(--v2-ink);
+}
+
+/* Scroll. A stepped meter in the rail, driven by the document scroll timeline
+   with no JavaScript. Where scroll timelines are unsupported the track still
+   renders and the fill stays at zero, which is its honest state at the top of
+   the page anyway. */
+@keyframes v2-meter {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.v2-meter {
+  position: relative;
+  width: 10ch;
+  height: 2px;
+  flex: none;
+  background-color: var(--v2-rule);
+}
+
+.v2-meter-fill {
+  position: absolute;
+  width: 0%;
+  background-color: var(--v2-text);
+  inset: 0 auto 0 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  .v2-meter-fill {
+    animation: v2-meter linear both;
+    animation-timeline: scroll(root block);
+    animation-timing-function: var(--v2-step-meter);
+  }
+}
+
+/* The caret. A 1ch block that blinks in two steps, and the only place the
+   accent is allowed to move. */
+@keyframes v2-caret {
+  0% {
+    opacity: 1;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.v2-caret {
+  display: inline-block;
+  width: 1ch;
+  height: 1em;
+  animation: v2-caret 1.06s steps(2, jump-none) infinite;
+  background-color: var(--v2-accent);
+  vertical-align: text-bottom;
+}
+
+/* ------------------------------------------------------- 5a. nav rail/strip */
+
+.v2-nav {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--v2-rule);
+  background-color: var(--v2-ink);
+  font-size: var(--v2-t-1);
+  gap: 2ch;
+  line-height: 1.5;
+  padding-block: 0.5rem;
+  padding-inline: var(--v2-gut);
+}
+
+.v2-nav-row {
+  display: flex;
+  overflow-x: auto;
+  align-items: baseline;
+  gap: 2ch;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.v2-nav-row::-webkit-scrollbar {
+  display: none;
+}
+
+.v2-nav-root,
+.v2-nav-branch {
+  display: none;
+}
+
+.v2-nav-tree {
+  display: flex;
+  align-items: baseline;
+  gap: 2ch;
+}
+
+.v2-nav-link {
+  display: inline-block;
+  padding-inline: 0.5ch;
+  color: var(--v2-dim);
+  text-decoration: none;
+}
+
+.v2-nav-link[aria-current] {
+  color: var(--v2-text);
+}
+
+.v2-nav-meter {
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+  color: var(--v2-dim);
+  gap: 1.5ch;
+}
+
+/* The one live counter on the page, so it gets the accent. */
+.v2-nav-count-n {
+  color: var(--v2-accent);
+}
+
+@media (min-width: 1024px) {
+  .v2-nav {
+    position: fixed;
+    inset-block: 0;
+    overflow: hidden auto;
+    align-items: stretch;
+    border-right: 1px solid var(--v2-rule);
+    border-bottom: 0;
+    flex-direction: column;
+    gap: 0;
+    inset-inline-start: 0;
+    padding-block: var(--v2-pad-y);
+    width: var(--v2-rail-w);
+  }
+
+  .v2-nav-row {
+    overflow: visible;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .v2-nav-root {
+    display: block;
+    margin-bottom: 0.5lh;
+    color: var(--v2-dim);
+  }
+
+  .v2-nav-branch {
+    display: inline;
+    color: var(--v2-dim);
+  }
+
+  .v2-nav-tree {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .v2-nav-link {
+    display: block;
+    padding-inline: 0.5ch;
+  }
+
+  .v2-nav-meter {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-block-start: auto;
+    margin-inline-start: 0;
+    gap: 0.4lh;
+    padding-block-start: 2lh;
+  }
+}
+
+/* ---------------------------------------------------------------- 5b. hero */
+
+.v2-prompt {
+  color: var(--v2-dim);
+}
+
+.v2-cmd {
+  font-size: var(--v2-t-1);
+}
+
+.v2-hero-h {
+  margin-block-start: 0.8lh;
+  font-size: var(--v2-t-3);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--v2-lh-tight);
+  text-wrap: pretty;
+}
+
+.v2-hero-body {
+  margin-block-start: 1lh;
+  color: var(--v2-text);
+}
+
+.v2-hero-body + .v2-hero-body {
+  margin-block-start: 0;
+}
+
+.v2-hero-status {
+  margin-block-start: 1lh;
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}
+
+.v2-ok {
+  color: var(--v2-text);
+}
+
+.v2-hero-cta {
+  margin-block-start: 1.4lh;
+}
+
+.v2-cta {
+  display: inline-block;
+  padding-inline: 0.5ch;
+  margin-inline-start: -0.5ch;
+  color: var(--v2-accent);
+  text-decoration: underline;
+}
+
+.v2-cta:hover,
+.v2-cta:focus-visible {
+  background-color: var(--v2-accent);
+  color: var(--v2-ink);
+  text-decoration: none;
+}
+
+.v2-note {
+  margin-block-start: 0.4lh;
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}
+
+.v2-note-link {
+  padding-inline: 0.5ch;
+  margin-inline-start: -0.5ch;
+  text-decoration: underline;
+}
+
+/* Phones. Two characters of side padding instead of three keeps the command
+   line and the CTA prompt on one line each at 360 and 390, which is what a
+   shell would do with the same string. */
+@media (max-width: 480px) {
+  .v2 {
+    --v2-gut: 2ch;
+  }
+}
+
+/* Short viewports: phone landscape at 844x390 is the tightest case in the
+   matrix. The display size folds back to body size and the vertical rhythm
+   halves, so the prompt, the output and the CTA all sit above the fold with no
+   scroll and nothing is hidden to get there. */
+@media (max-height: 480px) {
+  .v2 {
+    --v2-t-3: var(--v2-t-2);
+    --v2-pad-y: 0.5lh;
+  }
+
+  .v2-hero-h {
+    margin-block-start: 0.5lh;
+    font-weight: 600;
+  }
+
+  .v2-hero-body,
+  .v2-hero-status {
+    margin-block-start: 0.5lh;
+  }
+
+  .v2-hero-cta {
+    margin-block-start: 0.8lh;
+  }
+}
+
+/* ------------------------------------------------------- 6. reduced motion */
+
+/* The shared reset already crushes durations. These rules make the resting
+   state explicit rather than accidental: the caret must stay lit, the meter
+   must keep its track, and print must land at zero offset. */
+@media (prefers-reduced-motion: reduce) {
+  .v2 .v2-print {
+    animation: none;
+    transform: none;
+  }
+
+  .v2 .v2-caret {
+    animation: none;
+    opacity: 1;
+  }
+
+  .v2 .v2-inv,
+  .v2 .v2-cta {
+    transition: none;
+  }
+
+  .v2 .v2-meter-fill {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------ 5c. services */
+
+/* dl/dt/dd are not in the reset above because nothing used them until this
+   section. Through :where() so the component classes below still win. */
+.v2 :where(dl, dt, dd) {
+  margin: 0;
+  padding: 0;
+}
+
+.v2-svc-h {
+  margin-block-start: 0.8lh;
+  font-size: var(--v2-t-3);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--v2-lh-tight);
+  text-wrap: pretty;
+}
+
+.v2-svc-sub {
+  margin-block-start: 1lh;
+}
+
+/* The `commands:` header of a help page. Chrome, so it sits at --v2-t-1 with
+   the prompts and the status lines rather than in the body size. */
+.v2-svc-legend {
+  margin-block-start: 1.6lh;
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}
+
+.v2-svc-list {
+  margin-block-start: 0.6lh;
+}
+
+/* One entry: an 18ch name column and the description beside it. 18ch fits the
+   longest name (`product-studios`, 15) and the longest standing-line key
+   (`buy versus build`, 16) with a space after either, so the builds list and
+   the notes under it hang off the same column, which is what makes the two
+   blocks read as one help page.
+
+   The 1ch padding with a matching negative margin is the same trick the CTA
+   uses: the inverse-video block breathes past the text while the text itself
+   stays on the 80ch measure. */
+.v2-svc-entry {
+  display: grid;
+  padding-block: 0.1lh;
+  padding-inline: 1ch;
+  grid-template-columns: 18ch minmax(0, 1fr);
+  margin-inline: -1ch;
+}
+
+.v2-svc-entry + .v2-svc-entry {
+  margin-block-start: 0.5lh;
+}
+
+.v2-svc-name {
+  color: var(--v2-text);
+}
+
+.v2-svc-out {
+  color: var(--v2-text);
+  text-wrap: pretty;
+}
+
+.v2-svc-scope {
+  color: var(--v2-dim);
+  text-wrap: pretty;
+  transition: color var(--v2-dur-swap) var(--v2-step-swap);
+}
+
+/* Inverse video takes the whole entry, so the dim scope lines invert with it.
+   A terminal does not keep a two-tone hierarchy inside a selected block, and
+   --v2-dim on --v2-text would not clear AA if it tried. */
+.v2-svc-entry:hover .v2-svc-scope,
+.v2-svc-entry:focus-within .v2-svc-scope {
+  color: inherit;
+}
+
+/* The three lines that hold for all five builds. Same column, one line each,
+   no hover: they are the footnotes of the help page, not entries in it. */
+.v2-svc-notes .v2-svc-entry + .v2-svc-entry {
+  margin-block-start: 0;
+}
+
+/* Below the point where the description would be squeezed under about 40
+   characters, the name takes its own line and the description wraps under it
+   with a hanging indent, exactly as help output does in a narrow terminal. */
+@media (max-width: 599px) {
+  .v2-svc-entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2-svc-def {
+    padding-inline-start: 2ch;
+  }
+}
+
+/* Short viewports, matching the hero: the display size has already folded back
+   to body size, so the rhythm around it halves too. */
+@media (max-height: 480px) {
+  .v2-svc-h {
+    margin-block-start: 0.5lh;
+    font-weight: 600;
+  }
+
+  .v2-svc-sub {
+    margin-block-start: 0.5lh;
+  }
+
+  .v2-svc-legend {
+    margin-block-start: 1lh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 .v2-svc-scope {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- 5d. work */
+
+/* Case studies as log output. Nothing here is a card: every division is a
+   command line, a hanging marker or a blank line, which is what the direction
+   allows and what a `log` actually looks like.
+
+   Hanging indents are the one rule that matters at 360px. Every block that
+   starts with a marker (`~/devonel $ `, `* `, `-- `, `deps: `, `# `) pays for
+   that marker in `padding-inline-start` and takes it back in a negative
+   `text-indent`, so a wrapped line aligns under the first character of the
+   text and never under the marker. That is why the section needs no horizontal
+   scroll at any width. */
+
+.v2-work-h {
+  font-size: var(--v2-t-3);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--v2-lh-tight);
+  text-wrap: pretty;
+}
+
+/* Spacing hangs off the t-2 blocks, never off the display heading: `lh`
+   resolves against the element it lands on, and 1.5lh of --v2-t-3 is a hole. */
+.v2-work-h + .v2-log {
+  margin-block-start: 1.5lh;
+}
+
+.v2-log + .v2-log {
+  margin-block-start: 2lh;
+}
+
+/* The command that produced the block. 12ch is the width of "~/devonel $ ", so
+   a command too long for a phone wraps under itself rather than under the
+   prompt. */
+.v2-log-cmd {
+  padding-inline-start: 12ch;
+  font-size: var(--v2-t-1);
+  text-indent: -12ch;
+}
+
+.v2-log-title {
+  margin-block-start: 0.6lh;
+  font-size: var(--v2-t-2);
+  font-weight: 600;
+  text-wrap: pretty;
+}
+
+.v2-log-tags {
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}
+
+.v2-log-entries {
+  margin-block-start: 1lh;
+}
+
+/* One entry. The `*` sits in the 2ch hanging column so every body line in the
+   entry, wrapped or not, starts on the same character. */
+.v2-log-e {
+  position: relative;
+  padding-inline-start: 2ch;
+}
+
+.v2-log-e::before {
+  position: absolute;
+  color: var(--v2-dim);
+  content: "*";
+  inset-inline-start: 0;
+}
+
+.v2-log-e + .v2-log-e {
+  margin-block-start: 1lh;
+}
+
+/* Head line: event on the left, date pushed to the right edge of the measure.
+   It wraps to its own line on a phone instead of squeezing the event name. */
+.v2-log-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 2ch;
+  justify-content: space-between;
+}
+
+.v2-log-when {
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}
+
+.v2-log-items > li {
+  padding-inline-start: 3ch;
+  text-indent: -3ch;
+}
+
+.v2-log-items > li::before {
+  color: var(--v2-dim);
+  content: "-- ";
+}
+
+.v2-log-deps {
+  padding-inline-start: 6ch;
+  margin-block-start: 0.5lh;
+  text-indent: -6ch;
+}
+
+.v2-log-key {
+  color: var(--v2-dim);
+}
+
+/* The client's words, prefixed the way the proof strip prefixes them. */
+.v2-log-quote {
+  margin-block-start: 0.5lh;
+}
+
+.v2-log-quote p {
+  padding-inline-start: 2ch;
+  text-indent: -2ch;
+}
+
+.v2-log-quote p::before {
+  color: var(--v2-dim);
+  content: "# ";
+}
+
+.v2-log-quote p + p {
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}
+
+.v2-log-out {
+  margin-block-start: 1lh;
+}
+
+.v2-log-open {
+  padding-inline: 0.5ch;
+  text-decoration: underline;
+}
+
+.v2-log-status {
+  margin-block-start: 1lh;
+  color: var(--v2-dim);
+  font-size: var(--v2-t-1);
+}

@@ -27,6 +27,7 @@ What this means for copy:
 ## How to use this document
 
 Take headline, subhead, body, labels and CTA text verbatim unless the per-variation note says otherwise.
+Round 2 note (2026-09-07): every "Per-variation tone" block below describes the rejected round-1 directions (Broadsheet, Terminal, Nightshift, Swiss Signal, Console). Ignore them. Text stays verbatim; presentation follows 03-design-research.md section 4.
 Alternates are for layout pressure, not for taste; if you use one, use it in that variation only and keep the primary CTA wording unchanged.
 Anything not in this document does not go on the page.
 
@@ -85,7 +86,7 @@ We shipped a name-pendant studio for a bespoke jewellery house in Dubai on the m
 
 **Sources:** spec received 11 Aug 2026 and live 27 Aug 2026, sixteen days [brief 4.1]; shipped the morning of the client's exhibition stall [brief 4.1]; client quote [brief 4.1]; positioning line [brief 9.4]; geography [brief 9.7]; channel [brief 9.9].
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: spell "Sixteen days" and set a dateline above the masthead; the client quote runs as a pull-quote in the right columns.
 - v2 Terminal: numerals, lowercase, terse. Headline as shell output: `devonel --ship pendant-studio` then `> live in 16 days`. CTA is a caret prompt.
 - v3 Nightshift: cut the subhead to its first sentence over the video; the sixteen-day fact fades in as a single line after the loop.
@@ -121,7 +122,7 @@ We shipped a name-pendant studio for a bespoke jewellery house in Dubai on the m
 - A. "Open the case study" - plain and unambiguous where the strip sits directly above the case section.
 - B. "Read the build log" - matches the terminal and console registers and promises detail, not marketing.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: set the counts as a folio row with hairline rules between them; no boxes.
 - v2 Terminal: counts as tabular figures with number-flow counters; testimonial as a quoted line prefixed with `#`.
 - v3 Nightshift: only two counts survive, sixteen days and four renders, fading in over the last second of the hero loop.
@@ -178,7 +179,7 @@ Buy versus build: if you should buy something off the shelf instead, we say so i
 - A. "Tell us which one you need" - removes the blank-page problem for an owner who cannot name the build yet.
 - B. "Get a scope and a price" - reuses the hero alternate so the page keeps one promise end to end.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: five numbered entries in a column grid with drop caps; no cards, no icons.
 - v2 Terminal: render as a file tree, `01_product-studios` down to `05_store-readiness`, each with a one-line comment.
 - v3 Nightshift: three services above the fold of this section, two below; each headline over its own still frame.
@@ -257,7 +258,7 @@ Status: in progress, discovery started 25 Aug 2026 [brief 4.3].
 - A. "Read the full build" - the natural next click inside a case card and the only sanctioned secondary action.
 - B. "Ask how we would do yours" - converts the reader who has just recognised their own problem in the case.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: the flagship runs as a full article with a standfirst, running heads and figure captions; showcases are two short columns below the rule.
 - v2 Terminal: each case is a log block with a timestamped header; the stack is a plain word list, no logos.
 - v3 Nightshift: one full-bleed render per case, text in a 720px measure, showcases reduced to three lines each.
@@ -309,7 +310,7 @@ No unpaid multi-month starts; we have been offered one and said no [brief 5].
 - A. "Start with paid discovery" - names the smallest first commitment, the lowest-friction yes on the page.
 - B. "Send your brief" - the canonical wording, used when this section sits far from the hero.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: four numbered heads with running rules and a folio number per phase.
 - v2 Terminal: four steps as a state machine, `discovery -> build -> launch -> run`, with the payment gate printed between each arrow.
 - v3 Nightshift: phases as four slow slides, one line each, the payment gate as the only bright element.
@@ -349,7 +350,7 @@ Commercial lead on proposals and go-to-market [brief 2].
 - A. "Message the founders" - makes the contact personal at the moment the reader is deciding about people; resolves to whichever channel `lib/site.ts` has configured.
 - B. "Book a call with both of us" - removes the fear of being handed to someone junior after signing.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: bylines with roles set as a masthead colophon; no portraits needed.
 - v2 Terminal: two records printed as key-value pairs, `location`, `owns`, `contact`.
 - v3 Nightshift: one low-light portrait or generated frame each, name in serif, role in small caps.
@@ -392,7 +393,7 @@ Model API and infrastructure costs are billed separately, at cost, and itemised 
 - A. "Start with paid discovery" - names the exact commercial step described directly above it.
 - B. "Get a scope and a price" - restates the deliverable for a reader still deciding whether the first payment is worth it.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: set as a classified-ad box with rules, terms listed like rate-card lines.
 - v2 Terminal: four options as a plain list with a `#` comment each; the two rules as a `constraints` block.
 - v3 Nightshift: three lines only, the fourth option revealed on interaction; the rest moves to the FAQ.
@@ -450,7 +451,7 @@ Fixing automations someone else sold you is a real part of our work [brief 1].
 - A. "Ask the one we missed" - converts the reader whose objection is not on the list straight into the channel.
 - B. "Send your brief" - canonical wording, used when the FAQ sits immediately above the final CTA.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: questions as bold running heads, answers in body serif, no accordion.
 - v2 Terminal: questions as `> q:` lines, answers as output; the accordion steps open with no easing.
 - v3 Nightshift: four questions on the page, three behind a reveal, all in a narrow measure over black.
@@ -490,7 +491,7 @@ Render the address as live text and link it to `mailto:sanchay@devonel.com?subje
 - A. "Book a scoping call" - for readers who want a meeting rather than a chat thread.
 - B. "Start with paid discovery" - names the commercial step, best where the engagement section sits directly above.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: a classified-ad box, ruled, with the contact lines set as small print.
 - v2 Terminal: a blinking caret prompt, `press enter to send your brief`, with the channel printed underneath.
 - v3 Nightshift: full-bleed black, one glowing pill button, the quote fading in beside it.
@@ -530,7 +531,7 @@ Page last revised 7 Sep 2026.
 - A. "Send your brief" - canonical wording, repeated as the last item on the page.
 - B. "Email the studio" - names the channel outright for a reader who wants mail; use it only as the second line once `contact.whatsapp` is set, since while it is empty the primary button already opens mail.
 
-**Per-variation tone**
+**Per-variation tone (ROUND 1, SUPERSEDED - ignore; round 2 layout and tone come from 03-design-research.md section 4 and 03b-round2-brief.md)**
 - v1 Broadsheet: colophon block with rules, revision line set as small print in the gutter.
 - v2 Terminal: footer as a shell exit line with the contact strings printed as plain values.
 - v3 Nightshift: one thin line of 8% white hairline text on black, contact only.

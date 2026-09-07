@@ -709,3 +709,777 @@
     gap: var(--v4-4);
   }
 }
+
+/* -- 15 Board band: proof and services ------------------------------------ */
+
+/* COPY.md sections 2 and 3 are one board, per `docs/goal/03-design-research.md`
+   section 4, layout skeleton item "2 and 3". Two regions, one column rhythm:
+   both region grids declare the same track count and the same gap, and the
+   band's own vertical gap is that same board gap, so the columns run unbroken
+   from the first figure down to the last service. The INDEX at the top of this
+   file stops at 14; blocks are append-only and never renumbered, so the index
+   continues here.
+
+   Column ladder, chosen so the live 2x2 stays the largest cell at every width,
+   which is the named test for risk 5 in section 5 of the research doc:
+     below 640    1 column, every span collapses, live is the tallest cell
+     640 to 1023  3 columns, live 2x2, services 3 / 3 / 1 / 1 / 1
+     1024 and up  6 columns, live 2x2, services 3 / 3 / 2 / 2 / 2
+   Both regions carry exactly 12 cell units at 3 and at 6 columns, so no row
+   ever ends in an empty slot. */
+
+.v4-band {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-board-gap);
+  /* No top padding: the hero's own bottom padding is the only separation, so
+     the board's first row peeks above the fold at 1280x800. */
+  padding-block: 0 var(--v4-24);
+}
+
+.v4-band-region {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-board-gap);
+}
+
+/* Sticky heads are the only scroll behaviour on this page. They sit outside
+   the grid on purpose: a sticky grid item is bounded by its own grid area and
+   would barely stick at all. */
+.v4-band-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--v4-1) var(--v4-6);
+}
+
+.v4-band-label {
+  font-size: var(--v4-caption);
+  font-weight: 500;
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+.v4-band-line {
+  font-size: 1.25rem; /* 20 */
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.v4-band-sub {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+  max-width: 48ch;
+}
+
+@media (min-width: 900px) {
+  /* Wide enough for the subhead to sit on the head's own line instead of
+     doubling the height of a sticky element. */
+  .v4-band-sub {
+    margin-inline-start: auto;
+    text-align: end;
+  }
+}
+
+/* -- the board itself ----------------------------------------------------- */
+
+@media (min-width: 640px) {
+  .v4-board--full {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .v4-board--full .v4-cell--live {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .v4-board--full .v4-cell--service {
+    grid-column: span 1;
+  }
+
+  /* The two services the live product is actually made of. */
+  .v4-board--full .v4-cell--service-lead {
+    grid-column: span 3;
+  }
+
+  /* Only rendered while the case section is not on the page yet; keeps the
+     proof region at 12 units so the last row still has no hole. */
+  .v4-board--full .v4-cell--figure-wide {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-board--full {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .v4-board--full .v4-cell--service {
+    grid-column: span 2;
+  }
+
+  /* Re-declared after the rule above: the lead cells carry both classes and
+     both selectors have the same specificity, so the later one has to be the
+     wider span or the two leads collapse to 2 and the region loses two units. */
+  .v4-board--full .v4-cell--service-lead {
+    grid-column: span 3;
+  }
+}
+
+/* -- one token redefined -------------------------------------------------- */
+
+/* `--v4-hatch` was 60% of the border colour, which composited the in-build
+   stripe to rgb(224,226,229) and dropped the 15px muted status line printed
+   over it to 4.41:1. At 40% the stripe lands near rgb(231,232,235) and the
+   same line measures above 4.5:1, while the hatch still reads as a hatch.
+   Redefined here rather than edited in block 01 because this file is
+   append-only; same selector, later in the file, so this value wins. */
+.v4 {
+  --v4-hatch: color-mix(in srgb, var(--v4-border) 40%, transparent);
+}
+
+/* Below 640 every span collapses, so height is the only thing carrying the
+   honesty rule, and the live cell's own copy clears the tallest service cell
+   by about 4% - close enough that one edit to a service line would invert it.
+   A floor makes the ordering a property of the system instead of the copy. */
+@media (max-width: 639px) {
+  .v4-board--full .v4-cell--live {
+    min-height: 360px;
+  }
+
+  /* One column means one cell per row, so the 180px floor that keeps a desktop
+     row honest just prints 90px of white under every figure. The floor drops to
+     the height of a figure and its caption; the live cell keeps its own. */
+  .v4-board--full {
+    grid-auto-rows: minmax(120px, auto);
+  }
+}
+
+/* Phone landscape has 390px of height to give. A sticky head there would hold
+   a quarter of the viewport, so in a short window the head scrolls away like
+   any other content. Same specificity as block 06 and later in the file. */
+@media (max-height: 560px) {
+  .v4-band-head {
+    position: static;
+  }
+}
+
+/* The live cell is sized by the honesty rule rather than by its copy, so it
+   has more height than its text needs. The free space goes above the quote,
+   which puts the customer's words next to the launch date instead of leaving
+   a hole between them. */
+.v4-board--full .v4-cell--live .v4-cell-quote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-2);
+  margin-top: auto;
+}
+
+.v4-board--full .v4-cell--live .v4-cell-foot {
+  margin-top: var(--v4-3);
+}
+
+/* -- states this board adds to block 11 ----------------------------------- */
+
+/* A service with a shipped case behind it. Filled like the live cell, but
+   without the cobalt rule: the budget is nav button, hero button, live rule. */
+.v4-cell--shipped {
+  --v4-cell-fill: var(--v4-cell);
+  --v4-i: 1;
+}
+
+/* Deliverables. A list, not a nested container: the marker is a hairline in
+   the board's own line language, so no icon and no box appears inside a cell. */
+.v4-cell-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-1);
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+}
+
+.v4-cell-list li {
+  position: relative;
+  padding-inline-start: 14px;
+}
+
+.v4-cell-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.66em;
+  width: 6px;
+  height: 1px;
+  background: var(--v4-line-hover);
+}
+
+/* The one cell that is a link. It is a cell, not a button: the affordance is
+   the underline on its footer line plus the perimeter every cell already
+   thickens on hover. */
+.v4-cell--cta .v4-cell-foot {
+  color: var(--v4-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* -- figures on the full board -------------------------------------------- */
+
+.v4-figure--live {
+  --v4-figure-value: 1;
+}
+.v4-figure--renders {
+  --v4-figure-value: 4;
+}
+.v4-figure--screens {
+  --v4-figure-value: 25;
+}
+.v4-figure--cities {
+  --v4-figure-value: 2;
+}
+
+/* COPY.md reads "More than 25 screens", so the numeral carries the qualifier
+   rather than dropping it. Same specificity as the rule in block 12 and later
+   in the file, so this content wins and the counter-reset there still applies. */
+.v4-figure--screens::before {
+  content: counter(v4-figure) "+";
+}
+
+/* -- under the board ------------------------------------------------------ */
+
+/* COPY.md section 3, "Standing lines under the grid". Set as lines, not as
+   cells: they are terms that apply to all five services, not a sixth service. */
+.v4-standing {
+  display: grid;
+  gap: var(--v4-3) var(--v4-6);
+  margin-top: var(--v4-4);
+  padding-top: var(--v4-4);
+  border-top: var(--v4-hairline) solid var(--v4-border);
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+}
+
+@media (min-width: 900px) {
+  .v4-standing {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* The legend the twist depends on, and the line that sits beside it. */
+.v4-band-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--v4-1) var(--v4-6);
+  margin-top: var(--v4-5);
+}
+
+/* -- 16 Case studies and the case page ------------------------------------ */
+
+/* The honesty rule at case scale. On the board a cell's area is how much of the
+   thing is live; here the same ladder runs across the 12-column grid, so the
+   one shipped case is 8 columns wide and filled and each unshipped case is 2
+   columns at reduced fill under the same hatch. The section reuses the board
+   band's head vocabulary (`.v4-band-head`, `.v4-band-label`, `.v4-band-line`)
+   rather than introducing a second kind of section heading.
+
+   Imagery, from `docs/goal/ASSET-INVENTORY.md`: one still in the flagship cell,
+   inside its own 1px frame, 300px wide against a 480px cap, beside the text and
+   never behind it. The two showcases carry none. */
+
+.v4-work {
+  /* No top padding: the band above ends on its own 96px, exactly as the board
+     band and the hero do, so section rhythm is owned in one place. */
+  padding-block: 0 var(--v4-24);
+}
+
+.v4-work-band {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-board-gap);
+}
+
+@media (min-width: 640px) {
+  .v4-work-board {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .v4-work-flagship {
+    grid-column: span 12;
+  }
+
+  .v4-work-show {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-work-flagship {
+    grid-column: span 8;
+  }
+
+  /* Two columns each, on purpose: nothing has shipped behind them. */
+  .v4-work-show {
+    grid-column: span 2;
+  }
+}
+
+.v4-work-flagship {
+  padding: var(--v4-6);
+  gap: var(--v4-3);
+}
+
+.v4-work-title {
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  max-width: 28ch;
+}
+
+.v4-work-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--v4-2);
+}
+
+.v4-chip--mono {
+  font-family: var(--v4-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.v4-work-body {
+  display: grid;
+  gap: var(--v4-6);
+  align-items: start;
+  margin-top: var(--v4-3);
+}
+
+/* Proportional, not a fixed plate column: at 1024 the flagship is only eight
+   of twelve columns wide, and a fixed 300px plate would leave the problem
+   paragraph at a 33-character measure. */
+@media (min-width: 720px) {
+  .v4-work-body {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+}
+
+.v4-work-text {
+  max-width: 62ch;
+}
+
+.v4-work-text > * + * {
+  margin-top: var(--v4-2);
+}
+
+/* Ordered after the rule above so the label gets the larger gap without an
+   `!important` and without raising specificity. */
+.v4-work-text > * + .v4-work-label {
+  margin-top: var(--v4-5);
+}
+
+.v4-work-label {
+  font-size: var(--v4-caption);
+  font-weight: 500;
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+/* A 6px rule as the marker. No bullet glyph, no icon. */
+.v4-work-list {
+  display: grid;
+  gap: var(--v4-2);
+}
+
+.v4-work-list > li {
+  position: relative;
+  padding-inline-start: var(--v4-4);
+}
+
+.v4-work-list > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.66em;
+  width: 6px;
+  height: 1px;
+  background: var(--v4-muted);
+}
+
+.v4-work-more {
+  margin-top: var(--v4-6);
+}
+
+.v4-work-plate {
+  /* The brief caps a case-card still at 480px at 1x; 360 keeps the client's
+     product a plate inside the card rather than the subject of the section. */
+  max-width: min(100%, 360px);
+}
+
+.v4-plate-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--v4-hairline) solid var(--v4-border);
+  border-radius: var(--v4-r-chip);
+  background: var(--v4-canvas);
+}
+
+.v4-work-show {
+  gap: var(--v4-3);
+}
+
+.v4-work-show-title,
+.v4-work-show .v4-cell-line {
+  overflow-wrap: break-word;
+}
+
+.v4-work-show-title {
+  font-size: var(--v4-caption);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+/* -- the case page, /v4/work/jewelo --------------------------------------- */
+
+/* A document on the same 12-column grid: prose in 8 columns, boards across all
+   12, so the write-up and the board vocabulary stay one system. */
+
+.v4-case {
+  padding-block: var(--v4-8) var(--v4-24);
+}
+
+.v4-case-back {
+  font-size: var(--v4-caption);
+  color: var(--v4-muted);
+}
+
+.v4-case-back a:hover {
+  color: var(--v4-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.v4-case-band {
+  margin-top: clamp(var(--v4-12), 5vw, var(--v4-18));
+}
+
+.v4 header.v4-case-band {
+  margin-top: var(--v4-6);
+}
+
+.v4-case-main {
+  grid-column: 1 / -1;
+}
+
+.v4-case-main > * + * {
+  margin-top: var(--v4-4);
+}
+
+.v4-steps,
+.v4-timeline,
+.v4-case-quote-wrap {
+  grid-column: 1 / -1;
+  margin-top: var(--v4-5);
+}
+
+@media (min-width: 1024px) {
+  .v4-case-main {
+    grid-column: 1 / span 8;
+  }
+
+  .v4-case-quote-wrap {
+    grid-column: 1 / span 6;
+  }
+}
+
+.v4-case-h2 {
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.v4-case-prose {
+  max-width: 62ch;
+}
+
+.v4-case-tags {
+  margin-top: var(--v4-5);
+}
+
+/* A filled cell with no status of its own: the case page uses cells for the
+   document's blocks, and only the timeline's own cells carry live or in-build
+   state. */
+.v4-cell--plain {
+  --v4-cell-fill: var(--v4-cell);
+}
+
+/* The six-step flow. Numbered because it is a real sequence.
+   One full-width cell per step: a two-up grid put a hole in the row before the
+   step whose evidence needs the full width, and dense packing would have
+   reordered a sequence. */
+.v4-steps {
+  grid-auto-rows: minmax(0, auto);
+}
+
+.v4-step {
+  padding: var(--v4-5);
+  gap: var(--v4-4);
+}
+
+@media (min-width: 820px) {
+  .v4-step {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    column-gap: var(--v4-10);
+    align-items: start;
+  }
+}
+
+.v4-step-copy > * + * {
+  margin-top: var(--v4-2);
+}
+
+/* Grid children default to `min-width: auto`, which lets a wide plate push its
+   own column past its track. */
+.v4-step-copy,
+.v4-step-media {
+  min-width: 0;
+}
+
+.v4-step-n {
+  font-family: var(--v4-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--v4-chip);
+  line-height: 1;
+  color: var(--v4-muted);
+}
+
+.v4-step-text {
+  font-size: var(--v4-body);
+  font-weight: 500;
+  max-width: 48ch;
+}
+
+.v4-plates {
+  display: grid;
+  gap: var(--v4-3);
+}
+
+@media (min-width: 560px) {
+  .v4-plates--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.v4-plate {
+  /* 440px is the cap in the round 2 brief; every plate is narrower than this in
+     practice because its column is. */
+  max-width: 440px;
+}
+
+.v4-plate-cap {
+  margin-top: var(--v4-2);
+  font-size: var(--v4-chip);
+  line-height: 1.35;
+  color: var(--v4-muted);
+}
+
+/* The four renders the step above names, in the product's own order. Held to
+   680px so it reads as evidence under a sentence rather than a lookbook. */
+.v4-renders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--v4-3);
+  margin-top: var(--v4-4);
+}
+
+@media (min-width: 560px) {
+  .v4-renders {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.v4-case-quote {
+  padding: var(--v4-6);
+}
+
+.v4-quote {
+  font-size: var(--v4-lead);
+  line-height: 1.4;
+  max-width: 30ch;
+}
+
+.v4-quote-by {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+@media (min-width: 640px) {
+  .v4-timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-timeline {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.v4-case-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--v4-4);
+  margin-top: var(--v4-6);
+}
+
+.v4-case-channel a {
+  color: var(--v4-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* -- 17 Process band ------------------------------------------------------ */
+
+/* COPY.md section 5 on the same board, per `docs/goal/03-design-research.md`
+   section 4, layout skeleton item 5: "a second, shorter band of four cells with
+   the payment gate as a chip inside each". Shorter is literal - one row of four
+   against the proof band's twelve units - and the band reuses `.v4-band` and
+   `.v4-sticky-head` rather than introducing a second kind of section.
+
+   Column ladder, matching the rest of the page:
+     below 640    1 column, the four phases stack in order
+     640 to 1023  2 columns, a 2x2 of phases
+     1024 and up  4 columns, the sequence on one line
+   Grid rows stretch by default, so cells in a row are equal height and the
+   four gate chips land on one line at every width that has more than one
+   column. */
+
+@media (min-width: 640px) {
+  .v4-board--process {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-board--process {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* A phase is committed work, so the cell is filled like the live cell but
+   carries no cobalt rule: the budget stays nav button, hero button, live rule.
+   Same specificity as `.v4-cell` in block 11 and later in the file, so the
+   wider gap wins without an override. */
+.v4-cell--phase {
+  --v4-cell-fill: var(--v4-cell);
+  gap: var(--v4-3);
+}
+
+/* Entrance: left to right, one 60ms step per cell, reusing block 06's single
+   board-online pass rather than adding a second kind of motion. */
+.v4-board--process .v4-cell--phase:nth-child(1) {
+  --v4-i: 0;
+}
+.v4-board--process .v4-cell--phase:nth-child(2) {
+  --v4-i: 1;
+}
+.v4-board--process .v4-cell--phase:nth-child(3) {
+  --v4-i: 2;
+}
+.v4-board--process .v4-cell--phase:nth-child(4) {
+  --v4-i: 3;
+}
+
+/* The payment gate. Mono because money is a figure and every figure on this
+   board is mono, and it is the one thing that distinguishes a gate chip from
+   the status chip block 12 already defines. */
+.v4-chip--gate {
+  font-family: var(--v4-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Numeral and name are one unit, so they sit closer than the cell's own gap. */
+.v4-phase-id {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* The one place on the page a 01/02/03 marker is allowed, because four phases
+   paid in order really are a sequence. */
+.v4-phase-num {
+  font-family: var(--v4-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.75rem; /* 28 */
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.v4-phase-name {
+  font-size: 1.375rem; /* 22 */
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.v4-phase-copy {
+  font-size: var(--v4-body);
+  line-height: var(--v4-body-lh);
+}
+
+.v4-phase-hands {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-1);
+  margin-top: var(--v4-1);
+}
+
+.v4-phase-hands-label {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+/* -- after the four phases ------------------------------------------------ */
+
+/* COPY.md section 5, "After handover". It holds for the whole sequence rather
+   than being a fifth phase, so it is set as a line under the band in the same
+   language as the standing lines under the proof board, not as a cell. */
+.v4-after {
+  display: grid;
+  gap: var(--v4-2) var(--v4-6);
+  margin-top: var(--v4-4);
+  padding-top: var(--v4-4);
+  border-top: var(--v4-hairline) solid var(--v4-border);
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+}
+
+.v4-after-label {
+  color: var(--v4-muted);
+}
+
+.v4-after-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-1);
+  max-width: 72ch;
+}
+
+@media (min-width: 900px) {
+  .v4-after {
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+    align-items: baseline;
+  }
+}

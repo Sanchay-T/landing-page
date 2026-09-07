@@ -39,13 +39,13 @@ export const sections: readonly Section[] = [
   // wordmark is the link back to the top.
   { id: "hero", label: "Devonel", built: true, inNav: false },
   // COPY.md section 2, "Label: Proof of work".
-  { id: "proof", label: "Proof of work", built: false, inNav: true },
+  { id: "proof", label: "Proof of work", built: true, inNav: true },
   // COPY.md section 3, "Label: What you buy".
-  { id: "services", label: "What you buy", built: false, inNav: true },
+  { id: "services", label: "What you buy", built: true, inNav: true },
   // COPY.md section 4, "Label: Case studies".
-  { id: "work", label: "Case studies", built: false, inNav: true },
+  { id: "work", label: "Case studies", built: true, inNav: true },
   // COPY.md section 5, "Label: How we work".
-  { id: "process", label: "How we work", built: false, inNav: true },
+  { id: "process", label: "How we work", built: true, inNav: true },
   // COPY.md section 6, "Label: Who you work with".
   { id: "founders", label: "Who you work with", built: false, inNav: false },
   // COPY.md section 7, "Label: How a quote works".

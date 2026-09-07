@@ -14,12 +14,16 @@ import { navSections } from "./sections";
  * The ground is solid white at every scroll position rather than transparent at
  * the top: the bar sits over the canvas, so it needs no scroll listener and no
  * blur to stay readable, and there is no state in which it is see-through.
+ *
+ * `base` is the path the anchors hang off. Empty on the variation root, where a
+ * bare `#work` is correct; `/v4` on a sub-page such as `/v4/work/jewelo`, where
+ * the same anchor has to travel back to the root before it means anything.
  */
-export function Nav() {
+export function Nav({ base = "" }: { base?: string } = {}) {
   return (
     <header className="v4-nav">
       <div className="v4-container v4-nav-inner">
-        <a className="v4-wordmark" href="#hero">
+        <a className="v4-wordmark" href={`${base}#hero`}>
           <Mark />
           <span>Devonel</span>
         </a>
@@ -27,7 +31,7 @@ export function Nav() {
         {navSections.length > 0 ? (
           <nav className="v4-nav-links" aria-label="Sections">
             {navSections.map((section) => (
-              <a key={section.id} href={`#${section.id}`}>
+              <a key={section.id} href={`${base}#${section.id}`}>
                 {section.label}
               </a>
             ))}

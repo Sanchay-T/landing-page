@@ -1,4 +1,4 @@
-import { Hero, Nav } from "@/components/variations/v4";
+import { Board, Hero, Nav, Process, Work } from "@/components/variations/v4";
 import "@/components/variations/v4/tokens.css";
 
 /**
@@ -17,6 +17,9 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
+        <Board />
+        <Work />
+        <Process />
       </main>
     </div>
   );

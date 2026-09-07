@@ -13,6 +13,9 @@
                          radius, the three motion primitives, :where() resets,
                          and the first components: shell, grid, button, nav,
                          hero, object, gauge.
+   02  2026-09-07  proof full-bleed panel band on the void, figure/head/quote
+                         type steps, the five-cell figure grid and its line
+                         verticals, the client quote and its text link.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
@@ -573,5 +576,200 @@ body:has(.v1) {
 
   .v1-hero__act {
     margin-top: var(--v1-5);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   02 - proof
+
+   The band the direction asks for: a full-bleed panel on the void, hairline
+   top and bottom, five figures in one row split by line verticals, the client
+   quote beneath. Panel and void are only 1.09:1 apart, so the two rules are
+   what make the band a band; that is deliberate, because a brighter panel on
+   this page would read as a card and there are no cards in this direction.
+
+   Nothing here is lamp. The band's only lamp is the shared focus ring from 01.
+   Nothing here moves on load either: the sixteen-tick assembly is the page's
+   one entrance, and the direction says nothing else moves.
+
+   Mono appears exactly once, on the five figures, with tabular figures so the
+   digits sit on the same rhythm as the hero gauge. Every caption, the quote and
+   the link are Geist; the heading is the display face. No eyebrow, no label.
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* 40px at 390 -> 56px at 1280, then held. Mono, tabular, one weight. */
+  --v1-figure: clamp(2.5rem, 2.0618rem + 1.7978vw, 3.5rem);
+  /* 24 -> 32. Subordinate to the 64px hero display by a clear step. */
+  --v1-section-head: clamp(1.5rem, 1.2809rem + 0.8989vw, 2rem);
+  /* 20 -> 24, the direction's range for the quote. */
+  --v1-quote: clamp(1.25rem, 1.1404rem + 0.4494vw, 1.5rem);
+}
+
+.v1-proof {
+  background-color: var(--v1-panel);
+  border-block: 1px solid var(--v1-line);
+  padding-block: var(--v1-8);
+}
+
+.v1-proof__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+/* -----------------------------------------------------------------------------
+   02 - the five figures
+
+   Stacked and ruled at phone widths, 3 + 2 from 768, one row of five from 1180.
+   Every border rule is written at the same specificity (a class plus one
+   pseudo-class) so a later breakpoint can clear an earlier one on source order
+   alone: `.v1-proof__cell` on its own would lose to `:not(:nth-child(3n + 1))`
+   however far down the file it sat.
+   -------------------------------------------------------------------------- */
+
+.v1-proof__figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: var(--v1-7);
+}
+
+.v1-proof__cell:not(:first-child) {
+  margin-top: var(--v1-5);
+  padding-top: var(--v1-5);
+  border-top: 1px solid var(--v1-line);
+}
+
+.v1-proof__fig {
+  font-family: var(--v1-font-mono);
+  font-size: var(--v1-figure);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--v1-text);
+}
+
+.v1-proof__cap {
+  margin-top: var(--v1-3);
+  max-width: 30ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   02 - the quote
+
+   Beneath the row, on space rather than on another rule: the band already
+   carries two horizontal hairlines and four verticals, and a seventh line
+   would start to draw a table.
+   -------------------------------------------------------------------------- */
+
+.v1-proof__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--v1-5);
+  margin-top: var(--v1-8);
+}
+
+.v1-proof__said {
+  font-size: var(--v1-quote);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+.v1-proof__who {
+  margin-top: var(--v1-3);
+  max-width: 48ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+}
+
+/* A text link, not a second button: the page has one primary action and it is
+   lamp-filled in the hero. This one is a hairline under body text. */
+.v1-proof__more {
+  flex: none;
+  padding-bottom: var(--v1-1);
+  border-bottom: 1px solid var(--v1-muted);
+  color: var(--v1-text);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+.v1-proof__more:hover {
+  border-bottom-color: var(--v1-text);
+}
+
+/* -----------------------------------------------------------------------------
+   02 - proof, 3 + 2 from 768
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .v1-proof__figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--v1-5);
+    row-gap: var(--v1-7);
+  }
+
+  .v1-proof__cell:not(:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Verticals only between cells that share a row, so the row of two below
+     never grows a rule against the empty third track. */
+  .v1-proof__cell:not(:nth-child(3n + 1)) {
+    padding-left: var(--v1-5);
+    border-left: 1px solid var(--v1-line);
+  }
+
+  .v1-proof__cell:nth-child(3n + 1) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   02 - proof, one row of five from 1180
+
+   The quote and the link share a baseline here: the sentence a client said and
+   the way to go and read why sit on one line, which is the whole argument of
+   the band in one gesture.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-proof {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-proof__figures {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: var(--v1-4);
+  }
+
+  .v1-proof__cell:not(:first-child) {
+    padding-left: var(--v1-4);
+    border-left: 1px solid var(--v1-line);
+  }
+
+  .v1-proof__cell:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .v1-proof__foot {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--v1-7);
   }
 }

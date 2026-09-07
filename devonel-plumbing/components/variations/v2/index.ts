@@ -6,6 +6,9 @@
  */
 
 export { Hero } from "./hero";
+export { Proof } from "./proof";
 export { Nav } from "./nav";
+export { Work } from "./work";
+export { Services } from "./services";
 export { sections, navSections } from "./sections";
 export type { Section, SectionId } from "./sections";

@@ -38,7 +38,7 @@ export type Section = {
 
 export const sections: readonly Section[] = [
   { id: "hero", label: "Hero", built: true, inNav: true },
-  { id: "proof", label: "Proof strip", built: false, inNav: true },
+  { id: "proof", label: "Proof strip", built: true, inNav: true },
   { id: "services", label: "Services", built: false, inNav: true },
   { id: "case-studies", label: "Case studies", built: false, inNav: true },
   { id: "process", label: "Process", built: false, inNav: true },

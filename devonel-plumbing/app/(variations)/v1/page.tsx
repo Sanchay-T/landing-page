@@ -1,6 +1,6 @@
 import "@/components/variations/v1/tokens.css";
 
-import { Hero, Nav } from "@/components/variations/v1";
+import { Hero, Nav, Proof } from "@/components/variations/v1";
 import { getVariation } from "../variations";
 
 /**
@@ -21,6 +21,7 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
+        <Proof />
       </main>
     </div>
   );

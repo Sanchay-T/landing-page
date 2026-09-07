@@ -591,3 +591,986 @@
     display: block;
   }
 }
+
+/* ===========================================================================
+   BLOCK 3 - services (the page's canonical section 3)
+
+   Appended, never woven in: blocks are numbered by the section they dress, so
+   proof lands as block 2 and case studies as block 4 without anyone editing
+   anyone else's lines.
+
+   The section is a ruled ledger. Direction 2 gives services "five stacked
+   full-width entries separated by rules, no numbering, no icons, no cards", so
+   the only structural devices below are 1px rules and the 12 column grid; there
+   is no plinth here because nothing on this section sits over the field.
+
+   Widths: the section is padded to the same --v2-band the nav is, so its rules
+   run out to where the nav's two clocks stand rather than stopping at the
+   71.25rem text page. Measure is held by the copy, not by the column: the
+   answer column is wider than 66ch above 1440, so every paragraph carries its
+   own max-inline-size.
+   =========================================================================== */
+
+.v2 {
+  /* One step darker than --v2-rule, and the only value this block adds. It is
+     the entire hover state of the list: the direction spends its hover on the
+     clocks, so an entry answers the pointer at hairline weight and reveals
+     nothing, which is also why nothing here is hover-gated. */
+  --v2-rule-hover: #b3b8b0;
+}
+
+.v2-services {
+  padding-block: var(--v2-s8);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+/* -- the heading block ----------------------------------------------------
+   Same string the nav links with, so the link lands on a heading that confirms
+   it. Sentence case at body-small size, not a tracked-out eyebrow. */
+
+.v2-services__label {
+  font-size: var(--v2-small);
+  letter-spacing: 0.03em;
+  color: var(--v2-ink-2);
+}
+
+.v2-services__headline {
+  margin-block-start: var(--v2-s3);
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(2.25rem, 1.55rem + 2.9vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--v2-ink);
+}
+
+.v2-services__sub {
+  margin-block-start: var(--v2-s5);
+  max-inline-size: 46ch;
+  font-size: var(--v2-lead);
+  line-height: 1.5;
+  color: var(--v2-ink-2);
+  text-wrap: pretty;
+}
+
+/* -- the five entries ------------------------------------------------------
+   Every entry owns the rule above it and the list owns the one below the last,
+   so the set is closed by six lines and no entry carries a card, a number or a
+   mark of any kind. */
+
+.v2-services__list {
+  margin-block-start: var(--v2-s7);
+  border-block-end: 1px solid var(--v2-rule);
+}
+
+.v2-service {
+  padding-block: var(--v2-s6);
+  border-block-start: 1px solid var(--v2-rule);
+  transition: border-color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-service:hover {
+  border-block-start-color: var(--v2-rule-hover);
+}
+
+.v2-service__name {
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 48;
+  font-size: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  color: var(--v2-ink);
+}
+
+.v2-service__body {
+  margin-block-start: var(--v2-s4);
+}
+
+.v2-service__promise {
+  max-inline-size: 44ch;
+  font-size: var(--v2-lead);
+  line-height: 1.45;
+  color: var(--v2-ink);
+  text-wrap: pretty;
+}
+
+.v2-service__scope {
+  display: grid;
+  gap: var(--v2-s3);
+  margin-block-start: var(--v2-s4);
+  max-inline-size: var(--v2-measure);
+  font-size: var(--v2-body);
+  line-height: var(--v2-body-leading);
+  color: var(--v2-ink-2);
+}
+
+/* -- the three standing lines ---------------------------------------------
+   They answer the whole list rather than any one entry, so they sit below the
+   closing rule in the answer column, one thought per line. */
+
+.v2-services__close {
+  display: grid;
+  gap: var(--v2-s3);
+  margin-block-start: var(--v2-s6);
+  font-size: var(--v2-body);
+  line-height: var(--v2-body-leading);
+  color: var(--v2-ink-2);
+}
+
+.v2-services__close > p {
+  max-inline-size: var(--v2-measure);
+}
+
+/* -- the two column read ---------------------------------------------------
+   At 64rem the name and the answer part: 4 columns of 12 for the name, one
+   column of air, 7 for the answer. Below that the pair stacks, which keeps the
+   name at display size instead of squeezing Fraunces into half a phone. */
+
+@media (min-width: 64rem) {
+  .v2-services__head,
+  .v2-service,
+  .v2-services__close {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+    align-items: start;
+  }
+
+  .v2-services__title {
+    grid-column: 1 / span 5;
+  }
+
+  .v2-services__sub {
+    grid-column: 6 / span 7;
+    align-self: end;
+    margin-block-start: 0;
+  }
+
+  .v2-service__name {
+    grid-column: 1 / span 4;
+  }
+
+  .v2-service__body {
+    grid-column: 6 / span 7;
+    margin-block-start: 0;
+  }
+
+  .v2-services__close > p {
+    grid-column: 6 / span 7;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   2. proof - "Shipped, not promised."
+
+   One white plinth on the 90rem band, cut hard out of a tinted ground, holding
+   five figures, two dates and the client's line.
+
+   The ground. hero.tsx keeps `TwoCityField` inside `.v2-hero`, which clips it,
+   and the brief allows one WebGL context per page, so this band reuses the
+   field's CSS half only: `.v2-field` + `.v2-field__poles` with the live hues
+   passed in by proof.tsx. Same 22% ceiling, same 900ms fade, same two poles at
+   28% and 62% of `--v2-band`, so the tinted columns run straight down from the
+   hero's. It is masked at the top and bottom edges: an unmasked band would cut
+   a hard horizontal seam across the paper where the hero's field stops.
+
+   The plinth. No border, no shadow, no radius. Its own edge is the separation,
+   which is what makes it a plinth and not a card. Rules do the rest of the
+   dividing inside it.
+
+   Figures. `--v2-proof-figure` runs 56px to 72px on the plinth's own width
+   (`cqi`, so the ceiling is reached on the 90rem band and not at some viewport
+   the band never fills). Below 48rem the row is stacked and the figure sits at
+   a flat 56px; between 48rem and 73.75rem it is 3 + 2 on a six column grid, so
+   the second row is two equal halves rather than an orphan; at 73.75rem and up
+   the five sit in one row whose columns are `minmax(min-content, 1fr)`, which
+   is what keeps "Sixteen" at 72px from ever being wider than its column.
+
+   Tokens here are named for the section on purpose. Another builder appending
+   a later block cannot collide with them.
+   --------------------------------------------------------------------------- */
+
+.v2-proof {
+  --v2-proof-h2: clamp(2rem, 1.15rem + 2.7vw, 3.25rem);
+  /* 56px until the plinth is wide enough to carry more, 72px on the full
+     90rem band. `cqi` reads the plinth's content box, so the ceiling lands
+     with the band and not at some viewport the band never fills. */
+  --v2-proof-figure: clamp(3.5rem, 5.5cqi, 4.5rem);
+  --v2-proof-quote: clamp(1.5rem, 1.15rem + 1.4vw, 2.125rem);
+  --v2-proof-caption: 0.9375rem;
+
+  position: relative;
+  isolation: isolate;
+  padding-block: var(--v2-s8);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+/* The band ends in paper at both edges instead of on a cut line. */
+.v2-proof__field {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10% 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 10% 90%, transparent);
+}
+
+.v2-proof__plinth {
+  container-type: inline-size;
+  display: grid;
+  gap: var(--v2-s7);
+  padding: var(--v2-s7);
+  background-color: var(--v2-raised);
+  border-radius: 0;
+}
+
+/* -- head: the label and the headline left, the two dates right ------------ */
+
+.v2-proof__head {
+  display: grid;
+  gap: var(--v2-s6);
+}
+
+@media (min-width: 61rem) {
+  .v2-proof__head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: var(--v2-s7);
+  }
+}
+
+/* The chip: 13px, sentence case, one rule under it. Not an eyebrow. */
+.v2-proof__label {
+  display: inline-block;
+  padding-block-end: var(--v2-s2);
+  border-block-end: 1px solid var(--v2-rule);
+  font-size: var(--v2-small);
+  letter-spacing: 0.02em;
+  color: var(--v2-muted);
+}
+
+.v2-proof__headline {
+  margin-block-start: var(--v2-s5);
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 72;
+  font-size: var(--v2-proof-h2);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--v2-ink);
+}
+
+/* The dateline. Two dates joined by a hairline: the hero joins two cities the
+   same way, and the distance between these two is the sixteen days below. */
+.v2-proof__dates {
+  display: grid;
+  grid-template-columns: auto minmax(2rem, 1fr) auto;
+  align-items: end;
+  column-gap: var(--v2-s4);
+}
+
+.v2-proof__date {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.v2-proof__date-label {
+  font-size: var(--v2-small);
+  letter-spacing: 0.02em;
+  color: var(--v2-muted);
+}
+
+.v2-proof__date-value {
+  font-family: var(--v2-display-font);
+  font-variation-settings: "opsz" 24;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  color: var(--v2-ink);
+}
+
+.v2-proof__span {
+  block-size: 1px;
+  margin-block-end: 0.6rem;
+  background-color: var(--v2-rule);
+}
+
+/* -- the five figures ------------------------------------------------------ */
+
+.v2-proof__figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--v2-s6) var(--v2-s5);
+  padding-block-start: var(--v2-s6);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-proof__figure {
+  display: grid;
+  align-content: start;
+  gap: var(--v2-s3);
+}
+
+.v2-proof__count {
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144;
+  font-size: var(--v2-proof-figure);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--v2-ink);
+}
+
+/* "More than 25": the qualifier is the copy's own, set small and on the same
+   baseline so all five figures still stand on one line. */
+.v2-proof__qualifier {
+  margin-inline-end: 0.4rem;
+  font-family: var(--v2-body-font);
+  font-size: var(--v2-small);
+  letter-spacing: 0.02em;
+  color: var(--v2-ink-2);
+}
+
+.v2-proof__caption {
+  max-inline-size: 26ch;
+  font-size: var(--v2-proof-caption);
+  line-height: 1.45;
+  color: var(--v2-ink-2);
+}
+
+@media (min-width: 48rem) {
+  .v2-proof__figures {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--v2-s7) var(--v2-s5);
+  }
+
+  .v2-proof__figure {
+    grid-column: span 2;
+  }
+
+  /* 3 + 2: the last two take half the row each, so no cell is orphaned. */
+  .v2-proof__figure:nth-child(4),
+  .v2-proof__figure:nth-child(5) {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 73.75rem) {
+  .v2-proof__figures {
+    grid-template-columns: repeat(5, minmax(min-content, 1fr));
+    column-gap: var(--v2-s6);
+  }
+
+  .v2-proof__figure,
+  .v2-proof__figure:nth-child(4),
+  .v2-proof__figure:nth-child(5) {
+    grid-column: auto;
+  }
+}
+
+/* -- the client's line ----------------------------------------------------- */
+
+.v2-proof__quote {
+  display: grid;
+  gap: var(--v2-s6);
+  padding-block-start: var(--v2-s7);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+@media (min-width: 61rem) {
+  .v2-proof__quote {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: var(--v2-s7);
+  }
+}
+
+/* Roman, not italic: italic belongs to the two clocks in this direction. */
+.v2-proof__blockquote {
+  max-inline-size: 24ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 48;
+  font-size: var(--v2-proof-quote);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--v2-ink);
+}
+
+.v2-proof__attribution {
+  margin-block-start: var(--v2-s4);
+  max-inline-size: 52ch;
+  font-size: var(--v2-small);
+  line-height: 1.5;
+  text-wrap: balance;
+  color: var(--v2-ink-2);
+}
+
+/* The secondary CTA: text on a rule, never a second button. */
+.v2-proof__more {
+  justify-self: start;
+  align-self: end;
+  padding-block-end: 0.35rem;
+  border-block-end: 1px solid var(--v2-ink-2);
+  font-size: 1rem;
+  color: var(--v2-ink);
+  transition:
+    border-color var(--v2-hover-in) var(--v2-ease),
+    color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-proof__more:hover {
+  border-block-end-color: var(--v2-ink);
+  color: var(--v2-ink-hover);
+}
+
+/* ===========================================================================
+   BLOCK 4 - case studies (the page's canonical section 4, and /v2/work/jewelo)
+
+   Two surfaces, one vocabulary, so the sub-page reads as the same site: rules
+   for every division, one white plinth under every still, and nothing else.
+   There is no card and no shadow here, and the only fill on either surface is
+   the plinth.
+
+   Section 4 is the 7/5 split direction 2 asks for - "flagship left as a long
+   read with one 400px still, showcases right as two short entries" - held to
+   the same --v2-band the nav and the services ledger use, so all three sections
+   start and stop on the same vertical. Below 64rem the two columns stack and
+   the hairline between them becomes the rule above the showcases.
+
+   The plate is the one place client imagery is allowed on this page. It is
+   capped at 400px of image inside a 432px plinth, so at 360 the plinth is the
+   column and the image is 288px: it can never exceed its column, and it is
+   never behind text.
+   =========================================================================== */
+
+.v2-work {
+  padding-block: var(--v2-s8);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+/* -- the heading block -----------------------------------------------------
+   Label as the heading, headline as the line under it. Not an eyebrow: both
+   strings are COPY.md's own and they sit on one baseline at desktop width. */
+
+.v2-work__title {
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 96;
+  font-size: clamp(2rem, 1.3rem + 2.4vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+}
+
+.v2-work__sub {
+  margin-block-start: var(--v2-s4);
+  max-inline-size: 34ch;
+  font-size: var(--v2-lead);
+  line-height: 1.5;
+  color: var(--v2-ink-2);
+}
+
+/* -- the two columns ------------------------------------------------------- */
+
+.v2-work__body {
+  margin-block-start: var(--v2-s7);
+  padding-block-start: var(--v2-s6);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-work__showcases {
+  margin-block-start: var(--v2-s7);
+  padding-block-start: var(--v2-s6);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+@media (min-width: 64rem) {
+  .v2-work__head {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+    align-items: end;
+  }
+
+  .v2-work__title {
+    grid-column: 1 / span 7;
+  }
+
+  .v2-work__sub {
+    grid-column: 8 / span 5;
+    margin-block-start: 0;
+  }
+
+  .v2-work__body {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+    align-items: start;
+  }
+
+  .v2-work__flagship {
+    grid-column: 1 / span 7;
+  }
+
+  /* The hairline that was the stacked rule above the showcases becomes the
+     rule between the columns. Same 1px, same token, one less division. */
+  .v2-work__showcases {
+    grid-column: 8 / span 5;
+    margin-block-start: 0;
+    padding-block-start: 0;
+    padding-inline-start: var(--v2-gap);
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--v2-rule);
+  }
+}
+
+/* -- the long read --------------------------------------------------------- */
+
+.v2-case__title {
+  max-inline-size: 24ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(1.5rem, 1.05rem + 1.6vw, 2.125rem);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+}
+
+/* Chips: 12px, sentence case, one hairline underneath. The direction's only
+   tag device; no outline, no fill, no radius. */
+
+.v2-case__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--v2-s4);
+  margin-block-start: var(--v2-s5);
+}
+
+.v2-chip {
+  display: inline-block;
+  padding-block-end: 3px;
+  border-block-end: 1px solid var(--v2-rule);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--v2-ink-2);
+}
+
+/* The status line is the honest fact in a showcase, so its rule is ink. */
+.v2-chip--status {
+  border-block-end-color: var(--v2-ink);
+  color: var(--v2-ink);
+}
+
+.v2-case__h {
+  margin-block-start: var(--v2-s6);
+  padding-block-start: var(--v2-s3);
+  border-block-start: 1px solid var(--v2-rule);
+  font-size: var(--v2-small);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--v2-ink);
+}
+
+.v2-case__p {
+  margin-block-start: var(--v2-s3);
+  max-inline-size: 62ch;
+  color: var(--v2-ink-2);
+}
+
+/* Six build lines as a ruled ledger rather than one paragraph: each line is a
+   thing that exists, and the rules count them without numbering them. */
+
+.v2-case__list {
+  margin-block-start: var(--v2-s3);
+  max-inline-size: 62ch;
+}
+
+.v2-case__list > li {
+  padding-block: var(--v2-s3);
+  border-block-start: 1px solid var(--v2-rule);
+  color: var(--v2-ink-2);
+}
+
+.v2-case__list > li:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.v2-case__quote {
+  margin-block-start: var(--v2-s6);
+  padding-block-start: var(--v2-s5);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+/* Roman, not italic: italic on this page belongs to the two live clocks. */
+.v2-case__quote > p {
+  max-inline-size: 28ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 48;
+  font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.5rem);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--v2-ink);
+}
+
+.v2-case__cite {
+  display: block;
+  margin-block-start: var(--v2-s3);
+  font-size: var(--v2-small);
+  font-style: normal;
+  color: var(--v2-ink-2);
+}
+
+/* -- the plinth ------------------------------------------------------------
+   White, hard edged, no border and no shadow, holding the still and its
+   caption. 432px = 400px of image plus its own 16px inset either side. */
+
+.v2-plate {
+  inline-size: min(432px, 100%);
+  margin-block-start: var(--v2-s5);
+  padding: var(--v2-s4);
+  background-color: var(--v2-raised);
+}
+
+.v2-plate__img {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.v2-plate__caption {
+  margin-block-start: var(--v2-s3);
+  font-size: var(--v2-small);
+  line-height: 1.5;
+  color: var(--v2-ink-2);
+}
+
+.v2-plate--small {
+  inline-size: 100%;
+  margin-block-start: 0;
+  padding: var(--v2-s3);
+}
+
+.v2-plate--small .v2-plate__caption {
+  margin-block-start: var(--v2-s2);
+  font-size: 0.75rem;
+}
+
+/* -- the read-on link ------------------------------------------------------ */
+
+.v2-read {
+  display: inline-block;
+  margin-block-start: var(--v2-s6);
+  padding-block-end: 3px;
+  border-block-end: 1px solid var(--v2-ink);
+  color: var(--v2-ink);
+  transition:
+    color var(--v2-hover-in) var(--v2-ease),
+    border-color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-read:hover {
+  border-block-end-color: var(--v2-rule);
+  color: var(--v2-ink-hover);
+}
+
+.v2-read--inline {
+  margin-block-start: 0;
+  font-size: inherit;
+}
+
+/* -- the two showcases -----------------------------------------------------
+   Short entries, no image: neither is shipped and a picture would say it was.
+   One rule between them, and the status line carries the truth. */
+
+.v2-showcase + .v2-showcase {
+  margin-block-start: var(--v2-s6);
+  padding-block-start: var(--v2-s6);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-showcase__title {
+  max-inline-size: 26ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 48;
+  font-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.375rem);
+  line-height: 1.22;
+  letter-spacing: -0.008em;
+}
+
+.v2-showcase__p {
+  margin-block-start: var(--v2-s4);
+  max-inline-size: 52ch;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--v2-ink-2);
+}
+
+.v2-showcase__status {
+  margin-block-start: var(--v2-s5);
+}
+
+/* ---------------------------------------------------------------------------
+   BLOCK 4b - /v2/work/jewelo
+
+   The same paper, one field behind the header only, and then a vertical read:
+   heading in the left three columns, the case in the right nine. Every still
+   on this page is small and captioned, which is the sub-page rule in
+   ASSET-INVENTORY.md, so the page reads as a write-up and never as a lookbook.
+   --------------------------------------------------------------------------- */
+
+.v2-case-page__head {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: calc(var(--v2-nav-h) + var(--v2-s7)) var(--v2-s7);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+/* The field ends in paper rather than on a cut edge, same treatment the hero
+   gives it on a phone. */
+.v2-case-page__field {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+
+.v2-case-page__title {
+  max-inline-size: 19ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" var(--v2-display-opsz);
+  font-size: clamp(2rem, 1.1rem + 3.4vw, 3.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+}
+
+.v2-case-page__tags {
+  margin-block-start: var(--v2-s5);
+}
+
+.v2-case-page__deck {
+  margin-block-start: var(--v2-s5);
+  max-inline-size: 44ch;
+  font-size: var(--v2-lead);
+  line-height: 1.5;
+  color: var(--v2-ink-2);
+}
+
+.v2-case-sec {
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+.v2-case-sec__inner {
+  padding-block: var(--v2-s7);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-case-sec__h {
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 48;
+  font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.v2-case-sec__content {
+  margin-block-start: var(--v2-s5);
+}
+
+.v2-case-sec__p {
+  max-inline-size: var(--v2-measure);
+  color: var(--v2-ink-2);
+}
+
+.v2-case-sec__p + .v2-case-sec__p {
+  margin-block-start: var(--v2-s4);
+}
+
+.v2-case-sec__plate {
+  margin-block-start: var(--v2-s6);
+}
+
+.v2-case__quote--lead {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+@media (min-width: 64rem) {
+  .v2-case-sec__inner {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+    align-items: start;
+  }
+
+  .v2-case-sec__h {
+    grid-column: 1 / span 3;
+  }
+
+  .v2-case-sec__content {
+    grid-column: 4 / span 9;
+    margin-block-start: 0;
+  }
+}
+
+/* -- the flow --------------------------------------------------------------
+   Six steps, and the only numbered block on either surface, because this is
+   the one thing on the site that is genuinely a sequence: the customer's path
+   through the product, in order, with the screen that proves each step. */
+
+.v2-step {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--v2-s4);
+  padding-block: var(--v2-s6);
+}
+
+.v2-step:first-child {
+  padding-block-start: 0;
+}
+
+.v2-step + .v2-step {
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-step__n {
+  font-family: var(--v2-display-font);
+  font-variation-settings: "opsz" 36;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--v2-muted);
+}
+
+.v2-step__text {
+  grid-column: 2;
+  max-inline-size: 48ch;
+  font-size: var(--v2-lead);
+  line-height: 1.5;
+  color: var(--v2-ink);
+}
+
+.v2-step__plate {
+  grid-column: 2;
+}
+
+/* Wide enough for the plate to stand beside the sentence rather than under
+   it. Below this the read is vertical and the plate keeps its full 400px. */
+@media (min-width: 90rem) {
+  .v2-step {
+    grid-template-columns: 2rem minmax(0, 1fr) minmax(0, 432px);
+    column-gap: var(--v2-gap);
+    align-items: start;
+  }
+
+  .v2-step__plate {
+    grid-column: 3;
+    grid-row: 1;
+    margin-block-start: 0;
+  }
+}
+
+/* -- the renders ----------------------------------------------------------- */
+
+.v2-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--v2-s5);
+  max-inline-size: 46rem;
+  margin-block-start: var(--v2-s5);
+}
+
+.v2-case-sec__p--spaced {
+  margin-block-start: var(--v2-s7);
+}
+
+/* -- the dates ------------------------------------------------------------- */
+
+.v2-timeline__row {
+  padding-block: var(--v2-s4);
+  border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-timeline__row:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.v2-timeline__when {
+  font-family: var(--v2-display-font);
+  font-variation-settings: "opsz" 36;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--v2-ink);
+}
+
+.v2-timeline__what {
+  margin-block-start: var(--v2-s1);
+  color: var(--v2-ink-2);
+}
+
+@media (min-width: 40rem) {
+  .v2-timeline__row {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    column-gap: var(--v2-s5);
+    align-items: baseline;
+  }
+
+  .v2-timeline__what {
+    margin-block-start: 0;
+  }
+}
+
+/* -- the close -------------------------------------------------------------
+   The one plinth that holds an action: white block, no border, no shadow,
+   the same button the hero carries. */
+
+.v2-case-close {
+  padding-block: var(--v2-s8);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+.v2-case-close__plinth {
+  max-inline-size: 44rem;
+  padding: var(--v2-s7) var(--v2-s6);
+  background-color: var(--v2-raised);
+}
+
+.v2-case-close__title {
+  max-inline-size: 20ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 96;
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.v2-case-close__sub {
+  margin-block-start: var(--v2-s5);
+  max-inline-size: 52ch;
+  color: var(--v2-ink-2);
+}
+
+.v2-case-close__act {
+  margin-block-start: var(--v2-s6);
+}
+
+.v2-case-close__support {
+  margin-block-start: var(--v2-s3);
+  font-size: var(--v2-small);
+  color: var(--v2-ink-2);
+}
+
+.v2-case-close__channel {
+  margin-block-start: var(--v2-s6);
+  padding-block-start: var(--v2-s4);
+  border-block-start: 1px solid var(--v2-rule);
+  font-size: var(--v2-small);
+  color: var(--v2-ink-2);
+}

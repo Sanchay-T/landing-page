@@ -14,7 +14,7 @@ export type SectionId =
   | "hero"
   | "proof"
   | "services"
-  | "case-studies"
+  | "work"
   | "process"
   | "founders"
   | "engagement"
@@ -35,9 +35,9 @@ export type Section = {
 
 export const sections: readonly Section[] = [
   { id: "hero", label: "Hero", built: true, inNav: false },
-  { id: "proof", label: "Proof of work", built: false, inNav: true },
-  { id: "services", label: "What you buy", built: false, inNav: true },
-  { id: "case-studies", label: "Case studies", built: false, inNav: true },
+  { id: "proof", label: "Proof of work", built: true, inNav: true },
+  { id: "services", label: "What you buy", built: true, inNav: true },
+  { id: "work", label: "Case studies", built: true, inNav: true },
   { id: "process", label: "How we work", built: false, inNav: true },
   { id: "founders", label: "Who you work with", built: false, inNav: true },
   { id: "engagement", label: "How a quote works", built: false, inNav: true },

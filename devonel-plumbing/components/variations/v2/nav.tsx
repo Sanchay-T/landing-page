@@ -21,7 +21,11 @@ import { Mark } from "@/components/ds/mark";
 import { navSections } from "./sections";
 import { CityClock } from "./two-city-field";
 
-export function Nav() {
+/**
+ * `base` prefixes the anchors so the same bar works on a sub-page: "" on /v2,
+ * "/v2" on /v2/work/jewelo, where a bare "#hero" would point at nothing.
+ */
+export function Nav({ base = "" }: { base?: string } = {}) {
   return (
     <nav className="v2-nav" aria-label="Devonel">
       <div className="v2-nav__side v2-nav__side--start">
@@ -29,7 +33,7 @@ export function Nav() {
       </div>
 
       <div className="v2-nav__centre">
-        <a className="v2-nav__wordmark" href="#hero">
+        <a className="v2-nav__wordmark" href={`${base}#hero`}>
           <Mark className="v2-nav__mark" />
           <span>Devonel</span>
         </a>
@@ -37,7 +41,7 @@ export function Nav() {
           <ul className="v2-nav__links">
             {navSections.map((section) => (
               <li key={section.id}>
-                <a className="v2-nav__link" href={`#${section.id}`}>
+                <a className="v2-nav__link" href={`${base}#${section.id}`}>
                   {section.label}
                 </a>
               </li>

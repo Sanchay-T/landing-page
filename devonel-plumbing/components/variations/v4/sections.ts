@@ -54,7 +54,8 @@ export const sections: readonly Section[] = [
   { id: "faq", label: "Before you pay", built: true, inNav: false },
   // COPY.md section 9, "Label: Start".
   { id: "contact", label: "Start", built: true, inNav: false },
-  // COPY.md section 10 carries no label; the footer is never a nav target.
+  // COPY.md section 10 carries no label; the footer is never a nav target, and
+  // the footer's own index drops this row rather than link to itself.
   { id: "footer", label: "Footer", built: true, inNav: false },
 ];
 

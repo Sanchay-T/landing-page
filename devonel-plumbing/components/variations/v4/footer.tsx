@@ -23,8 +23,9 @@ import { sections } from "./sections";
  * moment its `built` flag turns true and not one commit earlier, which makes a
  * dead footer link impossible rather than merely discouraged. It is the same
  * contract the nav bar runs on, and the reason this list needs no maintenance.
- * The nav bar shows the five it carries; the footer shows all of them, which is
- * what COPY.md section 10 asks the footer navigation to be.
+ * The nav bar shows the five it carries; the footer shows every section above
+ * it and not its own row, which is what COPY.md section 10 asks the footer
+ * navigation to be.
  *
  * No social links: `docs/goal/COPY.md` lists no social account for Devonel, and
  * a link to a profile that does not exist is the one thing a footer must never
@@ -41,7 +42,13 @@ export function Footer() {
     site.contact.mailSubject,
   )}`;
 
-  const anchors = sections.filter((section) => section.built);
+  // The footer never indexes itself: a link from the footer to the footer is a
+  // dead end, so the index is the nine sections above it - hero, labelled
+  // "Devonel" the way the wordmark says it, through contact - and not ten. Same
+  // shape as every other variation's index; see STATUS.md "Footer index labels".
+  const anchors = sections.filter(
+    (section) => section.built && section.id !== "footer",
+  );
 
   return (
     <footer id="footer" className="v4-footer">

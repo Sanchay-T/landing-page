@@ -1977,3 +1977,37 @@ body:has(.v3-doc) {
 .v3-engagement-lead + .v3-terms {
   margin-top: var(--v3-space-m);
 }
+
+/* ============================================= 11 - matrix round-1 fixes
+
+   Two corrections found by the nine-viewport matrix pass. Both are overrides
+   of earlier entries, appended rather than edited in place, so the entries
+   above stay the record of what was first drawn.
+
+   1. THE DATE IN THE TICK READOUT IS TEXT, NOT A MARK. Entry 04 set
+   `.v3-event-date` in `--v3-marker`, the same red the bar mark, the process
+   gates and the two CTA underlines use. On the mark those are non-text and
+   carry no meaning alone, which is what the marker deviation note covers. The
+   readout date is different: it is 13px/400 prose inside the hover and focus
+   panel, so WCAG 1.4.3 applies and #c8451c never clears 4.5:1 against
+   `--v3-bg` anywhere on the ramp (3.87 at midnight, 4.29 at noon, its best).
+   It takes `--v3-fg` instead, which is the colour the sentence beside it
+   already uses, so the panel now reads as one line of text. The mark itself is
+   untouched: the bar tick, the three process gates and the hero and contact
+   CTA underlines stay in `--v3-marker`.
+
+   2. AN ORPHAN AT 390 ONLY. `#process .v3-h2` broke "Paid discovery. Fixed
+   build. Monthly run." at 350px and left "run." alone on a 39px second line.
+   `text-wrap: balance` evens the two lines instead. It is scoped to this one
+   heading because it is the only one that orphans: at 360 the same string
+   already breaks 265/123, and the other six `.v3-h2` are single-line from 844
+   up and break cleanly below. The string is COPY.md verbatim and unchanged.
+   =========================================================================== */
+
+.v3-event .v3-event-date {
+  color: var(--v3-fg);
+}
+
+#process .v3-h2 {
+  text-wrap: balance;
+}

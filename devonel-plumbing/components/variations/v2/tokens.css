@@ -1,0 +1,593 @@
+/* ---------------------------------------------------------------------------
+   v2 "Shader Light" - the whole design system for variation 2, scoped to `.v2`.
+
+   Everything visual on /v2 resolves to a token in this block: palette, type,
+   space, the 12 column grid, radius, and the three motion primitives. A later
+   tweak is one edit here, never a sweep through sections.
+
+   Three rules this file enforces, from docs/goal/03-design-research.md
+   section 4:
+     - No shadow anywhere. Blocks are plinths: white, hard edged, no border.
+     - No radius above 6px.
+     - No monospace. Fraunces is display and clocks, Geist is everything else,
+       and italic is reserved for the clocks.
+
+   Motion primitives, and what each collapses to under
+   `prefers-reduced-motion: reduce`:
+     entrance  `v2-field-in`      the field fades 0 -> --v2-field-max over
+                                  --v2-field-in. It is the only load movement
+                                  on the page; no DOM element animates in.
+                                  Reduced: lands at full value on frame one.
+     hover     `--v2-hover-in`    the clock pair naming its own offset, and the
+                                  button darkening. Reduced: 1ms.
+     scroll    `--v2-drift`       the two poles part by up to 6% of page width
+                                  as the field leaves. Set by
+                                  two-city-field.tsx. Reduced: never set, stays
+                                  at the 0% declared here.
+
+   APPEND-ONLY. Add new tokens at the end of the block that owns them and never
+   repurpose an existing name: a section built later reads these by name.
+   --------------------------------------------------------------------------- */
+
+.v2 {
+  /* -- palette -------------------------------------------------------------
+     Off-white paper, white plinths, near-black ink. No cream, no terracotta,
+     nowhere on the page. */
+  --v2-paper: #f3f4f1;
+  --v2-raised: #ffffff;
+  --v2-ink: #141614;
+  --v2-ink-hover: #2c322c;
+  /* Secondary ink. Set for the worst case in the field: --v2-muted over paper
+     tinted 22% toward the darkest pole measures 3.7:1, this measures 6.3:1. */
+  --v2-ink-2: #3c423c;
+  --v2-muted: #5e635e;
+  --v2-rule: #d8dad4;
+
+  /* Pole anchors. Each city runs night -> day along the daylight ramp in
+     two-city-field.tsx, which writes --v2-dubai and --v2-mumbai inline. */
+  --v2-dubai-day: #e2a34b;
+  --v2-dubai-night: #2b3a6b;
+  --v2-mumbai-day: #3e9b8a;
+  --v2-mumbai-night: #1e3a44;
+  --v2-dubai: var(--v2-dubai-day);
+  --v2-mumbai: var(--v2-mumbai-day);
+
+  /* Where each city sits.
+     28% and 62% are read across a band that stops growing at 90rem, so the
+     two poles and the two clocks stay with the content instead of drifting to
+     the edges of a 2560px window. Below 90rem the band is the page and the
+     poles land at a true 28% and 62% of it. */
+  --v2-band: min(100%, 90rem);
+  --v2-band-inset: calc((100% - var(--v2-band)) / 2);
+  --v2-pole-dubai: calc(var(--v2-band-inset) + 0.28 * var(--v2-band));
+  --v2-pole-mumbai: calc(var(--v2-band-inset) + 0.62 * var(--v2-band));
+
+  /* -- type ----------------------------------------------------------------
+     Fraunces on its opsz axis for display and clocks, Geist for body. */
+  --v2-display-font: var(--font-serif);
+  --v2-body-font: var(--font-sans);
+  /* 36px at 390, 92px at 1280, capped there so ultrawide does not inflate. */
+  --v2-display: clamp(2.25rem, 0.716rem + 6.292vw, 5.75rem);
+  --v2-display-opsz: 96;
+  --v2-display-leading: 1.05;
+  --v2-clock: clamp(1.375rem, 0.9rem + 1.95vw, 1.75rem);
+  --v2-lead: clamp(1.0625rem, 0.95rem + 0.5vw, 1.25rem);
+  --v2-body: 1.0625rem;
+  --v2-body-leading: 1.65;
+  --v2-small: 0.8125rem;
+  --v2-measure: 66ch;
+
+  /* -- space ---------------------------------------------------------------
+     Fluid, utopia method, shared across the five directions; the scale is not. */
+  --v2-s1: 0.25rem;
+  --v2-s2: 0.5rem;
+  --v2-s3: 0.75rem;
+  --v2-s4: 1rem;
+  --v2-s5: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --v2-s6: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  --v2-s7: clamp(2.5rem, 1.9rem + 2.4vw, 4rem);
+  --v2-s8: clamp(4rem, 2.8rem + 4.8vw, 7rem);
+
+  /* -- grid ---------------------------------------------------------------- */
+  --v2-page: 71.25rem;
+  --v2-gutter: clamp(1.25rem, 0.55rem + 2.9vw, 2.5rem);
+  --v2-columns: 12;
+  --v2-gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --v2-nav-h: 4rem;
+
+  /* -- radius. Nothing on this page is rounder than 6px. ------------------- */
+  --v2-r: 4px;
+  --v2-r-lg: 6px;
+
+  /* -- motion -------------------------------------------------------------- */
+  --v2-field-max: 0.22;
+  --v2-field-in: 900ms;
+  --v2-hover-in: 160ms;
+  --v2-ease: cubic-bezier(0.2, 0.6, 0.3, 1);
+  --v2-drift: 0%;
+
+  position: relative;
+  min-block-size: 100dvh;
+  background-color: var(--v2-paper);
+  color: var(--v2-ink);
+  font-family: var(--v2-body-font);
+  font-size: var(--v2-body);
+  line-height: var(--v2-body-leading);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 64rem) {
+  .v2 {
+    --v2-display-opsz: 144;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 {
+    --v2-field-in: 1ms;
+    --v2-hover-in: 1ms;
+    --v2-drift: 0%;
+  }
+}
+
+/* -- resets ----------------------------------------------------------------
+   Zero specificity, so any rule below wins without an override war. */
+
+.v2 :where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+.v2 :where(h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol) {
+  margin: 0;
+}
+
+.v2 :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+.v2 :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.v2 :where(img, svg) {
+  display: block;
+  max-inline-size: 100%;
+}
+
+.v2 :where(:focus-visible) {
+  outline: 2px solid var(--v2-ink);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Anchors clear the bar, whether or not a later section makes it sticky. */
+.v2 :where([id]) {
+  scroll-margin-block-start: calc(var(--v2-nav-h) + var(--v2-s5));
+}
+
+/* -- grid ------------------------------------------------------------------
+   One 12 column definition, used by every section. `full` breaks a child out
+   to the page edge without touching 100vw, which would overflow wherever a
+   scrollbar takes width. */
+
+.v2-grid {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--v2-gutter), 1fr)
+    [inner-start] repeat(var(--v2-columns), minmax(0, calc(var(--v2-page) / var(--v2-columns))))
+    [inner-end] minmax(var(--v2-gutter), 1fr)
+    [full-end];
+  column-gap: 0;
+}
+
+.v2-grid > * {
+  grid-column: inner;
+}
+
+/* -- the field -------------------------------------------------------------
+   Poles first, mesh over them, both inside one box that never exceeds 22%. */
+
+.v2-field {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: -1;
+  block-size: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  animation: v2-field-in var(--v2-field-in) var(--v2-ease) both;
+}
+
+@keyframes v2-field-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--v2-field-max);
+  }
+}
+
+.v2-field__poles {
+  position: absolute;
+  inset: 0;
+  background-color: var(--v2-paper);
+  background-image:
+    radial-gradient(
+      56% 78% at calc(var(--v2-pole-dubai) - var(--v2-drift)) 42%,
+      var(--v2-dubai) 0%,
+      transparent 74%
+    ),
+    radial-gradient(
+      56% 78% at calc(var(--v2-pole-mumbai) + var(--v2-drift)) 58%,
+      var(--v2-mumbai) 0%,
+      transparent 74%
+    );
+}
+
+/* -- nav -------------------------------------------------------------------
+   64px, transparent, over the field. Wordmark centred, one clock each side. */
+
+.v2-nav {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--v2-s4);
+  block-size: var(--v2-nav-h);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+.v2-nav__side--start {
+  justify-self: start;
+}
+
+.v2-nav__side--end {
+  justify-self: end;
+}
+
+.v2-nav__centre {
+  display: flex;
+  align-items: center;
+  gap: var(--v2-s6);
+  justify-self: center;
+}
+
+.v2-nav__wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--v2-display-font);
+  font-variation-settings: "opsz" 36;
+  font-size: 1.125rem;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--v2-ink);
+}
+
+.v2-nav__mark {
+  inline-size: 1.0625rem;
+  block-size: 1.0625rem;
+}
+
+.v2-nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--v2-s5);
+}
+
+.v2-nav__link {
+  font-size: var(--v2-small);
+  color: var(--v2-ink-2);
+  padding-block-end: 2px;
+  border-block-end: 1px solid transparent;
+  transition: border-color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-nav__link:hover {
+  border-block-end-color: var(--v2-ink);
+}
+
+/* The quiet clock: nav only. */
+
+.v2-tick {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  color: var(--v2-ink-2);
+}
+
+.v2-tick__city {
+  font-size: var(--v2-small);
+  letter-spacing: 0.03em;
+}
+
+.v2-tick__time {
+  font-family: var(--v2-display-font);
+  font-style: italic;
+  font-variation-settings: "opsz" 20;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--v2-ink);
+}
+
+/* -- hero ------------------------------------------------------------------ */
+
+.v2-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: center;
+  min-block-size: 100dvh;
+  padding-block: calc(var(--v2-nav-h) + var(--v2-s7)) var(--v2-s8);
+  overflow: hidden;
+}
+
+.v2-hero__inner {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--v2-gutter), 1fr)
+    [inner-start] minmax(0, var(--v2-page))
+    [inner-end] minmax(var(--v2-gutter), 1fr)
+    [full-end];
+  text-align: center;
+}
+
+.v2-hero__inner > * {
+  grid-column: inner;
+}
+
+.v2-hero__headline {
+  grid-column: inner;
+  margin-inline: auto;
+  max-inline-size: 17ch;
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" var(--v2-display-opsz);
+  /* The svh term keeps the headline off the button in a 390px tall window. */
+  font-size: min(var(--v2-display), 13svh);
+  line-height: var(--v2-display-leading);
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+  color: var(--v2-ink);
+}
+
+.v2-hero__line {
+  display: inline;
+}
+
+.v2-hero__sub {
+  margin-block-start: var(--v2-s6);
+  margin-inline: auto;
+  max-inline-size: 36ch;
+  font-size: var(--v2-lead);
+  line-height: 1.55;
+  color: var(--v2-ink-2);
+  text-wrap: balance;
+}
+
+.v2-hero__act {
+  margin-block-start: var(--v2-s6);
+}
+
+.v2-hero__support {
+  margin-block-start: var(--v2-s3);
+  font-size: var(--v2-small);
+  color: var(--v2-ink-2);
+}
+
+/* -- the display clocks ----------------------------------------------------
+   Each one stands on its own pole. The hairline between them is the thread;
+   hover or focus the pair and it names the distance. */
+
+.v2-clocks {
+  position: relative;
+  grid-column: full;
+  block-size: 4.5rem;
+  margin-block-start: var(--v2-s6);
+}
+
+.v2-clocks__clock {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--v2-band-inset) + var(--v2-pole) * var(--v2-band));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  transform: translateX(-50%);
+}
+
+.v2-clocks__city {
+  font-size: var(--v2-small);
+  letter-spacing: 0.05em;
+  color: var(--v2-ink-2);
+}
+
+.v2-clocks__time {
+  font-family: var(--v2-display-font);
+  font-style: italic;
+  font-variation-settings: "opsz" 48;
+  font-size: var(--v2-clock);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--v2-ink);
+}
+
+.v2-clocks__thread {
+  position: absolute;
+  inset-block-start: 2.35rem;
+  inset-inline-start: calc(var(--v2-pole-dubai) + 3.25rem);
+  inset-inline-end: calc(100% - var(--v2-pole-mumbai) + 3.25rem);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transform: translateY(-50%);
+}
+
+.v2-clocks__thread::before,
+.v2-clocks__thread::after {
+  content: "";
+  flex: 1 1 auto;
+  block-size: 1px;
+  background-color: var(--v2-rule);
+}
+
+.v2-clocks__offset {
+  flex: 0 0 auto;
+  font-size: var(--v2-small);
+  letter-spacing: 0.02em;
+  color: var(--v2-ink-2);
+  opacity: 0;
+  transition: opacity var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-clocks:hover .v2-clocks__offset,
+.v2-clocks:focus-visible .v2-clocks__offset,
+.v2-clocks:focus-within .v2-clocks__offset {
+  opacity: 1;
+}
+
+/* -- the button ------------------------------------------------------------ */
+
+.v2-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 3rem;
+  padding-inline: 1.75rem;
+  border-radius: var(--v2-r);
+  background-color: var(--v2-ink);
+  color: var(--v2-paper);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  transition: background-color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-cta:hover {
+  background-color: var(--v2-ink-hover);
+}
+
+/* -- phone -----------------------------------------------------------------
+   Below 40rem the field stops being full bleed and becomes a 300px band
+   behind the headline, the nav keeps the wordmark only, and the two clocks
+   stack under the headline where they have room to be read. */
+
+@media (max-width: 39.999rem) {
+  .v2-hero {
+    align-content: start;
+    min-block-size: auto;
+    padding-block: calc(var(--v2-nav-h) + var(--v2-s6)) var(--v2-s8);
+  }
+
+  /* The band is 300px and it ends in paper rather than on a hard line: a cut
+     edge across the middle of a phone screen reads as a broken image. */
+  .v2-hero__field {
+    inset-block-start: var(--v2-nav-h);
+    block-size: 300px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15% 72%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 15% 72%, transparent);
+  }
+
+  .v2-nav {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .v2-nav__side {
+    display: none;
+  }
+
+  .v2-clocks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--v2-s3);
+    block-size: auto;
+  }
+
+  .v2-clocks__clock {
+    position: static;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+    transform: none;
+  }
+
+  /* Fixed slot for the city so the two times line up in a column. */
+  .v2-clocks__city {
+    min-inline-size: 4.75rem;
+    text-align: end;
+  }
+
+  .v2-clocks__thread {
+    position: static;
+    order: 2;
+    inline-size: 11rem;
+    transform: none;
+  }
+
+  /* Nothing hovers on a phone, so the thread reads out by default. */
+  .v2-clocks__offset {
+    opacity: 1;
+  }
+}
+
+/* Short windows: phone landscape at 844x390 has to hold the button on screen,
+   so the headline drops to two lines and every gap closes by one step. */
+@media (min-width: 40rem) and (max-height: 33rem) {
+  .v2 {
+    --v2-nav-h: 3rem;
+  }
+
+  .v2-hero {
+    min-block-size: auto;
+    padding-block: calc(var(--v2-nav-h) + var(--v2-s3)) var(--v2-s5);
+  }
+
+  .v2-hero__headline {
+    max-inline-size: 42ch;
+    font-size: min(var(--v2-display), 9.6svh);
+    line-height: 1.03;
+  }
+
+  .v2-clocks {
+    block-size: 3.25rem;
+    margin-block-start: var(--v2-s4);
+  }
+
+  .v2-clocks__thread {
+    inset-block-start: 2.1rem;
+  }
+
+  .v2-hero__sub {
+    margin-block-start: var(--v2-s4);
+    max-inline-size: none;
+    font-size: 1rem;
+  }
+
+  .v2-hero__act {
+    margin-block-start: var(--v2-s4);
+  }
+
+  .v2-cta {
+    min-block-size: 2.75rem;
+  }
+}
+
+/* Three lines at 92px is the drawn hero, so the breaks are set, not wrapped. */
+@media (min-width: 56rem) {
+  .v2-hero__headline {
+    max-inline-size: none;
+  }
+
+  .v2-hero__line {
+    display: block;
+  }
+}

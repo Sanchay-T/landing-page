@@ -1,12 +1,14 @@
-import Link from "next/link";
 import { getVariation } from "../variations";
+import { Hero, Nav } from "@/components/variations/v2";
+import "@/components/variations/v2/tokens.css";
 
 /**
- * Variation 2. Round 1 was deleted wholesale; this route holds the slug and
- * the name until the round-2 direction is built here.
+ * Variation 2, "Shader Light": off-white paper with a slow field behind it
+ * whose two colour poles are Dubai and Mumbai, lit by the real local time in
+ * each city.
  *
- * The name is read from `variations.ts` rather than typed, so this page, the
- * switcher at `/` and the mini-switcher can never disagree about what v2 is.
+ * Every token the page uses is scoped to the `.v2` class on the wrapper below,
+ * so nothing here leaks into the other four variations or into the switcher.
  */
 const variation = getVariation("v2")!;
 
@@ -14,18 +16,11 @@ export const metadata = { title: `${variation.name} - Devonel` };
 
 export default function Page() {
   return (
-    <main className="mx-auto flex min-h-svh max-w-[46rem] flex-col justify-center px-5 py-16 sm:px-8">
-      <h1 className="text-[clamp(2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
-        {variation.name}
-      </h1>
-      <p className="mt-8">
-        <Link
-          href="/"
-          className="underline decoration-border-strong underline-offset-4 hover:decoration-fg"
-        >
-          Back to all five variations
-        </Link>
-      </p>
-    </main>
+    <div className="v2">
+      <Nav />
+      <main>
+        <Hero />
+      </main>
+    </div>
   );
 }

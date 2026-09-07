@@ -22,6 +22,13 @@ import type { CSSProperties } from "react";
  * COPY.md's own alternate for this block instead, set as a shell comment, which
  * is the line that answers the objection the table raises: one client.
  *
+ * The secondary CTA is COPY.md section 2's alternate B, "Read the build log",
+ * which that document notes is the one that "matches the terminal and console
+ * registers". It is set as an output line, not a button: a dim `->` marker and
+ * a link in text colour with the page's inverse-video hover, so the accent
+ * stays on the caret, the rail counter and the primary CTA. It points at
+ * `#work`, the log this table is the summary of.
+ *
  * Every string is `docs/goal/COPY.md` section 2, on its v2 tone note (numerals,
  * lowercase, terse). Nothing is rounded, restated or invented.
  */
@@ -86,6 +93,15 @@ export function Proof() {
 
         <p className="v2-proof-log v2-print" style={printStep(3)}>
           <span aria-hidden="true">#</span> one product live. two more in build.
+        </p>
+
+        <p className="v2-proof-cta v2-print" style={printStep(4)}>
+          <span className="v2-proof-arrow" aria-hidden="true">
+            {"-> "}
+          </span>
+          <a className="v2-proof-open v2-inv" href="#work">
+            read the build log
+          </a>
         </p>
       </div>
     </section>

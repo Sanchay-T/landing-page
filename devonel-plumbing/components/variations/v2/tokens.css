@@ -14,7 +14,14 @@
      2  reset         element-level, all wrapped in :where() so classes win
      3  grid          shell, rail offset, 80ch measure, full-width rules
      4  primitives    print (entrance), inverse video (hover), meter (scroll)
-     5  components    nav rail / top strip, hero
+     5  components    one lettered block per section, 5a..5m, in file order:
+                      5a nav, 5b hero, 5c services, 5d work, 5e proof,
+                      5f case study document, 5g founders, 5h engagement,
+                      5i process, 5j faq, 5k footer, 5l contact, and 5m the
+                      round 1 fixes. The file is append-only, so the letters
+                      run in file order, not in page order; 5d/5e/5g had each
+                      been used twice by parallel builders and were relabelled
+                      (comments only, no rule changed).
      6  reduced motion
 
    Two rules that bit this project already and still apply here:
@@ -839,7 +846,7 @@
   }
 }
 
-/* --------------------------------------------------------------- 5d. proof */
+/* --------------------------------------------------------------- 5e. proof */
 
 /* The record `devonel --proof` prints. The figures are the only display-size
    type in the section, because the direction's thesis for this block is that
@@ -962,7 +969,7 @@
   }
 }
 
-/* -------------------------------------------------- 5e. case study document */
+/* ------------------------------------------------- 5f. case study document */
 
 /* `/v2/work/jewelo`: the file the log points at, catted to the buffer. The
    markers are markdown, because that is what the command says it is printing:
@@ -1054,7 +1061,7 @@
   margin-block-start: 1.5lh;
 }
 
-/* ------------------------------------------------------------ 5e. founders */
+/* ------------------------------------------------------------ 5g. founders */
 
 /* The record `devonel whoami` prints. Two blocks of key-value pairs and
    nothing else: this direction has no images, so there is no portrait, no
@@ -1175,7 +1182,7 @@
   }
 }
 
-/* ---------------------------------------------------------- 5f. engagement */
+/* ---------------------------------------------------------- 5h. engagement */
 
 /* `cat engagement.toml`. The buyer question is "what does this cost", and the
    honest answer on this page is a set of terms, not a number, so the section
@@ -1330,7 +1337,7 @@
   white-space: nowrap;
 }
 
-/* ------------------------------------------------------------- 5e. process */
+/* ------------------------------------------------------------- 5i. process */
 
 /* The engagement as a task runner. Four step lines, a payment column, indented
    sub-output under each step, and one stepped meter that ends the run.
@@ -1546,7 +1553,7 @@
   }
 }
 
-/* ----------------------------------------------------------------- 5g. faq */
+/* ----------------------------------------------------------------- 5j. faq */
 
 /* `devonel faq`. The section is a manual page read in `less`: a header line, a
    title, then tagged paragraphs. Each tag is a question carrying its own
@@ -1709,7 +1716,7 @@
   }
 }
 
-/* --------------------------------------------------------------- 5g. footer */
+/* -------------------------------------------------------------- 5k. footer */
 
 /* The `eof` block. Same measure and same rule as every section above it, so the
    footer is not a different surface, it is where the buffer stops.
@@ -1859,7 +1866,7 @@
   }
 }
 
-/* ------------------------------------------------------------- 5g. contact */
+/* ------------------------------------------------------------- 5l. contact */
 
 /* The final CTA. Every block above prints and stops; this one prints and then
    waits, so the section is built around a single live prompt.
@@ -1990,5 +1997,67 @@
 
   .v2-ct-cta {
     margin-block-start: 0.8lh;
+  }
+}
+
+/* ---------------------------------------------------- 5m. fix round 1 (r1) */
+
+/* Proof secondary CTA, unbreakable log tokens, top-strip scroll hint.
+
+   Appended after every section block above so the cascade is document order and
+   nothing earlier is rewritten. Three fixes, all inside the direction: one
+   family, three sizes, radius 0, shadow none, no image and no gradient. */
+
+/* Secondary CTA on the proof record, COPY.md section 2 alternate B. Set as an
+   output line rather than a button: the `-> ` marker sits in a 3ch hanging
+   column, so the words align under themselves when the line wraps at 360. The
+   link is text colour with the page's inverse-video hover, because the accent
+   is spent on the caret, the rail counter and the primary CTA. */
+.v2-proof-cta {
+  padding-inline-start: 3ch;
+  margin-block-start: 1lh;
+  text-indent: -3ch;
+}
+
+.v2-proof-arrow {
+  color: var(--v2-dim);
+}
+
+.v2-proof-open {
+  padding-inline: 0.5ch;
+  text-decoration: underline;
+}
+
+@media (max-height: 480px) {
+  .v2-proof-cta {
+    margin-block-start: 0.6lh;
+  }
+}
+
+/* One unbreakable token: a project slug or a stack name in the log. A hyphen is
+   a break opportunity, so `pendant-studio` and `gpt-image-2` split across two
+   lines on a phone and a command read as two. The break now falls in front of
+   the whole token, which the 12ch and 6ch hanging indents already handle. Every
+   one of these fits a 360px line on its own, so nothing can overflow. The case
+   link is the same class of token, a path that must not break at a slash. */
+.v2-nb,
+.v2-log-open {
+  white-space: nowrap;
+}
+
+/* The scroll hint on the compact top strip. Below 1024 the strip is one
+   horizontal scroll row and the last entries start off the right edge; the
+   current entry is scrolled into view by nav.tsx, and this prints while there
+   is more row to the right of it. A character, not an edge fade: a gradient
+   would be a `background-image`, which this direction does not have. */
+.v2-nav-more {
+  flex: none;
+  color: var(--v2-dim);
+  user-select: none;
+}
+
+@media (min-width: 1024px) {
+  .v2-nav-more {
+    display: none;
   }
 }

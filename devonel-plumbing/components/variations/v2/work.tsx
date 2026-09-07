@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 
@@ -34,6 +35,37 @@ function Command({ children }: { children: ReactNode }) {
 }
 
 /**
+ * One unbreakable token: a project slug or a stack name.
+ *
+ * A hyphen is a line-break opportunity, so on a phone `pendant-studio` set as
+ * plain text broke into `pendant-` / `studio` and a shell command read as two.
+ * `.v2-nb` is `white-space: nowrap`, so the break moves in front of the whole
+ * token instead, where the hanging indent already puts it under the command.
+ * Every one of these is short enough to fit a 360px line on its own.
+ */
+function Nb({ children }: { children: ReactNode }) {
+  return <span className="v2-nb">{children}</span>;
+}
+
+/**
+ * The pendant studio stack, COPY.md section 4, in its order. Each name prints
+ * with its own comma inside the unbreakable span, so a wrapped line can never
+ * open on a stray comma.
+ */
+const pendantStack: readonly string[] = [
+  "next.js",
+  "react",
+  "strict typescript",
+  "supabase",
+  "trigger.dev",
+  "gpt-image-2",
+  "fal.ai seedance",
+  "sentry",
+  "posthog",
+  "digitalocean",
+];
+
+/**
  * One log entry: a head line, an optional date pushed to the right of the
  * measure, and the body. The `*` bullet is a CSS marker in the hanging column,
  * so a wrapped body line never runs under it.
@@ -62,7 +94,9 @@ export function Work() {
 
         {/* ------------------------------------------------ pendant studio */}
         <article className="v2-log v2-print" style={printStep(1)}>
-          <Command>devonel log --project pendant-studio</Command>
+          <Command>
+            devonel log --project <Nb>pendant-studio</Nb>
+          </Command>
 
           <h3 className="v2-log-title">
             a name-pendant studio, live for an exhibition stall in 16 days
@@ -91,8 +125,12 @@ export function Work() {
                 <li>the operator issues the quote and the customer accepts it in the same screen</li>
               </ul>
               <p className="v2-log-deps">
-                <span className="v2-log-key">deps:</span> next.js, react, strict typescript,
-                supabase, trigger.dev, gpt-image-2, fal.ai seedance, sentry, posthog, digitalocean
+                <span className="v2-log-key">deps:</span>{" "}
+                {pendantStack.map((name, i) => (
+                  <Fragment key={name}>
+                    <Nb>{i < pendantStack.length - 1 ? `${name},` : name}</Nb>{" "}
+                  </Fragment>
+                ))}
               </p>
             </Entry>
 
@@ -139,7 +177,9 @@ export function Work() {
 
         {/* --------------------------------------------------- store audit */}
         <article className="v2-log v2-print" style={printStep(2)}>
-          <Command>devonel log --project store-audit</Command>
+          <Command>
+            devonel log --project <Nb>store-audit</Nb>
+          </Command>
 
           <h3 className="v2-log-title">
             an audit that found the launch blockers before submission
@@ -170,7 +210,9 @@ export function Work() {
 
         {/* --------------------------------------------------- watch leads */}
         <article className="v2-log v2-print" style={printStep(3)}>
-          <Command>devonel log --project watch-leads</Command>
+          <Command>
+            devonel log --project <Nb>watch-leads</Nb>
+          </Command>
 
           <h3 className="v2-log-title">
             leads that answer back, for a luxury watch boutique in dubai

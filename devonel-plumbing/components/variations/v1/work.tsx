@@ -152,8 +152,8 @@ export function Work() {
                   Spec on <Datum iso="2026-08-11">11 Aug 2026</Datum>.
                 </p>
                 <p className="v1-work__line">
-                  Live on the morning of <Datum iso="2026-08-27">27 Aug 2026</Datum>, in time for
-                  the client&rsquo;s exhibition stall.
+                  Live on the morning of <Datum iso="2026-08-27">27 Aug 2026</Datum>
+                  {", in time for the client's exhibition stall."}
                 </p>
                 <p className="v1-work__line">
                   The one complaint was generation time, which is set by the model providers, and we

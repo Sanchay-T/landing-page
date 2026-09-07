@@ -27,6 +27,14 @@
                          station tick, and the one gauge geometry that
                          turns vertical at 390, 2 x 2 at 768 and four
                          across at 1180.
+   06  2026-09-07  founders  the founder name type step, the two panels on
+                         the void reusing entry 04's panel surface, the
+                         hairline inside each panel, and the two-across
+                         geometry at 1180.
+   07  2026-09-07  engagement  four ruled rows back on the void in entry 03's
+                         list geometry, the run-in list header, the one-rule
+                         hover, and the pass-through cost that closes the
+                         section.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
@@ -1121,6 +1129,14 @@ body:has(.v1) {
   border-top: 1px solid var(--v1-line);
 }
 
+/* The facts column: the still, then the stack word list under it. It is the
+   second half of the flagship's two-column split from 1180 and a plain block in
+   source order below that, so the reading order never has to be repaired in
+   CSS. */
+.v1-work__aside {
+  min-width: 0;
+}
+
 .v1-work__plate {
   width: 100%;
   max-width: 26.25rem; /* 420 */
@@ -1223,19 +1239,29 @@ body:has(.v1) {
     align-content: start;
   }
 
-  /* The still moves into a fixed 220 column beside the write-up and spans both
-     of its rows, so the link stays on the prose column's left edge instead of
-     drifting under the image. */
+  /* Narrative left, facts right. The facts column spans both rows of the
+     left-hand track, so the link stays on the prose column's left edge instead
+     of drifting under the still. */
   .v1-work__flagbody {
     grid-template-columns: minmax(0, 1fr) 13.75rem;
     column-gap: var(--v1-6);
     align-items: start;
   }
 
-  .v1-work__plate {
+  .v1-work__aside {
     grid-column: 2;
     grid-row: 1 / span 2;
+  }
+
+  .v1-work__plate {
     max-width: none;
+  }
+
+  /* 15 rather than 17 in a 220 track: the stack is one long comma list and at
+     body size it sets to 26 characters a line, which breaks the product names
+     across lines more often than it fits them. */
+  .v1-work__aside .v1-work__line {
+    font-size: var(--v1-small);
   }
 
   .v1-work__doc {
@@ -1246,6 +1272,21 @@ body:has(.v1) {
   .v1-work__act {
     grid-column: 1;
     grid-row: 2;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   04 - case studies, short viewports
+
+   Phone landscape is 390 tall, and a 420-wide portrait still is 522 tall there,
+   which is a whole screen of the client's product inside a page about the
+   studio. The same call entry 01 makes for the hero on this height: step it
+   down rather than let it own the fold.
+   -------------------------------------------------------------------------- */
+
+@media (max-height: 34rem) {
+  .v1-work__plate {
+    max-width: 15rem;
   }
 }
 
@@ -1556,7 +1597,7 @@ body:has(.v1) {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   row-gap: var(--v1-7);
-  margin-top: var(--v1-4);
+  margin-top: var(--v1-5);
   padding-left: var(--v1-5);
   border-left: 1px solid var(--v1-line);
 }
@@ -1731,5 +1772,328 @@ body:has(.v1) {
 
   .v1-process__gate {
     left: calc(100% + var(--v1-7) / 2 - var(--v1-gate) / 2);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   06 - founders
+
+   Two panels on the void, side by side from 1180 and stacked below it. The
+   panel is the surface entry 04 already introduced for the case studies -
+   #111519 on the #07090C void, one 1px --v1-line border, 0 radius, no shadow -
+   so this section adds no new material to the page, only a second use of the
+   one it already has. Panels, not cards: nothing lifts, nothing rounds,
+   nothing tints, nothing here is hover-gated and nothing moves on load.
+
+   No portraits, no avatars, no initials and no monogram. The direction says
+   the section needs none, and the page carries exactly one piece of art.
+
+   Inside each panel the identity sits above one hairline and the role lines
+   below it, which is the flagship panel's own geometry from entry 04 (title
+   above a rule, write-up beneath). Two rules in the whole section, one per
+   panel, each doing the same job.
+
+   The name is the one new type step: 28 at 390 -> 32 at 1280, a step over
+   --v1-section-head at phone widths and level with it from 1280. That is
+   deliberate. The direction sets these names at 40px because the people are
+   the content of this section, and 28 -> 32 keeps that intent inside a panel
+   without letting a name out-shout the 40 -> 64 hero headline.
+
+   No lamp anywhere in this block. The only lamp in the section is the shared
+   focus ring from entry 01, and there is nothing focusable in it. No mono
+   either: mono on this page is for figures, and there are none here.
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* 28 at 390 -> 32 at 1280, then held. Same slope as --v1-phase from entry
+     05, so the two sections' names change size on one rhythm. */
+  --v1-founder: clamp(1.75rem, 1.6404rem + 0.4494vw, 2rem);
+}
+
+.v1-founders {
+  padding-block: var(--v1-8);
+}
+
+.v1-founders__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+.v1-founders__sub {
+  margin-top: var(--v1-4);
+  max-width: 52ch;
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   06 - the two panels
+
+   Below 1180 they stack with a space-scale gap rather than sharing an edge:
+   two hairline borders meeting on a 0px gap would read as one two-cell table,
+   and these are two people, not two rows.
+   -------------------------------------------------------------------------- */
+
+.v1-founders__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--v1-5);
+  margin-top: var(--v1-8);
+}
+
+.v1-founders__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.v1-founders__name {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-founder);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+  text-wrap: pretty;
+}
+
+/* COPY.md writes "Name - City." on one line; the hyphen becomes this break.
+   Muted, because the city is context for the name rather than a second claim. */
+.v1-founders__city {
+  margin-top: var(--v1-2);
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+}
+
+.v1-founders__roles {
+  margin-top: var(--v1-6);
+  padding-top: var(--v1-6);
+  border-top: 1px solid var(--v1-line);
+}
+
+/* Each paragraph carries its own measure so the cap is counted in its own font
+   size, the same rule entry 03 states for the services promise and scope. */
+.v1-founders__role {
+  max-width: 46ch;
+  color: var(--v1-text);
+  text-wrap: pretty;
+}
+
+.v1-founders__also {
+  margin-top: var(--v1-3);
+  max-width: 50ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* COPY.md's standing line, on the section's left edge - the one every heading,
+   name and paragraph on this page shares. */
+.v1-founders__standing {
+  margin-top: var(--v1-7);
+  max-width: 66ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   06 - founders, two panels side by side from 1180
+
+   The same 73.75rem the proof band, the services rows, the case row and the
+   process gauge change shape on, so every section on this page turns on one
+   breakpoint. Two equal tracks with the shell's own gutter between them is
+   arithmetically the direction's columns 1-6 and 7-12: on a 12-column grid of
+   track t and gutter g, 6t + 5g is exactly (W - g) / 2, so the panels land on
+   the same verticals the grid would put them on without a second grid
+   definition to keep in step with the first.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-founders {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-founders__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   07 - engagement
+
+   Back on the void after the two founder panels, so the page still reads void,
+   surface, void: the panels are the raised block between process and here, and
+   this section earns its edges from rules alone.
+
+   Four full-width rows, no cards, no icons, no numbering, no shadow. The
+   geometry is entry 03's services list exactly - the row owns the hairline
+   above it, the list owns the one that closes the set, the name takes columns
+   1-5 and the term columns 6-12 from 1180, and hovering a row lifts exactly
+   its own rule to text colour over --v1-open with no lift, no scale and no
+   fill. The direction's skeleton asks for a four-row table with columns for
+   what you get and when you pay; this is that table, drawn with the list
+   instrument the page already has.
+
+   The class names are its own rather than a second use of `.v1-services__`.
+   The two sections are deliberately identical today and a later change to the
+   services rows must not silently reshape the commercial terms, so the
+   geometry is repeated on purpose and the entries stay independent, which is
+   also what "append only, never rewrite an earlier entry" asks for.
+
+   No new tokens. The section head and the row names both reuse
+   --v1-section-head from entry 02, exactly as services does, and the hierarchy
+   comes from position: the head sits above every rule with a muted sentence
+   under it, the names sit inside the rules with their terms beside them.
+
+   No lamp anywhere in this block, and no mono: mono on this page is for
+   figures, and this section prints no figure - there are no prices on it,
+   which is its first sentence.
+   -------------------------------------------------------------------------- */
+
+.v1-engage {
+  padding-block: var(--v1-8);
+}
+
+.v1-engage__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+.v1-engage__sub {
+  margin-top: var(--v1-4);
+  max-width: 52ch;
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+/* COPY.md's own list header, set in the body face one weight up and one colour
+   step over the prose around it: a run-in heading inside a document, the same
+   treatment entry 04 gives the block names inside the flagship panel. It is
+   here because the process section directly above prints four numbered phases
+   and these four are alternatives, not steps; without the line, a reader who
+   has just read a sequence reads a second one. */
+.v1-engage__lead {
+  margin-top: var(--v1-8);
+  color: var(--v1-text);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* -----------------------------------------------------------------------------
+   07 - the four rows
+
+   The transition is declared on the row rather than on the hover state so the
+   rule falls back to --v1-line at the same speed it lifts, and --v1-open is
+   0ms under reduced motion, which takes both directions to nothing. Hover is
+   guarded on a real pointer: on a touch screen :hover sticks to the last row
+   tapped, and a rule left bright behind a finger would be the one thing on
+   this page that looks like state.
+   -------------------------------------------------------------------------- */
+
+.v1-engage__list {
+  margin-top: var(--v1-5);
+  border-bottom: 1px solid var(--v1-line);
+}
+
+.v1-engage__row {
+  padding-block: var(--v1-6);
+  border-top: 1px solid var(--v1-line);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+@media (hover: hover) {
+  .v1-engage__row:hover {
+    border-top-color: var(--v1-text);
+  }
+}
+
+.v1-engage__name {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.15;
+  text-wrap: pretty;
+}
+
+.v1-engage__terms {
+  margin-top: var(--v1-4);
+  max-width: 62ch;
+  color: var(--v1-text);
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   07 - the pass-through cost
+
+   The one term that is not a way of working, so it sits under the closed list
+   on space rather than on a fifth rule - the same call the proof band made
+   under its figure row, services made under its last row and process made
+   under its gauge.
+   -------------------------------------------------------------------------- */
+
+.v1-engage__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-2);
+  margin-top: var(--v1-7);
+  max-width: 52ch;
+}
+
+.v1-engage__foot-lead {
+  color: var(--v1-text);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+}
+
+.v1-engage__foot-line {
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   07 - engagement, name and terms side by side from 1180
+
+   The same 73.75rem every other section on this page turns on, and the same
+   1-5 / 6-12 split entry 03 measured for the services rows: the name sits on
+   the section's left edge and the term starts on the same vertical in all four
+   rows. The name reserves a step of the space scale on its right for the same
+   reason services does - the gutter alone is not enough air between a 32px
+   display face and a 17px paragraph.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-engage {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-engage__row {
+    display: grid;
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    padding-block: var(--v1-7);
+  }
+
+  .v1-engage__name {
+    grid-column: 1 / span 5;
+    padding-right: var(--v1-5);
+  }
+
+  .v1-engage__terms {
+    grid-column: 6 / span 7;
+    margin-top: 0;
   }
 }

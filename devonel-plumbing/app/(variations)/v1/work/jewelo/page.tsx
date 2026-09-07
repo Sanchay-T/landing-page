@@ -239,7 +239,7 @@ export default function Page() {
               <div className="v1-doc__plates v1-doc__plates--renders">
                 <Plates
                   plates={RENDERS}
-                  sizes="(min-width: 73.75rem) 240px, (min-width: 48rem) 30vw, (min-width: 30rem) 45vw, 100vw"
+                  sizes="(min-width: 73.75rem) 240px, (min-width: 48rem) 33vw, (min-width: 30rem) 45vw, 100vw"
                 />
               </div>
 
@@ -250,7 +250,7 @@ export default function Page() {
               <div className="v1-doc__plates v1-doc__plates--screens">
                 <Plates
                   plates={SCREENS}
-                  sizes="(min-width: 73.75rem) 380px, (min-width: 48rem) 45vw, 100vw"
+                  sizes="(min-width: 73.75rem) 480px, (min-width: 48rem) 48vw, 100vw"
                 />
               </div>
             </div>
@@ -291,11 +291,11 @@ export default function Page() {
             <time className="v1-work__date" dateTime="2026-08-27">
               27 Aug 2026
             </time>
-            , in time for the client&rsquo;s exhibition stall.
+            {", in time for the client's exhibition stall."}
           </p>
           <p className="v1-doc__line">
-            The owner&rsquo;s note on the first version: &ldquo;the layout is very good and
-            simple&rdquo;.
+            {"The owner's note on the first version: "}
+            &ldquo;the layout is very good and simple&rdquo;.
           </p>
           <p className="v1-doc__line">
             The one complaint was generation time, which is set by the model providers, and we said

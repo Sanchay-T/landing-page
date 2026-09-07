@@ -7,6 +7,8 @@
  * it anywhere else would put three.js in /v1's first-load JS.
  */
 
+export { Engagement } from "./engagement";
+export { Founders } from "./founders";
 export { Hero } from "./hero";
 export { Nav } from "./nav";
 export { Process } from "./process";

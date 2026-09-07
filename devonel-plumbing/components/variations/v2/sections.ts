@@ -42,8 +42,8 @@ export const sections: readonly Section[] = [
   { id: "founders", label: "Who you work with", built: true, inNav: true },
   { id: "engagement", label: "How a quote works", built: true, inNav: true },
   { id: "faq", label: "Before you pay", built: true, inNav: true },
-  { id: "final-cta", label: "Start", built: false, inNav: true },
-  { id: "footer", label: "Footer", built: false, inNav: false },
+  { id: "final-cta", label: "Start", built: true, inNav: true },
+  { id: "footer", label: "Footer", built: true, inNav: false },
 ] as const;
 
 /** The sections a nav may link to today. Empty until the next section lands. */

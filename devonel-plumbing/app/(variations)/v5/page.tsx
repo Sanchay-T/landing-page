@@ -1,4 +1,4 @@
-import { Hero, Nav } from "@/components/variations/v5";
+import { Hero, Nav, Proof } from "@/components/variations/v5";
 import "@/components/variations/v5/tokens.css";
 import { getVariation } from "../variations";
 
@@ -28,6 +28,7 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
+        <Proof />
       </main>
     </div>
   );

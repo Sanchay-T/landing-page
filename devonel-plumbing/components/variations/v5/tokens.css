@@ -659,3 +659,205 @@
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------- proof ---
+   Block 05 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03 nav,
+   04 hero, 05 proof); the second section block on the page. Appended, nothing
+   above this line is touched.
+
+   THE BAND. A steel block on the void, full bleed, with no border and no
+   radius: the value step from #06080D to #151B26 is the edge, and a rule around
+   it would make it a card. The direction allows slabs, not cards, and this
+   section is neither - it is the ground changing under the whole width.
+
+   THE ONE RULE. A single 1px chrome hairline at 22 percent sits between the
+   heading and the figures and is the only rule in the section. Nothing else is
+   boxed, underlined or separated.
+
+   SIZE OF THE FIGURES, MEASURED. Archivo at `wdth` 125 / `wght` 800 with
+   -0.02em sets the five COPY.md quantities at these widths per 100px of font
+   size, measured in this page's own font stack at 1280:
+
+     One 248.8   Sixteen 462.3   Four 270.0   25 153.2   Two 261.2
+
+   "Sixteen" is 4.623em, which is what settles the shape of this section. The
+   direction asks for 96px figures "in two rows", and two rows is not a
+   preference: five equal columns inside `.v5-band` give 216px per column at
+   1280 and 264px at 1536, so a single row of five caps the display at 46.7px
+   and 57.0px - smaller on a 1280 screen than the 45.3px this section sets on a
+   390 phone. A proof strip with no scale change between a phone and a desktop
+   gives up the one axis this direction is built on. Three columns give 376px
+   per column at 1280 and 455px at 1536, so the figures land at 79.8px and at
+   the direction's full 96px. Hence 3 + 2, with the sixth cell left empty: five
+   facts do not divide by three, and on a page whose argument is emptiness the
+   hole is the honest way to say so.
+
+   Below 48rem the grid is one column and each figure sits on a baseline with
+   its caption beside it, `flex-wrap` deciding per item: a caption that fits on
+   the line stays on it ("days from spec to live", "cities: Dubai and Mumbai"),
+   and one that does not drops under its figure whole. The flex base size is the
+   caption's own content width, so that decision is the browser measuring the
+   real string rather than a guessed breakpoint.
+
+   The figure size is a container-query unit, not a viewport one, because
+   `.v5-band` stops growing at `--v5-page` while the gutter keeps widening: the
+   content box is 1413px at 1536 and 1248px at 1920, so a `vw` ramp would
+   overflow exactly where the page gets wider. `--v5-proof-figure` is declared
+   on the section and consumed inside `.v5-proof__figures`, which is the
+   container, so `cqw` resolves against the grid that has to hold the type.
+
+   NO ENTRANCE. The variation's one moment is the orb's environment map
+   building on load. There is no reveal here, so this section is byte-identical
+   under `prefers-reduced-motion` and there is nothing to guard.
+
+   CONTRAST, MEASURED on steel #151B26: caption and attribution `--v5-muted`
+   #7C8798 is 4.77:1, figures `--v5-chrome` #DCE4EE is 13.5:1, heading and quote
+   `--v5-text` #E9EDF3 is 14.8:1. */
+
+.v5-proof {
+  /* 14px, the direction's caption size, shared by captions, the "More than"
+     qualifier and the quote's attribution line. */
+  --v5-proof-caption: 0.875rem;
+  /* One column: as large as the phone allows, 45.3px at 390 and 41.5px at 360,
+     holding at 48px once the column is wide enough to stop being the limit. */
+  --v5-proof-figure: clamp(2.5rem, 12.8cqw, 3rem);
+
+  background-color: var(--v5-steel);
+  padding-block: var(--v5-space-6);
+}
+
+.v5-proof__inner {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  justify-items: start;
+}
+
+/* Set below the figures on purpose. The counts are the proof and the heading is
+   the claim about them, so the claim is the smaller thing. */
+.v5-proof__head {
+  font-size: clamp(1.75rem, 2.2vw + 0.9rem, 3rem);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+.v5-proof__rule {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: var(--v5-hairline) solid var(--v5-rule-strong);
+}
+
+.v5-proof__figures {
+  container-type: inline-size;
+  display: grid;
+  width: 100%;
+  row-gap: var(--v5-space-4);
+}
+
+.v5-proof__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.75rem;
+  row-gap: var(--v5-space-1);
+}
+
+.v5-proof__figure {
+  font-size: var(--v5-proof-figure);
+  line-height: 0.9;
+  color: var(--v5-chrome);
+}
+
+/* "More than" is a floor, not a digit. Caption size and caption colour on the
+   numeral's own baseline, so the line still reads as one sourced sentence. */
+.v5-proof__lead {
+  font-family: var(--v5-font-body);
+  font-variation-settings: normal;
+  font-weight: 400;
+  font-size: var(--v5-proof-caption);
+  letter-spacing: normal;
+  color: var(--v5-muted);
+}
+
+.v5-proof__caption {
+  /* Base size is the caption's own width, so a caption that fits beside its
+     figure stays on the line and a longer one takes the next line whole. */
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 52ch;
+  font-size: var(--v5-proof-caption);
+  line-height: 1.5;
+  color: var(--v5-muted);
+}
+
+/* Three columns, five facts, one empty cell. */
+@media (min-width: 48rem) {
+  .v5-proof {
+    --v5-proof-figure: min(calc((100cqw - 3rem) / 14.153), 6rem);
+  }
+
+  .v5-proof__figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--v5-space-3);
+    row-gap: var(--v5-space-5);
+  }
+
+  .v5-proof__item {
+    display: block;
+  }
+
+  .v5-proof__caption {
+    max-width: 34ch;
+    margin-top: var(--v5-space-2);
+  }
+}
+
+.v5-proof__quote {
+  max-width: var(--v5-copy);
+  margin-top: var(--v5-space-4);
+}
+
+/* The opening quote mark hangs into the gutter so the sentence itself lines up
+   with the figures above it. */
+.v5-proof__quote-text {
+  font-family: var(--v5-font-body);
+  font-size: clamp(1.25rem, 0.6vw + 1.1rem, 1.5rem);
+  line-height: 1.45;
+  color: var(--v5-text);
+  text-indent: -0.42em;
+}
+
+.v5-proof__quote-source {
+  margin-top: var(--v5-space-2);
+  font-size: var(--v5-proof-caption);
+  line-height: 1.5;
+  color: var(--v5-muted);
+}
+
+/* The secondary CTA, gated in `proof.tsx` on the work section being built. Text
+   link, not a second pill: the hero's button stays the only button on the page.
+   Hover and focus are the same chrome hairline fill the nav uses. */
+.v5-proof__more {
+  position: relative;
+  align-self: start;
+  font-size: var(--v5-body);
+  color: var(--v5-chrome);
+  padding-bottom: 0.35em;
+  transition: color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-proof__more::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--v5-hairline);
+  background-color: var(--v5-chrome);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-proof__more:hover::after,
+.v5-proof__more:focus-visible::after {
+  transform: scaleX(1);
+}

@@ -34,9 +34,9 @@ export const sections: readonly V3Section[] = [
   { id: "process", label: "How we work", inNav: true, built: true },
   { id: "founders", label: "Who you work with", inNav: true, built: true },
   { id: "engagement", label: "How a quote works", inNav: true, built: true },
-  { id: "faq", label: "Before you pay", inNav: true, built: false },
-  { id: "contact", label: "Start", inNav: false, built: false },
-  { id: "footer", label: "Colophon", inNav: false, built: false },
+  { id: "faq", label: "Before you pay", inNav: true, built: true },
+  { id: "contact", label: "Start", inNav: false, built: true },
+  { id: "footer", label: "Colophon", inNav: false, built: true },
 ];
 
 /** The anchors the floating bar renders: on the page today, and worth a link. */

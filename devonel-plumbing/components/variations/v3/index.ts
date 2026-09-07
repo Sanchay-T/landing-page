@@ -13,4 +13,7 @@ export { V3Services } from "./services";
 export { V3Process } from "./process";
 export { V3Founders } from "./founders";
 export { V3Engagement } from "./engagement";
+export { V3Faq } from "./faq";
+export { V3Contact } from "./contact";
+export { V3Footer } from "./footer";
 export { sections, navSections, type V3Section } from "./sections";

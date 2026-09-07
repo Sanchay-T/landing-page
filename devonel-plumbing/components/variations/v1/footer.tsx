@@ -18,8 +18,12 @@ import { navSections } from "./sections";
  *
  * The section links come from `sections.ts` through `navSections`, filtered on
  * `built`, so a section still in flight can never ship a dead `#href` here and
- * the list grows as the page does. The footer is deliberately not in its own
- * list: a footer that links to itself is a dead end.
+ * the list grows as the page does. Their text is COPY.md's on-page label for
+ * each section rather than its documentation heading, so the index reads in the
+ * words the reader has just scrolled past; the hero has no label line and takes
+ * the wordmark. The footer is deliberately not in its own list: a footer that
+ * links to itself is a dead end, so the index is nine anchors beside the
+ * wordmark block, not ten.
  *
  * Every string is COPY.md section 10, verbatim, with the bracketed source
  * citations stripped. Three calls worth recording:

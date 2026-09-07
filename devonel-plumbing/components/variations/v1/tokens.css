@@ -46,6 +46,10 @@
    10  2026-09-07  footer  the colophon on the void: the wordmark block, the
                          two-column section links, the reach block and the
                          small print under one rule.
+   11  2026-09-07  polish  the record of the pre-matrix polish pass: the
+                         footer index now prints COPY.md's on-page labels, and
+                         the measurements that show the two columns still hold
+                         them at 360 through 2560 with no rule of its own.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
@@ -2459,10 +2463,17 @@ body:has(.v1) {
 
    `isolation: isolate` keeps the z-index -1 glow inside this block's own
    stacking context, so it paints behind the button and above the band rather
-   than disappearing under --v1-panel. The insets are deliberately small: the
-   glow never reaches the band's two hairlines, so it has no hard edge to clip
-   against, and the widest it runs past the shell is 32px, which the variation's
-   `overflow-x: clip` on `.v1` already contains.
+   than disappearing under --v1-panel.
+
+   The radii are explicit rather than left to `farthest-corner`, and that is the
+   whole trick: a default radial in a wide short box still has colour left in it
+   when it reaches the near sides, and what you get is a lit rectangle with four
+   hard edges instead of a pool of light. 9rem x 7rem centred at 40% fades to
+   nothing 144px and 112px out, and the insets put every side of the box further
+   away than that at every width in the matrix, so the light ends in the middle
+   of the band and never meets an edge to be cut by. The furthest it runs past
+   the shell is 48px, which the variation's `overflow-x: clip` on `.v1` contains,
+   and it is transparent long before it gets there.
 
    Measured over --v1-panel #111519: the peak stop lifts the surface to about
    #171a1e, which leaves the muted support line at 5.0:1 and the body text at
@@ -2478,12 +2489,12 @@ body:has(.v1) {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -3rem -2rem;
+  inset: -5rem -3rem;
   background-image: radial-gradient(
-    circle at 30% 50%,
-    rgb(255 243 224 / 0.06),
-    rgb(255 243 224 / 0.02) 42%,
-    rgb(255 243 224 / 0) 70%
+    9rem 7rem at 40% 50%,
+    rgb(255 243 224 / 0.07),
+    rgb(255 243 224 / 0.022) 45%,
+    rgb(255 243 224 / 0) 100%
   );
   pointer-events: none;
 }
@@ -2533,6 +2544,13 @@ body:has(.v1) {
   font-size: 0.94em;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
+  /* Geist Mono's space is a full character advance, about 8.5px against Geist's
+     4.4px at this size, so "27 Aug 2026" set inline in a Geist sentence reads as
+     if it were typed with double spaces. -0.2em takes the gap to 5.7px, which
+     sits with the spaces on either side of the date. `nowrap` keeps the three
+     parts together: a date broken over two lines is a date read twice. */
+  word-spacing: -0.2em;
+  white-space: nowrap;
 }
 
 /* The always-on channel line. It closes the band on space rather than on a
@@ -2663,16 +2681,25 @@ body:has(.v1) {
 /* -----------------------------------------------------------------------------
    10 - the section links
 
-   Two columns at every width, so nine anchors read as a short block beside the
+   Two columns at every width, so the anchors read as a short block beside the
    other two rather than as a tower down the page. The hairline under a link is
    the same one the proof band's text link carries, so a reader who has met one
    text link on this page has met all of them.
    -------------------------------------------------------------------------- */
 
 .v1-colophon__links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--v1-2) var(--v1-4);
+  columns: 2;
+  column-gap: var(--v1-4);
+}
+
+/* Multi-column rather than a two-column grid, because a grid fills across the
+   row and would print the page's order as Hero, Proof strip / Services, Case
+   studies: a reader scanning down the left column reads every other section.
+   Columns fill downward, so the left column is the first half of the page in
+   order and the right column is the second, whatever the list length is while
+   sections are still landing. */
+.v1-colophon__links > li {
+  break-inside: avoid;
 }
 
 .v1-colophon__link {
@@ -2731,6 +2758,13 @@ body:has(.v1) {
   font-size: 0.94em;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
+  /* Geist Mono's space is a full character advance, about 8.5px against Geist's
+     4.4px at this size, so "27 Aug 2026" set inline in a Geist sentence reads as
+     if it were typed with double spaces. -0.2em takes the gap to 5.7px, which
+     sits with the spaces on either side of the date. `nowrap` keeps the three
+     parts together: a date broken over two lines is a date read twice. */
+  word-spacing: -0.2em;
+  white-space: nowrap;
 }
 
 /* -----------------------------------------------------------------------------
@@ -2768,3 +2802,30 @@ body:has(.v1) {
     grid-column: 9 / span 4;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   11 - polish
+
+   The pre-matrix polish pass. It changed no declaration in this file, and that
+   is the finding, not an omission: the footer index swapped its ten
+   documentation headings for COPY.md's nine on-page labels - "Hero" became the
+   wordmark "Devonel", "Proof strip" became "Proof of work", "Objections and
+   FAQ" became "Before you pay", "Final CTA" became "Start" - and the two
+   columns entry 10 built absorbed every new width without a single rule.
+
+   Measured on the widest label, "Who you work with", after the swap:
+
+     390   column box 350px, two columns of ~165px, longest link 132px
+     1180  column box 361px, longest link 132px
+     1280  column box 395px, longest link 132px
+
+   A Range over each link's contents returns exactly one client rect at all
+   three widths, so no label wraps and none is close to wrapping. Recorded here
+   so the next builder who lengthens a label knows the headroom is ~30px at 390
+   and does not reach for a third column or a smaller step first.
+
+   The nav is untouched by the relabelling by construction: v1's bar carries the
+   wordmark and one button and no section anchor, so `sections.ts` labels reach
+   the page in exactly one place, this index. Bar height stays 56px at 390, 1180
+   and 1280, and document scrollWidth equals innerWidth at all three.
+   -------------------------------------------------------------------------- */

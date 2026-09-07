@@ -44,6 +44,13 @@
  * the client's line with its attribution, and the always-on channel line. The
  * document's bracketed source references are notation, not copy, and are the
  * only thing dropped. The client is not named, here or anywhere on the page.
+ *
+ * The proof line is set exactly as COPY.md prints it: straight quote marks
+ * around the client's words (as `&quot;`, because a bare `"` in JSX text is a
+ * react/no-unescaped-entities error) and no full stop after the date, because
+ * the stop in the document belongs to its bracketed source reference. The
+ * document's " - " between the words and the attribution is the separator the
+ * blockquote/figcaption pair already is, so it is not printed twice.
  */
 
 import type { CSSProperties } from "react";
@@ -94,11 +101,11 @@ export function Contact() {
 
           <figure className="v2-contact__proof">
             <blockquote className="v2-contact__quote">
-              &ldquo;the layout is very good and simple&rdquo;
+              &quot;the layout is very good and simple&quot;
             </blockquote>
             <figcaption className="v2-contact__attribution">
               the owner, a bespoke jewellery house in Dubai. Shipped{" "}
-              <time dateTime="2026-08-27">27 Aug 2026</time>.
+              <time dateTime="2026-08-27">27 Aug 2026</time>
             </figcaption>
           </figure>
         </div>

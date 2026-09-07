@@ -3022,3 +3022,68 @@
     gap: 2rem;
   }
 }
+
+/* ===========================================================================
+   BLOCK 12: final fixes - v2 fix pass before the matrix
+   Appended, never edited in place: everything above this line is the block that
+   authored it, and a correction of record belongs after it, not inside it.
+
+   -- FAQ: the trigger spans the band at >= 64rem ---------------------------
+   Block 8 gave the row a 5 / 7 grid and put the h3 in columns 1-5, so the
+   button - and with it the "+" that says the row opens - ended where the
+   question column ends: x=521 of a 40..1240 rule at 1280, 1131 of 560..2000 at
+   2560. Every closed row was therefore a full-band hairline whose only
+   affordance sat in its left 40%, with the remaining 60% reading as ruled paper
+   that does nothing.
+
+   The fix is the second of the two the note allowed: the trigger spans the
+   whole row and the answer keeps the right-hand columns. The button carries the
+   row's own twelve-column grid inside it, so the question still sets in columns
+   1-5 and lines up with the service names above it exactly as before, and the
+   state glyph lands in column 12, flush with the end of the rule. The panel is
+   still columns 6.. of grid row 1, so an open row still reads as one line of
+   the ledger.
+
+   The answer gives up column 12 and now runs 6-11, because the glyph and the
+   answer's first line share a baseline: block 8 sets the first line's top
+   padding to the button's own so the answer starts level with its question, and
+   with the answer running to the end of the rule three of the seven first lines
+   measured straight into the glyph at 1280 (-1.3px, -2.0px, -7.8px of
+   clearance). Column 12 is therefore the state's, at every width and for any
+   length of first line, and the answer clears it by 93px at 1280 and 113px at
+   2560. Below --v2-measure nothing about the answer's setting changes; where
+   the column box was the binding constraint the measure is now shorter, which
+   is the cheaper of the two prices.
+
+   The trigger's overlap with the open answer is deliberate and harmless. The
+   panel is a later sibling, so it paints and hit-tests above the button: the
+   answer's own words stay selectable and carry a text cursor, while the band
+   around them stays the toggle. Below 64rem block 8's single-column flex row is
+   already correct and is left alone. */
+
+@media (min-width: 64rem) {
+  .v2-faq__q {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .v2-faq__toggle {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+    align-items: baseline;
+  }
+
+  .v2-faq__question {
+    grid-column: 1 / span 5;
+  }
+
+  .v2-faq__state {
+    grid-column: 12;
+    justify-self: end;
+  }
+
+  .v2-faq__panel {
+    grid-column: 6 / span 6;
+  }
+}

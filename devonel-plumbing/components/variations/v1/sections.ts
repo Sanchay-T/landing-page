@@ -2,8 +2,11 @@
  * The ten canonical sections of v1 "Studio Dark", in page order.
  *
  * One list, read by every part of the variation, so the anchor ids, the labels
- * and the nav can never drift apart. Labels are the section names from
- * `docs/goal/COPY.md`; no label is invented here.
+ * and the nav can never drift apart. Labels are the on-page labels COPY.md
+ * prints for each section, not its documentation headings, so the footer index
+ * reads in the reader's words; no label is invented here. The hero has no
+ * COPY.md label line, so it carries the wordmark, "Devonel", the way the nav
+ * and the colophon already name the top of the page.
  *
  * `built`  the section exists on the page. Anything still false has no anchor
  *          to link to, so link builders must filter on it rather than render a
@@ -30,22 +33,22 @@ export type SectionId =
 export type Section = {
   /** The element id, and the anchor a link uses. */
   id: SectionId;
-  /** Section name from COPY.md. */
+  /** On-page label from COPY.md (hero: the wordmark). */
   label: string;
   built: boolean;
   inNav: boolean;
 };
 
 export const sections: readonly Section[] = [
-  { id: "hero", label: "Hero", built: true, inNav: true },
-  { id: "proof", label: "Proof strip", built: true, inNav: true },
-  { id: "services", label: "Services", built: true, inNav: true },
+  { id: "hero", label: "Devonel", built: true, inNav: true },
+  { id: "proof", label: "Proof of work", built: true, inNav: true },
+  { id: "services", label: "What you buy", built: true, inNav: true },
   { id: "case-studies", label: "Case studies", built: true, inNav: true },
-  { id: "process", label: "Process", built: true, inNav: true },
-  { id: "founders", label: "Founders", built: true, inNav: true },
-  { id: "engagement", label: "Engagement", built: true, inNav: true },
-  { id: "faq", label: "Objections and FAQ", built: true, inNav: true },
-  { id: "final-cta", label: "Final CTA", built: true, inNav: true },
+  { id: "process", label: "How we work", built: true, inNav: true },
+  { id: "founders", label: "Who you work with", built: true, inNav: true },
+  { id: "engagement", label: "How a quote works", built: true, inNav: true },
+  { id: "faq", label: "Before you pay", built: true, inNav: true },
+  { id: "final-cta", label: "Start", built: true, inNav: true },
   { id: "footer", label: "Footer", built: true, inNav: false },
 ] as const;
 

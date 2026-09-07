@@ -19,9 +19,13 @@
  * labels plus the wordmark and the two clocks only fit from 84rem up, so below
  * 1344px this list is the page's only written map. It is built from
  * `sections.ts`, gated on `built` exactly the way the nav gates its own links,
- * so it can never point at a section that does not exist; with the final CTA
- * and this footer flipped, all ten canonical sections are built and all ten
- * anchors render.
+ * so it can never point at a section that does not exist. It drops one row that
+ * the nav also drops for its own reason: this footer, because a list of the page
+ * cannot usefully point at the place the reader is already standing. The hero
+ * stays, under the label `sections.ts` gives it - "Devonel", the wordmark - so
+ * every line of the index is something the page says out loud rather than a
+ * heading out of the copy document. Nine anchors, and the tenth section is the
+ * one printing them.
  *
  * The address is printed as live text, linked to mail built from
  * `site.contact`. It is deliberately not `contactHref()`: the moment a WhatsApp
@@ -54,7 +58,7 @@ const MAIL_HREF = `mailto:${site.contact.email}?subject=${encodeURIComponent(sit
  * Same contract as `nav.tsx`.
  */
 export function Footer({ base = "" }: { base?: string } = {}) {
-  const index = sections.filter((section) => section.built);
+  const index = sections.filter((section) => section.built && section.id !== "footer");
 
   return (
     <footer id="footer" className="v2-footer">

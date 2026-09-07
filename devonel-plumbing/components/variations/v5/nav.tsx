@@ -1,7 +1,6 @@
 import { ContactCTA } from "@/components/ds/contact-cta";
 import { Mark } from "@/components/ds/mark";
 import { contactLabel } from "@/lib/site";
-import { navSections } from "./sections";
 
 /**
  * Two 12px items in opposite corners, and nothing else.
@@ -15,35 +14,28 @@ import { navSections } from "./sections";
  * button on the screen. It resolves to whichever channel `lib/site.ts` has
  * configured, so this file names no channel of its own.
  *
- * Section anchors are gated on `built` in `sections.ts`, so a link can never
- * point at a section that is not on the page. Only the hero is built today and
- * the hero is not in the index, so the middle group renders nothing at all and
- * the nav is the two corner items the direction asks for. As sections land they
- * appear here in page order without anyone editing this file.
+ * `base` is empty on the variation root, where the mark is a link to the top of
+ * this page, and "/v5" on the sub-page at /v5/work/jewelo, where it has to
+ * resolve back to the root instead of to an anchor that page has not got. The
+ * CTA is unaffected: it reads its href from `lib/site.ts`.
+ *
+ * NO SECTION INDEX HERE, and that is the direction rather than a shortcut.
+ * 03-design-research.md section 4 puts it flatly: "Nav is two 12px items in
+ * opposite corners and nothing else, with no bar and no background." An earlier
+ * version of this file rendered the built `navSections()` between the two
+ * corners; with two sections built it took the header to 95px at 390 and 360
+ * and laid it 11px over the h1, and every further section made it worse. The
+ * ten section anchors belong to the footer, which is what `inNav` in
+ * `sections.ts` drives and where COPY.md section 10 puts them. Nothing on this
+ * line grows as the page grows.
  */
-export function Nav() {
-  const links = navSections();
-
+export function Nav({ base = "" }: { base?: string }) {
   return (
     <header className="v5-nav">
-      <a className="v5-nav__mark" href="#hero">
+      <a className="v5-nav__mark" href={`${base}#hero`}>
         <Mark />
         Devonel
       </a>
-
-      {links.length > 0 ? (
-        <nav className="v5-nav__index" aria-label="Sections">
-          {links.map((section) => (
-            <a
-              key={section.id}
-              className="v5-nav__link"
-              href={`#${section.id}`}
-            >
-              {section.label}
-            </a>
-          ))}
-        </nav>
-      ) : null}
 
       <ContactCTA className="v5-nav__link">{contactLabel()}</ContactCTA>
     </header>

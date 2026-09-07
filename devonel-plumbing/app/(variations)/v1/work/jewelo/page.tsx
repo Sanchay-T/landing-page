@@ -176,8 +176,23 @@ const SCREENS: readonly Plate[] = [
   },
 ];
 
-function Plates({ plates, sizes }: { plates: readonly Plate[]; sizes: string }) {
-  return plates.map((plate) => (
+/**
+ * `leads` marks the group that opens the plate run. Only the very first plate on
+ * the page is `priority`; every other plate is left to next/image's default lazy
+ * loading, so fourteen stills below the fold stop competing with the document's
+ * own text for the first connections. Verified by scrolling the page at 390 and
+ * 1280 and counting fifteen decoded images, not by reading the flag.
+ */
+function Plates({
+  plates,
+  sizes,
+  leads = false,
+}: {
+  plates: readonly Plate[];
+  sizes: string;
+  leads?: boolean;
+}) {
+  return plates.map((plate, index) => (
     <figure key={plate.src} className="v1-doc__plate">
       <Image
         className="v1-doc__still"
@@ -186,7 +201,7 @@ function Plates({ plates, sizes }: { plates: readonly Plate[]; sizes: string }) 
         width={plate.w}
         height={plate.h}
         sizes={sizes}
-        priority
+        priority={leads && index === 0}
       />
       <figcaption className="v1-doc__caption" aria-hidden="true">
         {plate.alt}
@@ -240,6 +255,7 @@ export default function Page() {
                 <Plates
                   plates={RENDERS}
                   sizes="(min-width: 73.75rem) 240px, (min-width: 48rem) 33vw, (min-width: 30rem) 45vw, 100vw"
+                  leads
                 />
               </div>
 

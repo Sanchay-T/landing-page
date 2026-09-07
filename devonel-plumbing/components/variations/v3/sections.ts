@@ -91,7 +91,7 @@ export const sections: readonly Section[] = [
     tick: 15,
     tickEnd: 15,
     stage: "first-light",
-    built: false,
+    built: true,
     inNav: true,
   },
   {
@@ -100,7 +100,7 @@ export const sections: readonly Section[] = [
     tick: 16,
     tickEnd: 16,
     stage: "first-light",
-    built: false,
+    built: true,
     inNav: true,
   },
   {
@@ -109,7 +109,7 @@ export const sections: readonly Section[] = [
     tick: 16,
     tickEnd: 16,
     stage: "day",
-    built: false,
+    built: true,
     inNav: true,
   },
   {

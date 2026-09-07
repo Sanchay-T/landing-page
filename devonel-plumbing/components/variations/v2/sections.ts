@@ -5,7 +5,10 @@
  * both `built` and `inNav`, so the nav can never point at a section that does
  * not exist yet) and by anything else that has to know the page's shape.
  * Labels are verbatim from `docs/goal/COPY.md`: the `**Label:**` line where the
- * section has one, otherwise the section heading.
+ * section has one, otherwise the section heading. The one exception is the hero,
+ * which COPY gives no label: it is "Devonel", the wordmark, because the only
+ * place that anchor is ever written as link text is the footer index and
+ * "Hero" is a document heading rather than anything the page says out loud.
  *
  * A builder finishing a section flips `built` to true here and nowhere else.
  */
@@ -29,12 +32,13 @@ export type Section = {
   label: string;
   /** True once the section is built on the page. */
   built: boolean;
-  /** False for the two sections a nav never links to: the top and the footer. */
+  /** False for the two sections a nav never links to: the top and the footer.
+      The footer index reads it too, and drops only its own self-link. */
   inNav: boolean;
 };
 
 export const sections: readonly Section[] = [
-  { id: "hero", label: "Hero", built: true, inNav: false },
+  { id: "hero", label: "Devonel", built: true, inNav: false },
   { id: "proof", label: "Proof of work", built: true, inNav: true },
   { id: "services", label: "What you buy", built: true, inNav: true },
   { id: "work", label: "Case studies", built: true, inNav: true },

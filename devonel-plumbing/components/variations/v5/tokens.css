@@ -1006,7 +1006,7 @@
 
 .v5-services__row {
   align-items: start;
-  row-gap: var(--v5-space-2);
+  row-gap: var(--v5-space-3);
   padding-block: var(--v5-space-4);
 }
 
@@ -1045,7 +1045,12 @@
   grid-column: 1 / -1;
   display: grid;
   row-gap: var(--v5-space-1);
-  max-width: var(--v5-copy);
+  /* `.v5-body`'s own measure, not `--v5-copy`. Measured: 66ch of Geist at 16px
+     is 700px, and stacked under the name the copy has the whole band, which
+     sets these paragraphs at 87 characters a line at 820 and at 844. 34em
+     holds them at 68 and binds in the side-by-side regime too, where the copy
+     column runs 531px to 647px, so one number covers both. */
+  max-width: 34em;
 }
 
 .v5-services__promise {
@@ -1095,5 +1100,808 @@
 @media (prefers-reduced-motion: reduce) {
   .v5-services {
     --v5-services-fill: 1ms;
+  }
+}
+
+/* -------------------------------------------------------------- nav fix ---
+   BLOCK 07: nav fix. Appended, nothing above this line is touched.
+
+   The direction is one sentence: "Nav is two 12px items in opposite corners and
+   nothing else, with no bar and no background" (03-design-research.md section 4,
+   "Component vocabulary"). Block 03 above was built to that shape but left a
+   middle group, `.v5-nav__index`, that rendered the built sections between the
+   corners. Once proof and services were built that group put a second and third
+   item on the line: measured at 390 and 360 the header ran to 94.8px and its
+   box crossed the h1 by 10.7px, and every further section would have added
+   another link. `nav.tsx` no longer renders it and the ten section anchors are
+   the footer's, which is what `inNav` in `sections.ts` says they are. The
+   `.v5-nav__index` rule in block 03 is now dead - append-only means it stays
+   where it is, and nothing in the DOM matches it.
+
+   WHAT IS LEFT TO HOLD. Two children, and the line must never become two lines
+   at any width the matrix tests. `flex-wrap` is stated rather than inherited
+   from the initial value so a later hand cannot loosen it by accident, and the
+   two labels - the wordmark and "Send your brief" - are kept on one line each,
+   because a wrapped CTA is exactly how the header grew the first time. Measured
+   after the fix: the header is 60px (`--v5-nav-h`, the reserve the hero already
+   pads for, not the content) with one 12px row in it at 360, 390, 844x390 and
+   1280, and the h1 clears it at every one. */
+
+.v5-nav {
+  flex-wrap: nowrap;
+}
+
+.v5-nav > * {
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------- work ---
+   Block 07 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03 nav,
+   04 hero, 05 proof, 06 services, 07 work); the fourth section block on the
+   page, and the block the sub-page at /v5/work/jewelo also reads. Appended,
+   nothing above this line is touched.
+
+   ONE SLAB, TWO ROWS, AND THAT IS THE ARGUMENT. The shipped product is a steel
+   slab raised off the void with evidence inside it. The two unshipped ones are
+   rows of type on the ground with no image and no block behind them. The
+   direction's vocabulary already says slabs are the raised thing, so the
+   honesty of "one shipped, two in build" is carried by the material before a
+   word is read, and no badge or colour is needed to say it.
+
+   NO CARD, NO SHADOW, NO ACCENT. `.v5-slab` is the only surface here: steel,
+   one 1px chrome rule at 10 percent, 2px radius. The still gets a 1px chrome
+   hairline at 22 percent, which is the same value the proof band's one rule
+   uses, so a frame and a rule are the same object at different lengths.
+
+   SIZE OF THE FLAGSHIP TITLE, MEASURED. Archivo at `wdth` 125 / `wght` 800 with
+   -0.02em sets about 0.63em per character in this page's own stack, so the
+   68-character title is roughly 42.8em and its longest word, "exhibition", is
+   6.3em. The size is solved from the slab's content box rather than from the
+   viewport, because the slab's padding is itself fluid: `.v5-work__case` is the
+   query container, so `cqw` resolves against the box that actually has to hold
+   the type.
+
+     content box   title      lines   longest word
+     276px (360)   28px min   5       176px, fits
+     306px (390)   28px min   5       176px, fits
+     705px (820)   41.0px     4       258px, fits
+     1015px (1180) 59.0px     3       372px, fits
+     1101px (1280) 64.0px cap 3       403px, fits
+     1321px (1536) 64.0px cap 3       403px, fits
+     1136px (1920) 64.0px cap 3       403px, fits
+
+   5.81cqw is what puts the cap exactly at 1280, which is the width the
+   direction names for 48-64px, and the 1.75rem floor is what holds 28px at 360
+   and 390, which is the 28-32px the direction names for a phone. Nothing here
+   uses `vw`: `.v5-band` stops growing at `--v5-page` while the gutter keeps
+   widening, so a viewport ramp would grow exactly where the slab does not.
+
+   SIZE OF THE SHOWCASE TITLES, the same method against `.v5-work__rows`:
+   3.4cqw with a 1.5rem floor and a 2.5rem cap gives 24px at 360 and 390, 37px
+   at 1180 and 40px from 1280 up. At and above 73.75rem the title takes columns
+   1-6 and its copy columns 7-12, which is the same rhythm the services rows
+   use, so the two stacked sections read as one page rather than two systems.
+
+   THE ROW HAIRLINE is chrome at 24 percent, the same value services uses, and
+   for the same reason: on the void the 22 percent rule reads fainter than it
+   does on steel. It is set with `+` so it appears between the two rows only.
+
+   NO ENTRANCE, NO REVEAL. The variation's one moment is the orb's environment
+   map building on load, so this section is byte-identical under
+   `prefers-reduced-motion` apart from the link hairline, which is the same
+   hover primitive the nav and the proof link already use and collapses with
+   them.
+
+   CONTRAST, MEASURED. On steel #151B26: title and link `--v5-chrome` #DCE4EE
+   13.5:1, label `--v5-text` #E9EDF3 14.8:1, lines and chip `--v5-muted`
+   #7C8798 4.77:1. On void #06080D: `--v5-chrome` 15.6:1, `--v5-text` 16.9:1,
+   `--v5-muted` 5.51:1. */
+
+.v5-work {
+  /* The section's claim, on the same ramp as `.v5-proof__head` and
+     `.v5-services__title`, so the three headings that make a claim about a
+     section are one size and the poster type under each carries the scale. */
+  --v5-work-head: clamp(1.75rem, 2.2vw + 0.9rem, 3rem);
+
+  /* Solved from the slab's content box. See the block header. */
+  --v5-work-title: clamp(1.75rem, 5.81cqw, 4rem);
+  --v5-work-row-title: clamp(1.5rem, 3.4cqw, 2.5rem);
+
+  /* Chrome at 24 percent: the only structure between the two showcase rows,
+     and the one rule value on this page that sits on the void. */
+  --v5-work-hairline: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+
+  /* Fluid slab padding, so the block breathes at 1536 without eating a phone. */
+  --v5-work-pad: clamp(1.5rem, 3vw, 3.5rem);
+
+  padding-block: var(--v5-space-6);
+}
+
+.v5-work__inner {
+  display: grid;
+  row-gap: var(--v5-space-5);
+  justify-items: start;
+}
+
+.v5-work__head {
+  font-size: var(--v5-work-head);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+/* The query container the flagship title is sized from, and the one raised
+   surface in the section. `.v5-slab` supplies steel, the rule and the radius. */
+.v5-work__case {
+  container-type: inline-size;
+  width: 100%;
+  padding: var(--v5-work-pad);
+}
+
+.v5-work__case-head {
+  display: grid;
+  row-gap: var(--v5-space-3);
+  justify-items: start;
+}
+
+.v5-work__title {
+  font-size: var(--v5-work-title);
+  color: var(--v5-chrome);
+}
+
+/* `.v5-chip` is 11px on a chrome hairline; inline-block so a chip that wraps
+   carries one rule under the whole line rather than one under each fragment. */
+.v5-work__chip {
+  display: inline-block;
+}
+
+.v5-work__rule {
+  width: 100%;
+  margin: var(--v5-space-4) 0 0;
+  border: 0;
+  border-top: var(--v5-hairline) solid var(--v5-rule-strong);
+}
+
+.v5-work__body {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  margin-top: var(--v5-space-4);
+}
+
+.v5-work__doc {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  max-width: var(--v5-copy);
+}
+
+.v5-work__block {
+  display: grid;
+  row-gap: var(--v5-space-1);
+}
+
+/* Two inks and one size: the document's own label in `--v5-text`, its sentences
+   in `--v5-muted`. Same hierarchy the services rows use, so no rule, no box and
+   no caps label is needed to separate them. */
+.v5-work__label {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  font-weight: 400;
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-work__line {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* The evidence column: the screen, then the dates under it. Same row gap as the
+   document beside it, so the two columns share one vertical rhythm. */
+.v5-work__aside {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  justify-items: start;
+  align-content: start;
+}
+
+/* The one still, framed by a 1px chrome hairline and capped at the 480px
+   ASSET-INVENTORY.md allows a case card. Never full-bleed, never behind text. */
+.v5-work__frame {
+  width: 100%;
+  max-width: 480px;
+  border: var(--v5-hairline) solid var(--v5-rule-strong);
+  border-radius: var(--v5-radius);
+  overflow: hidden;
+}
+
+.v5-work__frame img {
+  width: 100%;
+  height: auto;
+}
+
+/* Text link, not a second pill: the hero's button stays the one button on the
+   page. Same chrome hairline fill the nav and the proof link use. */
+.v5-work__more {
+  position: relative;
+  display: inline-block;
+  margin-top: var(--v5-space-5);
+  font-size: var(--v5-body);
+  color: var(--v5-chrome);
+  padding-bottom: 0.35em;
+  transition: color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-work__more::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--v5-hairline);
+  background-color: var(--v5-chrome);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-work__more:hover::after,
+.v5-work__more:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* The two showcases: the query container for their titles, and the void. */
+.v5-work__rows {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.v5-work__row {
+  display: grid;
+  row-gap: var(--v5-space-2);
+  padding-block: var(--v5-space-4);
+}
+
+.v5-work__row:first-child {
+  padding-top: 0;
+}
+
+.v5-work__row + .v5-work__row {
+  border-top: var(--v5-hairline) solid var(--v5-work-hairline);
+}
+
+.v5-work__row-title {
+  font-size: var(--v5-work-row-title);
+  color: var(--v5-chrome);
+}
+
+.v5-work__row-copy {
+  display: grid;
+  row-gap: var(--v5-space-2);
+  max-width: var(--v5-copy);
+}
+
+/* The status line is the fact these two rows exist to state, so it is the one
+   chip on the page set in chrome rather than in muted. */
+.v5-work__status {
+  color: var(--v5-chrome);
+}
+
+/* Beside, not beneath. The slab splits document from evidence at the same width
+   the services rows split name from copy, so one breakpoint governs the page. */
+@media (min-width: 73.75rem) {
+  .v5-work__body {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v5-space-3);
+    align-items: start;
+  }
+
+  .v5-work__doc {
+    grid-column: 1 / 8;
+  }
+
+  .v5-work__aside {
+    grid-column: 8 / 13;
+  }
+
+  .v5-work__row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--v5-space-3);
+    align-items: start;
+    row-gap: 0;
+    padding-block: var(--v5-space-5);
+  }
+
+  .v5-work__row-title {
+    grid-column: 1 / 7;
+  }
+
+  .v5-work__row-copy {
+    grid-column: 7 / 13;
+  }
+}
+
+/* A short landscape viewport has no room for poster type; the hero block above
+   already drops `--v5-display` there, and these two are the section's own
+   equivalents. */
+@media (max-height: 560px) and (min-width: 600px) {
+  .v5-work {
+    --v5-work-title: 2rem;
+    --v5-work-row-title: 1.5rem;
+  }
+}
+
+/* ------------------------------------------------- work: the case sub-page ---
+   /v5/work/jewelo. Same tokens, same primitives, no orb: one WebGL context per
+   page and this page is not the one that owns it.
+
+   TWO MATERIALS, ONE DOCUMENT. The write-up is set on the void at the copy
+   measure and the fifteen plates sit in two full-width steel bands, so a reader
+   scrolling fast sees the argument and the evidence as two different grounds
+   without a single heading being invented to announce them.
+
+   THE TITLE, MEASURED against `.v5-case__head`, which is the `.v5-band` itself:
+   6.1cqw with a 2rem floor and a 4.5rem cap gives 32px at 360 and 390, 46px at
+   820, 66px at 1180 and the 72px cap from 1280 up. The longest word is
+   "exhibition" at 6.3em, which is 454px at the cap and fits the 1177px band at
+   1280 and the 276px content box at 360 alike.
+
+   THE PLATE GRID never gives a column more than the 480px ASSET-INVENTORY.md
+   allows: one column below 40rem (354px at 390), two to 64rem (282px at 640)
+   and three above (298px at 1024, 377px at 1280, 400px from 1920, where
+   `.v5-band` has already stopped growing). Nothing spans, including the two
+   wide strips, so the cap holds for every plate at every width.
+
+   CONTRAST, MEASURED. Captions `--v5-muted` #7C8798 on steel #151B26 4.77:1;
+   on void #06080D the document's lines are 5.51:1, its labels `--v5-text`
+   16.9:1 and the title and mail link `--v5-chrome` 15.6:1. */
+
+.v5-case {
+  --v5-case-title: clamp(2rem, 6.1cqw, 4.5rem);
+  --v5-case-hairline: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+  --v5-case-caption: 0.875rem;
+
+  display: grid;
+  row-gap: var(--v5-space-5);
+  padding-block: calc(var(--v5-nav-h) + var(--v5-space-4)) var(--v5-space-6);
+}
+
+.v5-case__head {
+  container-type: inline-size;
+  display: grid;
+  row-gap: var(--v5-space-3);
+  justify-items: start;
+}
+
+.v5-case__title {
+  font-size: var(--v5-case-title);
+  color: var(--v5-chrome);
+}
+
+.v5-case__chip {
+  display: inline-block;
+}
+
+.v5-case__doc {
+  display: grid;
+  row-gap: var(--v5-space-4);
+}
+
+.v5-case__block {
+  display: grid;
+  row-gap: var(--v5-space-1);
+  max-width: var(--v5-copy);
+  padding-top: var(--v5-space-3);
+  border-top: var(--v5-hairline) solid var(--v5-case-hairline);
+}
+
+.v5-case__label {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  font-weight: 400;
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-case__line {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* A plate run: the ground changes under the whole width, exactly as it does in
+   the proof band, so no border and no radius is needed to hold it. */
+.v5-plates {
+  background-color: var(--v5-steel);
+  padding-block: var(--v5-space-5);
+}
+
+.v5-plates__grid {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  column-gap: var(--v5-space-3);
+  align-items: start;
+}
+
+.v5-plate {
+  display: grid;
+  row-gap: var(--v5-space-2);
+}
+
+.v5-plate__frame {
+  width: 100%;
+  max-width: 480px;
+  border: var(--v5-hairline) solid var(--v5-rule-strong);
+  border-radius: var(--v5-radius);
+  overflow: hidden;
+}
+
+.v5-plate__frame img {
+  width: 100%;
+  height: auto;
+}
+
+/* The caption is the inventory's own alt text. It describes the artefact and
+   names no brand, which is why it is the only sourced string available here. */
+.v5-plate__caption {
+  max-width: 480px;
+  font-size: var(--v5-case-caption);
+  line-height: 1.5;
+  color: var(--v5-muted);
+}
+
+@media (min-width: 40rem) {
+  .v5-plates__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .v5-plates__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* The close: COPY.md section 9, with the one pill this page carries. */
+.v5-case__close {
+  display: grid;
+  row-gap: var(--v5-space-3);
+  justify-items: start;
+  margin-top: var(--v5-space-4);
+}
+
+.v5-case__close-title {
+  /* The same ramp `.v5-work__head` uses; written out because that token is
+     declared on `.v5-work`, which this page does not have. */
+  font-size: clamp(1.75rem, 2.2vw + 0.9rem, 3rem);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+.v5-case__close-lede {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  max-width: var(--v5-copy);
+  font-size: var(--v5-lead);
+  line-height: 1.5;
+  color: var(--v5-text);
+}
+
+.v5-case__support {
+  font-size: var(--v5-lead);
+  line-height: 1.45;
+  color: var(--v5-muted);
+}
+
+.v5-case__channel {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+.v5-case__mail {
+  color: var(--v5-chrome);
+  text-decoration: underline;
+  text-decoration-color: var(--v5-rule-strong);
+  text-decoration-thickness: var(--v5-hairline);
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-case__mail:hover,
+.v5-case__mail:focus-visible {
+  text-decoration-color: var(--v5-chrome);
+}
+
+/* Full width on a phone, exactly as the hero's pill is, and hugging its own
+   label once there is a line to sit on. */
+.v5-case__cta {
+  width: 100%;
+}
+
+@media (min-width: 40rem) {
+  .v5-case__cta {
+    width: auto;
+  }
+}
+
+/* -------------------------------------------------------------- process ---
+   Block 08 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03
+   nav, 04 hero, 05 proof, 06 services, 07 work, 08 process); the fifth section
+   block on the page. Appended, nothing above this line is touched.
+
+   THE GATE IS THE ONLY LINE. The direction sets this section as four phases
+   "with the payment gate set between them" (03-design-research.md section 4,
+   layout skeleton 5). So the gate is not a chip, a badge or a repeated label:
+   it is the gap between two slabs with a single 1px chrome hairline at 24
+   percent (`--v5-process-gate-ink`) drawn down the middle of it. Three gates,
+   three hairlines, and nothing else in the section is ruled, boxed or underlined.
+
+   The hairline turns with the layout, because a payment gate that stops
+   separating its phases when the row wraps is the named failure for this
+   section in 03-design-research.md: vertical between slabs while they sit side
+   by side, horizontal above a slab that has wrapped under its predecessor. It
+   is drawn on the phase itself rather than on a spacer element, so it is always
+   the full height (or width) of the slab it gates and can never drift from it.
+
+   `::before` is the vertical gate and `::after` is the horizontal one, and the
+   three layouts are written as non-overlapping ranges rather than as
+   min-width overrides: at 2x2 the fourth slab needs both gates at once, so
+   specificity between two open-ended media queries would decide which pseudo
+   survives, and a range says what is meant instead.
+
+   SLABS, NOT CARDS. `.v5-slab` would put a 1px chrome rule around each block,
+   and four of those in a row is a row of cards - banned by 03b-round2-brief.md,
+   and it would land three lines within 24px of each other at every gate. These
+   take the proof band's idiom: steel #151B26 on the void, no border, the value
+   step is the edge. Radius stays the direction's 2px.
+
+   SIZE OF THE TYPE, MEASURED. Both ramps are container-query units, not
+   viewport ones, for the reason recorded in block 05: `.v5-band` stops growing
+   at `--v5-page` while the gutter keeps widening, so the content box is 1177.6px
+   at 1280, about 1317px at 1536 and 1248px at 1920 and 2560 - a `vw` ramp
+   overflows exactly where the page gets wider.
+
+   `--v5-process-head` is resolved against `.v5-process__inner`, the band whose
+   width the heading has to fit: 3.85cqw lands 45.3px at 1280 and reaches the
+   3rem cap from 1248px of content, and the 1.75rem floor holds the heading at
+   28px at 390 and 360, where "Four phases." sets about 207px inside a 324px
+   content box. That is within about 3px of `.v5-proof__head` and
+   `.v5-services__title` at every width in the matrix, so the three section
+   claims read as one size.
+
+   `--v5-process-name` is resolved against `.v5-process__row`, which is the
+   element that actually changes shape. 2.72cqw lands the phase names at 29.5px
+   at 1180, 32.0px at 1280 and 35.8px at 1536, inside the 28-36px the direction
+   asks for at desktop, and the 1.5rem floor holds them at 24px everywhere the
+   row is stacked or 2x2.
+
+   COLUMN WIDTH IS WHY THE COPY IS 15px. Four equal columns inside the band are
+   276px at 1280 less 24px of padding each side, so a phase line has 228px to
+   set in. At 0.9375rem that is about 31 characters, which is short for prose
+   and right for a spec: these are four terse sourced lines, not a paragraph.
+
+   NO MOTION. The variation's one moment is the orb's environment map building
+   on load. Nothing in this section moves, hovers, reveals or hides at any
+   width, so it is byte-identical under `prefers-reduced-motion` and there is
+   nothing here to guard.
+
+   CONTRAST, computed on steel #151B26: `--v5-muted` #7C8798 is 4.77:1,
+   `--v5-text` #E9EDF3 is 14.8:1, `--v5-chrome` #DCE4EE is 13.5:1. On the void
+   #06080D, which carries the heading, the subhead, the gate caption and the two
+   closing notes: `--v5-muted` 5.51:1, `--v5-text` 17.05:1, `--v5-chrome`
+   15.62:1. */
+
+.v5-process {
+  /* The section's claim, on the same visual step as `.v5-proof__head` and
+     `.v5-services__title`, solved from the band that has to hold it. */
+  --v5-process-head: clamp(1.75rem, 3.85cqw, 3rem);
+
+  /* The phase name: 24px wherever the row is stacked or 2x2, 28-36px across the
+     desktop widths where all four sit in one row. */
+  --v5-process-name: clamp(1.5rem, 2.72cqw, 2.25rem);
+
+  /* 15px. The slab column is 228px of text at 1280; see the block header. */
+  --v5-process-copy: 0.9375rem;
+
+  /* The gate hairline. Chrome at 24 percent, one step above `--v5-rule-strong`,
+     for the reason block 06 records: in the proof band the hairline sits on
+     steel, and here it sits on the void between two slabs, where the same alpha
+     reads fainter. It stops there rather than climbing to the 3:1 a graphic
+     needs to carry meaning alone, because it does not carry it alone - the
+     caption above the row says the rule in words, and four bright rules would
+     out-shout the type on a page whose argument is emptiness. */
+  --v5-process-gate-ink: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+
+  /* The two gap widths, and therefore where each hairline sits: the gate is
+     always drawn down the middle of the gap it fills. */
+  --v5-process-gate-x: var(--v5-space-3);
+  --v5-process-gate-y: var(--v5-space-4);
+
+  --v5-process-pad: var(--v5-space-3);
+
+  padding-block: var(--v5-space-6);
+}
+
+.v5-process__inner {
+  container-type: inline-size;
+  display: grid;
+  row-gap: var(--v5-space-5);
+  justify-items: start;
+}
+
+.v5-process__head {
+  display: grid;
+  row-gap: var(--v5-space-2);
+}
+
+.v5-process__title {
+  font-size: var(--v5-process-head);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+.v5-process__subhead {
+  max-width: 34em;
+  font-size: var(--v5-lead);
+  line-height: 1.5;
+  color: var(--v5-text);
+}
+
+/* The caption and the row it captions travel together. */
+.v5-process__gated {
+  display: grid;
+  row-gap: var(--v5-space-3);
+  width: 100%;
+}
+
+/* The second sentence of the COPY.md headline, set once above the row in chrome
+   because chrome is what the gates are drawn in. It is not repeated at each
+   hairline: three copies of one sentence is a label, and this is a caption. */
+.v5-process__gate {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--v5-chrome);
+}
+
+/* The container the phase name is sized from, and the grid the gates live in.
+   Stacked by default: one column, gates horizontal. */
+.v5-process__row {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--v5-process-gate-x);
+  row-gap: var(--v5-process-gate-y);
+  width: 100%;
+}
+
+.v5-process__phase {
+  position: relative;
+  display: grid;
+  align-content: start;
+  row-gap: var(--v5-space-2);
+  background-color: var(--v5-steel);
+  border-radius: var(--v5-radius);
+  padding: var(--v5-process-pad);
+}
+
+/* The two gates. `::before` is vertical and sits in the column gap to the left
+   of its slab; `::after` is horizontal and sits in the row gap above it. Both
+   are drawn full bleed along the slab's own edge, so a gate can never separate
+   from the phase it gates. */
+.v5-process__phase::before,
+.v5-process__phase::after {
+  content: "";
+  position: absolute;
+  background-color: var(--v5-process-gate-ink);
+}
+
+.v5-process__phase::before {
+  display: none;
+  inset-block: 0;
+  left: calc(var(--v5-process-gate-x) / -2);
+  width: var(--v5-hairline);
+}
+
+.v5-process__phase::after {
+  inset-inline: 0;
+  top: calc(var(--v5-process-gate-y) / -2);
+  height: var(--v5-hairline);
+}
+
+/* Nothing is gated before the first phase: you pay to start it, and that is
+   what the caption above the row says. */
+.v5-process__phase:first-child::after {
+  display: none;
+}
+
+.v5-process__name {
+  font-size: var(--v5-process-name);
+  line-height: 1;
+  color: var(--v5-chrome);
+}
+
+.v5-process__copy {
+  display: grid;
+  row-gap: var(--v5-space-1);
+}
+
+.v5-process__commitment {
+  font-size: var(--v5-process-copy);
+  line-height: 1.5;
+  color: var(--v5-text);
+  text-wrap: pretty;
+}
+
+.v5-process__detail {
+  font-size: var(--v5-process-copy);
+  line-height: 1.5;
+  color: var(--v5-muted);
+  /* No single-word last line on a two- or three-line sourced sentence: at 1280
+     "and said no." was leaving "no." alone under a 276px column. */
+  text-wrap: pretty;
+}
+
+/* Two by two: the even slabs take a vertical gate, the bottom pair a horizontal
+   one, and the fourth carries both. */
+@media (min-width: 40rem) and (max-width: 73.6875rem) {
+  .v5-process__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v5-process__phase:nth-child(even)::before {
+    display: block;
+  }
+
+  .v5-process__phase:nth-child(-n + 2)::after {
+    display: none;
+  }
+}
+
+/* One row of four, which is the shape the direction asks for. Every gate is
+   vertical now, so the horizontal one is off everywhere. */
+@media (min-width: 73.75rem) {
+  .v5-process__row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .v5-process__phase::before {
+    display: block;
+  }
+
+  .v5-process__phase:first-child::before {
+    display: none;
+  }
+
+  .v5-process__phase::after {
+    display: none;
+  }
+}
+
+/* The two closing blocks sit on the void under the row, in Geist, with no rule
+   and no ground: COPY.md section 5 puts them here, and they are the terms of
+   the engagement rather than a fifth phase, so they must not read as one. */
+.v5-process__closing {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  width: 100%;
+}
+
+.v5-process__note {
+  display: grid;
+  row-gap: var(--v5-space-1);
+  max-width: 44ch;
+}
+
+.v5-process__note-label {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--v5-text);
+}
+
+@media (min-width: 40rem) {
+  .v5-process__closing {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--v5-space-5);
   }
 }

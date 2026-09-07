@@ -1,15 +1,15 @@
 "use client";
 
 /**
- * v2 "Shader Light" - the proof strip.
+ * v2 "Shader Light" - the proof strip, canonical section 2.
  *
  * The direction (docs/goal/03-design-research.md section 4, direction 2,
  * layout item 2) draws this section as "five figures on a solid white plinth
- * with a hard edge over the field". Three consequences, all deliberate:
+ * with a hard edge over the field". Four consequences, all deliberate:
  *
- *   the plinth   one white block, no border, no shadow, zero radius. Its own
- *                cut edge is what separates it from the field, which is the
- *                whole point of a plinth rather than a card.
+ *   the plinth   one white block, no shadow, no radius, and one 1px ink rule
+ *                along its top edge. The rule is what raises it; a border on
+ *                four sides would make it a card, which this direction bans.
  *   the field    hero.tsx mounts `TwoCityField` inside `.v2-hero`, which is
  *                `overflow: hidden`, so the shader is hero-only and does not
  *                reach down here. Rather than open a second WebGL context -
@@ -22,52 +22,69 @@
  *                the hero reads, so the plinth can never sit on a daylit field
  *                while the hero sits on a night one. It is masked top and
  *                bottom so the band ends in paper instead of a seam.
- *   the figures  Fraunces on its display cut, one row at 1180 and above,
- *                3 + 2 from 768, stacked below it. No monospace, per the
- *                direction; the only tabular figure is the 25.
+ *   the figures  Fraunces on its display cut, 48px to 64px: one row at 64rem
+ *                and above, 3 + 2 from 40rem, stacked below it. No monospace,
+ *                per the direction; every figure is tabular so the five sit on
+ *                one baseline whatever the numerals.
+ *   the dates    both sourced dates are printed in the captions, where they
+ *                belong to a number, rather than as a separate dateline that
+ *                would answer the section's question a second time. The first
+ *                count carries its own trailing "27 Aug 2026" from COPY.md
+ *                section 2; "Sixteen" carries "spec received 11 Aug 2026" from
+ *                the Sources line under COPY.md section 1, which is the only
+ *                place that date is written. Between them the reader can add
+ *                sixteen days to 11 Aug and check the claim.
  *
- * Copy is verbatim from `docs/goal/COPY.md` section 2: the label, the primary
- * headline, the five counts split at the word that carries the number, the
- * testimonial with its attribution, and the secondary CTA. Two deliberate
- * choices inside that:
+ * Copy is verbatim: the label, the headline, the five counts split at the word
+ * that carries the number, the testimonial with its attribution, and the
+ * secondary CTA, all from COPY.md section 2, plus the one dated fragment above.
  *
- *   the dates    "spec received 11 Aug 2026 and live 27 Aug 2026" is the
- *                sourced line under COPY.md section 1; the two dates are set
- *                here as a dateline joined by a hairline, which is the same
- *                device the hero uses to join its two cities. Because the
- *                dateline prints 27 Aug 2026, the first count's trailing
- *                ", 27 Aug 2026" is not repeated in its caption; no word of
- *                it is changed and nothing is added.
- *   the quote    set in Fraunces ROMAN, not italic. Italic is reserved for
- *                the two live clocks in this direction, so the quote earns
- *                its weight from size alone and the attribution under it
- *                drops to small Geist.
+ * The quote is set in Geist at 20-24px, not in Fraunces. Italic is reserved
+ * for the two live clocks in this direction, and the plinth already spends its
+ * serif on the headline and the five figures; a third display voice under them
+ * would be the loudest thing in a section whose job is to be checkable.
  *
  * The secondary CTA is gated on the case study existing: `sections.ts` is the
  * one place that knows what is built, so this link cannot point at an anchor
- * that is not on the page yet. It appears the moment that section lands.
+ * that is not on the page yet.
+ *
+ * Motion: none of its own. The only movement here is the shared field fade,
+ * which `--v2-field-in` collapses to 1ms under `prefers-reduced-motion`.
  */
 
-import { Fragment, type CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import { sections } from "./sections";
 import { CITIES, cityHue, useNow } from "./two-city-field";
 
+type Count = {
+  /** The word or numeral that carries the count. */
+  figure: string;
+  /** Copy that runs before the figure, set above it so the row keeps one baseline. */
+  qualifier?: string;
+  caption: string;
+  /** A sourced date belonging to this count, printed under its caption. */
+  note?: { text: string; machine: string };
+};
+
 /** COPY.md section 2, "Counts, all sourced, no invention", in document order. */
-const COUNTS: readonly { figure: string; qualifier?: string; caption: string }[] = [
+const COUNTS: readonly Count[] = [
   {
     figure: "One",
     caption: "product live: a name-pendant studio for a bespoke jewellery house in Dubai",
+    note: { text: "27 Aug 2026", machine: "2026-08-27" },
   },
-  { figure: "Sixteen", caption: "days from spec to live" },
+  {
+    figure: "Sixteen",
+    caption: "days from spec to live",
+    note: { text: "spec received 11 Aug 2026", machine: "2026-08-11" },
+  },
   { figure: "Four", caption: "renders per design, the first in about two minutes" },
-  { figure: "25", qualifier: "More than", caption: "screens covered in an app store readiness audit" },
+  {
+    figure: "25",
+    qualifier: "More than",
+    caption: "screens covered in an app store readiness audit",
+  },
   { figure: "Two", caption: "cities: Dubai and Mumbai" },
-];
-
-/** COPY.md section 1, Sources: "spec received 11 Aug 2026 and live 27 Aug 2026". */
-const DATES: readonly { label: string; value: string; machine: string }[] = [
-  { label: "Spec received", value: "11 Aug 2026", machine: "2026-08-11" },
-  { label: "Live", value: "27 Aug 2026", machine: "2026-08-27" },
 ];
 
 /** The case study this section's secondary CTA opens, once someone builds it. */
@@ -91,36 +108,27 @@ export function Proof() {
 
       <div className="v2-proof__plinth">
         <header className="v2-proof__head">
-          <div>
-            <p className="v2-proof__label">Proof of work</p>
-            <h2 id="proof-headline" className="v2-proof__headline">
-              Shipped, not promised.
-            </h2>
-          </div>
-
-          <p className="v2-proof__dates">
-            {DATES.map((date, index) => (
-              <Fragment key={date.machine}>
-                {index > 0 ? <span className="v2-proof__span" aria-hidden="true" /> : null}
-                <span className="v2-proof__date">
-                  <span className="v2-proof__date-label">{date.label}</span>
-                  <time className="v2-proof__date-value" dateTime={date.machine}>
-                    {date.value}
-                  </time>
-                </span>
-              </Fragment>
-            ))}
-          </p>
+          <p className="v2-proof__label">Proof of work</p>
+          <h2 id="proof-headline" className="v2-proof__headline">
+            Shipped, not promised.
+          </h2>
         </header>
 
         <ul className="v2-proof__figures">
           {COUNTS.map((count) => (
             <li className="v2-proof__figure" key={count.figure + count.caption}>
               <p className="v2-proof__count">
-                {count.qualifier ? <span className="v2-proof__qualifier">{count.qualifier}</span> : null}
+                {count.qualifier ? (
+                  <span className="v2-proof__qualifier">{count.qualifier}</span>
+                ) : null}
                 {count.figure}
               </p>
               <p className="v2-proof__caption">{count.caption}</p>
+              {count.note ? (
+                <p className="v2-proof__note">
+                  <time dateTime={count.note.machine}>{count.note.text}</time>
+                </p>
+              ) : null}
             </li>
           ))}
         </ul>

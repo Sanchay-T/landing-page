@@ -690,3 +690,191 @@ body:has(.v3) {
    APPEND BELOW THIS LINE. Sections added after the hero declare their own
    classes here, in section order, and never edit anything above.
    =========================================================================== */
+
+/* ============================================================== 02 - proof
+
+   The flash-forward. `data-clock="flash"` (declared above) pins `--v3-t` to 1
+   on the band itself, so this one screen is full daylight and full-night ink
+   while section 3 below it is still at 12 Aug. Nothing here writes a colour;
+   the band is at 16.1:1 in every mode because the clock is pinned, not ramped.
+
+   The band reads as a station on the timeline: a rule with the section on the
+   left and the date it belongs to on the right, in the same tabular mono the
+   tick bar uses for its readout. Vertical hairline column rules between the
+   counts are forbidden on this direction, so the counts are separated by space
+   and by size alone - which is also the page rule for text, since there is no
+   muted token here.
+   =========================================================================== */
+
+.v3 {
+  /* 28px at 390, 48px at 1280. */
+  --v3-size-h2: clamp(1.75rem, 2.6vw + 0.9rem, 3rem);
+  /* 40px at 390, 56px at 1280. */
+  --v3-size-figure: clamp(2.5rem, 1.798vw + 2.062rem, 3.5rem);
+  /* 20px at 390, 24px at 1280. */
+  --v3-size-quote: clamp(1.25rem, 0.449vw + 1.141rem, 1.5rem);
+  /* Fixed. A caption is separated from its figure by a 3:1 size step, not by
+     ink, and that step has to survive the phone as well as the desktop. */
+  --v3-size-caption: 0.875rem;
+}
+
+.v3-proof {
+  padding-block: clamp(2.75rem, 8vh, 5.5rem);
+}
+
+/* --------------------------------------------------------------- the station */
+
+.v3-station {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--v3-space-s);
+  padding-bottom: var(--v3-space-xs);
+  /* The load-bearing rule of the band, so 32% rather than the 14% hairline the
+     tick bar closes itself with. */
+  border-bottom: 1px solid var(--v3-rule-strong);
+  font-size: var(--v3-size-micro);
+  line-height: 1.2;
+}
+
+.v3-station-date {
+  flex: none;
+  font-family: var(--v3-font-date);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.v3-h2 {
+  margin-top: var(--v3-space-l);
+  font-family: var(--v3-font-display);
+  font-variation-settings: "wdth" 70;
+  font-weight: 700;
+  font-size: var(--v3-size-h2);
+  line-height: 1;
+  letter-spacing: -0.005em;
+}
+
+/* ---------------------------------------------------------------- the counts
+
+   Stacked at 390, two up from 544, three up from 820 (which puts the last two
+   on a second row), and one row of five from 1180. The five column weights at
+   1180 are the caption lengths: the columns are uneven so the captions are
+   even, and every figure still sits on one shared baseline at the top.
+
+   On the phone the figure sits beside its caption on a shared baseline rather
+   than above it. Stacked the other way the five counts run to 950px on an 844px
+   screen, and this band is a one-screen flash-forward or it is nothing. The
+   figure column is 4.75rem, which clears the widest figure (`25+` inks 69.6px
+   at 40px) with room to spare. */
+
+.v3-counts {
+  margin-top: clamp(2rem, 5vh, 3.25rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: var(--v3-space-m) var(--v3-space-m);
+}
+
+.v3-count {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  column-gap: var(--v3-space-s);
+  align-items: baseline;
+}
+
+.v3-figure {
+  font-family: var(--v3-font-date);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  font-size: var(--v3-size-figure);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.v3-caption {
+  max-width: 32ch;
+  font-size: var(--v3-size-caption);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* ----------------------------------------------------------------- the quote */
+
+.v3-quote {
+  margin-top: clamp(2.25rem, 6vh, 3.5rem);
+  padding-top: var(--v3-space-m);
+  border-top: 1px solid var(--v3-rule);
+  max-width: var(--v3-measure);
+}
+
+.v3-quote p {
+  font-size: var(--v3-size-quote);
+  line-height: 1.35;
+  text-wrap: pretty;
+  /* Hanging punctuation: the opening quote sits in the margin so the first
+     letter lines up with the rule above it. */
+  text-indent: -0.42em;
+}
+
+.v3-attrib {
+  margin-top: var(--v3-space-s);
+  font-size: var(--v3-size-micro);
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------- the secondary link
+
+   Text, not a button: the primary action on this page is `Send your brief` and
+   there is only one of those per screen. The marker red is reserved for the day
+   marker and the primary underline, so this one underlines in ink. */
+
+.v3-more {
+  margin-top: clamp(2rem, 5vh, 3rem);
+}
+
+.v3-more a {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--v3-rule-strong);
+  transition: border-color var(--v3-hover-dur) var(--v3-ease);
+}
+
+.v3-more a:hover {
+  border-bottom-color: currentColor;
+}
+
+/* -------------------------------------------------- the counts, widths in order */
+
+/* From two up, the figure goes back over its caption: the columns are narrow
+   enough that a figure beside a caption would leave the caption three words
+   wide. */
+@media (min-width: 34rem) {
+  .v3-counts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: var(--v3-space-l);
+  }
+  .v3-count {
+    display: block;
+  }
+  .v3-caption {
+    margin-top: var(--v3-space-xs);
+  }
+}
+
+@media (min-width: 51.25rem) {
+  .v3-counts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--v3-space-xl);
+  }
+}
+
+@media (min-width: 73.75rem) {
+  .v3-counts {
+    grid-template-columns:
+      minmax(0, 1.5fr) minmax(0, 0.75fr) minmax(0, 1.05fr)
+      minmax(0, 1fr) minmax(0, 0.7fr);
+    column-gap: var(--v3-space-l);
+  }
+  .v3-caption {
+    max-width: none;
+  }
+}

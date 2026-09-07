@@ -4,18 +4,24 @@ import Image from "next/image";
  * v2 "Shader Light" - section 4, case studies.
  *
  * Direction 2 asks for "two columns, flagship left as a long read with one
- * 400px still, showcases right as two short entries", so the section is a
- * 7/5 split with a single hairline between the columns and no card anywhere:
- * the only filled block on the screen is the white plinth the still stands on.
+ * 400px still, showcases right as two short entries", and its component
+ * vocabulary is "plinths, not cards: white blocks with no border and no
+ * shadow". So the section is a 7/5 split of three plinths: one wide one
+ * holding the shipped case, two smaller ones holding the work that is not
+ * shipped. Nothing here has a border, a radius, a shadow or an icon; the only
+ * division inside a plinth is a 1px rule.
  *
  * Copy is verbatim from `docs/goal/COPY.md` section 4. The heading is that
  * section's label, the line under it is its headline, and every sentence in
  * the flagship and the two showcases is the document's own, including the two
  * status lines, which are the honest part of this page and are printed exactly
- * as written.
+ * as written. The owner's quote from the same section is deliberately not
+ * repeated here: the proof strip above already carries it at display size, and
+ * printing it twice on one page would weaken it in both places. It is on
+ * `/v2/work/jewelo`, under Feedback, with the sentence that follows it.
  *
  * Imagery rule, from `docs/goal/ASSET-INVENTORY.md`: one still, in the
- * flagship entry only, at most 400px wide, on its own plinth with text above
+ * flagship entry only, at most 480px wide, inside the plinth with text above
  * and below it and never behind it. The two showcases carry no image, because
  * neither is shipped and a picture would claim otherwise. The client is never
  * named; the constant is "a bespoke jewellery house in Dubai".
@@ -73,7 +79,7 @@ export function Work() {
       </div>
 
       <div className="v2-work__body">
-        <article className="v2-work__flagship">
+        <article className="v2-plinth v2-work__flagship">
           <h3 className="v2-case__title">
             A name-pendant studio, live for an exhibition stall in sixteen days.
           </h3>
@@ -125,13 +131,6 @@ export function Work() {
             exhibition stall.
           </p>
 
-          <blockquote className="v2-case__quote">
-            <p>&ldquo;the layout is very good and simple&rdquo;</p>
-            <cite className="v2-case__cite">
-              the owner, a bespoke jewellery house in Dubai, on the day the studio went live
-            </cite>
-          </blockquote>
-
           <a className="v2-read" href="/v2/work/jewelo">
             Read the full build
           </a>
@@ -139,7 +138,7 @@ export function Work() {
 
         <div className="v2-work__showcases">
           {SHOWCASES.map((showcase) => (
-            <article key={showcase.title} className="v2-showcase">
+            <article key={showcase.title} className="v2-plinth v2-showcase">
               <h3 className="v2-showcase__title">{showcase.title}</h3>
 
               <ul className="v2-case__tags">

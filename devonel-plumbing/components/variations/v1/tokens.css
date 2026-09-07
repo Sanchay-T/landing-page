@@ -16,6 +16,9 @@
    02  2026-09-07  proof full-bleed panel band on the void, figure/head/quote
                          type steps, the five-cell figure grid and its line
                          verticals, the client quote and its text link.
+   03  2026-09-07  services  five ruled rows back on the void, the name/body
+                         split at 1180, the one-rule hover, and the standing
+                         lines that close the section.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
@@ -682,6 +685,14 @@ body:has(.v1) {
   font-size: var(--v1-quote);
   line-height: 1.4;
   letter-spacing: -0.01em;
+  /* The opening quotation mark hangs into the shell padding so the sentence
+     itself starts on the same left edge as the heading, the figures and the
+     captions. One margin runs the whole band and a quote mark is the one
+     glyph allowed to sit outside it. 0.368em is the measured advance of U+201C
+     in Geist; `hanging-punctuation` would do this natively but only Safari
+     supports it, and the overhang is smaller than the 20px shell pad at every
+     width, so nothing is ever clipped. */
+  text-indent: -0.368em;
   max-width: 34ch;
   text-wrap: pretty;
 }
@@ -771,5 +782,162 @@ body:has(.v1) {
     align-items: flex-end;
     justify-content: space-between;
     gap: var(--v1-7);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   03 - services
+
+   Back on the void after the proof panel, so the page reads void, band, void:
+   the band is the only raised surface between the hero and here, and the
+   services section earns its edges from rules alone.
+
+   Five full-width rows, no cards, no icons, no numbering. The row owns the
+   hairline above it and the list owns the one that closes the set, so every
+   row has exactly one rule of its own and hovering lifts exactly that one to
+   text colour. Nothing else changes on hover - no lift, no scale, no shadow,
+   no fill - and nothing here moves on load, because the sixteen-tick assembly
+   in the hero is this page's one entrance.
+
+   No lamp anywhere in this block. The only lamp in the section is the shared
+   focus ring from entry 01, and there is nothing focusable in the list.
+
+   No new tokens. The names reuse --v1-section-head from entry 02, which is
+   already the 24 -> 32 step this direction asks for; the section head is the
+   same step, and the hierarchy comes from position - the head sits above every
+   rule with a muted sentence under it, the names sit inside the rules with
+   body copy beside them.
+   -------------------------------------------------------------------------- */
+
+.v1-services {
+  padding-block: var(--v1-8);
+}
+
+.v1-services__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+.v1-services__sub {
+  margin-top: var(--v1-4);
+  max-width: 52ch;
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   03 - the five rows
+
+   The transition is declared on the row rather than on the hover state so the
+   rule falls back to --v1-line at the same speed it lifts. --v1-open is 0ms
+   under reduced motion, which takes both directions to nothing.
+
+   Hover is guarded on a real pointer: on a touch screen :hover sticks to the
+   last row tapped, and a rule left bright behind a finger would be the one
+   thing on this page that looks like state.
+   -------------------------------------------------------------------------- */
+
+.v1-services__list {
+  margin-top: var(--v1-8);
+  border-bottom: 1px solid var(--v1-line);
+}
+
+.v1-services__row {
+  padding-block: var(--v1-6);
+  border-top: 1px solid var(--v1-line);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+@media (hover: hover) {
+  .v1-services__row:hover {
+    border-top-color: var(--v1-text);
+  }
+}
+
+.v1-services__name {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.15;
+  text-wrap: pretty;
+}
+
+.v1-services__body {
+  margin-top: var(--v1-4);
+}
+
+/* Each paragraph carries its own measure so the cap is counted in its own
+   font size: 62ch at 17 is not the same width as 62ch at 15, and putting one
+   ch measure on their shared parent would silently run the smaller type past
+   its own limit. */
+.v1-services__promise {
+  max-width: 62ch;
+  color: var(--v1-text);
+  text-wrap: pretty;
+}
+
+.v1-services__scope {
+  margin-top: var(--v1-3);
+  max-width: 66ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   03 - the standing lines
+
+   COPY.md's three lines under the grid. They close the section on space, not
+   on a sixth rule: the list is already shut by its own hairline and one more
+   would start to draw a table - the same call the proof band made under its
+   figure row. They stay on the section's left edge, the one every heading,
+   name and paragraph on this page shares.
+   -------------------------------------------------------------------------- */
+
+.v1-services__standing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-3);
+  margin-top: var(--v1-7);
+  max-width: 66ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   03 - services, name and body side by side from 1180
+
+   The same 73.75rem the proof band uses for its row of five, so the two
+   sections change shape on one breakpoint. Name on columns 1-5, body on 6-12,
+   both on the shell's 12-column definition, so the name sits on the section's
+   left edge and the paragraph starts on the same vertical in all five rows.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-services {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-services__row {
+    display: grid;
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    padding-block: var(--v1-7);
+  }
+
+  .v1-services__name {
+    grid-column: 1 / span 5;
+  }
+
+  .v1-services__body {
+    grid-column: 6 / span 7;
+    margin-top: 0;
   }
 }

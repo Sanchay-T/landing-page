@@ -1483,3 +1483,177 @@
     align-items: baseline;
   }
 }
+
+/* -- 18 Founders band ----------------------------------------------------- */
+
+/* COPY.md section 6 on the same board, per `docs/goal/03-design-research.md`
+   section 4, layout skeleton item 6: "two wide cells, one per founder, city and
+   role". The band reuses `.v4-band`, `.v4-sticky-head` and `.v4-cell` rather
+   than introducing a third kind of section.
+
+   The honesty rule decides the sizing here too, and it decides EQUAL: both
+   founders are on every engagement, so both cells are six of twelve columns.
+   Unequal area would be a claim COPY.md does not carry.
+
+   Column ladder:
+     below 1024   1 column, the two founders stack in COPY.md's order
+     1024 and up  12-column grid, span 6 each
+   Grid rows stretch, so both cells share a row height and the two cities land
+   on one baseline in their footer bands. */
+
+@media (min-width: 1024px) {
+  .v4-board--founders {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .v4-board--founders .v4-cell--founder {
+    grid-column: span 6;
+  }
+}
+
+/* A founder is committed work, so the cell is filled like a phase cell and
+   carries no cobalt rule: the budget stays nav button, hero button, live rule.
+   Same specificity as `.v4-cell` in block 11 and later in the file, so the
+   wider padding wins without an override. */
+.v4-cell--founder {
+  --v4-cell-fill: var(--v4-cell);
+  padding: var(--v4-6);
+  gap: var(--v4-4);
+}
+
+/* Entrance reuses block 06's single board-online pass, top to bottom. */
+.v4-board--founders .v4-cell--founder:nth-child(1) {
+  --v4-i: 0;
+}
+.v4-board--founders .v4-cell--founder:nth-child(2) {
+  --v4-i: 1;
+}
+
+/* Geist 600 at display tracking, 28px at 390 through 32px from 1024. Big enough
+   to be the cell's visual, which is what lets this section carry no portrait,
+   no avatar and no initials badge - a circular initial is an icon of a person,
+   and this direction bans icons on the board. */
+.v4-founder-name {
+  font-size: clamp(1.75rem, 1.45rem + 0.9vw, 2rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+/* The role lines run to a readable measure rather than to the cell edge: at
+   1280 the cell is 616px wide and an uncapped 15px line would set at 74
+   characters. Capped, the cell keeps a quiet right margin instead. */
+.v4-founder-roles {
+  gap: var(--v4-2);
+  max-width: 58ch;
+}
+
+/* COPY.md section 6's standing line. It holds for both founders rather than
+   belonging to either, so it is a line under the board in the same language as
+   the standing lines under the services grid, not a third cell that would
+   break the two-equal-cells rule.
+
+   The measure is capped on the line, not on the block: a max-width on the block
+   shortens its own top rule, and that rule has to run the full board width the
+   way the rules under the services grid and the process band do, or it reads as
+   a stray hairline rather than as the board's closing edge. */
+.v4-founders-standing {
+  margin-top: var(--v4-4);
+  padding-top: var(--v4-4);
+  border-top: var(--v4-hairline) solid var(--v4-border);
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+}
+
+.v4-founders-standing p {
+  max-width: 72ch;
+}
+
+/* -- 19 Engagement band --------------------------------------------------- */
+
+/* COPY.md section 7 on the same board. The direction asks for the money section
+   to read as a document rather than as a decorated grid, and on this board a
+   document is made of cells, so the shape does the reading: the two binding
+   rules are full-width single lines, the four engagement shapes are four equal
+   cells under them.
+
+   The honesty rule again, and here honesty is scope of application: a term that
+   holds for all four shapes is wider than any one of them. Nothing in COPY.md
+   section 7 is marked as not yet offered, so no cell in this band carries the
+   hatch.
+
+   Column ladder for the four shapes, matching the process band:
+     below 640    1 column
+     640 to 1023  2 columns, a 2x2
+     1024 and up  4 columns, all four on one line */
+
+/* Two regions with different track counts, so they need more air between them
+   than the 8px board gap the proof and services regions share to keep one
+   column rhythm. Scoped to this band so nothing else moves. */
+.v4-band--engagement .v4-band-region + .v4-band-region {
+  margin-top: var(--v4-6);
+}
+
+/* The two rules. One line each, full width, so the 180px row floor that keeps a
+   desktop board row honest would print 140px of empty white under a sentence.
+   The floor drops to the content, the way the case page's step rows do. */
+.v4-board--rules {
+  grid-auto-rows: minmax(0, auto);
+}
+
+.v4-cell--rule {
+  --v4-cell-fill: var(--v4-cell);
+  grid-column: 1 / -1;
+  padding: var(--v4-4) var(--v4-6);
+  font-size: var(--v4-body);
+  font-weight: 500;
+}
+
+.v4-board--rules .v4-cell--rule:nth-child(1) {
+  --v4-i: 0;
+}
+.v4-board--rules .v4-cell--rule:nth-child(2) {
+  --v4-i: 1;
+}
+
+/* One column means one cell per row, so the 180px floor that keeps a desktop
+   row honest just prints up to 90px of white under a two-line shape. The rows
+   drop to their content, the same fix block 15 makes for the full board below
+   640. From 640 up the floor is back and grid stretch keeps the row even. */
+@media (max-width: 639px) {
+  .v4-board--shapes {
+    grid-auto-rows: minmax(0, auto);
+  }
+}
+
+@media (min-width: 640px) {
+  .v4-board--shapes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-board--shapes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* All four are on offer today, so all four are filled and equal. */
+.v4-cell--shape {
+  --v4-cell-fill: var(--v4-cell);
+  gap: var(--v4-3);
+}
+
+/* Entrance left to right, reusing the single board-online pass. */
+.v4-board--shapes .v4-cell--shape:nth-child(1) {
+  --v4-i: 0;
+}
+.v4-board--shapes .v4-cell--shape:nth-child(2) {
+  --v4-i: 1;
+}
+.v4-board--shapes .v4-cell--shape:nth-child(3) {
+  --v4-i: 2;
+}
+.v4-board--shapes .v4-cell--shape:nth-child(4) {
+  --v4-i: 3;
+}

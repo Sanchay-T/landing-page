@@ -10,4 +10,5 @@
 export { Hero } from "./hero";
 export { Nav } from "./nav";
 export { Proof } from "./proof";
+export { Services } from "./services";
 export { navSections, sections, type Section, type SectionId } from "./sections";

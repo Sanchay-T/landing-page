@@ -1,5 +1,7 @@
 /** v4 "Bento SaaS". Tokens are imported by the route, not from here. */
 export { Board } from "./board";
+export { Engagement } from "./engagement";
+export { Founders } from "./founders";
 export { Hero } from "./hero";
 export { Nav } from "./nav";
 export { Process } from "./process";

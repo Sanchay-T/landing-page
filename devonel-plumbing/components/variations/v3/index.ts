@@ -6,6 +6,7 @@
  */
 
 export { Hero } from "./hero";
+export { Proof } from "./proof";
 export { TickBar } from "./tick-bar";
 export { WireRing } from "./wire-ring";
 export { getSection, resolvedTicks, sections, ticks } from "./sections";

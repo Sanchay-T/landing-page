@@ -47,9 +47,9 @@ export const sections: readonly Section[] = [
   // COPY.md section 5, "Label: How we work".
   { id: "process", label: "How we work", built: true, inNav: true },
   // COPY.md section 6, "Label: Who you work with".
-  { id: "founders", label: "Who you work with", built: false, inNav: false },
+  { id: "founders", label: "Who you work with", built: true, inNav: false },
   // COPY.md section 7, "Label: How a quote works".
-  { id: "engagement", label: "How a quote works", built: false, inNav: true },
+  { id: "engagement", label: "How a quote works", built: true, inNav: true },
   // COPY.md section 8, "Label: Before you pay".
   { id: "faq", label: "Before you pay", built: false, inNav: false },
   // COPY.md section 9, "Label: Start".

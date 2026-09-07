@@ -10,5 +10,8 @@ export { Proof } from "./proof";
 export { Nav } from "./nav";
 export { Work } from "./work";
 export { Services } from "./services";
+export { Process } from "./process";
+export { Founders } from "./founders";
+export { Engagement } from "./engagement";
 export { sections, navSections } from "./sections";
 export type { Section, SectionId } from "./sections";

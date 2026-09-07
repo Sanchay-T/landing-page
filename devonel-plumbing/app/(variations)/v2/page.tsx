@@ -1,5 +1,14 @@
 import { getVariation } from "../variations";
-import { Hero, Nav, Proof, Services, Work } from "@/components/variations/v2";
+import {
+  Engagement,
+  Founders,
+  Hero,
+  Nav,
+  Process,
+  Proof,
+  Services,
+  Work,
+} from "@/components/variations/v2";
 import "@/components/variations/v2/tokens.css";
 
 /**
@@ -23,6 +32,9 @@ export default function Page() {
         <Proof />
         <Services />
         <Work />
+        <Process />
+        <Founders />
+        <Engagement />
       </main>
     </div>
   );

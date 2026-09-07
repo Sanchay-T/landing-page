@@ -19,52 +19,95 @@ import "@/components/variations/v2/tokens.css";
  * name, a price or a staging URL.
  *
  * Stills follow `docs/goal/ASSET-INVENTORY.md`: the seven `ui-*` screens in
- * product order, then the four `pendant-*-silver` renders in the product's own
- * order - studio, on model, close up, dark mood - which is the "four renders"
- * claim, then the second design in gold. Every plate is capped at 400px wide,
- * stands on its own plinth, and carries the inventory's brand-free alt text.
+ * the product's own order - name and language, style picker, stones and
+ * setting, review spec, generation queue, RTL mirror, operator console - then
+ * the four `pendant-*-silver` renders in the product's own order - studio, on
+ * model, close up, dark mood - which is the "four renders" claim, then the
+ * second design in gold. Every plate is capped at 400px wide, stands on its
+ * own plinth, and carries the inventory's brand-free alt text.
+ *
+ * Two notes on that order, because the two documents genuinely disagree at the
+ * tail. A plate is only ever placed on a sentence it actually shows, so where
+ * one COPY line covers two screens it carries both, and where it covers none
+ * it carries none: step 5 has no screenshot in the inventory. And the RTL
+ * mirror sits under "How it holds up" rather than between the queue and the
+ * operator console, because COPY has no build line about right-to-left and
+ * that section is where the claim belongs.
  */
 
 const TAGS = ["Jewellery", "Dubai", "Product studio", "Shipped 27 Aug 2026"];
 
-const STEPS = [
+type Plate = {
+  src: string;
+  alt: string;
+  caption: string;
+  width?: number;
+  height?: number;
+  priority?: boolean;
+};
+
+const STEPS: readonly { text: string; plates: readonly Plate[] }[] = [
   {
     text: "Type a name in Arabic or English and take a spelling suggestion.",
-    src: "ui-name-and-language",
-    alt: "The name step of a jewellery design tool: a name field, a language toggle, an approved script-spelling field, and a live pendant preview",
-    caption: "The name step, with the language toggle and the approved spelling field.",
+    plates: [
+      {
+        src: "ui-name-and-language",
+        alt: "The name step of a jewellery design tool: a name field, a language toggle, an approved script-spelling field, and a live pendant preview",
+        caption: "The name step, with the language toggle and the approved spelling field.",
+        priority: true,
+      },
+    ],
   },
   {
     text: "Choose one name or two, then the style, the metal, the stones, the size and the chain.",
-    src: "ui-style-picker",
-    alt: "The style step of a jewellery design tool showing six lettering styles as selectable cards",
-    caption: "Six lettering styles, the scope locked at six on purpose.",
+    plates: [
+      {
+        src: "ui-style-picker",
+        alt: "The style step of a jewellery design tool showing six lettering styles as selectable cards",
+        caption: "Six lettering styles, the scope locked at six.",
+      },
+      {
+        src: "ui-stones-and-setting",
+        alt: "The stone step of a jewellery design tool: setting density and stone type beside a live pendant preview",
+        caption: "Setting density and stone type, beside the live preview.",
+      },
+    ],
   },
   {
     text: "Watch a live preview update as you choose, then approve the spelling.",
-    src: "ui-stones-and-setting",
-    alt: "The stone step of a jewellery design tool: setting density and stone type beside a live pendant preview",
-    caption: "Setting density and stone type, with the preview redrawing beside them.",
+    plates: [
+      {
+        src: "ui-review-spec",
+        alt: "A review screen listing script, layout, metal, stones, size and chain, with a spelling confirmation checkbox",
+        caption: "The review screen: the whole specification, and the spelling confirmed once.",
+      },
+    ],
   },
   {
     text: "The studio returns four renders: a studio shot in about two minutes, then the piece on the neck, a close-up and a dark editorial frame.",
-    src: "ui-generation-queue",
-    alt: "Four presentation views queued in parallel, labelled Studio, On model, Close up and Dark mood, each showing a queued state",
-    caption: "Four views queued in parallel, each showing its own honest state.",
+    plates: [
+      {
+        src: "ui-generation-queue",
+        alt: "Four presentation views queued in parallel, labelled Studio, On model, Close up and Dark mood, each showing a queued state",
+        caption: "Four views queued in parallel, each showing its own honest state.",
+      },
+    ],
   },
   {
     text: "Download full screen, see a price estimate and request a quote.",
-    src: "ui-review-spec",
-    alt: "A review screen listing script, layout, metal, stones, size and chain, with a spelling confirmation checkbox",
-    caption: "The review screen: the whole specification, and the spelling confirmed once.",
+    plates: [],
   },
   {
     text: "The operator issues the quote and the customer accepts it in the same screen.",
-    src: "ui-operator-console",
-    alt: "An operator work queue header showing counts for quote requests, in progress and ready",
-    caption: "The operator side: quote requests, in progress, ready.",
-    width: 1440,
-    height: 322,
+    plates: [
+      {
+        src: "ui-operator-console",
+        alt: "An operator work queue header showing counts for quote requests, in progress and ready",
+        caption: "The operator side: quote requests, in progress, ready.",
+        width: 1440,
+        height: 322,
+      },
+    ],
   },
 ];
 
@@ -140,7 +183,7 @@ const mailHref = `mailto:${site.contact.email}?subject=${encodeURIComponent(site
 export const metadata = {
   title: "A name-pendant studio, live for an exhibition stall in sixteen days - Devonel",
   description:
-    "The full build: a name-pendant studio for a bespoke jewellery house in Dubai, spec on 11 Aug 2026 and live on the morning of 27 Aug 2026.",
+    "Spec on 11 Aug 2026. Live on the morning of 27 Aug 2026, in time for the client's exhibition stall.",
 };
 
 export default function Page() {
@@ -197,22 +240,29 @@ export default function Page() {
             <div className="v2-case-sec__content">
               <ol className="v2-steps">
                 {STEPS.map((step, index) => (
-                  <li key={step.src} className="v2-step">
+                  <li key={step.text} className="v2-step">
                     <span className="v2-step__n" aria-hidden="true">
                       {index + 1}
                     </span>
                     <p className="v2-step__text">{step.text}</p>
-                    <figure className="v2-plate v2-step__plate">
-                      <Image
-                        className="v2-plate__img"
-                        src={`/media/jewelo/${step.src}@2x.webp`}
-                        alt={step.alt}
-                        width={step.width ?? 1440}
-                        height={step.height ?? 822}
-                        sizes="400px"
-                      />
-                      <figcaption className="v2-plate__caption">{step.caption}</figcaption>
-                    </figure>
+                    {step.plates.length > 0 ? (
+                      <div className="v2-step__plates">
+                        {step.plates.map((plate) => (
+                          <figure key={plate.src} className="v2-plate">
+                            <Image
+                              className="v2-plate__img"
+                              src={`/media/jewelo/${plate.src}@2x.webp`}
+                              alt={plate.alt}
+                              width={plate.width ?? 1440}
+                              height={plate.height ?? 822}
+                              sizes="400px"
+                              priority={plate.priority}
+                            />
+                            <figcaption className="v2-plate__caption">{plate.caption}</figcaption>
+                          </figure>
+                        ))}
+                      </div>
+                    ) : null}
                   </li>
                 ))}
               </ol>

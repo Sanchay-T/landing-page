@@ -1,20 +1,17 @@
 /**
- * The section index for variation 4 - Swiss Signal.
+ * The ten canonical sections of v4, in page order.
  *
- * One array is the whole contract between the page and its navigation. The nav
- * bar renders an anchor only for a section whose `built` flag is true, so a
- * link on this page can never point at something that is not on the page. That
- * is the rule the build spec calls out: dead links and `#` hrefs are failing
- * items.
+ * One list, read by the nav and by anything else that has to know what exists.
+ * `built` is the honesty flag: it is false until a section is on the page, and
+ * the nav only ever links to a section whose flag is true, so this file makes a
+ * dead nav link impossible rather than merely discouraged. A builder finishing
+ * a section flips one boolean here and its anchor appears.
  *
- * HOW TO ADD YOUR SECTION
- *   1. Flip `built` to true on your row here.
- *   2. Render the component in `app/(variations)/v4/page.tsx`, in this order,
- *      with `id` matching the `id` below so the anchor resolves.
- * Do not reorder the array: it is the page order and the nav order at once.
+ * Labels are the section labels from `docs/goal/COPY.md`. The hero has no label
+ * there, so it carries an internal one and never appears in the nav.
  */
 
-export type V4SectionId =
+export type SectionId =
   | "hero"
   | "proof"
   | "services"
@@ -26,36 +23,40 @@ export type V4SectionId =
   | "contact"
   | "footer";
 
-export type V4Section = {
-  /** The DOM id on the section element, and the anchor target. */
-  id: V4SectionId;
-  /**
-   * The word on the signage bar. Kept to one or two words: the bar is a black
-   * signage band, not a sentence, and long labels are what make the anchor row
-   * wrap badly at 360. Labels track the section labels in docs/goal/COPY.md
-   * where COPY.md gives one.
-   */
-  navLabel: string;
-  /** False for a section that is on the page but not worth a stop on the bar. */
-  inNav: boolean;
-  /** True once the section is rendered on the page. Nav reads this. */
+export type Section = {
+  /** The DOM id, and the anchor target. */
+  id: SectionId;
+  /** Nav and heading label, verbatim from COPY.md where COPY.md has one. */
+  label: string;
+  /** True once the section is really on the page. The nav reads this. */
   built: boolean;
+  /** True for the five the product bar carries once they are built. */
+  inNav: boolean;
 };
 
-export const SECTIONS: readonly V4Section[] = [
-  { id: "hero", navLabel: "Top", inNav: true, built: true },
-  { id: "proof", navLabel: "Proof", inNav: true, built: true },
-  { id: "services", navLabel: "Services", inNav: true, built: true },
-  { id: "work", navLabel: "Work", inNav: true, built: true },
-  { id: "process", navLabel: "Process", inNav: true, built: true },
-  { id: "founders", navLabel: "Founders", inNav: true, built: true },
-  { id: "engagement", navLabel: "Engagement", inNav: true, built: true },
-  { id: "faq", navLabel: "FAQ", inNav: true, built: true },
-  { id: "contact", navLabel: "Contact", inNav: true, built: true },
-  { id: "footer", navLabel: "Footer", inNav: false, built: true },
-] as const;
+export const sections: readonly Section[] = [
+  // COPY.md section 1 carries an eyebrow, not a label. Never in the nav: the
+  // wordmark is the link back to the top.
+  { id: "hero", label: "Devonel", built: true, inNav: false },
+  // COPY.md section 2, "Label: Proof of work".
+  { id: "proof", label: "Proof of work", built: false, inNav: true },
+  // COPY.md section 3, "Label: What you buy".
+  { id: "services", label: "What you buy", built: false, inNav: true },
+  // COPY.md section 4, "Label: Case studies".
+  { id: "work", label: "Case studies", built: false, inNav: true },
+  // COPY.md section 5, "Label: How we work".
+  { id: "process", label: "How we work", built: false, inNav: true },
+  // COPY.md section 6, "Label: Who you work with".
+  { id: "founders", label: "Who you work with", built: false, inNav: false },
+  // COPY.md section 7, "Label: How a quote works".
+  { id: "engagement", label: "How a quote works", built: false, inNav: true },
+  // COPY.md section 8, "Label: Before you pay".
+  { id: "faq", label: "Before you pay", built: false, inNav: false },
+  // COPY.md section 9, "Label: Start".
+  { id: "contact", label: "Start", built: false, inNav: false },
+  // COPY.md section 10 carries no label; the footer is never a nav target.
+  { id: "footer", label: "Footer", built: false, inNav: false },
+];
 
-/** The stops the signage bar shows right now. */
-export function navSections(sections: readonly V4Section[] = SECTIONS): V4Section[] {
-  return sections.filter((section) => section.built && section.inNav);
-}
+/** The anchors the nav is allowed to render today. Five once all five ship. */
+export const navSections = sections.filter((s) => s.built && s.inNav);

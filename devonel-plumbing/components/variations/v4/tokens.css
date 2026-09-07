@@ -1,267 +1,202 @@
 /* ===========================================================================
-   Variation 4 - "Swiss Signal". The whole design system for this variation.
+   v4 "Bento SaaS" - design system
+   ---------------------------------------------------------------------------
+   Everything here is scoped under `.v4`, which `app/(variations)/v4/page.tsx`
+   puts on the page root. Nothing leaks to the other variations and nothing
+   from `app/globals.css` is redefined outside that scope.
 
-   Direction: docs/goal/03-design-research.md section 4, "Variation 4 - Swiss
-   Signal". Process plumbing explained like a metro map. Big flat colour, bold
-   geometry, no ornament. Light only, white ground, four flat inks, one
-   typeface, radius 0, shadow none.
+   CONVENTION - append only.
+   Blocks are numbered and never renumbered. A new token joins the end of its
+   block; a new block joins the end of the file with the next free number. Do
+   not reorder, do not delete a numbered heading, do not fork a second token
+   file. A later tweak is one edit inside one block.
 
-   Everything here is scoped under `.v4`, so no rule can reach another route.
+   INDEX
+     01  Palette
+     02  Type
+     03  Space
+     04  Grid and container
+     05  Radius and line
+     06  Motion
+     07  Reset
+     08  Text primitives
+     09  Buttons
+     10  Nav
+     11  Board and cells
+     12  Chips, dots and figures
+     13  Reduced motion
+     14  Hero
 
-   HOW TO EXTEND THIS FILE
-   Sections 1 to 4 are the shared system - tokens, reset, grid, motion. Never
-   edit them: every later section reads them, so a change there is a change to
-   the whole page. Sections 5 and up are per-component and safe to grow.
-
-   The index below is the file: numbers run 1 to 16 with no gaps and no repeats,
-   and a block sits where its number says it does. A new page section takes the
-   next free number and is inserted in front of the case page, which is the
-   sub-page appendix and stays last.
-
-   1. Tokens        colour, type, space, radius, shadow, motion
-   2. Reset         element resets, all with :where() so component classes win
-   3. Grid          8 columns, max 1440, colour panels, block primitive
-   4. Motion        enter, hover and draw primitives, reduced-motion collapse
-   5. Nav           the black signage bar
-   6. Hero          headline, timetable, metro map, legend
-   7. Proof         yellow signal board, ruled count grid, dateline rail
-   8. Work          case posters in service ink, one render plate
-   9. Services      the five lines, one ink block each
-  10. Process       the timetable board, four phases and their payment gates
-  11. Engagement    the fare rules board, three fields and six clauses
-  12. Founders      crew manifest, two keyline panels, city nameplates
-  13. FAQ           the signal slots, seven rows on one rule system
-  14. Contact       the terminus board, the address and the receipt
-  15. Footer        the end-of-line board, four columns on black, paper rules
-  16. Case page     /v4/work/jewelo, the flagship case as poster bands
-
-   Sections 6 to 15 run in the order the page renders them, so reading the file
-   top to bottom is reading /v4 top to bottom. Two numbers were fixed by what
-   already cites them and could not be moved for the sake of that order: work is
-   8 and services is 9 (services.tsx and engagement.tsx name section 9),
-   engagement is 11 (contact.tsx and engagement.tsx name section 11), so those
-   two pairs sit in the file the other way round from the page. Every other
-   block is where the page puts it. No selector is declared in two blocks, so
-   the order is documentation and never cascade.
+   Two rules this file exists to enforce, both from
+   `docs/goal/03-design-research.md` section 4, direction 4:
+     - There is NO shadow token. `box-shadow` appears nowhere in this system.
+       A flat, bordered, shadowless page is the specific defence against the
+       generic SaaS-card kit.
+     - Cobalt is rationed to three surfaces: the primary action (nav and hero
+       are the same action), and the live cell's rule. Focus rings are ink so
+       they do not spend the budget.
    =========================================================================== */
 
-/* ---------------------------------------------------------------------------
-   1. TOKENS
-   --------------------------------------------------------------------------- */
+/* -- 01 Palette ----------------------------------------------------------- */
 
 .v4 {
-  /* --- 1.1 Ground and ink ------------------------------------------------
-     Four flat inks on white, from the research brief. No tints, no ramps, no
-     gradients: a colour is either one of these or it is not on the page.
+  --v4-canvas: #e9eaec;
+  --v4-cell: #ffffff;
+  --v4-ink: #111312;
+  --v4-muted: #616770;
+  --v4-border: #d3d6da;
+  --v4-cobalt: #1b34d8;
+  --v4-jade: #12805c;
 
-     Measured contrast on the white ground (WCAG 2.1, 1.4.3 and 1.4.11):
-       black  #111111 on white  19.0:1  any text, any size
-       blue   #2456e6 on white   5.9:1  any text, any size
-       red    #e63b2e on white   4.2:1  LARGE TEXT ONLY (>=24px, or >=19px bold)
-                                        and graphics; never for 18px body text
-       yellow #f2c318 on white   1.7:1  NEVER text on white, never a bare
-                                        hairline; black on yellow is 11.4:1 and
-                                        is the only sanctioned yellow pairing
-       black  #111111 on red     4.6:1  passes AA, used by the hero tag
-       white  #ffffff on black  19.0:1
-       yellow #f2c318 on black  12.3:1  used by nav hover and focus rings
-
-     Because yellow cannot carry its own weight on white, every yellow graphic
-     on the white ground gets a black keyline: the map lines all take a casing
-     (section 6.6) and the legend chips all take a 1px black border
-     (section 6.7). Both are applied to every ink, not just yellow, so the
-     system stays one rule instead of one rule plus an exception. */
-  --v4-paper: #ffffff;
-  --v4-ink-red: #e63b2e;
-  --v4-ink-blue: #2456e6;
-  --v4-ink-yellow: #f2c318;
-  --v4-ink-black: #111111;
-
-  /* There is no fifth ink and no grey for text. A label that needs to sit
-     back from the value beside it does it with weight, not with colour: black
-     at 400 against black at 700 is the whole secondary-text system (the
-     timetable in 6.6, the quote attribution in 6.7). A grey label ink was
-     tried and removed, because four inks that are sometimes five is not a
-     palette.
-
-     The one grey left on the page is the pencil below, which never carries
-     text and never leaves the map. */
-
-  /* The pencil the map is drawn in before it is inked. Never carries text.
-     The self-drawing line in section 4.3 draws over this, so the diagram is
-     complete and visible at scroll 0 whether or not the animation has run. */
-  --v4-pencil: #d6d6d1;
-
-  /* --- 1.2 Service inks --------------------------------------------------
-     One ink per service, fixed for the whole page. A service keeps its colour
-     in the hero map, in the bento services grid, in the case studies and in
-     the process line, so colour is an index rather than decoration.
-
-     Order and names are docs/goal/COPY.md section 3, "The five", verbatim:
-       1  Customer-facing product studios  red
-       2  Generated product media          blue
-       3  Agent systems and harnesses      yellow
-       4  WhatsApp lead systems            black
-       5  App store readiness              red, drawn dashed
-
-     Five services and four inks, so service 5 reuses red and is distinguished
-     the way a metro map distinguishes a shuttle: same colour, dashed. The dash
-     is punched out of the drawn line by a paper-coloured stroke rather than set
-     on it, because the draw primitive in section 4.3 owns stroke-dasharray.
-     --v4-service-5-dash is that punch: 12 units of paper every 40. */
-  --v4-ink-service-1: var(--v4-ink-red);
-  --v4-ink-service-2: var(--v4-ink-blue);
-  --v4-ink-service-3: var(--v4-ink-yellow);
-  --v4-ink-service-4: var(--v4-ink-black);
-  --v4-ink-service-5: var(--v4-ink-red);
-  --v4-service-5-dash: 12 28;
-
-  /* --- 1.3 Type ----------------------------------------------------------
-     Space Grotesk for everything, loaded once in app/fonts.ts and exposed as
-     --font-grotesk in app/globals.css. No second family anywhere in v4.
-
-     Exactly five stops, from the research brief: 18, 24, 40, 72, 120.
-       t-1   18px  body, labels, nav, legend, CTA support
-       t-2   24px  lead paragraph, block CTA
-       t-3   40px  timetable figures, sub-heads
-       t-4   72px  section heads
-       t-5  120px  the hero headline, the only place this stop is used
-
-     t-4 and t-5 clamp down on small screens and hold their ratio. At the
-     ceiling 120/72 = 1.667; at the floor 44/26 = 1.692 after rounding both to
-     whole pixels. t-1 to t-3 are the same at every width except t-3, which
-     eases down so a three-cell timetable does not need to wrap at 360.
-
-     Tracking is tight and negative at the display stops, which is what makes a
-     grotesk read as Swiss rather than as a UI font. */
-  --v4-t-1: 18px;
-  --v4-t-2: 24px;
-  --v4-t-3: clamp(28px, 2.9vw, 40px);
-  --v4-t-4: clamp(26px, 5.04vw, 72px);
-  --v4-t-5: clamp(44px, 8.4vw, 120px);
-
-  --v4-track-tight: -0.035em;
-  --v4-track-snug: -0.02em;
-  --v4-track-flat: 0;
-
-  --v4-leading-display: 0.94;
-  --v4-leading-tight: 1.1;
-  --v4-leading-body: 1.45;
-
-  /* --- 1.4 Space ---------------------------------------------------------
-     One 8px base. Every margin, pad and gap on the page is one of these, so
-     vertical rhythm cannot drift. */
-  --v4-s0: 4px;
-  --v4-s1: 8px;
-  --v4-s2: 16px;
-  --v4-s3: 24px;
-  --v4-s4: 32px;
-  --v4-s5: 40px;
-  --v4-s6: 48px;
-  --v4-s8: 64px;
-  --v4-s10: 80px;
-  --v4-s12: 96px;
-  --v4-s16: 128px;
-
-  /* --- 1.5 Radius and shadow --------------------------------------------
-     Both are zero and stay zero. Blocks are blocks. The only curves on the
-     page are inside the metro map, where a station marker is a circle because
-     that is what a station marker is; radius governs UI, not diagram geometry.
-     These tokens exist so a later section cannot quietly invent a rounded
-     card: it has to reach for a value that is 0. */
-  --v4-radius: 0;
-  --v4-shadow: none;
-
-  /* --- 1.6 Motion --------------------------------------------------------
-     Three primitives, no library, no dependency. The spring is a
-     cubic-bezier overshoot, not a physics engine.
-
-       enter  a block slides in along a grid axis and overshoots once, 500ms
-       hover  a block shifts 4px on its grid axis and its ink swaps, 160ms
-       draw   the metro line inks itself over its pencil underlay, 700ms
-
-     All three collapse under prefers-reduced-motion in section 4.4. Nothing
-     here changes whether an element is present, only how finished it looks:
-     there is no opacity-0 start state anywhere in this variation. */
-  --v4-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --v4-ease-flat: cubic-bezier(0.2, 0, 0, 1);
-  --v4-dur-enter: 500ms;
-  --v4-dur-hover: 160ms;
-  --v4-dur-draw: 700ms;
-  --v4-enter-shift: 24px;
-  --v4-hover-shift: 4px;
-  /* How much of a line is left to stroke in on load, in pathLength units, which
-     are per cent. The page default is 0: a map is inked the moment it renders
-     and stays inked, which is the only state that survives a screenshot (see
-     4.3). A section that wants the stroke gesture opts in by raising this on
-     itself, and owns the still it produces. */
-  --v4-draw-lead: 0;
-
-  /* --- 1.7 Layout --------------------------------------------------------
-     8 columns at every width. Blocks span more columns as the screen narrows;
-     the column count never changes, so a block always lands on the grid. */
-  --v4-cols: 8;
-  --v4-shell: 1440px;
-  --v4-gutter: 24px;
-  --v4-pad: 48px;
-  --v4-rule: 3px;
-
-  /* The height of the one-row signage bar, and therefore how far a section has
-     to hold itself clear of the top when an anchor scrolls it into view. The
-     bar is 16px of padding above and below a 50px yellow block (18px label,
-     line-height 1, 16px of padding each side), so 82px. Section 3 spends it as
-     scroll-margin-top; nothing else may read it.
-
-     One value, because the bar only pins at the width where it is one row
-     (section 5). The two-row bar below 1180 is 131px and scrolls away with the
-     page, so nothing has to hold itself clear of it. This number stopped being
-     true once before, when the stop row wrapped a line per section built and
-     the bar reported 82, 88, 120 and 280 at four widths while this token still
-     said 82; the strip in section 5 cannot wrap, which is what makes it a
-     constant rather than a count. */
-  --v4-nav-h: 82px;
+  /* Derived, not new hues: every value below is mixed from the seven above so
+     the palette stays seven colours wide. */
+  --v4-cobalt-press: color-mix(in oklab, var(--v4-cobalt) 86%, #000);
+  --v4-line-hover: color-mix(in oklab, var(--v4-ink) 26%, var(--v4-border));
+  /* In-build cells: the fill is pulled back towards the canvas and hatched, so
+     "partly built" is a property of the surface rather than a label on it. */
+  --v4-cell-reduced: color-mix(in oklab, var(--v4-cell) 52%, var(--v4-canvas));
+  --v4-hatch: color-mix(in srgb, var(--v4-border) 60%, transparent);
 }
 
-/* Small screens: the same grid, tighter gutters, smaller page margin. */
-@media (max-width: 720px) {
-  .v4 {
-    --v4-gutter: 16px;
-    --v4-pad: 20px;
+/* -- 02 Type -------------------------------------------------------------- */
+
+.v4 {
+  --v4-font: var(--font-geist), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --v4-font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Display: Geist 600 at -0.035em. 32px at 390 through 56px at 1280. */
+  --v4-display: clamp(2rem, 0.2rem + 4.2vw, 3.5rem);
+  --v4-display-lh: 1.05;
+  --v4-display-tracking: -0.035em;
+
+  /* Body inside cells and out. Captions are the one step down. */
+  --v4-body: 1rem; /* 16 */
+  --v4-body-lh: 1.55;
+  --v4-caption: 0.9375rem; /* 15 */
+  --v4-caption-lh: 1.45;
+  --v4-chip: 0.75rem; /* 12 */
+  --v4-lead: 1.0625rem; /* 17, hero subhead only */
+
+  /* Every figure on the board is Geist Mono with tabular figures. */
+  --v4-figure: clamp(2rem, 1.4rem + 1.4vw, 2.5rem);
+}
+
+/* -- 03 Space ------------------------------------------------------------- */
+
+.v4 {
+  --v4-1: 4px;
+  --v4-2: 8px;
+  --v4-3: 12px;
+  --v4-4: 16px;
+  --v4-5: 20px;
+  --v4-6: 24px;
+  --v4-8: 32px;
+  --v4-10: 40px;
+  --v4-12: 48px;
+  --v4-14: 56px;
+  --v4-16: 64px;
+  --v4-18: 72px;
+  --v4-24: 96px;
+}
+
+/* -- 04 Grid and container ------------------------------------------------ */
+
+.v4 {
+  --v4-max: 1280px;
+  --v4-gutter: clamp(20px, 3vw, 40px);
+  --v4-col-gap: 24px;
+  /* Board gutter. Cells sit close so the board reads as one object. */
+  --v4-board-gap: 8px;
+  /* Where the hero stops stacking and the board moves to the right. Chosen so
+     the two-line headline survives: at 1180 the copy column is 548px. */
+  --v4-split: 1180px;
+}
+
+.v4-container {
+  width: 100%;
+  max-width: var(--v4-max);
+  margin-inline: auto;
+  padding-inline: var(--v4-gutter);
+}
+
+/* The 12-column grid every section lays out on. */
+.v4-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--v4-col-gap);
+}
+
+/* Anchors clear the fixed product bar. */
+.v4 :where([id]) {
+  scroll-margin-top: calc(var(--v4-nav-h) + var(--v4-4));
+}
+
+/* -- 05 Radius and line --------------------------------------------------- */
+
+.v4 {
+  --v4-r-cell: 8px;
+  --v4-r-chip: 4px;
+  --v4-hairline: 1px;
+  --v4-hairline-hover: 1.5px;
+}
+
+/* -- 06 Motion ------------------------------------------------------------ */
+
+.v4 {
+  --v4-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* Entrance: one board-online pass. 4 cells x 60ms stagger + 460ms = ~700ms. */
+  --v4-online: 460ms;
+  --v4-stagger: 60ms;
+  /* Hover: line weight and one count-up. */
+  --v4-hover: 140ms;
+  --v4-count: 700ms;
+}
+
+/* Entrance primitive. Cells are already on the page as 1px outlines; only the
+   fill and the content cross-fade, largest cell first. */
+@keyframes v4-online {
+  from {
+    opacity: 0;
   }
 }
 
-/* Short landscape viewports (844x390 and friends). The headline drops to a
-   size that fits two lines in the width the phone actually has, and the hero
-   rhythm tightens so the CTA stays above the fold without a 100vh trap. */
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4 {
-    --v4-t-5: clamp(32px, 5.2vw, 56px);
-    --v4-t-3: clamp(24px, 2.6vw, 32px);
-    --v4-pad: 32px;
+/* Hover primitive, part two: the figure counts once to the value already in
+   the DOM. Only a `from` keyframe, so the implicit `to` is the element's own
+   value and one keyframe serves every figure on the board. */
+/* `inherits: true` is load-bearing: the number is printed by a pseudo-element,
+   which only sees the value set on the cell if the property inherits. */
+@property --v4-figure-value {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: true;
+}
+
+@keyframes v4-count-up {
+  from {
+    --v4-figure-value: 0;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   2. RESET AND ROOT
-
-   Every element reset uses :where() so it carries zero specificity and any
-   component class below wins without !important and without ordering games.
-   --------------------------------------------------------------------------- */
-
-.v4 {
-  background: var(--v4-paper);
-  color: var(--v4-ink-black);
-  font-family: var(--font-grotesk);
-  font-synthesis-weight: none;
-  -webkit-font-smoothing: antialiased;
+/* Scroll primitive: sticky headers inside a band. Nothing else moves on
+   scroll. Declared here so every later section uses the same one. */
+.v4-sticky-head {
+  position: sticky;
+  top: calc(var(--v4-nav-h) + var(--v4-2));
+  z-index: 2;
+  background: var(--v4-canvas);
+  padding-block: var(--v4-3);
 }
 
-.v4 :where(h1, h2, h3, h4, p, figure, figcaption, blockquote, dl, dd, ul, ol) {
+/* -- 07 Reset ------------------------------------------------------------- */
+
+/* `:where()` keeps every reset at zero specificity inside `.v4`, so a
+   primitive below always wins without a single `!important`. */
+.v4 :where(h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd) {
   margin: 0;
-  padding: 0;
 }
 
 .v4 :where(ul, ol) {
+  padding: 0;
   list-style: none;
 }
 
@@ -274,16 +209,57 @@
   display: block;
 }
 
-.v4 :where(button) {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  padding: 0;
+.v4 :where(:focus-visible) {
+  outline: 2px solid var(--v4-ink);
+  outline-offset: 2px;
+  border-radius: var(--v4-r-chip);
 }
 
-/* Screen-reader-only. Used to give the metro map a text equivalent that stays
-   in the accessibility tree while both SVG geometries are aria-hidden. */
+.v4 {
+  background: var(--v4-canvas);
+  color: var(--v4-ink);
+  font-family: var(--v4-font);
+  font-size: var(--v4-body);
+  line-height: var(--v4-body-lh);
+  min-height: 100svh;
+}
+
+/* -- 08 Text primitives --------------------------------------------------- */
+
+.v4-display {
+  font-size: var(--v4-display);
+  font-weight: 600;
+  line-height: var(--v4-display-lh);
+  letter-spacing: var(--v4-display-tracking);
+  text-wrap: balance;
+  max-width: 22ch;
+}
+
+.v4-eyebrow {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+.v4-lede {
+  font-size: var(--v4-lead);
+  line-height: 1.5;
+  color: var(--v4-muted);
+  max-width: 52ch;
+}
+
+.v4-support {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+.v4-legend {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
 .v4-sr {
   position: absolute;
   width: 1px;
@@ -291,4290 +267,445 @@
   margin: -1px;
   padding: 0;
   overflow: hidden;
-  clip-path: inset(50%);
   white-space: nowrap;
+  clip-path: inset(50%);
   border: 0;
 }
 
-/* ---------------------------------------------------------------------------
-   3. GRID AND BLOCKS
-   --------------------------------------------------------------------------- */
+/* -- 09 Buttons ----------------------------------------------------------- */
 
-/* Where a section lands when a stop on the bar sends the reader to it. The bar
-   pins itself on viewports that are wide and tall enough (section 5), and a
-   pinned bar sits over the top of whatever the anchor scrolled to: without this
-   the "Proof" stop tucks the first line of the proof board under the black
-   band. --v4-anchor-offset is raised to the bar height by the same media query
-   that pins the bar, so the condition is written once and cannot drift, and it
-   is 0 wherever the bar scrolls away with the page. Every section on this page
-   is a `section` with an id, which is also what the nav anchors resolve to. */
-.v4 section[id] {
-  scroll-margin-top: var(--v4-anchor-offset, 0px);
-}
-
-/* The measure every section sits in. Content maxes at 1440 and the page margin
-   sits outside it, so the grid holds at 2560 instead of drifting to the edges. */
-.v4-shell {
-  width: 100%;
-  max-width: calc(var(--v4-shell) + (var(--v4-pad) * 2));
-  margin-inline: auto;
-  padding-inline: var(--v4-pad);
-}
-
-/* The strict 8-column grid. Every block snaps to it. */
-.v4-grid {
-  display: grid;
-  grid-template-columns: repeat(var(--v4-cols), minmax(0, 1fr));
-  column-gap: var(--v4-gutter);
-}
-
-/* Full-bleed flat colour panels. Sections alternate white and one ink; the
-   panel is the section element itself, so colour runs edge to edge while the
-   content inside stays on the 1440 grid. Text colour comes with the panel so a
-   section cannot end up with red body text by accident. */
-.v4-panel--black {
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-}
-
-.v4-panel--blue {
-  background: var(--v4-ink-blue);
-  color: var(--v4-paper);
-}
-
-.v4-panel--yellow {
-  background: var(--v4-ink-yellow);
-  color: var(--v4-ink-black);
-}
-
-.v4-panel--red {
-  background: var(--v4-ink-red);
-  color: var(--v4-ink-black);
-}
-
-/* The block primitive: every button, tag and CTA on the page.
-   A block is a rectangle of flat ink with a label in it. Radius 0, no border,
-   no shadow. Instances set the four --v4-block-* variables; the defaults here
-   are a black block with white text that swaps to yellow with black text on
-   hover. Section 4.2 records why that swap and not another. */
-.v4-block {
-  --v4-block-bg: var(--v4-ink-black);
-  --v4-block-fg: var(--v4-paper);
-  --v4-block-bg-hover: var(--v4-ink-yellow);
-  --v4-block-fg-hover: var(--v4-ink-black);
-
+/* Exactly two forms. Nothing else is a button on this page. */
+.v4-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--v4-block-bg);
-  color: var(--v4-block-fg);
-  border-radius: var(--v4-radius);
-  box-shadow: var(--v4-shadow);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
+  gap: var(--v4-2);
+  min-height: 44px;
+  padding: 0 var(--v4-5);
+  border-radius: var(--v4-r-chip);
+  border: var(--v4-hairline) solid transparent;
+  font-size: var(--v4-body);
+  font-weight: 500;
   line-height: 1;
-  text-align: center;
-}
-
-/* ---------------------------------------------------------------------------
-   4. MOTION PRIMITIVES
-   --------------------------------------------------------------------------- */
-
-/* 4.1 Enter. A block arrives along a grid axis and overshoots once.
-
-   Translate only: the element is at full opacity in the initial DOM state, so a
-   capture taken before the motion finishes shows a finished page that is merely
-   24px off its column, never a page with a hole in it.
-
-   Like the draw in 4.3 this is a transition out of @starting-style rather than
-   a keyframe animation, for the same reason: the rest state is the finished
-   state, so a relayout cannot rewind it, and a later section that wants the
-   same motion on scroll only has to add the class when the block enters view.
-   Stagger with --v4-enter-delay.
-
-   This is where the page spends its spring. The hero puts it on six blocks in
-   reading order (6.10) and the work section on its case blocks; the draw in 4.3
-   no longer moves by default, so the entrance is the load gesture. Keep the
-   whole stagger short - the last block should be settled well inside a second -
-   because a screenshot taken mid-flight is a page whose blocks sit up to 24px
-   low, which is survivable but not the deliverable. */
-.v4-enter-x,
-.v4-enter-y {
-  transform: translate3d(0, 0, 0);
-  transition: transform var(--v4-dur-enter) var(--v4-ease-spring)
-    var(--v4-enter-delay, 0ms);
-}
-
-@starting-style {
-  .v4 .v4-enter-x {
-    transform: translate3d(var(--v4-enter-shift), 0, 0);
-  }
-
-  .v4 .v4-enter-y {
-    transform: translate3d(0, var(--v4-enter-shift), 0);
-  }
-}
-
-/* 4.2 Hover. The block shifts 4px along its grid axis and its ink swaps.
-
-   THE DEFAULT SWAP IS BLACK TO YELLOW, AND IT IS A CONTRAST DECISION
-   The default used to be white on red, which is 4.18:1. That is under the 4.5
-   floor for anything below 24px, and the CTAs that take the default are 18px:
-   the process link, the engagement CTA, and the hero CTA once the short-
-   landscape rule drops it to 18px. A hover state that fails AA fails for as
-   long as the pointer is on it and for the whole time a keyboard user is
-   focused there, so the primitive cannot ship a swap that is only legal at one
-   size. Black on yellow is 11.4:1 and legal at every size on this page.
-
-   It is also the only swap that reads on both grounds. Paper is the natural
-   inverse of a black block, but the three blocks that take the default all sit
-   on the white ground, and a paper block on white has no edge left to see -
-   radius 0 and shadow none mean the rectangle is the ink and nothing else.
-   Yellow is the page's signage ink and already means "this is the action" on
-   the bar, so a black block turning yellow under the pointer is the system
-   saying the same thing twice rather than a new colour.
-
-   A block on a coloured panel still sets --v4-block-bg-hover itself, because
-   yellow on yellow and yellow on black have the same problem in reverse; the
-   proof, work, contact and case-page blocks all do. Red is left in the palette
-   as an opt-in for a block that is 24px at every width, which today is none of
-   them. Focus-visible gets the same treatment as hover so a keyboard user sees
-   the affordance a mouse user does. */
-.v4-block {
   transition:
-    background-color var(--v4-dur-hover) var(--v4-ease-flat),
-    color var(--v4-dur-hover) var(--v4-ease-flat),
-    transform var(--v4-dur-hover) var(--v4-ease-flat);
+    background-color var(--v4-hover) var(--v4-ease),
+    border-color var(--v4-hover) var(--v4-ease);
 }
 
-.v4-block:hover,
-.v4-block:focus-visible {
-  background: var(--v4-block-bg-hover);
-  color: var(--v4-block-fg-hover);
-  transform: translate3d(var(--v4-hover-shift), 0, 0);
+.v4-btn--primary {
+  background: var(--v4-cobalt);
+  color: #ffffff;
 }
 
-/* 4.3 Draw. Available and unused: every section on the page ships its diagrams
-   inked, so no section raises --v4-draw-lead above 0 and nothing on either
-   route strokes in on load.
-
-   The primitive stays because it is what pins that decision down. A line that
-   carries this class rests complete at stroke-dashoffset 0; @starting-style
-   hides its leading --v4-draw-lead per cent for the one style resolution when
-   the element first renders, so a section that opts in gets its lines stroking
-   in from the edge of the diagram. The default is 0 because a full-page capture
-   lands on a clock nothing in CSS can see: an 8% lead staggered 90ms a line
-   printed a grey stub on four of the five hero lines in seven of the nine
-   full-page shots. Any lead above 0 is a window in which a still can be caught,
-   so a section that raises it owns the still that produces.
-
-   pathLength="100" is required on every path that carries this class. The dash
-   values below are in pathLength units; without the attribute they are user
-   units and the dash is far shorter than the path, so the line renders as a
-   dotted rule and never reveals. */
-.v4-draw {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset var(--v4-dur-draw) var(--v4-ease-flat)
-    var(--v4-draw-delay, 0ms);
+.v4-btn--primary:hover {
+  background: var(--v4-cobalt-press);
 }
 
-@starting-style {
-  .v4 .v4-draw {
-    stroke-dashoffset: calc(var(--v4-draw-lead) * -1);
-  }
+.v4-btn--outline {
+  background: transparent;
+  border-color: var(--v4-border);
+  color: var(--v4-ink);
 }
 
-/* 4.4 Reduced motion. Everything collapses to its finished state. The map is
-   drawn complete, blocks sit on their columns, hover keeps the colour swap
-   (which is information) and loses the shift (which is decoration). */
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-enter-x,
-  .v4 .v4-enter-y {
-    transition: none;
-    transform: none;
-  }
-
-  .v4 .v4-draw {
-    transition: none;
-    stroke-dashoffset: 0;
-  }
-
-  .v4 .v4-block {
-    transition: none;
-  }
-
-  .v4 .v4-block:hover,
-  .v4 .v4-block:focus-visible {
-    transform: none;
-  }
+.v4-btn--outline:hover {
+  border-color: var(--v4-line-hover);
 }
 
-/* Focus. The shared ring in app/globals.css is a black outline, which is
-   invisible on the black signage bar. Yellow is 12.3:1 on black and 1.7:1 on
-   white, so the ring is yellow inside black panels and black everywhere else. */
-.v4 :focus-visible {
-  outline: 3px solid var(--v4-ink-black);
-  outline-offset: 3px;
-}
+/* -- 10 Nav --------------------------------------------------------------- */
 
-.v4 .v4-panel--black :focus-visible,
-.v4 .v4-nav :focus-visible {
-  outline-color: var(--v4-ink-yellow);
+.v4 {
+  --v4-nav-h: 64px;
 }
-
-/* ---------------------------------------------------------------------------
-   5. NAV - the black signage bar
-   --------------------------------------------------------------------------- */
 
 .v4-nav {
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  position: static;
-  z-index: 20;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  /* Solid ground, no blur, at every scroll position: the bar is white over the
+     canvas, so it needs no transparent-at-top state and no scroll listener. */
+  background: var(--v4-cell);
+  border-bottom: var(--v4-hairline) solid var(--v4-border);
 }
 
-/* Sticky only where the bar is one row and there is height to spare, which is
-   1180 and up. That is the whole rule, and it is the same 1180 the one-row
-   layout is measured at further down, so the two can never disagree.
-
-   Below 1180 the bar is two rows and 131px. Pinning that costs a tablet an
-   eighth of its screen, tucks 131px off the top of every anchored section, and
-   parks an opaque band on the footer wordmark at the end of a page whose footer
-   happens to nearly fit the viewport. A bar that scrolls away has none of those
-   problems, and the footer carries the full section index for the reader who
-   wants to get back. On a 390px-tall landscape phone nothing is pinned either,
-   which is what keeps the hero CTA above the fold there. */
-@media (min-width: 1180px) and (min-height: 620px) {
-  .v4-nav {
-    position: sticky;
-    top: 0;
-  }
-
-  /* Pinning the bar is what makes an anchor land under it, so the offset the
-     sections read (section 3) is set here and nowhere else. */
-  .v4 {
-    --v4-anchor-offset: var(--v4-nav-h);
-  }
-}
-
-.v4-nav__inner {
+.v4-nav-inner {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--v4-s1) var(--v4-s5);
-  padding-block: var(--v4-s2);
+  gap: var(--v4-6);
+  height: var(--v4-nav-h);
 }
 
-.v4-nav__brand {
+.v4-wordmark {
   display: inline-flex;
   align-items: center;
-  gap: var(--v4-s1);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  margin-right: auto;
+  gap: var(--v4-2);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-inline-end: auto;
 }
 
-.v4-nav__mark {
-  width: 22px;
-  height: 22px;
-  color: currentColor;
-  flex: none;
+.v4-wordmark svg {
+  width: 20px;
+  height: 20px;
 }
 
-/* The anchor row, set as a strip map: one line of stops that slides sideways
-   when the line is longer than the bar.
-
-   IT MUST NEVER WRAP. The bar is what every anchor on the page measures itself
-   against - `--v4-nav-h` is spent as scroll-margin-top in section 3 - so a row
-   that grows a line as sections are built silently shortens that offset and
-   tucks the top of every section under the band. A wrapping row measured 82px
-   at 1280, 88px at 1180, 120px at 720 and 280px at 560 with the full ten-
-   section index, which is the same bar reporting four different heights. One
-   non-wrapping line makes it a constant per breakpoint again: 82px wherever the
-   bar is pinned, and the stops that do not fit are reached by dragging the
-   strip rather than by the band eating the screen.
-
-   The scroller is the reason for the padding: a scroll box clips its overflow
-   in both axes, and the focus ring in section 4.5 is a 3px outline at a 3px
-   offset, so 8px of padding all round is what keeps the ring on the first and
-   last stop from being sheared off. On the two-row bar the padding is left to
-   stand, because pulling it back out with a negative margin would run the
-   hairline 8px into the page gutter at both ends and take the rule off the
-   grid; the one-row bar has no hairline to keep straight and cancels it.
-
-   `order` puts the strip below the brand and the CTA on narrow bars and inline
-   between them on wide ones. */
-.v4-nav__sections {
-  order: 3;
-  flex-basis: 100%;
-  min-width: 0;
-  padding: var(--v4-s1);
-  border-top: 1px solid rgb(255 255 255 / 0.22);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  scroll-padding-inline: var(--v4-s1);
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-/* No visible scrollbar: a 15px system bar under a 22px line would be half the
-   height of the strip, and on a signage band it reads as a fault. */
-.v4-nav__sections::-webkit-scrollbar {
+.v4-nav-links {
   display: none;
-}
-
-.v4-nav__list {
-  display: flex;
-  flex-wrap: nowrap;
   align-items: center;
-  gap: var(--v4-s3);
+  gap: var(--v4-6);
 }
 
-.v4-nav__list > li {
-  flex: none;
-  scroll-snap-align: start;
+.v4-nav-links a {
+  font-size: var(--v4-caption);
+  color: var(--v4-muted);
+  transition: color var(--v4-hover) var(--v4-ease);
 }
 
-.v4-nav__link {
-  display: inline-block;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1.2;
-  color: var(--v4-paper);
-  transition:
-    color var(--v4-dur-hover) var(--v4-ease-flat),
-    transform var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-.v4-nav__link:hover,
-.v4-nav__link:focus-visible {
-  color: var(--v4-ink-yellow);
-  transform: translate3d(var(--v4-hover-shift), 0, 0);
-}
-
-/* The stop the reader is at. `aria-current` is set by the nav component on load
-   and on every hash change, so the mark is the same thing the screen reader
-   hears rather than a class beside it.
-
-   Yellow ink on the black band at 12.3:1 with a 2px rule under it, which is the
-   line marker on a strip map and the one signal on the bar that is not the CTA
-   block. Underline rather than a yellow plate for two reasons: a second yellow
-   block beside the CTA reads as a second button, and a plate needs padding,
-   which would change the width of one stop and move every stop after it each
-   time the hash changed - on a strip whose whole job is to hold its position.
-   Nothing here touches the box, so the line and the bar keep their metrics.
-
-   It does not take the hover shift: the current stop is where the reader is,
-   not something they are pointing at. */
-.v4-nav__link[aria-current] {
-  color: var(--v4-ink-yellow);
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-}
-
-.v4-nav__link[aria-current]:hover,
-.v4-nav__link[aria-current]:focus-visible {
-  transform: none;
-}
-
-/* The CTA: a flat yellow block with black text, the one piece of colour on the
-   bar. It is already the yellow the default swaps to, so it declares its own
-   hover: paper, the inverse section 4.2 names, at 19.0:1 on the black label. */
-.v4-nav__cta {
-  --v4-block-bg: var(--v4-ink-yellow);
-  --v4-block-fg: var(--v4-ink-black);
-  --v4-block-bg-hover: var(--v4-paper);
-  --v4-block-fg-hover: var(--v4-ink-black);
-  font-size: var(--v4-t-1);
-  padding: var(--v4-s2) var(--v4-s3);
-  order: 2;
-}
-
-/* One row, at the two widths that can carry one.
-
-   1180 is measured, not chosen: the eight stops and their gaps run 668px, and
-   1180 is the first width in the matrix where the brand, that line and the CTA
-   all fit a single row with the stops still whole. Below it the strip would be
-   cut mid-word against the yellow block - "Founde" at 820 - which reads as a
-   truncation fault rather than as a sign that continues, so below 1180 the
-   strip takes the full width of its own row instead and the cut, when there is
-   one, happens at the edge of the page where a strip map is supposed to run
-   off.
-
-   The short landscape phone takes the one-row bar whatever its width, because
-   there the fold is the constraint and not the stop list: 66px of bar against a
-   390px viewport instead of 113px. Nothing is pinned at that height, so the
-   strip scrolling is the only cost.
-
-   In both cases the bar is exactly `--v4-nav-h` tall and nothing on the page
-   can change that: the brand and the CTA do not shrink, the strip takes
-   whatever is left and scrolls, and the strip cannot wrap. That is the whole
-   contract the anchor offset in section 3 depends on. */
-@media (min-width: 1180px), (max-height: 560px) and (orientation: landscape) {
-  .v4-nav__inner {
-    flex-wrap: nowrap;
-  }
-
-  .v4-nav__brand {
-    flex: none;
-  }
-
-  .v4-nav__sections {
-    order: 2;
-    flex: 0 1 auto;
-    /* No hairline on one row, so the inline ring padding is pulled back out and
-       the first stop sits exactly where it would with no scroller at all. The
-       block padding stays: at 38px tall the strip is shorter than the 50px CTA
-       beside it, so it never sets the height of the bar. */
-    margin-inline: calc(var(--v4-s1) * -1);
-    border-top: 0;
-  }
-
-  .v4-nav__cta {
-    order: 3;
-    margin-left: auto;
-    flex: none;
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-nav__inner {
-    padding-block: var(--v4-s1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-nav__link {
-    transition: none;
-  }
-
-  .v4 .v4-nav__link:hover,
-  .v4 .v4-nav__link:focus-visible {
-    transform: none;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   6. HERO
-   --------------------------------------------------------------------------- */
-
-/* 6.1 Frame. No 100vh, no pin, no min-height: the hero is exactly as tall as
-   its content, which is what keeps it out of trouble at 844x390. overflow-x is
-   clipped here rather than on `.v4` so the 24px enter shift cannot open a
-   horizontal scrollbar, and so the sticky nav above keeps a clean ancestor. */
-.v4-hero {
-  overflow-x: clip;
-  padding-block: var(--v4-s10) var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-hero {
-    padding-block: var(--v4-s2) var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-hero {
-    padding-block: var(--v4-s4) var(--v4-s8);
-  }
-}
-
-/* 6.2 The headline block runs the full eight columns. The 120 stop needs every
-   column it can get: at 1440 the longer of the two lines measures about 1230px
-   and the full content width is 1440px, so a six-column copy well would force
-   the headline onto a third line on desktop. Measure is held by the lead's own
-   max-width instead, which is where a measure belongs. */
-
-/* 6.3 The tag. COPY.md section 1 eyebrow, set as a flat red block with black
-   text. Black on red is 4.6:1, the only AA-safe way to put text on this red. */
-.v4-tag {
-  display: inline-block;
-  background: var(--v4-ink-red);
-  color: var(--v4-ink-black);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-/* 6.4 The headline. The only use of the 120 stop on the page. Two spans so the
-   line break is a design decision above 900px and a natural wrap below it,
-   where the same two lines would run off the screen. Black, both lines: the
-   colour in this hero belongs to the map, and splitting a headline across two
-   inks would spend the page's boldness twice. */
-.v4-hero__title {
-  margin-top: var(--v4-s3);
-  font-size: var(--v4-t-5);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-  text-wrap: balance;
-}
-
-.v4-hero__title span {
-  display: inline;
-}
-
-@media (min-width: 900px) {
-  .v4-hero__title {
-    text-wrap: initial;
-  }
-
-  .v4-hero__title span {
-    display: block;
-  }
-}
-
-/* 6.5 Lead, CTA and support line, all COPY.md section 1 verbatim. */
-.v4-hero__lead {
-  margin-top: var(--v4-s4);
-  max-width: 34ch;
-  font-size: var(--v4-t-2);
-  font-weight: 400;
-  letter-spacing: var(--v4-track-flat);
-  line-height: var(--v4-leading-body);
-}
-
-@media (min-width: 900px) {
-  .v4-hero__lead {
-    max-width: 46ch;
-  }
-}
-
-.v4-hero__act {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--v4-s2) var(--v4-s3);
-  margin-top: var(--v4-s5);
-}
-
-.v4-hero__cta {
-  font-size: var(--v4-t-2);
-  padding: var(--v4-s2) var(--v4-s5);
-}
-
-.v4-hero__support {
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-  color: var(--v4-ink-black);
-}
-
-/* Phones. Every step of the hero rhythm comes down on the 8px scale so the
-   whole call to action - the black block AND the support line under it, which
-   is where the money terms are - clears the fold at 360x780, the shortest
-   portrait in the matrix. The support line wraps below the block at this width,
-   so the row gap in .v4-hero__act is part of that measurement and comes down
-   with everything else, and so is the signage bar above: the bar is what shifts
-   this whole stack down the screen, which is why it is pinned to one row of
-   stops in section 5 rather than left to grow a line per section.
-
-   Measured at 360x780 with the full ten-section bar: bar 131, CTA block bottom
-   713, support line 721 to 761 against a 780 viewport. 19px of headroom is the
-   number this block exists to hold; spend it and the money terms go under the
-   fold. */
-@media (max-width: 720px) {
-  .v4-hero__title {
-    margin-top: var(--v4-s2);
-  }
-
-  .v4-hero__lead {
-    margin-top: var(--v4-s2);
-  }
-
-  .v4-hero__act {
-    margin-top: var(--v4-s3);
-    gap: var(--v4-s1) var(--v4-s3);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-hero__title {
-    margin-top: var(--v4-s2);
-  }
-
-  .v4-hero__lead {
-    margin-top: var(--v4-s2);
-    max-width: 62ch;
-    font-size: var(--v4-t-1);
-  }
-
-  .v4-hero__act {
-    margin-top: var(--v4-s3);
-  }
-
-  .v4-hero__cta {
-    font-size: var(--v4-t-1);
-    padding: var(--v4-s2) var(--v4-s4);
-  }
-}
-
-/* 6.6 The timetable. The hero's proof hook: the two sourced dates from
-   COPY.md section 1 "Sources", set as one segment of a metro line with a
-   station at each end and the running time on the track between them. */
-.v4-hero__proof {
-  margin-top: var(--v4-s10);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s4);
-  row-gap: var(--v4-s4);
-}
-
-@media (max-width: 720px) {
-  .v4-hero__proof {
-    margin-top: var(--v4-s6);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-hero__proof {
-    margin-top: var(--v4-s5);
-  }
-}
-
-.v4-tt {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 900px) {
-  .v4-tt {
-    grid-column: 1 / span 5;
-  }
-}
-
-.v4-tt__track {
-  display: flex;
-  align-items: center;
-  gap: var(--v4-s1);
-  margin-bottom: var(--v4-s3);
-}
-
-/* The two ends of the segment. Square, not round: the map draws an interchange
-   as a rectangle (6.8) and this is the same marker at label size, so the two
-   agree, and radius stays 0 on every piece of this page that is not inside the
-   diagram. */
-.v4-tt__dot {
-  width: 14px;
-  height: 14px;
-  border: 3px solid var(--v4-ink-black);
-  background: var(--v4-paper);
-  flex: none;
-}
-
-.v4-tt__dot--start {
-  background: var(--v4-ink-service-1);
-}
-
-.v4-tt__dot--end {
-  background: var(--v4-ink-service-2);
-}
-
-.v4-tt__rule {
-  flex: 1 1 auto;
-  height: var(--v4-rule);
-  background: var(--v4-ink-black);
-}
-
-.v4-tt__cells {
-  display: grid;
-  gap: var(--v4-s3);
-}
-
-.v4-tt__cell {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--v4-s2);
-  border-bottom: 1px solid var(--v4-ink-black);
-  padding-bottom: var(--v4-s1);
-}
-
-/* The label sits back from the figure beside it on weight alone: 400 against
-   the value's 700, both black. There is no grey text on this page (1.1). */
-.v4-tt__label {
-  font-size: var(--v4-t-1);
-  font-weight: 400;
-  letter-spacing: var(--v4-track-flat);
-}
-
-.v4-tt__value {
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Three cells across once there is room for the widest value, stacked rows
-   below that so "27 Aug 2026" never splits across two lines at 360. */
-@media (min-width: 560px) {
-  .v4-tt__cells {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--v4-s4);
-  }
-
-  .v4-tt__cell {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: var(--v4-s1);
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
-}
-
-/* 6.7 The client quote, COPY.md section 1 proof hook, verbatim. */
-.v4-quote {
-  grid-column: 1 / -1;
-  font-size: var(--v4-t-1);
-  line-height: var(--v4-leading-body);
-}
-
-@media (min-width: 900px) {
-  .v4-quote {
-    grid-column: 6 / span 3;
-  }
-}
-
-.v4-quote p {
-  font-weight: 700;
-}
-
-/* Attribution steps back from the quote the same way the timetable label steps
-   back from its figure: 400 under the quote's 700, black under black. */
-.v4-quote footer {
-  font-weight: 400;
-}
-
-/* 6.8 The map. Two geometries of the same diagram: a wide one where the
-   corridor runs left to right, and a tall one for phones where it runs top to
-   bottom. Only one is in the box at a time, so nothing is read twice; both are
-   aria-hidden and the .v4-sr list beside them is the text equivalent.
-
-   The hero map takes the page default --v4-draw-lead: 0 and never overrides it,
-   so all five lines are inked at every moment (4.3). The map's motion is the
-   block entrance it arrives on, not a stroke. */
-.v4-map {
-  margin-top: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-map {
-    margin-top: var(--v4-s8);
-  }
-}
-
-.v4-map__wide {
-  display: none;
-  width: 100%;
-  height: auto;
-}
-
-.v4-map__tall {
-  display: block;
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-}
-
-/* 700px is where the wide map's smallest label, 34 user units on a 1200-unit
-   viewBox, still renders at 34 x (700 - 2 x 20) / 1200 = 18.7px. Below it the
-   tall map takes over, where the same label is 26 units on a 320-unit viewBox
-   and renders at 26px on a 360px phone. Both stay well over the 12px floor. */
-@media (min-width: 700px) {
-  .v4-map__wide {
-    display: block;
-  }
-
-  .v4-map__tall {
-    display: none;
-  }
-}
-
-.v4-map__svg text {
-  font-family: var(--font-grotesk);
-  fill: var(--v4-ink-black);
-}
-
-.v4-map__station-name {
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-}
-
-/* Line casing. Every service line gets a black keyline, which is what lets the
-   yellow line meet the 3:1 non-text contrast floor on white without a one-off.
-   Static and always complete: it is the outline of the diagram. */
-.v4-map__casing {
-  fill: none;
-  stroke: var(--v4-ink-black);
-  stroke-linecap: butt;
-}
-
-/* Pencil core: the same `d` inside the casing, painted once, never animated.
-   With the casing it makes the whole map legible at any moment, including a
-   capture taken before the ink has run. */
-.v4-map__pencil {
-  fill: none;
-  stroke: var(--v4-pencil);
-  stroke-linecap: butt;
-}
-
-.v4-map__ink {
-  fill: none;
-  stroke-linecap: butt;
-}
-
-.v4-map__ink--1 {
-  stroke: var(--v4-ink-service-1);
-}
-
-.v4-map__ink--2 {
-  stroke: var(--v4-ink-service-2);
-}
-
-.v4-map__ink--3 {
-  stroke: var(--v4-ink-service-3);
-}
-
-.v4-map__ink--4 {
-  stroke: var(--v4-ink-service-4);
-}
-
-.v4-map__ink--5 {
-  stroke: var(--v4-ink-service-5);
-}
-
-/* Service 5 shares red with service 1 and is told apart the way a metro map
-   tells a shuttle apart: same ink, dashed. The draw animation owns
-   stroke-dasharray, so the dashes cannot live on the animated path. They are
-   punched out afterwards by a static paper-coloured stroke one width narrower
-   than the ink, which leaves the black casing showing through each gap. The
-   line underneath still draws on the same clock as the other four. */
-.v4-map__gaps {
-  fill: none;
-  stroke: var(--v4-paper);
-  stroke-linecap: butt;
-  stroke-dasharray: var(--v4-service-5-dash);
-}
-
-/* The station marker: white body, black ring, sitting on top of the bundle,
-   which is how a metro map draws an interchange. */
-.v4-map__station {
-  fill: var(--v4-paper);
-  stroke: var(--v4-ink-black);
-}
-
-/* 6.9 Legend. The colour index for the whole page: these five inks mean these
-   five services in every later section. Chips carry a 1px black keyline for
-   the same reason the map lines carry a casing. */
-.v4-map__caption {
-  margin-top: var(--v4-s4);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-}
-
-.v4-legend {
-  display: grid;
-  gap: var(--v4-s3);
-  margin-top: var(--v4-s4);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s3);
-}
-
-@media (min-width: 560px) {
-  .v4-legend {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 900px) {
-  .v4-legend {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    column-gap: var(--v4-gutter);
-  }
-}
-
-.v4-legend__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--v4-s1);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-legend__chip {
-  width: 40px;
-  height: 10px;
-  border: 1px solid var(--v4-ink-black);
-  background: var(--v4-legend-ink, var(--v4-ink-black));
-}
-
-.v4-legend__chip--dashed {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      var(--v4-legend-ink) 0 10px,
-      var(--v4-paper) 10px 16px
-    );
-}
-
-/* 6.10 The entrance. The hero is the one orchestrated moment on this page: six
-   blocks - tag, headline, lead, call to action, timetable rail, map - arrive up
-   the y axis in reading order and each overshoots once on the spring from 4.1.
-   The delays live on the elements in hero.tsx, one 60ms step apart, so the last
-   block is settled 800ms after first paint; the class and the shift live here.
-
-   The blocks are laid out where they finish and only translate, so a capture
-   taken before the sequence ends is a page whose blocks sit a little low, never
-   a page missing a block. Under reduced motion 4.4 removes the transform and
-   the six blocks are simply on their grid. Nothing else in the hero moves: the
-   map is inked from the first frame (6.8) and hover is the only other motion.
-   No rule is needed here: 4.1 is the whole primitive and the hero only spends
-   it, the way 6.2 only describes the headline column. */
-
-/* ---------------------------------------------------------------------------
-   7. PROOF - the signal board
-
-   A full-bleed yellow panel with black type and a 3px black rule grid. One
-   panel ink, not five: the colour index in section 1.2 belongs to the service
-   lines, so a section that painted its counts in four different service inks
-   would be claiming five things it is not about. Yellow is chosen over blue
-   because black on this yellow measures 12.3:1 - the same pair section 1.1
-   records as "yellow on black 12.3:1", contrast being symmetric - against 5.9:1
-   for white on the blue. It is the highest-contrast pairing the four inks
-   allow, and a signal board is the one place the page wants its numbers read
-   from across a room.
-
-   The 120 stop appears here for the second and last time on the page. Section
-   1.3 calls it the hero headline's stop; it is spent again here because the
-   counts are this section's argument, not its decoration, and the two never
-   share a field - the hero is black on white, the board is black on yellow.
-   Nothing below 120 makes a proof strip read as evidence rather than as a
-   footer.
-
-   NO GREY ON THIS PANEL. The grey label ink section 1.1 removed measured 4.2:1
-   on yellow, under the 4.5 floor for 18px text, so every word in this section
-   is full black and the label/value split is carried by weight instead of by
-   colour.
-   --------------------------------------------------------------------------- */
-
-/* 7.1 Frame. Same rhythm as the hero, one step tighter, so the two blocks read
-   as one page rather than as two posters glued together. */
-.v4-proof {
-  padding-block: var(--v4-s12);
-}
-
-/* Anchor offset. The signage bar is sticky at exactly the widths in section 5,
-   and it is 82px tall there, so a jump to #proof from the bar would land the
-   panel's top edge under it and cover the plate at the widths where the panel's
-   own top padding is only 64px. The margin is scoped to the same query the bar
-   uses, so nothing is given away at the widths where nothing is pinned. */
-@media (min-width: 560px) and (min-height: 620px) {
-  .v4-proof {
-    scroll-margin-top: calc(var(--v4-s10) + var(--v4-s1));
-  }
-}
-
-@media (max-width: 720px) {
-  .v4-proof {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-proof {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 7.2 The plate. Section signage: a black block with the section label in it,
-   the same primitive as the hero's red tag and the bar's yellow CTA, in the one
-   ink that reads on a yellow ground. */
-.v4-proof__plate {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-/* 7.3 The head. The 72 stop, which section 1.3 reserves for section heads. It
-   sits under the figures in the visual hierarchy on purpose: the sentence is
-   the claim and the numbers are the evidence, and this page argues with
-   evidence. No max-width: at 1440 the line measures about 900px inside a
-   1440px shell, and a measure would only invent a widow. */
-.v4-proof__title {
-  margin-top: var(--v4-s3);
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-/* 7.4 The board. Four counts on the 8-column grid in exactly three states, so
-   there is no width at which a row goes ragged:
-     under 560   one per row, span 8, separated by full-width rules
-     560 to 1023 two per row, span 4, a rule cross between them
-     1024 and up four per row, span 2, three vertical rules
-
-   Four items divide evenly by 1, 2 and 4, so every state fills its last row.
-   The rules are drawn as cell borders rather than as separate elements, so a
-   grid row that stretches its cells stretches the rules with them and the board
-   cannot end up with a rule that stops short.
-
-   The board carries no padding and no row gap of its own: every cell pads
-   itself top and bottom instead. That is what closes the board. A cell's left
-   rule then runs its whole height, so it meets the rule above it, meets the
-   rail's rule below it, and joins the same column's rule in the next row into
-   one unbroken line. With padding on the board and a gap between rows the
-   vertical rules floated mid-panel with daylight at both ends, which reads as a
-   stat row rather than as a board. */
-.v4-proof__board {
-  margin-top: var(--v4-s8);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  row-gap: 0;
-}
-
-.v4-proof__cell {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--v4-s2);
-  padding-block: var(--v4-s5);
-}
-
-/* Stacked state: a full-width rule above every cell but the first. */
-.v4-proof__cell + .v4-proof__cell {
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-}
-
-.v4-proof__figure {
-  font-size: var(--v4-t-5);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-proof__caption {
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-  max-width: 30ch;
-  text-wrap: pretty;
-}
-
-/* 2 x 2. The right column takes a vertical rule, the second row a horizontal
-   one, which makes one cross through the middle of the board. The stacked rule
-   is reset first so the later selectors, at equal specificity, win by order. */
-@media (min-width: 560px) {
-  .v4-proof__cell {
-    grid-column: span 4;
-  }
-
-  .v4-proof__cell + .v4-proof__cell {
-    border-top: 0;
-  }
-
-  .v4-proof__cell:nth-child(even) {
-    border-left: var(--v4-rule) solid var(--v4-ink-black);
-    padding-left: var(--v4-s3);
-  }
-
-  .v4-proof__cell:nth-child(n + 3) {
-    border-top: var(--v4-rule) solid var(--v4-ink-black);
-  }
-}
-
-/* Four across. 1024 is where a 2-column cell is wide enough for the widest
-   figure: at 1024 the cell is 214px, its rule and pad take 27, and "25+" at the
-   120 stop clamped to 8.4vw is about 150px, so the figure never touches the
-   next rule. Below it the board stays 2 x 2, which is what keeps 820 x 1180
-   clean. */
-@media (min-width: 1024px) {
-  .v4-proof__cell {
-    grid-column: span 2;
-  }
-
-  .v4-proof__cell:nth-child(n + 3) {
-    border-top: 0;
-  }
-
-  .v4-proof__cell:nth-child(n + 2) {
-    border-left: var(--v4-rule) solid var(--v4-ink-black);
-    padding-left: var(--v4-s3);
-  }
-}
-
-/* 7.5 The rail. The board's dateline: both sourced dates and the two cities,
-   set flat at the 18 stop under a single rule. It carries no internal rules on
-   purpose - one ruled grid per section is the whole point of a ruled grid, and
-   its top rule is the board's bottom rule, so the two read as one table. */
-.v4-proof__rail {
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s4);
-  row-gap: var(--v4-s4);
-}
-
-.v4-proof__slot {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--v4-s0);
-}
-
-.v4-proof__rail-label {
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-proof__rail-value {
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  font-variant-numeric: tabular-nums;
-}
-
-/* The secondary CTA, COPY.md section 2. A black block on the yellow ground; it
-   cannot swap to black on hover, so it swaps to paper, the same documented
-   inverse the bar's CTA uses (section 4.2). It occupies the fourth slot of the
-   rail when the case section exists and simply is not there when it does not,
-   which leaves an empty grid slot rather than a dead link. */
-.v4-proof__cta {
-  --v4-block-bg: var(--v4-ink-black);
-  --v4-block-fg: var(--v4-paper);
-  --v4-block-bg-hover: var(--v4-paper);
-  --v4-block-fg-hover: var(--v4-ink-black);
-  grid-column: 1 / -1;
-  justify-self: start;
-  align-self: start;
-  font-size: var(--v4-t-1);
-  padding: var(--v4-s2) var(--v4-s3);
-}
-
-@media (min-width: 560px) {
-  .v4-proof__slot,
-  .v4-proof__cta {
-    grid-column: span 4;
-  }
+.v4-nav-links a:hover {
+  color: var(--v4-ink);
 }
 
 @media (min-width: 1024px) {
-  .v4-proof__slot,
-  .v4-proof__cta {
-    grid-column: span 2;
+  .v4-nav-links {
+    display: flex;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   8. WORK - case studies as posters
+/* -- 11 Board and cells --------------------------------------------------- */
 
-   Three panels of flat ink, one per case, in the service ink that delivered it
-   (tokens.css section 1.2): the flagship is service 1 red, the audit is service
-   5 red dashed, the WhatsApp lead system is service 4 black.
-
-   Services 1 and 5 share red, so every panel prints its own line across the top
-   in paper, solid or punched. Paper rather than ink because a red line on a red
-   ground is not a line; this is the same punch construction the hero map uses
-   for its dashed shuttle (section 6.8, `.v4-map__gaps`), read from the other
-   side. Paper on red is 3.4:1 and paper on black is 19:1, both over the 3:1
-   floor for a graphic.
-
-   Contrast on the rendered pairs, all AA or better:
-     black on red      4.6:1   panel body, headings, tags, captions
-     paper on black    19:1    tile body on the WhatsApp panel
-     black on paper    19:1    the four white blocks on the red panel
-   --------------------------------------------------------------------------- */
-
-/* 8.1 Frame. White ground; the case panels are full-bleed children, so they run
-   edge to edge while their content stays on the 1440 grid inside `.v4-shell`. */
-.v4-work {
-  padding-block: var(--v4-s16);
-}
-
-@media (max-width: 720px) {
-  .v4-work {
-    padding-block: var(--v4-s10);
-  }
-}
-
-/* 8.2 Section head. The label is a black signage block rather than the red
-   `.v4-tag` from the hero: it sits directly above a red panel, and two reds
-   touching would read as one shape. */
-.v4-work__label {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-.v4-work__title {
-  margin-top: var(--v4-s3);
-  max-width: 20ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-.v4-work__head {
-  margin-bottom: var(--v4-s10);
-}
-
-@media (max-width: 720px) {
-  .v4-work__head {
-    margin-bottom: var(--v4-s6);
-  }
-}
-
-/* 8.3 The line. One rule for all three panels: the service line, drawn in paper
-   on the ink, punched at 28/40 where the service is the dashed one. */
-.v4-work-line {
-  display: block;
-  height: 12px;
-  background: var(--v4-paper);
-}
-
-.v4-work-line--dashed {
-  background: repeating-linear-gradient(
-    90deg,
-    var(--v4-paper) 0 28px,
-    transparent 28px 40px
-  );
-}
-
-/* 8.4 Tags. COPY.md prints them as one full-stopped string; set as signage
-   chips so a four-item tag line cannot read as a sentence. The keyline is
-   `currentColor`, so a chip is black on the red panels and paper on the black
-   one without a second rule. */
-.v4-work-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--v4-s1);
-  margin-top: var(--v4-s3);
-}
-
-.v4-work-tags__item {
-  border: 1px solid currentColor;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: var(--v4-track-flat);
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-/* 8.5 The flagship panel. */
-.v4-work-case {
-  padding-block: var(--v4-s8) var(--v4-s10);
-}
-
-@media (max-width: 720px) {
-  .v4-work-case {
-    padding-block: var(--v4-s5) var(--v4-s8);
-  }
-}
-
-/* The outcome title at the 72 stop, which is what the v4 tone note in COPY.md
-   section 4 asks for. Held to a poster measure so it breaks into three or four
-   short lines instead of one long ribbon at 2560. */
-.v4-work-case__title {
-  margin-top: var(--v4-s4);
-  max-width: 17ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-.v4-work-case__top {
-  margin-top: var(--v4-s10);
-  row-gap: var(--v4-s6);
-}
-
-@media (max-width: 720px) {
-  .v4-work-case__top {
-    margin-top: var(--v4-s6);
-  }
-}
-
-/* 8.6 The render plate. Printed at the file's own ratio, so there is no crop to
-   lose at 2560 and no overflow at 360: the box is the column and the image is
-   the box. Hard edge, no radius, no shadow, in line with section 1.5. */
-.v4-work-case__plate {
-  grid-column: 1 / -1;
-}
-
-.v4-work-case__plate img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: var(--v4-radius);
-  box-shadow: var(--v4-shadow);
-}
-
-.v4-work-case__plate figcaption {
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-work-case__meta {
-  grid-column: 1 / -1;
-}
-
-/* 560 is where a half-width plate still renders over 300px wide; 900 is where
-   the meta column can hold the 120 stop and a quote beside it. */
-@media (min-width: 560px) {
-  .v4-work-case__plate {
-    grid-column: 1 / span 4;
-  }
-
-  .v4-work-case__meta {
-    grid-column: 5 / span 4;
-  }
-}
-
-@media (min-width: 900px) {
-  .v4-work-case__plate {
-    grid-column: 1 / span 3;
-  }
-
-  .v4-work-case__meta {
-    grid-column: 5 / span 4;
-  }
-}
-
-/* 8.7 The one number on the card, which is the v4 tone note's "one number per
-   card". This is the second and last use of the 120 stop on the variation: it
-   is a numeral, not a headline, and it never shares a screen with the hero. */
-.v4-work-case__figure {
-  display: flex;
-  flex-direction: column;
-  gap: var(--v4-s1);
-}
-
-.v4-work-case__num {
-  font-size: var(--v4-t-5);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: 0.82;
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-work-case__numlabel {
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-work-case__dates {
+/* Cells are the only container on this page. A card never nests inside one. */
+.v4-board {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--v4-s3);
-  margin-top: var(--v4-s5);
-  border-top: var(--v4-rule) solid currentColor;
-  padding-top: var(--v4-s2);
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+  gap: var(--v4-board-gap);
 }
 
-.v4-work-case__date dt {
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-}
-
-.v4-work-case__date dd {
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: 1.05;
-  font-variant-numeric: tabular-nums;
-}
-
-/* The client's own words are the second voice on this poster, so they are set
-   at the sub-head stop rather than at body size. That is also what fills the
-   right-hand column: at 1440 and above a 24px quote left about 290px of bare
-   ink under it, which read as an unfinished panel rather than as poster space. */
-.v4-work-case__quote {
-  margin-top: var(--v4-s5);
-  max-width: 22ch;
-  font-size: var(--v4-t-3);
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-work-case__quote p {
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-}
-
-/* 48ch, not 34: the attribution is 45 characters and a narrower measure broke
-   "Dubai" onto a line of its own at every width from 1180 up. */
-.v4-work-case__quote footer {
-  margin-top: var(--v4-s3);
-  max-width: 48ch;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-}
-
-/* 8.8 The four blocks: problem, build, stack, result, as paper rectangles on
-   the ink. Grid stretch plus one shared padding is what keeps the row even; no
-   block sets its own height, so a long block sets the row and the short ones
-   fill. Four across only from 1200, where a 2-column block still holds about
-   32 characters; below that it is a 2 x 2 field, and one column on a phone. */
-.v4-work-case__blocks {
-  margin-top: var(--v4-s10);
-  row-gap: var(--v4-gutter);
-}
-
-@media (max-width: 720px) {
-  .v4-work-case__blocks {
-    margin-top: var(--v4-s6);
-  }
-}
-
-.v4-work-block {
-  grid-column: 1 / -1;
-  background: var(--v4-paper);
-  color: var(--v4-ink-black);
-  padding: var(--v4-s3);
-}
-
-@media (min-width: 560px) {
-  .v4-work-block {
-    grid-column: span 4;
-  }
-}
-
-@media (min-width: 1200px) {
-  .v4-work-block {
-    grid-column: span 2;
-  }
-}
-
-.v4-work-block__heading {
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1.1;
-  border-bottom: var(--v4-rule) solid var(--v4-ink-black);
-  padding-bottom: var(--v4-s1);
-}
-
-.v4-work-block__body {
-  display: grid;
-  gap: var(--v4-s2);
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  line-height: var(--v4-leading-body);
-}
-
-.v4-work-block__words {
-  display: grid;
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: 1.6;
-}
-
-/* 8.9 The block link to the full case. Black on red, so it declares its own
-   hover ink: the default yellow swap is legible here but puts a third flat
-   colour on a panel that already carries two, so this block takes the paper
-   inverse instead - 19.0:1, and the same swap the other panel blocks take. */
-.v4-work-case__cta {
-  --v4-block-bg: var(--v4-ink-black);
-  --v4-block-fg: var(--v4-paper);
-  --v4-block-bg-hover: var(--v4-paper);
-  --v4-block-fg-hover: var(--v4-ink-black);
-  margin-top: var(--v4-s8);
-  font-size: var(--v4-t-2);
-  padding: var(--v4-s2) var(--v4-s5);
-}
-
-@media (max-width: 720px) {
-  .v4-work-case__cta {
-    margin-top: var(--v4-s5);
-  }
-}
-
-/* 8.10 The two open files. Half-width posters from 900, stacked below it: at
-   820 a four-column tile is 350px, which puts the 28px title on five lines and
-   the long audit paragraph on twelve, so the tablet takes them full width and
-   the grid still holds. `margin-top: auto` on the status line is what keeps the
-   pair even when they do sit side by side, whatever the body lengths. */
-.v4-work__tiles {
-  margin-top: var(--v4-s10);
-  row-gap: var(--v4-gutter);
-}
-
-@media (max-width: 720px) {
-  .v4-work__tiles {
-    margin-top: var(--v4-s6);
-  }
-}
-
-.v4-work-tile {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  padding: var(--v4-s5) var(--v4-s4) var(--v4-s4);
-}
-
-@media (min-width: 900px) {
-  .v4-work-tile {
-    grid-column: span 4;
-  }
-}
-
-/* The line sits inside the panel padding, not flush with its top edge. Flush
-   was the first attempt and it failed on white ground: a paper line at the very
-   edge of a panel is a notch, not a line, and the solid one on the black tile
-   disappeared into the page entirely. Inset by the panel's own top padding, the
-   ink runs above and below it and both lines read. */
-.v4-work-tile .v4-work-tags {
-  margin-top: var(--v4-s4);
-}
-
-.v4-work-tile__title {
-  margin-top: var(--v4-s3);
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-/* The bottom margin is what keeps the status rule off the last line of body
-   text: `margin-top: auto` on the status resolves to zero on whichever tile is
-   the taller of the pair, and auto margins are applied after normal ones, so
-   the pair still bottom-aligns. */
-.v4-work-tile__body {
-  display: grid;
-  gap: var(--v4-s2);
-  margin-top: var(--v4-s3);
-  margin-bottom: var(--v4-s5);
-  max-width: 58ch;
-  font-size: var(--v4-t-1);
-  line-height: var(--v4-leading-body);
-}
-
-.v4-work-tile__status {
-  padding-top: var(--v4-s2);
-  border-top: var(--v4-rule) solid currentColor;
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-}
-
-@media (min-width: 900px) {
-  .v4-work-tile__status {
-    margin-top: auto;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   9. SERVICES - the five lines, one block each
-
-   Five flat blocks of ink on the white ground, one per service, in the ink that
-   service keeps for the whole page (section 1.2). Each block is a segment of
-   its own metro line: the line runs across the top of the block as a 12px stub,
-   the line number sits under it in a keyline shield, and the block's ground is
-   the line's colour. Services 1 and 5 share red, so 5's stub is punched at
-   28/40 in its own ground colour, which is the same shuttle construction the
-   hero map uses (section 6.8) read from the other side.
-
-   ONE RULE FOR EVERY MARK ON A BLOCK: currentColor.
-   The stub, the shield keyline and the rule above the deliverables are all
-   drawn in the block's own text colour rather than in paper, so the system is
-   one declaration instead of one declaration plus a yellow exception. Paper on
-   yellow is 1.7:1 and would vanish; currentColor is black there, and black on
-   yellow is 11.4:1.
-
-   Contrast on the rendered pairs, all AA or better for 18px body text:
-     black on red     4.6:1   blocks 1 and 5
-     paper on blue    5.9:1   block 2
-     black on yellow  11.4:1  block 3
-     paper on black   19:1    block 4
-   No text on this page is set in red, so section 1.1's "large text only" limit
-   on red never applies here: red is a ground, never an ink for words.
-
-   LAYOUT, WHICH IS THE WHOLE ARGUMENT OF THE SECTION
-   The 8-column grid does not divide by three, and rather than break the grid
-   the row of three takes 3 + 3 + 2. That is a modular Swiss composition, not a
-   compromise: it puts the two lines with the most to say in the wide cells and
-   the shuttle in the narrow one, and every edge still lands on a column.
-     under 820    one block per row, span 8
-     820 to 1279  two per row, span 4, and block 5 spans 8 to close the grid
-     1280 and up  4 + 4 over 3 + 3 + 2
-
-   Row heights are equalised by the grid itself (items stretch), so a row can
-   never go ragged the way flex children of different content lengths do. That
-   is the "cards with uneven heights" failure in 03-design-research section 5.
-   --------------------------------------------------------------------------- */
-
-/* 9.1 Frame. The same block rhythm as the proof board, so the yellow panel and
-   this white one read as two halves of one page. */
-.v4-svc {
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-svc {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-svc {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 9.2 Section head. Black signage plate, the 72 stop for the head, the 24 stop
-   for the line under it. The plate is black rather than the hero's red tag
-   because the first block below it is red, and two reds a heading apart would
-   read as one shape interrupted. */
-.v4-svc__plate {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-.v4-svc__title {
-  margin-top: var(--v4-s3);
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-.v4-svc__lead {
-  margin-top: var(--v4-s3);
-  max-width: 44ch;
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  text-wrap: pretty;
-}
-
-/* 9.3 The grid. Row gap equals the column gutter, so the five blocks sit in a
-   true modular grid rather than in rows that happen to line up. */
-.v4-svc__grid {
-  margin-top: var(--v4-s8);
-  row-gap: var(--v4-gutter);
-}
-
-@media (max-width: 720px) {
-  .v4-svc__grid {
-    margin-top: var(--v4-s6);
-  }
-}
-
-/* 9.4 The block. Flat ink, radius 0, shadow none, no keyline: the ground is the
-   colour and the colour is the index. `overflow-wrap` is the 360 guard - the
-   longest deliverable line is 138 characters and sits in the narrowest cell. */
-.v4-svc__block {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  background: var(--v4-svc-ink);
-  color: var(--v4-svc-fg);
-  border-radius: var(--v4-radius);
-  box-shadow: var(--v4-shadow);
-  overflow-wrap: break-word;
-
-  /* 9.5 Hover. The variation's block-shift primitive (section 4.2), 4px along
-     the grid axis. There is no colour swap here because the colour is the
-     service's name, not a state, and nothing is hidden behind the hover: the
-     block is a poster, and the shift is the only thing that moves. The gutter
-     is 24px at every width, so a 4px shift cannot touch the next block. */
-  transition: transform var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-.v4-svc__block:hover {
-  transform: translate3d(var(--v4-hover-shift), 0, 0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-svc__block {
-    transition: none;
-  }
-
-  .v4 .v4-svc__block:hover {
-    transform: none;
-  }
-}
-
-/* 9.6 The inks. Service order and colour are docs/goal/COPY.md section 3 and
-   tokens.css section 1.2; nothing here invents a pairing. */
-.v4-svc__block--1 {
-  --v4-svc-ink: var(--v4-ink-service-1);
-  --v4-svc-fg: var(--v4-ink-black);
-}
-
-.v4-svc__block--2 {
-  --v4-svc-ink: var(--v4-ink-service-2);
-  --v4-svc-fg: var(--v4-paper);
-}
-
-.v4-svc__block--3 {
-  --v4-svc-ink: var(--v4-ink-service-3);
-  --v4-svc-fg: var(--v4-ink-black);
-}
-
-.v4-svc__block--4 {
-  --v4-svc-ink: var(--v4-ink-service-4);
-  --v4-svc-fg: var(--v4-paper);
-}
-
-.v4-svc__block--5 {
-  --v4-svc-ink: var(--v4-ink-service-5);
-  --v4-svc-fg: var(--v4-ink-black);
-}
-
-/* 9.7 The stub. The service line, printed across the top of its own block and
-   inset by the block's padding, so the block's ink runs all the way round it.
-   Inset rather than flush to the top edge: currentColor on the blue and black
-   blocks is paper, and a paper stub flush to the edge is white on the white
-   page, which left the two darkest blocks as the only two without a visible
-   line. Inset, every stub sits on its own ground - black on yellow 11.4:1,
-   black on red 4.6:1, paper on blue 5.9:1, paper on black 19:1.
-
-   The dashed variant punches the ground colour back through it, so the dash is
-   the block showing through the line rather than a second colour. */
-.v4-svc__stub {
-  display: block;
-  height: 12px;
-  margin-bottom: var(--v4-s4);
-  background: currentColor;
-}
-
-@media (max-width: 720px) {
-  .v4-svc__stub {
-    margin-bottom: var(--v4-s3);
-  }
-}
-
-.v4-svc__stub--dashed {
-  background: repeating-linear-gradient(
-    90deg,
-    currentColor 0 28px,
-    var(--v4-svc-ink) 28px 40px
-  );
-}
-
-/* 9.8 The body. */
-.v4-svc__body {
-  display: flex;
-  flex-direction: column;
-  padding: var(--v4-s4);
-}
-
-@media (max-width: 720px) {
-  .v4-svc__body {
-    padding: var(--v4-s3);
-  }
-}
-
-/* The line shield. A square keyline with the line number in it, which is what a
-   metro map puts at the end of a line. Filled shields are what the map uses;
-   here the block is already the fill, so the shield is its inverse. */
-.v4-svc__number {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: var(--v4-rule) solid currentColor;
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-svc__name {
-  margin-top: var(--v4-s4);
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-  text-wrap: balance;
-}
-
-/* The promise, at the 24 stop, is the sentence a buyer reads if they read one
-   line of the block. */
-.v4-svc__promise {
-  margin-top: var(--v4-s2);
-  max-width: 34ch;
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  text-wrap: pretty;
-}
-
-/* What you get, under a 3px rule: the platform edge of the block. */
-.v4-svc__lines {
-  display: flex;
-  flex-direction: column;
-  gap: var(--v4-s2);
-  margin-top: var(--v4-s5);
-  padding-top: var(--v4-s3);
-  border-top: var(--v4-rule) solid currentColor;
-  max-width: 46ch;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-  text-wrap: pretty;
-}
-
-/* 9.9 The two wide states. */
-@media (min-width: 820px) {
-  .v4-svc__block {
-    grid-column: span 4;
-  }
-
-  /* The fifth block closes the grid instead of leaving a half-row hole. */
-  .v4-svc__block:nth-child(5) {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (min-width: 1280px) {
-  .v4-svc__block:nth-child(1),
-  .v4-svc__block:nth-child(2) {
-    grid-column: span 4;
-  }
-
-  .v4-svc__block:nth-child(3),
-  .v4-svc__block:nth-child(4) {
-    grid-column: span 3;
-  }
-
-  .v4-svc__block:nth-child(5) {
-    grid-column: span 2;
-  }
-}
-
-/* 9.10 The standing rail. The three answers that hold for all five lines, set
-   flat at the 18 stop under one black rule, on the same columns the last row of
-   blocks uses. No internal rules: one ruled grid per section. */
-.v4-svc__standing {
-  margin-top: var(--v4-s8);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s4);
-  row-gap: var(--v4-s4);
-}
-
-.v4-svc__standing-item {
-  grid-column: 1 / -1;
-  max-width: 46ch;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-  text-wrap: pretty;
-}
-
-@media (max-width: 720px) {
-  .v4-svc__standing {
-    margin-top: var(--v4-s6);
-  }
-}
-
-@media (min-width: 820px) {
-  .v4-svc__standing-item {
-    grid-column: span 4;
-  }
-}
-
-@media (min-width: 1280px) {
-  .v4-svc__standing-item:nth-child(1),
-  .v4-svc__standing-item:nth-child(2) {
-    grid-column: span 3;
-  }
-
-  .v4-svc__standing-item:nth-child(3) {
-    grid-column: span 2;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   10. PROCESS - the timetable board
-
-   The hero prints the line; this is the fine print under it. A station
-   timetable poster: white paper, one heavy rule opening and closing the board,
-   thinner rules between the four phases, an ordinal at the 40-72 stop in the
-   left column, and the phase, what happens and the client's side of it in the
-   three columns beside it.
-
-   Black on white throughout, because colour on this page is a service index and
-   COPY.md ties no phase to a service. The single yellow is the interchange ring
-   that marks a payment gate, keylined in 3px of black as tokens.css section 1.1
-   requires of every yellow graphic on the white ground.
-
-   Nothing here enters and nothing draws. --v4-draw-lead is pinned to 0 on the
-   section so no descendant can opt into the stroke gesture that section 4.3
-   warns about, and the board is complete in the first frame of every capture.
-   --------------------------------------------------------------------------- */
-
-.v4-proc {
-  --v4-draw-lead: 0;
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-proc {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-proc {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 10.1 Section head. The same black signage plate the proof and work sections
-   use, so a section label reads as one device down the whole page. */
-.v4-proc__label {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-/* COPY.md section 5 headline alternate A, which COPY.md itself calls "strongest
-   as a poster line". The primary headline is not used here because the hero map
-   already prints it verbatim as its caption. */
-.v4-proc__title {
-  margin-top: var(--v4-s3);
-  max-width: 22ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-proc__lead {
-  margin-top: var(--v4-s3);
-  max-width: 46ch;
-  font-size: var(--v4-t-2);
-  font-weight: 400;
-  line-height: var(--v4-leading-body);
-  /* Both this line and the note at the foot are single sentences that land one
-     word past a full line at several widths, and a lone "update." under a
-     board this ruled reads as a mistake in the rules. Balanced rather than
-     pretty: two even lines are the poster setting, and neither string is long
-     enough for the four-line limit to bite. */
-  text-wrap: balance;
-}
-
-/* 10.2 The board grid. Header row, phase rows and the closing band all run on
-   the same eight columns, so every rule and every column edge lines up whatever
-   is in the cell. */
-.v4-proc__head,
-.v4-proc__row,
-.v4-proc__end {
-  display: grid;
-  grid-template-columns: repeat(var(--v4-cols), minmax(0, 1fr));
-  column-gap: var(--v4-gutter);
-  row-gap: var(--v4-s2);
-  align-items: start;
-}
-
-/* Column labels only exist where there are columns to label. Below 1080 the
-   row folds and the header would be labelling the wrong things, so it is off
-   and the "Your side" label inside each row takes over. */
-.v4-proc__head {
-  display: none;
-  margin-top: var(--v4-s8);
-  padding-bottom: var(--v4-s2);
-}
-
-.v4-proc__board {
-  margin-top: var(--v4-s8);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-}
-
-/* The header sits directly on the board's opening rule, so the board loses its
-   own top margin wherever the header is showing. */
-@media (min-width: 1080px) {
-  .v4-proc__head {
-    display: grid;
-  }
-
-  .v4-proc__board {
-    margin-top: 0;
-  }
-}
-
-@media (max-width: 720px) {
-  .v4-proc__board {
-    margin-top: var(--v4-s6);
-  }
-}
-
-.v4-proc__row {
-  padding-block: var(--v4-s5);
-  border-bottom: 2px solid var(--v4-ink-black);
-}
-
-/* The closing band. Not a phase, so no ordinal and no gate: it answers the
-   research brief's rule that the last step has to say what happens after
-   handover. The 3px rule under it closes the board the way the 3px rule above
-   the header opens it. */
-.v4-proc__end {
-  padding-block: var(--v4-s5);
-  border-bottom: var(--v4-rule) solid var(--v4-ink-black);
-}
-
-@media (max-width: 720px) {
-  .v4-proc__row,
-  .v4-proc__end {
-    padding-block: var(--v4-s4);
-  }
-}
-
-/* 10.3 Cell spans. Mobile first: every cell owns the full width and the row
-   reads as ordinal, phase, what happens, your side, top to bottom.
-
-   From 721 the row folds into two lines - ordinal and phase above, the two text
-   columns below - which is what keeps the ordinal in its own column at 820
-   without squeezing an 18px measure into 69px beside it.
-
-   From 1080 the four columns are the four columns. */
-.v4-proc__no,
-.v4-proc__phase,
-.v4-proc__what,
-.v4-proc__you,
-.v4-proc__end-copy {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 721px) {
-  .v4-proc__head,
-  .v4-proc__row,
-  .v4-proc__end {
-    row-gap: var(--v4-s3);
-  }
-
-  .v4-proc__no {
-    grid-column: 1 / span 1;
-    grid-row: 1;
-  }
-
-  .v4-proc__phase {
-    grid-column: 2 / span 7;
-    grid-row: 1;
-  }
-
-  .v4-proc__what {
-    grid-column: 2 / span 4;
-    grid-row: 2;
-  }
-
-  .v4-proc__you {
-    grid-column: 6 / span 3;
-    grid-row: 2;
-  }
-
-  .v4-proc__end-copy {
-    grid-column: 2 / span 7;
-    grid-row: 2;
-  }
-
-  /* The phase name starts level with the top of the ordinal beside it, which is
-     the height of the line stub plus its gap. */
-  .v4-proc__name {
-    padding-top: calc(16px + var(--v4-s0));
-  }
-}
-
-@media (min-width: 1080px) {
-  .v4-proc__phase {
-    grid-column: 2 / span 2;
-  }
-
-  .v4-proc__what {
-    grid-column: 4 / span 3;
-    grid-row: 1;
-  }
-
-  .v4-proc__you {
-    grid-column: 7 / span 2;
-    grid-row: 1;
-  }
-
-  .v4-proc__end-copy {
-    grid-column: 4 / span 5;
-    grid-row: 1;
-  }
-
-  /* On one line every text column starts level with the ordinal. */
-  .v4-proc__copy {
-    padding-top: calc(16px + var(--v4-s0));
-  }
-}
-
-/* 10.4 Type in the cells. */
-.v4-proc__col,
-.v4-proc__you-label {
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  line-height: 1;
-}
-
-/* The ordinal. It holds the 40 stop as a floor at every width: below that it
-   stops reading as the board's left column and starts reading as a caption,
-   and it would drop under the phase name beside it, which the 40-72 range
-   cannot do. tabular-nums so the four ordinals stack on one stem. */
-.v4-proc__num {
-  display: block;
-  margin-top: var(--v4-s2);
-  font-size: clamp(40px, 5.04vw, 72px);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: 0.9;
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-proc__name {
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-proc__copy {
-  max-width: 46ch;
-  font-size: var(--v4-t-1);
-  font-weight: 400;
-  line-height: var(--v4-leading-body);
-  text-wrap: pretty;
-}
-
-/* The cell label. Visible wherever the header row is not, hidden from sight and
-   left in the accessibility tree wherever it is, so the "your side" column is
-   named exactly once for each audience. */
-.v4-proc__you-label {
-  display: block;
-  margin-bottom: var(--v4-s1);
-}
-
-@media (min-width: 1080px) {
-  .v4-proc__you-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
-  }
-}
-
-/* 10.5 The line marks. Metro grammar at row scale: a stub of black line with an
-   interchange ring on it for a phase you pay to enter, and a terminus bar for
-   the end of the line. The circle is diagram geometry, which is the one place
-   this variation allows a curve (tokens.css section 1.5), so it is drawn in SVG
-   and the UI radius stays 0. */
-.v4-proc__mark {
-  display: flex;
-  align-items: center;
-  gap: var(--v4-s0);
-}
-
-@media (max-width: 720px) {
-  .v4-proc__mark {
-    max-width: 128px;
-  }
-}
-
-.v4-proc__glyph {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  overflow: visible;
-}
-
-.v4-proc__ring {
-  fill: var(--v4-ink-yellow);
-  stroke: var(--v4-ink-black);
-  stroke-width: 3;
-}
-
-.v4-proc__stop {
-  fill: var(--v4-ink-black);
-}
-
-.v4-proc__bar {
-  flex: 1 1 auto;
-  height: var(--v4-rule);
-  background: var(--v4-ink-black);
-}
-
-/* 10.6 The foot. The note is the legend for the ring, and the block link only
-   renders once the engagement section exists to receive it. */
-.v4-proc__foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--v4-s2) var(--v4-s5);
-  margin-top: var(--v4-s5);
-}
-
-.v4-proc__note {
-  max-width: 56ch;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-  text-wrap: balance;
-}
-
-.v4-proc__cta {
-  font-size: var(--v4-t-1);
-  padding: var(--v4-s2) var(--v4-s4);
-}
-
-/* ---------------------------------------------------------------------------
-   11. ENGAGEMENT - the fare rules board
-
-   A white section that opens on three fields of flat ink and closes on a ruled
-   board. It is the page's answer to "how does a quote work", and 01-business-
-   brief.md section 9.5 forbids a number anywhere in it, so the section argues
-   with terms instead: three conditions that hold on every engagement, then six
-   rules of the deal, then the action.
-
-   WHY THE BAND HAS NO GUTTER
-   Section 9 already spends the 24px gutter on five ink blocks. Three more
-   gutter-separated ink blocks here would read as that grid again at a smaller
-   count. Closing the gutter changes what the row is: with gutters it is a set
-   of cards to choose between, without them it is one bar divided into three
-   fields, which is what these three lines actually are - conditions that all
-   hold at once, printed across a ticket. The band is the only place on this
-   page where two inks share an edge, and that edge is the section's whole
-   visual idea.
-
-   CONTRAST ON EVERY PAIR RENDERED HERE, all AA or better at 18px:
-     paper on blue    5.9:1   field 1, and its currentColor rule
-     paper on black   19.0:1  field 2, the foot block, the section plate
-     black on red     4.6:1   field 3, and its currentColor rule
-     black on white   19.0:1  the board, every rule, every clause
-   Field 3 takes black type rather than the white the other two fields take,
-   because white on this red is 4.2:1 and fails the 4.5 floor for 18px text.
-   That is the same decision, for the same reason, that section 9.6 makes for
-   the red service blocks, so red on this page never carries white words.
-   Yellow is not used: it is the signage ink (the bar, the payment gates in
-   section 10), and a term of the deal is not a thing to notice, it is a thing
-   to read.
-
-   THE RULE SYSTEM
-   3px black is the section division, the same weight sections 7 and 10 use, and
-   it draws every row of the board plus the foot. Inside each field of the band
-   the rule between the term and its clause is 3px of currentColor, so it is
-   paper on the blue and black fields and black on the red one and the system
-   stays one declaration.
-
-   The clauses in the band are pushed to the bottom of their field with an auto
-   margin. The fields are grid items and therefore equal height, so bottom-
-   aligning the clauses puts all three currentColor rules on one line across the
-   band, which is what stops a two-line term in one field from knocking that
-   field's rule out of register with its neighbours.
-
-   LAYOUT
-   The band and the board run on the same eight columns, in the same three
-   states, so the section reads as one object:
-     band   under 820   one field per row, span 8
-            820-1279    fields 1 and 2 span 4, field 3 spans 8
-            1280 and up 3 + 3 + 2
-     board  under 560   label over clause, both span 8, one rule per pair
-            560-1023    label spans 3, clause spans 5
-            1024 and up label spans 2, clause spans 6
-   The board's 560 breakpoint is the "table needing horizontal scroll" failure
-   in 03-design-research section 5: below it the two columns stop being columns
-   and become stacked label/clause pairs, which is the only form that fits a
-   17-character tracked label and a 95-character clause at 360.
-   --------------------------------------------------------------------------- */
-
-/* 11.1 Frame. The same block rhythm as every other section on this page. */
-.v4-eng {
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-eng {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-eng {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 11.2 Section head. Black signage plate, the 72 stop for the head, the 24 stop
-   for the line under it - the same three parts, in the same order, that the
-   proof, services, process and founders heads are built from.
-
-   The head is one short sentence rather than COPY.md's full two-sentence
-   headline. The 72 stop cannot set the second sentence on one line below about
-   1440, and a three-line display head would push the band out of the first
-   screen of the section at every laptop width. The sentence that is dropped is
-   not lost: it opens the lead directly underneath, at the 24 stop, where it
-   reads as the promise it is. */
-.v4-eng__label {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-.v4-eng__title {
-  margin-top: var(--v4-s3);
-  max-width: 24ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-eng__lead {
-  margin-top: var(--v4-s3);
-  max-width: 46ch;
-  font-size: var(--v4-t-2);
-  font-weight: 400;
-  line-height: var(--v4-leading-body);
-}
-
-/* 11.3 The band. One bar, three fields, no gutter and no row gap: the fields
-   share edges at every width, so the row is a stripe rather than three blocks
-   that happen to sit near each other. */
-.v4-eng__band {
-  margin-top: var(--v4-s8);
-  column-gap: 0;
-  row-gap: 0;
-}
-
-@media (max-width: 720px) {
-  .v4-eng__band {
-    margin-top: var(--v4-s6);
-  }
-}
-
-.v4-eng__bind {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  background: var(--v4-eng-ink);
-  color: var(--v4-eng-fg);
-  border-radius: var(--v4-radius);
-  box-shadow: var(--v4-shadow);
-  padding: var(--v4-s4);
-  /* The 360 guard. The longest word in a field is "engagement"; this is here so
-     a later copy edit cannot introduce one that pushes the band wider than the
-     column it sits in. */
-  overflow-wrap: break-word;
-}
-
-@media (max-width: 720px) {
-  .v4-eng__bind {
-    padding: var(--v4-s3);
-  }
-}
-
-@media (min-width: 820px) {
-  .v4-eng__bind--1 {
-    grid-column: 1 / 5;
-  }
-
-  .v4-eng__bind--2 {
-    grid-column: 5 / -1;
-  }
-}
-
-@media (min-width: 1280px) {
-  .v4-eng__bind--1 {
-    grid-column: 1 / 4;
-  }
-
-  .v4-eng__bind--2 {
-    grid-column: 4 / 7;
-  }
-
-  .v4-eng__bind--3 {
-    grid-column: 7 / -1;
-  }
-}
-
-/* The inks. Three signal fields on one bar. See the contrast table at the head
-   of this section for why the red field is the one that takes black type. */
-.v4-eng__bind--1 {
-  --v4-eng-ink: var(--v4-ink-blue);
-  --v4-eng-fg: var(--v4-paper);
-}
-
-.v4-eng__bind--2 {
-  --v4-eng-ink: var(--v4-ink-black);
-  --v4-eng-fg: var(--v4-paper);
-}
-
-.v4-eng__bind--3 {
-  --v4-eng-ink: var(--v4-ink-red);
-  --v4-eng-fg: var(--v4-ink-black);
-}
-
-/* The term. The 40 stop, which is the size the tone note's "one word each"
-   asks for and the largest stop that lets "Minimum commitment" set inside a
-   two-column field at 1280. */
-.v4-eng__term {
-  margin-bottom: var(--v4-s4);
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-/* The clause, under its own rule.
-
-   HOW THE THREE RULES ARE HELD IN REGISTER, which is the whole reason this
-   block is written the way it is. The rule is a top border on the clause, so
-   its position is padding + term height + term margin. Terms are one line
-   ("Paid discovery", "Fixed scope") or two ("Minimum commitment" in a two-
-   column field), so left alone the three rules sit at three different heights
-   and the band reads as three blocks rather than as one bar.
-
-   The first attempt bottom-anchored the clause with margin-top:auto, on the
-   theory that grid items are equal height so bottom-aligning would align the
-   rules too. It aligns the bottom of the clause, not the top of it: a clause
-   that wraps to four lines at 820 pushed its rule 85px above its neighbour's.
-   Measured, at 1280, on three fields: rules at 173, 228 and 200.
-
-   So the term is given a floor of exactly two lines wherever fields share a
-   row, and the clause simply follows it. The rule is then at a constant offset
-   from the top of every field in the row, whatever the term above it or the
-   clause below it does, and the leftover height falls at the bottom of the
-   shorter fields where it is invisible on flat ink. Two lines is the ceiling as
-   well as the floor: the longest term is "Minimum commitment", and the
-   narrowest field it is ever set in is two columns at 1280, where it sets in
-   two lines. */
-.v4-eng__clause {
-  border-top: var(--v4-rule) solid currentColor;
-  padding-top: var(--v4-s3);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-}
-
-/* 820 is where fields 1 and 2 first share a row, so it is where they first
-   have a register to hold. Field 3 is on its own row here and is left alone:
-   giving it a two-line floor would only open dead ink under a one-line term. */
-@media (min-width: 820px) {
-  .v4-eng__bind--1 .v4-eng__term,
-  .v4-eng__bind--2 .v4-eng__term {
-    min-height: calc(var(--v4-t-3) * var(--v4-leading-display) * 2);
-  }
-}
-
-/* 1280 is where all three fields share one row. */
-@media (min-width: 1280px) {
-  .v4-eng__bind--3 .v4-eng__term {
-    min-height: calc(var(--v4-t-3) * var(--v4-leading-display) * 2);
-  }
-}
-
-/* 11.4 The board. Six rules of the deal, one per row, drawn as cell borders on
-   the same eight columns as the band. No border-bottom on the list: the foot
-   below carries the closing rule, so the action is the board's last row rather
-   than a button parked under a finished table. */
-.v4-eng__board {
-  margin-top: var(--v4-s8);
-  row-gap: 0;
-}
-
-@media (max-width: 720px) {
-  .v4-eng__board {
-    margin-top: var(--v4-s6);
-  }
-}
-
-/* Stacked pairs. Below 560 the label sits over its clause and only the label
-   carries the rule, so there is one rule per term and none between a term and
-   its own clause. */
-.v4-eng__key,
-.v4-eng__val {
-  grid-column: 1 / -1;
-}
-
-.v4-eng__key {
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s3);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  /* Uppercase and tracked out positively, matching the process board's column
-     labels in section 10.4 exactly. Both are the same object - the label of a
-     row on a ruled board - so they are set the same way and share one value. */
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-eng__val {
-  padding-top: var(--v4-s1);
-  padding-bottom: var(--v4-s3);
-  font-size: var(--v4-t-2);
-  font-weight: 400;
-  line-height: var(--v4-leading-body);
-  text-wrap: pretty;
-}
-
-/* Two columns. The clause takes its own rule from here up, so the two cells of
-   a row are divided by one printed line that runs the full width. */
-@media (min-width: 560px) {
-  .v4-eng__key {
-    grid-column: 1 / 4;
-    padding-block: var(--v4-s4);
-  }
-
-  .v4-eng__val {
-    grid-column: 4 / -1;
-    border-top: var(--v4-rule) solid var(--v4-ink-black);
-    padding-block: var(--v4-s4);
-  }
-}
-
-@media (min-width: 1024px) {
-  .v4-eng__key {
-    grid-column: 1 / 3;
-  }
-
-  .v4-eng__val {
-    grid-column: 3 / -1;
-  }
-}
-
-/* 11.5 The foot. The board's closing rule plus the one action. The block sits
-   in the label column and the line beside it in the clause column, so the row
-   is set on the same two columns the six rules above it use. */
-.v4-eng__foot {
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s4);
-  row-gap: var(--v4-s3);
-  align-items: center;
-}
-
-.v4-eng__cta {
-  grid-column: 1 / -1;
-  font-size: var(--v4-t-1);
-  padding: var(--v4-s2) var(--v4-s4);
-}
-
-.v4-eng__note {
-  grid-column: 1 / -1;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-}
-
-@media (min-width: 560px) {
-  .v4-eng__cta {
-    grid-column: 1 / 4;
-  }
-
-  .v4-eng__note {
-    grid-column: 4 / -1;
-  }
-}
-
-@media (min-width: 1024px) {
-  .v4-eng__cta {
-    grid-column: 1 / 3;
-  }
-
-  .v4-eng__note {
-    grid-column: 3 / -1;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   12. FOUNDERS - the crew manifest
-
-   Two panels on the 8-column grid, four columns each, and one flat black band
-   under them. This is the only section on the page with no field of service
-   ink in it, and that is the decision the section is built on.
-
-   WHY NO SERVICE INK
-   Section 1.2 makes colour an index: one ink per service, held from the hero
-   map through the services grid to the case posters. Painting a founder in
-   service 2's blue tells the reader Umayr is generated product media, and
-   painting the founder beside him in service 4's black says the same about
-   WhatsApp lead systems. Neither is true, and a colour system that means
-   something in eight places and nothing in the ninth means nothing anywhere.
-
-   So the manifest is printed matter: white ground, 3px black keylines, a black
-   signage plate carrying the city across the top of each panel, and one flat
-   black band carrying the standing line. Black is this page's structural ink -
-   the bar, every plate, every rule - so it reads as the system speaking rather
-   than as a fifth claim. It is also the page's one quiet beat between the four
-   colour-saturated sections above it and the ones below, which is what makes
-   the colour elsewhere read as an index rather than as wallpaper.
-
-   Contrast on every pair rendered here, all AA or better at 18px:
-     black on white   19.0:1   the panel body, the ruled list, the keylines
-     paper on black   19.0:1   the city plate, the section plate, the band
-   No yellow, no red, no blue, and therefore none of section 1.1's large-text-
-   only limits apply: nothing in this section is set in an ink that has one.
-
-   TWO RULE WEIGHTS, TWO MEANINGS
-   3px is a section-level division (the panel keyline, the rule that opens the
-   ruled list, the rule above the credential line), which is the same weight the
-   proof board divides its counts with in 7.4. 1px divides the rows inside one
-   list, which is the same hairline the hero legend chips take in 6.7. Nothing
-   in this section invents a third weight.
-
-   LAYOUT
-     under 820    one panel per row, span 8
-     820 and up   two per row, span 4 each, on the shared 24px gutter
-
-   Panel heights are equalised by the grid itself: grid items stretch, so the
-   two panels are the same height at 820 and at 1280 whatever their content
-   does, which is the "cards with uneven heights" failure in 03-design-research
-   section 5. Only one founder has a credential line in COPY.md, so that line is
-   pinned to the foot of its own panel with `margin-top: auto` and the other
-   panel simply ends. Both ruled lists close on their own 3px rule whether or not
-   a credential line follows, so the two panels hold the same object and the
-   leftover is white space at the foot of one of them, not a stretched list or an
-   invented sentence.
-   --------------------------------------------------------------------------- */
-
-/* 12.1 Frame. The same block rhythm as the proof board and the services grid,
-   so all three read as one page rather than as three posters glued together.
-   The anchor offset is the page-wide one in section 3: this section's own top
-   padding is 96px against an 82px bar, so the plate is clear of the band the
-   moment the stop on the bar lands on it, and nothing extra is spent here. */
-.v4-fdr {
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-fdr {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-fdr {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 12.2 Section head. Black signage plate, the 72 stop for the head, the 24 stop
-   for the line under it - the same three-part head the services section uses,
-   because a page that introduces its sections two different ways is two pages. */
-.v4-fdr__plate {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-.v4-fdr__title {
-  margin-top: var(--v4-s3);
-  max-width: 20ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-  text-wrap: balance;
-}
-
-.v4-fdr__lead {
-  margin-top: var(--v4-s3);
-  max-width: 44ch;
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  text-wrap: pretty;
-}
-
-/* 12.3 The manifest. Row gap equals the column gutter, so the stacked state at
-   360 keeps the same 24px between panels that the two-up state keeps beside
-   them, and the band below sits on that same interval. */
-.v4-fdr__manifest {
-  margin-top: var(--v4-s8);
-  row-gap: var(--v4-gutter);
-}
-
-@media (max-width: 720px) {
-  .v4-fdr__manifest {
-    margin-top: var(--v4-s6);
-  }
-}
-
-/* 12.4 The panel. A keyline box, radius 0, shadow none, no hover: it is not a
-   link and it must not behave like one. `overflow-wrap` is the 360 guard - the
-   longest string in the section is a 35-character list item sitting in a 272px
-   measure, which wraps, but the guard means it can only ever wrap and never
-   push the panel past its column. */
-.v4-fdr__panel {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  border: var(--v4-rule) solid var(--v4-ink-black);
-  border-radius: var(--v4-radius);
-  box-shadow: var(--v4-shadow);
-  background: var(--v4-paper);
-  overflow-wrap: break-word;
-}
-
-@media (min-width: 820px) {
-  .v4-fdr__panel {
-    grid-column: span 4;
-  }
-}
-
-/* 12.5 The city plate. A platform sign: a flat black band across the top of the
-   panel, inside its keyline, with the city set at the 18 stop and nothing else
-   on it. Uppercase and tracked out positively, which happens here and nowhere
-   else in this variation - every other label on the page is sentence case at
-   its natural tracking, so the one tracked-out line reads as signage rather
-   than as a label habit. Cities are docs/goal/COPY.md section 6 and
-   01-business-brief.md section 9.7. */
-.v4-fdr__city {
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  padding: var(--v4-s2) var(--v4-s3);
-}
-
-@media (max-width: 720px) {
-  .v4-fdr__city {
-    padding: var(--v4-s2);
-  }
-}
-
-/* 12.6 The body. Grows to fill the panel so the credential line at its foot has
-   something to be pushed against. */
-.v4-fdr__body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: var(--v4-s4);
-}
-
-@media (max-width: 720px) {
-  .v4-fdr__body {
-    padding: var(--v4-s3);
-  }
-}
-
-/* 12.7 The name, at the 40 stop. This is the portrait: the section carries no
-   photography, so the name is the largest thing in the panel and gets the whole
-   measure to itself. `balance` keeps a two-word name from dropping one letter
-   to a second line at the widths where it is close. */
-.v4-fdr__name {
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-  text-wrap: balance;
-}
-
-/* The role, at the 24 stop. Set at 500 against the name's 700: section 1.1
-   makes weight the whole secondary-text system, because there is no grey ink on
-   this page to set it in. */
-.v4-fdr__role {
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  text-wrap: pretty;
-}
-
-/* 12.8 What each founder owns. A ruled list at the 18 stop: 3px rules open and
-   close it because that is a section-level division, and 1px rules divide the
-   rows inside it. The rules are borders on the list and on its rows rather than
-   separate elements, so a row that wraps to two lines takes its rule with it.
-
-   The closing rule belongs to the list, not to the credential line under it.
-   It started on the credential line, which meant the panel that has one closed
-   its table and the panel that does not left its last row hanging on white -
-   two different objects rather than the same object twice. */
-.v4-fdr__owns {
-  margin-top: var(--v4-s4);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  border-bottom: var(--v4-rule) solid var(--v4-ink-black);
-}
-
-.v4-fdr__owns-item {
-  padding-block: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-}
-
-.v4-fdr__owns-item + .v4-fdr__owns-item {
-  border-top: 1px solid var(--v4-ink-black);
-}
-
-/* 12.9 The credential line. COPY.md gives one to Sanchay and none to Umayr, so
-   it is pinned to the foot of its own panel instead of sitting under the list:
-   at the foot it reads as the panel's footnote, and the panel without one ends
-   on white space rather than on a sentence written to fill a hole. Weight 400
-   against the list's 500 is the same weight split the role uses against the
-   name. */
-.v4-fdr__also {
-  margin-top: auto;
-  padding-top: var(--v4-s4);
-  font-size: var(--v4-t-1);
-  font-weight: 400;
-  line-height: var(--v4-leading-body);
-  text-wrap: pretty;
-}
-
-/* 12.10 The standing line. The one flat field of ink in the section, run across
-   all eight columns under both panels: it is the sentence that is about the two
-   of them at once, so it is the shape that touches both. Set at the 24 stop in
-   paper on black, 19:1, on the same 24px interval that separates the panels. */
-.v4-fdr__standing {
-  margin-top: var(--v4-gutter);
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  padding: var(--v4-s4);
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  text-wrap: pretty;
-}
-
-@media (max-width: 720px) {
-  .v4-fdr__standing {
-    padding: var(--v4-s3);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   13. FAQ - the signal slots
-
-   Seven native `details` rows on the white ground, divided by the page's 3px
-   black rule, each opened by a slot on its left edge that fills with colour.
-   No script: the open row is an HTML attribute, so it is open in the served
-   markup, open before hydration and open in a scroll-0 capture.
-
-   THE SLOT, AND WHY IT IS YELLOW
-   COPY.md's v4 tone note asks for a coloured left edge that changes colour as
-   a row opens. Section 1.2 makes colour an index - one ink per service, held
-   from the hero map to the case posters - so a red row would say question 01 is
-   about customer-facing product studios, which it is not. That rules out the
-   service inks here, the same way it rules them out of the founders manifest.
-
-   Yellow is the one ink on this page with a meaning that is not a service: it
-   is the nav's hover and focus colour (section 4.4) and the ground of the proof
-   board. It means the thing you are on. An open row is the row you are on, so
-   the slot fills yellow, and a closed row sits in the pencil that section 1.1
-   defines as the map before it is inked.
-
-   Yellow is 1.7:1 on white, so section 1.1 requires a keyline on it. The slot
-   takes 3px keylines on its left and right edges only; the rules that divide
-   the rows close it top and bottom, so it is fully enclosed in black without
-   printing any rule twice. The keyline is on the slot in both states, not only
-   the yellow one, so this is one declaration rather than one plus an exception.
-
-   Colour is never the only signal. The mark goes from plus to minus and the
-   answer appears, so the state survives a monochrome print and a reader who
-   cannot separate yellow from grey.
-
-   CONTRAST
-     black on white   19.0:1   questions, answers, plates, rules, keylines
-     paper on black   19.0:1   the number in its plate, the section plate
-   Yellow and pencil carry no text anywhere in this section, so section 1.1's
-   text limits on them never apply.
-
-   LAYOUT
-     under 721     the number plate takes its own row above the question, so a
-                   24px question keeps the full measure at 360
-     721 to 1279   plate, question and mark on one row; head stacked above
-     1280 and up   head spans 3 columns, list spans 5, on the same 8-column grid
-   The answer is capped at 40rem, which is roughly 75 characters at the 18 stop
-   and is what stops the ultrawide failure in 03-design-research section 5.
-   --------------------------------------------------------------------------- */
-
-/* 13.1 Frame. The same block rhythm as every other section on the page. */
-.v4-faq {
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-faq {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-faq {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 13.2 The two blocks on the 8-column grid. Stacked until there is room for a
-   525px head column beside a list that still holds a 40rem answer, which is
-   1280; below that a 3-column head would set the 72 stop in about 20 characters
-   per line and the head would be taller than three of the rows beside it. */
-.v4-faq__grid {
-  row-gap: var(--v4-s8);
-}
-
-.v4-faq__head,
-.v4-faq__list {
-  grid-column: span 8;
-}
-
-@media (max-width: 720px) {
-  .v4-faq__grid {
-    row-gap: var(--v4-s6);
-  }
-}
-
-@media (min-width: 1280px) {
-  .v4-faq__grid {
-    row-gap: 0;
-  }
-
-  .v4-faq__head {
-    grid-column: span 3;
-  }
-
-  .v4-faq__list {
-    grid-column: span 5;
-  }
-}
-
-/* 13.3 Section head. Black signage plate and the 72 stop, the same head the
-   services and founders sections use. There is no lead line under it because
-   COPY.md section 8 does not carry one, and this file does not write copy. */
-.v4-faq__plate {
-  display: inline-block;
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-.v4-faq__title {
-  margin-top: var(--v4-s3);
-  max-width: 18ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-  text-wrap: balance;
-}
-
-/* 13.4 The list and its rows. The list draws the rule above the first row and
-   each row draws the rule below itself, so seven rows print eight rules and the
-   block is closed at both ends. */
-.v4-faq__list {
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-}
-
-.v4-faq__row {
-  /* The slot, and the space between it and the row's content. Both are on the
-     8px scale; redefining them in one place moves the whole row. */
-  --v4-faq-slot: var(--v4-s4);
-  --v4-faq-gap: var(--v4-s3);
-  --v4-faq-fill: var(--v4-pencil);
-
+.v4-cell {
   position: relative;
-  border-bottom: var(--v4-rule) solid var(--v4-ink-black);
-  padding-left: calc(var(--v4-faq-slot) + var(--v4-faq-gap));
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-2);
+  padding: var(--v4-4);
+  border: var(--v4-hairline) solid var(--v4-border);
+  border-radius: var(--v4-r-cell);
+  /* The outline is the resting state. Fill is a layer on top of it, which is
+     what lets the board come online without the layout moving. */
+  background: transparent;
 }
 
-.v4-faq__row[open] {
-  --v4-faq-fill: var(--v4-ink-yellow);
+/* The pass moves the fill, the cobalt rule and the content. The border never
+   animates, so every cell is already on the page as a 1px outline before the
+   board comes online. */
+.v4-cell::before,
+.v4-cell::after,
+.v4-cell > * {
+  animation: v4-online var(--v4-online) var(--v4-ease) both;
+  animation-delay: calc(var(--v4-i, 0) * var(--v4-stagger));
 }
 
-/* The slot itself. Absolute against the row's padding box, so it runs the full
-   height of an open row and stops exactly where the rule below it starts. */
-.v4-faq__row::before {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  box-sizing: border-box;
-  width: var(--v4-faq-slot);
-  background: var(--v4-faq-fill);
-  border-inline: var(--v4-rule) solid var(--v4-ink-black);
-  transition: background-color var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-@media (max-width: 720px) {
-  .v4-faq__row {
-    --v4-faq-slot: var(--v4-s3);
-    --v4-faq-gap: var(--v4-s2);
-  }
-}
-
-/* 13.5 The summary. `display: grid` is also what removes the disclosure
-   triangle in Chrome; `list-style` and the webkit marker rule remove it
-   everywhere else. The row is the hit target, not the words in it.
-
-   Hover borrows the page's hover primitive (section 4.2): a 4px shift along
-   the grid axis, no colour change, because every colour in this section already
-   means something. Focus-visible is left to the page ring in section 4.4, which
-   draws a 3px black outline around the whole summary. */
-.v4-faq__summary {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: start;
-  column-gap: var(--v4-s2);
-  padding-block: var(--v4-s4);
-  cursor: pointer;
-  list-style: none;
-  transition: transform var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-.v4-faq__summary::-webkit-details-marker {
-  display: none;
-}
-
-.v4-faq__summary:hover {
-  transform: translate3d(var(--v4-hover-shift), 0, 0);
-}
-
-/* 13.6 The number plate. A black square with the row number in it, 40px at
-   every width: on a phone it sits on its own row, where it has the space. */
-.v4-faq__num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: var(--v4-s5);
-  block-size: var(--v4-s5);
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--v4-track-flat);
-  line-height: 1;
-}
-
-/* 13.7 The question, at the 24 stop. */
-.v4-faq__q {
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-tight);
-  text-wrap: pretty;
-}
-
-/* 13.8 The mark. Two centred rules drawn as borders on the pseudo-elements of
-   one empty span: no icon file, no icon font, nothing to load. The vertical
-   rule rotates a quarter turn to land exactly on the horizontal one, which is
-   how the plus becomes a minus. Same box as the number plate, so the two ends
-   of the row weigh the same. */
-.v4-faq__mark {
-  position: relative;
-  inline-size: var(--v4-s5);
-  block-size: var(--v4-s5);
-}
-
-.v4-faq__mark::before,
-.v4-faq__mark::after {
+.v4-cell::before {
   content: "";
   position: absolute;
   inset: 0;
-  margin: auto;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--v4-cell-fill, transparent);
+  background-image: var(--v4-cell-texture, none);
 }
 
-.v4-faq__mark::before {
-  inline-size: 100%;
-  block-size: 0;
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
+.v4-cell > * {
+  position: relative;
+  z-index: 1;
 }
 
-.v4-faq__mark::after {
-  inline-size: 0;
-  block-size: 100%;
-  border-left: var(--v4-rule) solid var(--v4-ink-black);
-  transition: transform var(--v4-dur-hover) var(--v4-ease-flat);
+/* Hover: the perimeter goes 1px to 1.5px. Drawn as an inset outline, not a
+   thicker border, so no text reflows by half a pixel and no shadow is used. */
+.v4-cell:hover {
+  outline: var(--v4-hairline-hover) solid var(--v4-line-hover);
+  outline-offset: calc(-1 * var(--v4-hairline-hover));
 }
 
-.v4-faq__row[open] .v4-faq__mark::after {
-  transform: rotate(90deg);
+/* Fill states. The three the honesty rule needs, and nothing else. */
+.v4-cell--live,
+.v4-cell--figure {
+  --v4-cell-fill: var(--v4-cell);
 }
 
-/* 13.9 The answer. Indented to the question's left edge wherever the question
-   sits beside the plate, flush with it wherever the plate has its own row. */
-.v4-faq__answer {
-  max-width: 40rem;
-  padding-bottom: var(--v4-s5);
-  font-size: var(--v4-t-1);
-  font-weight: 400;
-  letter-spacing: var(--v4-track-flat);
-  line-height: var(--v4-leading-body);
-  text-wrap: pretty;
+.v4-cell--build {
+  --v4-cell-fill: var(--v4-cell-reduced);
+  --v4-cell-texture: repeating-linear-gradient(
+    135deg,
+    transparent 0 5px,
+    var(--v4-hatch) 5px 6px
+  );
 }
 
-.v4-faq__answer p + p {
-  margin-top: var(--v4-s2);
+/* Outline only: 1px border, no fill, ink text. Not disabled, not dimmed. */
+.v4-cell--outline {
+  --v4-cell-fill: transparent;
+  color: var(--v4-ink);
 }
 
-@media (min-width: 721px) {
-  .v4-faq__answer {
-    padding-left: calc(var(--v4-s5) + var(--v4-s2));
+/* The live cell is the one place besides the primary action that carries
+   cobalt: a rule across its top edge. */
+.v4-cell--live::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 1;
+  background: var(--v4-cobalt);
+  border-radius: var(--v4-r-cell) var(--v4-r-cell) 0 0;
+}
+
+.v4-cell-title {
+  font-size: var(--v4-body);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.v4-cell-line {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+}
+
+.v4-cell-line--muted {
+  color: var(--v4-muted);
+}
+
+/* Every cell is a flex column with its caption pinned to the bottom, so a
+   short cell never floats its own footer against a tall neighbour. */
+.v4-cell-foot {
+  margin-top: auto;
+  padding-top: var(--v4-3);
+  /* The rule is what turns the space a pinned caption leaves above it into a
+     footer band rather than a hole. */
+  border-top: var(--v4-hairline) solid var(--v4-border);
+  display: flex;
+  align-items: baseline;
+  gap: var(--v4-2);
+  flex-wrap: wrap;
+  font-size: var(--v4-caption);
+  color: var(--v4-muted);
+}
+
+/* Entrance order: largest cell first. */
+.v4-cell--live {
+  --v4-i: 0;
+}
+.v4-cell--build {
+  --v4-i: 1;
+}
+.v4-cell--outline {
+  --v4-i: 2;
+}
+.v4-cell--figure {
+  --v4-i: 3;
+}
+
+/* Below 640 every span collapses: one column, and the live cell is simply the
+   tallest cell in the stack. */
+.v4-cell--live {
+  min-height: 240px;
+}
+
+@media (min-width: 640px) {
+  .v4-board--preview {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-auto-rows: minmax(150px, auto);
+  }
+
+  /* The honest staircase, in one place: 2x2, then 3x1, then 2x1, then 1x1.
+     Area falls with how much of the thing is actually live. */
+  .v4-board--preview .v4-cell--live {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .v4-board--preview .v4-cell--build {
+    grid-column: span 3;
+  }
+  .v4-board--preview .v4-cell--outline {
+    grid-column: span 2;
+  }
+  .v4-board--preview .v4-cell--figure {
+    grid-column: span 1;
+    padding: var(--v4-3);
   }
 }
 
-/* 13.10 Phones. The plate and the mark take a row of their own above the
-   question, so a 24px question keeps the whole 272px the 360 viewport leaves
-   after the slot. Set as areas rather than as a second source order, so the
-   reading order and the tab order are the same at every width. */
-@media (max-width: 720px) {
-  .v4-faq__summary {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "num mark"
-      "question question";
-    row-gap: var(--v4-s2);
-    padding-block: var(--v4-s3);
-  }
+/* -- 12 Chips, dots and figures ------------------------------------------- */
 
-  .v4-faq__num {
-    grid-area: num;
-  }
-
-  .v4-faq__q {
-    grid-area: question;
-  }
-
-  .v4-faq__mark {
-    grid-area: mark;
-    justify-self: end;
-  }
-
-  .v4-faq__answer {
-    padding-bottom: var(--v4-s4);
-  }
-}
-
-/* 13.11 Reduced motion. The slot still changes colour, because colour here is
-   information; the hover shift goes, and the mark stops rotating and simply
-   drops its vertical rule, which prints the same minus. */
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-faq__summary,
-  .v4 .v4-faq__row::before,
-  .v4 .v4-faq__mark::after {
-    transition: none;
-  }
-
-  .v4 .v4-faq__summary:hover {
-    transform: none;
-  }
-
-  .v4 .v4-faq__row[open] .v4-faq__mark::after {
-    transform: none;
-    opacity: 0;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   14. CONTACT - the terminus board
-
-   The one full-bleed red section on the page, and the last of the three places
-   the 120 stop is spent: white in the hero, yellow on the proof board, red
-   here. Every other section on this page is white or yellow ground, so the
-   reader arrives at a colour they have not seen carry a whole section, which is
-   the whole signal that the line ends here.
-
-   IT OPENS ON THE HEADLINE, NOT ON A PLATE
-   Sections 7, 9, 10, 11 and 12 all open with a black signage plate, then the 72
-   stop, then the 24 lead. This one has no plate and no 72: the headline is the
-   first thing in the section, at the 120 stop. A plate names which stop you are
-   standing at, and at the terminus there is no next stop to be told apart.
-
-   CONTRAST ON EVERY PAIR RENDERED HERE, all AA at the size it is used:
-     black on red     4.6:1   headline, lead, quote, support, channel, mail
-                              link, every 3px rule, the strip and its terms.
-                              Above the 4.5 floor, so this section needs no
-                              size exception anywhere.
-     black on paper  19.0:1   the CTA block at rest
-     paper on black  19.0:1   the CTA block on hover and focus
-   Paper type on this red is 4.2:1 and is not used: section 11 already records
-   that red on this page never carries white words. The one paper object in the
-   section is the CTA block, where paper is the ground and not the ink.
-
-   THE BUTTON IS PAPER, WHICH IS THE ONE PLACE THIS SECTION LEAVES ITS COPY NOTE
-   COPY.md's v4 tone note asks for a black block button. Black is the right
-   answer on a white ground; on this one the headline directly above the button
-   is already black at 120px, so a black button repeats the loudest ink in the
-   section at a tenth of its size. Paper is used by nothing else on the panel,
-   so the block is the only white object here. Its hover swaps it to black,
-   which is also the documented exception in section 4.2: the default swap is to
-   red, and a red block on a red panel is an invisible button.
-
-   LAYOUT, on the same eight columns as every other section:
-     headline  span 8 at every width; two spans that are one wrapped sentence
-               below 900 and two designed lines above it, the hero's device
-     body      under 1024  act then quote, both span 8
-               1024 and up act spans 5, quote spans 3 with a rule above it
-     strip     under 1024  label span 8, three terms span 8, ruled between
-               1024 and up label span 8, terms 4 + 2 + 2 on one row, ruled
-               between with no gutter
-
-   WHY THE STRIP CLOSES ITS GUTTER
-   The three terms are the three halves-of-a-sentence from COPY.md section 9,
-   not three things to choose between. Gutters would make them cards; closing
-   the gutter and dividing them with 3px black makes them one bar read left to
-   right, which is what the sentence is. This is the same decision, for the same
-   reason, that section 11 makes for the fare band.
-
-   THE FIRST 600px AT 390
-   The action has to be on the first screen of the section on a phone, so the
-   order inside the act block is lead, block, support, channel, and the phone
-   rhythm comes down one stop on the 8px scale. Measured at 390x844: the CTA
-   block's top edge sits 374px below the section's top edge and its bottom edge
-   at 446px, both inside the 600px the brief allows.
-   --------------------------------------------------------------------------- */
-
-/* 14.1 Frame. The same block rhythm as every other section, because the ink is
-   what makes this section different and it does not need the spacing too. */
-.v4-contact {
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-contact {
-    padding-block: var(--v4-s8);
-  }
-}
-
-@media (max-height: 560px) and (orientation: landscape) {
-  .v4-contact {
-    padding-block: var(--v4-s6);
-  }
-}
-
-/* 14.2 The headline. The 120 stop, the third and last time it is spent.
-
-   The floor is 38px rather than the 44px of --v4-t-5, and that is the only
-   difference between this curve and the hero's. At 360 the sentence is 36
-   characters and has to land in three lines inside a 320px measure; 44px puts
-   it in four and pushes the block button past the section's first screen. Above
-   452px the two curves are the same 8.4vw, and both cap at 120. */
-.v4-contact__title {
-  font-size: clamp(38px, 8.4vw, 120px);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-  text-wrap: balance;
-}
-
-.v4-contact__title span {
-  display: inline;
-}
-
-@media (min-width: 900px) {
-  .v4-contact__title {
-    text-wrap: initial;
-  }
-
-  .v4-contact__title span {
-    display: block;
-  }
-}
-
-/* 14.3 The body. Act on the left, receipt on the right, one grid. */
-.v4-contact__body {
-  margin-top: var(--v4-s8);
-  row-gap: var(--v4-s6);
-}
-
-@media (max-width: 720px) {
-  .v4-contact__body {
-    margin-top: var(--v4-s5);
-    row-gap: var(--v4-s5);
-  }
-}
-
-.v4-contact__act {
-  grid-column: 1 / -1;
-}
-
-@media (min-width: 1024px) {
-  .v4-contact__act {
-    grid-column: 1 / span 5;
-  }
-}
-
-/* 14.4 The lead. COPY.md section 9's subhead, first half. The second half is
-   the strip at the foot of the section. */
-.v4-contact__lead {
-  max-width: 40ch;
-  font-size: var(--v4-t-2);
-  font-weight: 400;
-  letter-spacing: var(--v4-track-flat);
-  line-height: var(--v4-leading-body);
-}
-
-/* 14.5 The block. The largest button on the page: the hero's is the 24 stop at
-   16/40 of padding, this one is the 24 stop at 24/48, because it is the last
-   thing the page asks for and the only thing this section is for.
-
-   Both --v4-block-*-hover values are set here rather than inherited. The
-   default swap is to yellow (section 4.2), which on this red panel would put
-   the page's signage ink inside the section that is not the signage bar. Black
-   is the swap instead, 19.0:1 against the paper label it takes with it. */
-.v4-contact__cta {
-  --v4-block-bg: var(--v4-paper);
-  --v4-block-fg: var(--v4-ink-black);
-  --v4-block-bg-hover: var(--v4-ink-black);
-  --v4-block-fg-hover: var(--v4-paper);
-
-  margin-top: var(--v4-s5);
-  font-size: var(--v4-t-2);
-  padding: var(--v4-s3) var(--v4-s6);
-}
-
-@media (max-width: 720px) {
-  .v4-contact__cta {
-    margin-top: var(--v4-s4);
-    padding: var(--v4-s2) var(--v4-s5);
-  }
-}
-
-/* 14.6 Support and channel. Both at the 18 stop, both full black on the red.
-   The support line carries the money terms and is set at 500 so it reads as
-   part of the button rather than as small print under it; the channel line
-   steps back to 400, which is the same weight split the hero timetable and the
-   proof rail use. */
-.v4-contact__support {
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-contact__channel {
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 400;
-  line-height: var(--v4-leading-body);
-}
-
-/* The address is live text and a link, which COPY.md requires, so it needs an
-   affordance that is not colour: there is no second ink available on this panel
-   and black is already the body ink. A 2px underline set clear of the baseline
-   is that affordance, and it thickens to the 3px this page rules everything
-   else with on hover and on keyboard focus. */
-.v4-contact__mail {
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-  transition: text-decoration-thickness var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-.v4-contact__mail:hover,
-.v4-contact__mail:focus-visible {
-  text-decoration-thickness: var(--v4-rule);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-contact__mail {
-    transition: none;
-  }
-}
-
-/* 14.7 The receipt. COPY.md section 9's proof beside the button, under a 3px
-   rule so it reads as a printed slip rather than as a second pull quote. The
-   quoted words take 700 and the attribution 400, the same split the hero quote
-   uses, so the two instances of this sentence are the same object at two
-   sizes rather than two different treatments of one fact. */
-.v4-contact__proof {
-  grid-column: 1 / -1;
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  line-height: var(--v4-leading-body);
-}
-
-.v4-contact__proof p {
-  font-weight: 700;
-}
-
-.v4-contact__proof footer {
-  font-weight: 400;
-}
-
-@media (min-width: 1024px) {
-  .v4-contact__proof {
-    grid-column: 6 / span 3;
-  }
-}
-
-/* 14.8 The strip. The sentence that closes the page, set as a bar.
-
-   column-gap is 0 so the three terms share edges and the 3px rules between them
-   are true divisions rather than marks floating in a gutter. Below 1024 the bar
-   turns on its side: the rules become the top edge of each term and the terms
-   take the full eight columns, which is the only form a 15-character term at
-   the 40 stop fits at 360. */
-.v4-contact__strip {
-  margin-top: var(--v4-s10);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  padding-top: var(--v4-s3);
-  column-gap: 0;
-}
-
-@media (max-width: 720px) {
-  .v4-contact__strip {
-    margin-top: var(--v4-s8);
-  }
-}
-
-.v4-contact__strip-label {
-  grid-column: 1 / -1;
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
-}
-
-.v4-contact__term {
-  grid-column: 1 / -1;
-  margin-top: var(--v4-s3);
-  padding-top: var(--v4-s3);
-  border-top: var(--v4-rule) solid var(--v4-ink-black);
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-@media (min-width: 1024px) {
-  .v4-contact__term {
-    margin-top: var(--v4-s5);
-    padding-top: 0;
-    border-top: 0;
-    border-left: var(--v4-rule) solid var(--v4-ink-black);
-    padding-left: var(--v4-s3);
-  }
-
-  /* 3 + 3 + 2, not 4 + 2 + 2. The terms are three lengths of one sentence, so
-     the rules that divide them want even intervals; giving the longest term
-     four columns put the first rule at half the bar and the second at three
-     quarters, which read as a wide field followed by two narrow ones instead of
-     as a ruled strip. At 3 + 3 + 2 the rules land on the thirds of the measure
-     and the widest term, fifteen characters at the 40 stop, still clears its
-     cell at 1024 with room to spare. */
-  .v4-contact__term:first-of-type {
-    grid-column: 1 / span 3;
-    border-left: 0;
-    padding-left: 0;
-  }
-
-  .v4-contact__term:nth-of-type(2) {
-    grid-column: 4 / span 3;
-  }
-
-  .v4-contact__term:nth-of-type(3) {
-    grid-column: 7 / span 2;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   15. FOOTER - the end-of-line board
-   --------------------------------------------------------------------------- */
-
-/* 15.1 The panel. The page inverted: black ground, paper ink, paper rules.
-   Everything above this point divides itself with 3px black rules on white, so
-   the footer running the same structure in reverse is what marks it as the end
-   of the line rather than as a tenth section.
-
-   The rule weight steps down with it. --v4-rule is 3px and is the page's
-   section-level division; the footer is one section dividing itself internally,
-   so its rules are 2px. Two weights, two meanings, the same distinction the
-   founders manifest makes between the rules around its list and the rules
-   inside it. The rules take currentColor, which the black panel has already set
-   to paper, so there is no second paper value to keep in sync.
-
-   scroll-margin-top is spent here because section 3 sets it on `section[id]`
-   and this is a `footer[id]`: without it the "Footer" anchor tucks the wordmark
-   under the pinned signage bar.
-
-   The padding does not grow with the screen the way every other section's does.
-   That is the height budget in 15.10, which is the rule this panel is built
-   against: the footer has to fit the viewport it is pinned in front of. */
-.v4-foot {
-  --v4-foot-rule: 2px;
-  padding-block: var(--v4-s10) var(--v4-s6);
-  scroll-margin-top: var(--v4-anchor-offset, 0px);
-}
-
-/* 15.2 The masthead, upside down. Mark and wordmark at the 24 stop, the
-   sign-off line at the 40 stop under it. The measure is capped at 24ch so the
-   line breaks into a three-line block instead of running 1100px across the
-   1440 grid as one thin sentence; `min()` keeps that cap from exceeding the
-   content width at 360, where 24ch is wider than the page. */
-.v4-foot__head {
-  padding-bottom: var(--v4-s8);
-}
-
-.v4-foot__brand {
+.v4-chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--v4-s2);
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1;
+  gap: var(--v4-2);
+  align-self: flex-start;
+  padding: 3px var(--v4-2);
+  border: var(--v4-hairline) solid var(--v4-border);
+  border-radius: var(--v4-r-chip);
+  font-size: var(--v4-chip);
+  line-height: 1.3;
+  color: var(--v4-ink);
 }
 
-.v4-foot__mark {
-  width: 28px;
-  height: 28px;
-  color: currentColor;
+/* Jade is used for this and for nothing else on the page. */
+.v4-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--v4-jade);
   flex: none;
 }
 
-.v4-foot__signoff {
-  margin-top: var(--v4-s3);
-  max-width: min(24ch, 100%);
-  font-size: var(--v4-t-3);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-/* 15.3 The board. Four columns on the 8-column grid, two each. The rule is
-   set on the column rather than across the board, so at 1024 and up the four
-   rules read as one line broken by the gutters - which is what a departures
-   board looks like - and on a phone, where the columns stack, every column
-   still arrives under its own rule with its own heading above its list. That is
-   the failure 03-design-research section 5 names for this section: footer
-   columns collapsing without headings. */
-.v4-foot__board {
-  row-gap: var(--v4-s6);
-}
-
-.v4-foot__col {
-  grid-column: 1 / -1;
-  border-top: var(--v4-foot-rule) solid currentColor;
-  padding-top: var(--v4-s3);
-}
-
-@media (min-width: 560px) {
-  .v4-foot__col {
-    grid-column: span 4;
-  }
-}
-
-@media (min-width: 1024px) {
-  .v4-foot__col {
-    grid-column: span 2;
-  }
-}
-
-.v4-foot__head-label {
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1.2;
-  margin-bottom: var(--v4-s3);
-}
-
-/* 15.4 The lists. The section index runs to ten anchors plus the case page and
-   would be a third of a phone screen deep as one file, so it is set two-up. The
-   count is fixed rather than auto-filled: auto-fill gave two columns at 1920
-   and one at 1280, where the cell is 278px and the 140px minimum does not fit
-   twice, so the board changed shape between two desktop widths. Two tracks of
-   minmax(0, 1fr) hold at 360 (152px a track) and at 1180 (118px a track), both
-   of which clear the widest label on the bar, "Engagement".
-
-   The variations list stays a single file, because the numbers in front of it
-   are a sequence and a sequence read across two columns is not one. */
-.v4-foot__list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--v4-s2);
-}
-
-.v4-foot__list--file {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-/* The case page is a page, not an anchor, so it takes the full width of the
-   index and closes it. Spanning both tracks is also what stops "Read the full
-   build" from being the one entry that wraps to two lines in a 140px track at
-   360, which it did before it was given the row. */
-.v4-foot__case {
-  grid-column: 1 / -1;
-}
-
-/* 15.5 Links. Paper by default with no underline, because eleven permanently
-   underlined entries is a hatched block rather than a list. Hover and
-   focus-visible bring the underline and the accent together; both survive
-   reduced motion, because they are what tells a reader the thing is a link. The
-   4px shift is the part that is decoration, and section 4.4 takes it away. */
-.v4-foot__link,
-.v4-foot__here {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1.3;
-}
-
-.v4-foot__link {
-  transition:
-    color var(--v4-dur-hover) var(--v4-ease-flat),
-    transform var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-.v4-foot__link:hover,
-.v4-foot__link:focus-visible {
-  color: var(--v4-ink-yellow);
-  text-decoration: underline;
-  text-decoration-thickness: var(--v4-foot-rule);
-  text-underline-offset: 4px;
-  transform: translate3d(var(--v4-hover-shift), 0, 0);
-}
-
-/* The variation you are standing on. It is not a link and must not behave like
-   one, and the palette has no fifth ink to grey it back with (section 1.1), so
-   it is marked the way a map marks where you are: already in the state hovering
-   the others puts them in. */
-.v4-foot__here {
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-thickness: var(--v4-foot-rule);
-  text-underline-offset: 4px;
-}
-
-/* The line number off the switcher button. Tabular so five single digits sit on
-   one axis and the names start on one axis with them. */
-.v4-foot__n {
-  min-width: 1ch;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-/* The switcher is the index all five variations are listed on, not a sixth
-   variation, so it sits under its own rule rather than as a sixth numbered
-   line. */
-.v4-foot__switcher {
-  margin-top: var(--v4-s3);
-  padding-top: var(--v4-s3);
-  border-top: var(--v4-foot-rule) solid currentColor;
-  width: 100%;
-}
-
-/* 15.6 Contact. The one field of colour on the panel and the only yellow text
-   in the variation that is not on the signage bar. tokens.css 1.1 measures it
-   at 12.3:1 on black; red is 4.0:1 and blue 3.2:1 on the same ground, so
-   neither could carry this at any size.
-
-   WHY THE WHOLE BOARD IS ONE TYPE STOP
-   The address was set at the 24 stop first, and at 24px it is about 251px wide.
-   The narrowest four-up cell is 214px at 1024 and 253px at 1180, so it broke
-   mid-word - "sanchay@devonel.co / m" - across that whole band. A value that
-   only fits at some widths is the wrong value, so the board is set at the 18
-   stop throughout and the address is 188px wide, which clears the narrowest
-   cell by 26px. Hierarchy inside the board is carried by weight and by the one
-   accent, which is the rule tokens.css 1.1 already sets for this page: heads at
-   700 paper, entries at 500 paper, the address at 700 yellow. That leaves the
-   24 stop to the wordmark and the 40 stop to the sign-off, so the footer reads
-   as statement, identity, directory.
-
-   `anywhere` stays as the guard rather than as the mechanism: nothing should
-   reach it now, and if a longer address is ever configured it degrades to a
-   wrap instead of to a horizontal scrollbar at 360. */
-.v4-foot__mail {
-  display: inline-block;
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: var(--v4-leading-body);
-  color: var(--v4-ink-yellow);
-  overflow-wrap: anywhere;
-  transition:
-    color var(--v4-dur-hover) var(--v4-ease-flat),
-    transform var(--v4-dur-hover) var(--v4-ease-flat);
-}
-
-.v4-foot__mail:hover,
-.v4-foot__mail:focus-visible {
-  color: var(--v4-paper);
-  text-decoration: underline;
-  text-decoration-thickness: var(--v4-foot-rule);
-  text-underline-offset: 4px;
-  transform: translate3d(var(--v4-hover-shift), 0, 0);
-}
-
-/* 15.7 Location. One paragraph, exactly as COPY.md section 10 writes the line:
-   the cities, then the reach. It was two elements with the cities at the 24
-   stop, and at 18 they would have been indistinguishable from the "Location"
-   head directly above them, which is a heading printed twice. Set as running
-   text under its head it is a column that matches the one beside it. */
-.v4-foot__where {
-  max-width: 32ch;
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
-}
-
-/* 15.8 The small print, on the board's closing rule. Wraps to two lines on a
-   phone and sits on one from 820 up; the year leads because it is the line a
-   reader scans for. */
-.v4-foot__legal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--v4-s2) var(--v4-s5);
-  margin-top: var(--v4-s8);
-  padding-top: var(--v4-s3);
-  border-top: var(--v4-foot-rule) solid currentColor;
-  font-size: var(--v4-t-1);
-  line-height: var(--v4-leading-body);
-}
-
-.v4-foot__year {
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-}
-
-.v4-foot__provenance {
-  max-width: 68ch;
-  font-weight: 500;
-}
-
-/* 15.9 Reduced motion. Colour and underline stay, because they carry the
-   information that the thing is a link; the shift goes, exactly as section 4.4
-   does it for the block primitive. */
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-foot__link,
-  .v4 .v4-foot__mail {
-    transition: none;
-  }
-
-  .v4 .v4-foot__link:hover,
-  .v4 .v4-foot__link:focus-visible,
-  .v4 .v4-foot__mail:hover,
-  .v4 .v4-foot__mail:focus-visible {
-    transform: none;
-  }
-}
-
-/* 15.10 The fit, and why it is the last thing in this section.
-
-   The signage bar pins from 1180/620 up and is opaque black. A footer taller
-   than the viewport is scrolled past its own top when the page reaches its end,
-   so the band lands on the mark and the wordmark and the colophon opens on a
-   sentence with its masthead cut off. The footer therefore has a height budget
-   wherever the bar pins: its content plus its bottom padding has to leave the
-   bar's 82px clear inside the viewport.
-
-   From 560 the head and the closing rule each come down one stop on the 8px
-   scale, which buys 32px, and the panel keeps the phone's padding rather than
-   growing to the 96/64 the wide sections take. Measured at max scroll, wordmark
-   top against bar bottom: 778px footer and 19px clear at 1280x800, 772 and 46
-   at 1180x820, 785 and 77 at 1536x864, 785 and 293 at 1920 and 2560. Below 1180
-   the bar scrolls away and the budget does not apply, which is what lets the
-   footer be 1150px at 820x1180 and 1635px at 360x780.
-
-   These rules are last on purpose. The same two declarations were written once
-   inside a `min-width: 1024px` block placed above the rules they tighten, where
-   equal specificity meant the later base rule won and nothing changed: the
-   footer measured 842px at 1280x800 and the bar sat on the wordmark. A
-   min-width override in this file has to come after the declaration it
-   overrides, and the end of the section is the only place that cannot drift. */
-@media (min-width: 560px) {
-  .v4-foot__head {
-    padding-bottom: var(--v4-s6);
-  }
-
-  .v4-foot__legal {
-    margin-top: var(--v4-s6);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   16. CASE PAGE - /v4/work/jewelo, the flagship case as a poster series
-
-   The sub-page runs on the same tokens, the same 8-column grid and the same
-   signage bar as the variation. It adds no new ink: only the case's own service
-   ink (red, service 1) and the signage black, because blue and yellow already
-   mean other services in section 1.2 and a page that used one would be saying
-   this case was a different kind of work.
-
-   Bands alternate red, white, white, black, white, black, white, red, so the
-   two red panels bookend the page and the two black panels carry the artefacts
-   and the client's own words.
-
-   Contrast on the rendered pairs, all AA or better:
-     black on red     4.6:1   head, tags, closing block
-     paper on black   19:1    the screens band, the quote band
-     black on paper   19:1    everything on the white bands
-     quiet on paper   6.5:1   the dateline labels
-   --------------------------------------------------------------------------- */
-
-/* 16.1 Bands. Each band owns its own vertical rhythm and runs full bleed; the
-   grid lives in a `.v4-shell` inside it, so a colour panel reaches the edge of
-   the window while the type stays on the 1440 measure. */
-.v4-jw-band {
-  padding-block: var(--v4-s12);
-}
-
-@media (max-width: 720px) {
-  .v4-jw-band {
-    padding-block: var(--v4-s8);
-  }
-}
-
-.v4-jw-band .v4-grid {
-  row-gap: var(--v4-s5);
-}
-
-/* A Swiss side-head: the band title sits in its own two columns to the left of
-   the text, at the sub-head stop, and stacks above it below 900. */
-.v4-jw-band__title {
-  grid-column: 1 / -1;
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-jw-band__body {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: var(--v4-s3);
-  max-width: 40ch;
-  font-size: var(--v4-t-2);
-  line-height: var(--v4-leading-body);
-}
-
-@media (min-width: 900px) {
-  .v4-jw-band__title {
-    grid-column: 1 / span 2;
-  }
-
-  .v4-jw-band__body {
-    grid-column: 3 / span 4;
-  }
-}
-
-/* 16.2 Head. The case title at the 72 stop and the one number at 120, which is
-   the same pair the `#work` poster on the variation uses, so the reader lands
-   on a page that is recognisably the poster they clicked. */
-.v4-jw-head {
-  padding-block: var(--v4-s8) var(--v4-s10);
-}
-
-@media (max-width: 720px) {
-  .v4-jw-head {
-    padding-block: var(--v4-s5) var(--v4-s8);
-  }
-}
-
-.v4-jw-back {
-  margin-top: var(--v4-s5);
-}
-
-.v4-jw-back__link {
-  --v4-block-bg: var(--v4-ink-black);
-  --v4-block-fg: var(--v4-paper);
-  --v4-block-bg-hover: var(--v4-paper);
-  --v4-block-fg-hover: var(--v4-ink-black);
-  font-size: var(--v4-t-1);
-  padding: var(--v4-s1) var(--v4-s2);
-}
-
-.v4-jw-head__title {
-  margin-top: var(--v4-s4);
-  max-width: 17ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-.v4-jw-head__figure {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--v4-s1) var(--v4-s3);
-  margin-top: var(--v4-s6);
-  border-top: var(--v4-rule) solid currentColor;
-  padding-top: var(--v4-s3);
-}
-
-.v4-jw-head__num {
-  font-size: var(--v4-t-5);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: 0.82;
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-jw-head__numlabel {
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-}
-
-/* 16.3 The flow, drawn as a line with a station at every step.
-
-   The steps are a real sequence - each one only makes sense after the one above
-   it - so numbering them is information rather than decoration. The rail is the
-   service-1 line in its casing, and each station is a paper marker with a black
-   keyline sitting on top of it, which is how the hero map draws an interchange
-   (section 6.8). The rail is drawn per step and stops at the last station, so
-   the line terminates where the flow does. */
-.v4-jw-flow {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: var(--v4-s5);
-}
-
-@media (min-width: 900px) {
-  .v4-jw-flow {
-    grid-column: 3 / span 5;
-  }
-}
-
-.v4-jw-flow__step {
-  position: relative;
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr);
-  gap: var(--v4-s3);
-  align-items: start;
-}
-
-.v4-jw-flow__step::before {
-  content: "";
-  position: absolute;
-  left: 14px;
-  top: 0;
-  bottom: calc(var(--v4-s5) * -1);
-  width: 12px;
-  background: var(--v4-ink-service-1);
-  border-inline: 3px solid var(--v4-ink-black);
-}
-
-.v4-jw-flow__step:last-child::before {
-  display: none;
-}
-
-.v4-jw-flow__stop {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--v4-paper);
-  border: 3px solid var(--v4-ink-black);
-  color: var(--v4-ink-black);
-  font-size: var(--v4-t-1);
-  font-weight: 700;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-jw-flow__text {
-  max-width: 40ch;
-  font-size: var(--v4-t-2);
-  line-height: var(--v4-leading-body);
-  padding-top: var(--v4-s0);
-}
-
-/* 16.4 The screens. Real product stills, printed at their own ratio so nothing
-   is cropped at 2560 and nothing overflows at 360, hard edged on the ink: no
-   frame, no radius, no shadow, and no invented browser chrome around a strip
-   that ASSET-INVENTORY.md says is a cropped panel. */
-.v4-jw-screens__title {
-  margin-bottom: var(--v4-s8);
-}
-
-.v4-jw-plates {
-  row-gap: var(--v4-s8);
-  align-items: start;
-}
-
-.v4-jw-cell {
-  grid-column: 1 / -1;
-}
-
-/* The two cropped strips share one column beside the wide plate. They are 920
-   and 1440 pixels of source, so giving either the full measure would upscale it
-   into a blur at 1440 and above; three columns is about 520px, which both
-   files still cover at better than 1.7x. */
-.v4-jw-cell--strips {
-  display: grid;
-  gap: var(--v4-s8);
-  align-content: start;
-}
-
-@media (min-width: 900px) {
-  .v4-jw-cell--half {
-    grid-column: span 4;
-  }
-
-  .v4-jw-cell--lead {
-    grid-column: span 5;
-  }
-
-  .v4-jw-cell--strips {
-    grid-column: span 3;
-  }
-}
-
-.v4-jw-plate img {
+.v4-figure {
   display: block;
-  width: 100%;
-  height: auto;
-  border-radius: var(--v4-radius);
-  box-shadow: var(--v4-shadow);
-}
-
-.v4-jw-plate figcaption {
-  margin-top: var(--v4-s2);
-  padding-top: var(--v4-s1);
-  border-top: 1px solid currentColor;
-  font-size: var(--v4-t-1);
+  font-family: var(--v4-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--v4-figure);
   font-weight: 500;
-  line-height: var(--v4-leading-tight);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-/* 16.5 The stack, as a plain word list in the last two columns. */
-.v4-jw-stack {
-  grid-column: 1 / -1;
+/* The value already sits in the DOM for assistive tech; this prints it. On
+   hover the counter runs 0 to that value once. */
+.v4-figure::before {
+  counter-reset: v4-figure var(--v4-figure-value);
+  content: counter(v4-figure);
 }
 
-@media (min-width: 900px) {
-  .v4-jw-stack {
-    grid-column: 7 / span 2;
+.v4-cell:hover .v4-figure,
+.v4-cell:focus-within .v4-figure {
+  animation: v4-count-up var(--v4-count) var(--v4-ease) both;
+}
+
+/* One class per figure on the board, so the value lives in the system rather
+   than in an inline style. */
+.v4-figure--days {
+  --v4-figure-value: 16;
+}
+
+.v4-figure-cap {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+  /* Left alone on purpose: `text-wrap: balance` breaks this caption worse than
+     the browser's own greedy wrap does in a 74px column. */
+}
+
+.v4-mono {
+  font-family: var(--v4-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--v4-caption);
+  color: var(--v4-ink);
+  letter-spacing: -0.01em;
+}
+
+/* -- 13 Reduced motion ---------------------------------------------------- */
+
+/* Checked at first paint, not after the pass has run: the cells are declared
+   filled and the counters print their final value, so nothing has to be
+   undone. */
+@media (prefers-reduced-motion: reduce) {
+  .v4-cell::before,
+  .v4-cell::after,
+  .v4-cell > *,
+  .v4-cell:hover .v4-figure,
+  .v4-cell:focus-within .v4-figure {
+    animation: none;
+  }
+
+  .v4-btn,
+  .v4-nav-links a {
+    transition: none;
   }
 }
 
-.v4-jw-stack__title {
-  border-bottom: var(--v4-rule) solid var(--v4-ink-black);
-  padding-bottom: var(--v4-s1);
-  font-size: var(--v4-t-2);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-snug);
-  line-height: 1.1;
+/* -- 14 Hero -------------------------------------------------------------- */
+
+.v4-hero {
+  padding-block: clamp(var(--v4-8), 5vw, var(--v4-18)) var(--v4-24);
 }
 
-.v4-jw-stack__words {
-  margin-top: var(--v4-s2);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: 1.7;
-}
-
-/* 16.6 What the client said. One short sentence at the section-head stop, which
-   is the whole point of the band; the honest complaint sits under it at body
-   size, because a case page that prints only the compliment is a brochure. */
-.v4-jw-said__quote {
-  max-width: 22ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-.v4-jw-said__quote footer {
-  margin-top: var(--v4-s3);
-  max-width: 48ch;
-  font-size: var(--v4-t-2);
-  font-weight: 500;
-  letter-spacing: var(--v4-track-flat);
-  line-height: var(--v4-leading-tight);
-}
-
-.v4-jw-said__note {
-  margin-top: var(--v4-s6);
-  max-width: 44ch;
-  padding-top: var(--v4-s3);
-  border-top: var(--v4-rule) solid currentColor;
-  font-size: var(--v4-t-2);
-  line-height: var(--v4-leading-body);
-}
-
-/* 16.7 The dateline. Two stops on the same line the flow is drawn with, in the
-   service ink, so the timeline reads as the end of the same journey. */
-.v4-jw-time {
+.v4-hero-layout {
   display: grid;
-  gap: var(--v4-s4);
-  margin-bottom: var(--v4-s3);
+  gap: clamp(var(--v4-8), 5vw, var(--v4-16));
+  align-items: start;
 }
 
-.v4-jw-time__stop {
-  position: relative;
-  display: grid;
-  gap: var(--v4-s0);
-  padding-left: 44px;
+.v4-hero-copy > * + * {
+  margin-top: var(--v4-4);
 }
 
-.v4-jw-time__stop:not(:last-child)::before {
-  content: "";
-  position: absolute;
-  left: 14px;
-  top: 16px;
-  bottom: calc(var(--v4-s4) * -1);
-  width: 4px;
-  background: var(--v4-ink-service-1);
+.v4-hero-copy .v4-display {
+  margin-top: var(--v4-3);
 }
 
-/* Square, like every other stop marker on this page: the map draws an
-   interchange as a rectangle (6.8) and the hero timetable repeats it at label
-   size (.v4-tt__dot), so radius stays 0 here too. A circle here was the one
-   rounded corner left on either route. */
-.v4-jw-time__dot {
-  position: absolute;
-  left: 6px;
-  top: 6px;
-  z-index: 1;
-  width: 20px;
-  height: 20px;
-  background: var(--v4-paper);
-  border: 4px solid var(--v4-ink-service-1);
+.v4-hero-copy .v4-lede {
+  margin-top: var(--v4-6);
 }
 
-.v4-jw-time__value {
-  font-size: var(--v4-t-3);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: 1.05;
-  font-variant-numeric: tabular-nums;
-}
-
-.v4-jw-time__label {
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
-  color: var(--v4-ink-black);
-}
-
-/* 16.8 The closing block. COPY.md section 9 on the v4 tone note: full-width
-   colour panel, black block button. The address is set as live text on a paper
-   highlight rather than an underline, because nothing else on this variation is
-   underlined and a flat block is the affordance the page already teaches. */
-.v4-jw-cta__title {
-  margin-top: var(--v4-s5);
-  max-width: 16ch;
-  font-size: var(--v4-t-4);
-  font-weight: 700;
-  letter-spacing: var(--v4-track-tight);
-  line-height: var(--v4-leading-display);
-}
-
-.v4-jw-cta__lead {
-  margin-top: var(--v4-s4);
-  max-width: 42ch;
-  font-size: var(--v4-t-2);
-  line-height: var(--v4-leading-body);
-}
-
-.v4-jw-cta__act {
+.v4-hero-actions {
+  margin-top: var(--v4-8);
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--v4-s2) var(--v4-s3);
-  margin-top: var(--v4-s6);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--v4-3);
 }
 
-.v4-jw-cta__block {
-  --v4-block-bg: var(--v4-ink-black);
-  --v4-block-fg: var(--v4-paper);
-  --v4-block-bg-hover: var(--v4-paper);
-  --v4-block-fg-hover: var(--v4-ink-black);
-  font-size: var(--v4-t-2);
-  padding: var(--v4-s2) var(--v4-s5);
+.v4-hero-actions .v4-btn {
+  width: 100%;
 }
 
-.v4-jw-cta__support {
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-tight);
+.v4-hero-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-3);
 }
 
-.v4-jw-cta__channel {
-  margin-top: var(--v4-s5);
-  font-size: var(--v4-t-1);
-  font-weight: 500;
-  line-height: var(--v4-leading-body);
+@media (min-width: 480px) {
+  .v4-hero-actions .v4-btn {
+    width: auto;
+  }
 }
 
-.v4-jw-cta__mail {
-  background: var(--v4-paper);
-  color: var(--v4-ink-black);
-  padding: 2px var(--v4-s0);
-  transition:
-    background-color var(--v4-dur-hover) var(--v4-ease-flat),
-    color var(--v4-dur-hover) var(--v4-ease-flat);
+/* At the split the board moves to the right at its designed 520 x 360 and the
+   copy column is 548px at 1180 and 616px at 1280: enough for two lines. */
+@media (min-width: 1180px) {
+  .v4-hero-layout {
+    grid-template-columns: minmax(0, 1fr) 520px;
+  }
+
+  /* 176 + 8 + 176 = the designed 360, and `auto` rather than a fixed height so
+     a longer line grows the board instead of being clipped by it. */
+  .v4-hero-board .v4-board--preview {
+    grid-auto-rows: minmax(176px, auto);
+  }
 }
 
-.v4-jw-cta__mail:hover,
-.v4-jw-cta__mail:focus-visible {
-  background: var(--v4-ink-black);
-  color: var(--v4-paper);
-}
+/* Phone landscape: 390px of height has to hold the bar, the headline, the
+   subhead and the button. Tighten the rhythm rather than let the CTA fall
+   below the fold. */
+@media (max-height: 520px) and (min-width: 640px) {
+  .v4-hero {
+    padding-block: var(--v4-5) var(--v4-12);
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  .v4 .v4-jw-cta__mail {
-    transition: none;
+  .v4-hero-copy .v4-display {
+    font-size: 1.75rem;
+  }
+
+  .v4-hero-copy .v4-lede {
+    margin-top: var(--v4-3);
+    font-size: var(--v4-caption);
+  }
+
+  .v4-hero-actions {
+    margin-top: var(--v4-5);
+    flex-direction: row;
+    align-items: center;
+    gap: var(--v4-4);
   }
 }

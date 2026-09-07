@@ -118,6 +118,27 @@ const ENTRIES: readonly Entry[] = [
 /** U+2212 MINUS SIGN, which is the same width and weight as the plus. */
 const MINUS = "−";
 
+/**
+ * NO JAVASCRIPT. The seven questions are in the markup either way, but the
+ * seven answers ship carrying `hidden` and only a click can take it off, so
+ * with scripting off the rows are inert and the answers are unreachable. This
+ * rule reverses the closed state and stands all seven open, which is the only
+ * honest resting state for a page whose buttons cannot fire.
+ *
+ * WHY `@layer base`, AND WHY `!important`. Tailwind's preflight ships
+ * `[hidden]:where(:not([hidden="until-found"])){display:none!important}` inside
+ * `base`, and for important declarations the cascade reverses layer order: an
+ * unlayered `!important` is the weakest of them, so no amount of specificity
+ * out here would answer it. Standing in the same layer puts the argument back
+ * on specificity, which `.v5-faq__answer[hidden]` wins. The other three
+ * declarations are important for the opposite reason - they are answering the
+ * unlayered closed state in `tokens.css`, and importance outranks it whatever
+ * the layer. `transition` goes with them because `@starting-style` would
+ * otherwise run a 200ms entrance on load for a state change that never
+ * happened.
+ */
+const NOSCRIPT_OPEN = `@layer base{.v5-faq__answer[hidden]{display:grid!important;grid-template-rows:1fr!important;opacity:1!important;transition:none!important}}`;
+
 export function Faq() {
   const [open, setOpen] = useState<readonly boolean[]>(() =>
     ENTRIES.map(() => false),
@@ -129,6 +150,10 @@ export function Faq() {
 
   return (
     <section className="v5-faq" id="faq" aria-labelledby="faq-title">
+      <noscript>
+        <style>{NOSCRIPT_OPEN}</style>
+      </noscript>
+
       <div className="v5-band v5-faq__inner">
         <h2 className="v5-display v5-faq__title" id="faq-title">
           The questions we get before the first payment.

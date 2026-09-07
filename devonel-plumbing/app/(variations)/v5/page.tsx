@@ -1,41 +1,31 @@
-import type { Metadata } from "next";
-import "@/components/variations/v5/tokens.css";
-import {
-  Contact,
-  Engagement,
-  Faq,
-  Footer,
-  Founders,
-  Hero,
-  Nav,
-  Process,
-  Proof,
-  Services,
-  Work,
-} from "@/components/variations/v5";
+import Link from "next/link";
+import { getVariation } from "../variations";
 
-export const metadata: Metadata = {
-  title: "5. Console - Devonel redesign",
-  description:
-    "Devonel builds and runs the software owner-led brands sell with. Sixteen days from brief to a product your customers use.",
-};
+/**
+ * Variation 5. Round 1 was deleted wholesale; this route holds the slug and
+ * the name until the round-2 direction is built here.
+ *
+ * The name is read from `variations.ts` rather than typed, so this page, the
+ * switcher at `/` and the mini-switcher can never disagree about what v5 is.
+ */
+const variation = getVariation("v5")!;
+
+export const metadata = { title: `${variation.name} - Devonel` };
 
 export default function Page() {
   return (
-    <div className="v5">
-      <Nav />
-      <main>
-        <Hero />
-        <Proof />
-        <Services />
-        <Work />
-        <Process />
-        <Founders />
-        <Engagement />
-        <Faq />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <main className="mx-auto flex min-h-svh max-w-[46rem] flex-col justify-center px-5 py-16 sm:px-8">
+      <h1 className="text-[clamp(2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+        {variation.name}
+      </h1>
+      <p className="mt-8">
+        <Link
+          href="/"
+          className="underline decoration-border-strong underline-offset-4 hover:decoration-fg"
+        >
+          Back to all five variations
+        </Link>
+      </p>
+    </main>
   );
 }

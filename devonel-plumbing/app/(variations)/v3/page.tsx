@@ -1,58 +1,31 @@
-import type { Metadata } from "next";
-import {
-  V3Contact,
-  V3Engagement,
-  V3Faq,
-  V3Footer,
-  V3Founders,
-  V3Hero,
-  V3Nav,
-  V3Process,
-  V3Proof,
-  V3Services,
-  V3Work,
-  navSections,
-} from "@/components/variations/v3";
-// The whole design system for this variation. Scoped under `.v3`, so it cannot
-// reach another route.
-import "@/components/variations/v3/tokens.css";
+import Link from "next/link";
+import { getVariation } from "../variations";
 
 /**
- * Variation 3 - Nightshift.
+ * Variation 3. Round 1 was deleted wholesale; this route holds the slug and
+ * the name until the round-2 direction is built here.
  *
- * How this page grows
- *   1. Flip the section's `built` flag in `components/variations/v3/sections.ts`.
- *      The floating bar is generated from that array, so a link exists only for
- *      a section that is really on the page.
- *   2. Render its component under the ones already inside `<div className="v3">`,
- *      in the same order as the array.
- * Nothing else changes: colour, type, space, grid and the three motion
- * primitives all live in tokens.css.
+ * The name is read from `variations.ts` rather than typed, so this page, the
+ * switcher at `/` and the mini-switcher can never disagree about what v3 is.
  */
+const variation = getVariation("v3")!;
 
-/** Title and description are COPY.md section 1, verbatim. */
-export const metadata: Metadata = {
-  title: "Nightshift - Devonel, AI product studio and growth partner",
-  description:
-    "Devonel builds and runs the software owner-led brands sell with. Sixteen days from brief to a product your customers use.",
-};
+export const metadata = { title: `${variation.name} - Devonel` };
 
 export default function Page() {
   return (
-    <div className="v3">
-      <V3Nav sections={navSections()} />
-      <main>
-        <V3Hero />
-        <V3Proof />
-        <V3Services />
-        <V3Work />
-        <V3Process />
-        <V3Founders />
-        <V3Engagement />
-        <V3Faq />
-        <V3Contact />
-      </main>
-      <V3Footer />
-    </div>
+    <main className="mx-auto flex min-h-svh max-w-[46rem] flex-col justify-center px-5 py-16 sm:px-8">
+      <h1 className="text-[clamp(2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+        {variation.name}
+      </h1>
+      <p className="mt-8">
+        <Link
+          href="/"
+          className="underline decoration-border-strong underline-offset-4 hover:decoration-fg"
+        >
+          Back to all five variations
+        </Link>
+      </p>
+    </main>
   );
 }

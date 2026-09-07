@@ -3,7 +3,7 @@
 /* ---------------------------------------------------------------------------
    Shared plumbing only.
 
-   This file carries the four font roles and a neutral surface ramp used by the
+   This file carries the five font roles and a neutral surface ramp used by the
    switcher at `/` and by any variation that has not defined its own token yet.
    It carries no visual direction: each variation under `app/(variations)/vN`
    owns its own palette, type scale, spacing and motion tokens.
@@ -16,16 +16,22 @@
    reaching for `var(--font-grotesk)` in hand-written CSS would resolve to
    nothing. */
 @theme static {
-  /* Type. Four families total for the whole project, all variable, all
+  /* Type. Five families total for the whole project, all variable, all
      self-hosted through next/font in `app/fonts.ts`.
-       serif   Fraunces      display for v1 Broadsheet and v3 Nightshift
-       sans    Geist         body and UI for v3, v5 and this switcher
-       mono    Geist Mono    the whole of v2 Terminal, labels in v5 Console
-       grotesk Space Grotesk everything in v4 Swiss Signal */
+       serif   Fraunces      display for v2 Shader Light, on its opsz axis
+       sans    Geist         body everywhere, and all of v4 Bento SaaS
+       mono    Geist Mono    figures only: v1 gauge, v3 date readout, v4 board
+       grotesk Space Grotesk display for v1 Studio Dark
+       width   Archivo       the fifth family, added for its width axis alone:
+                             wdth 70 / wght 700 is v3 Scroll Story's condensed
+                             date face, wdth 125 / wght 800 is v5 Liquid Metal's
+                             expanded poster face, from the one file. Set the
+                             axis per variation with font-variation-settings. */
   --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
   --font-grotesk: var(--font-space-grotesk), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-width: var(--font-archivo), var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 
   /* Neutral surface ramp. Semantic names on purpose: nothing here implies a
      direction, and a variation that wants colour declares its own tokens. */

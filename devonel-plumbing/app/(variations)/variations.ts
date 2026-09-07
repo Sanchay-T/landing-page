@@ -25,41 +25,41 @@ export const variations: readonly Variation[] = [
   {
     n: 1,
     slug: "v1",
-    name: "Broadsheet",
+    name: "Studio Dark",
     thesis:
-      "A studio that publishes its ledger reads like a trade newspaper, so the page is typeset like one.",
+      "A near-black workshop with one lit object in it: Devonel's own mark, assembled in front of you out of sixteen pieces, before a single claim is made.",
     href: "/v1",
   },
   {
     n: 2,
     slug: "v2",
-    name: "Terminal",
+    name: "Shader Light",
     thesis:
-      "No imagery at all; the whole page is one monospace type system and the ledger numbers are the art.",
+      "Off-white paper with a slow shader field behind it, where the field is not decoration but a live reading of the two cities the studio works from.",
     href: "/v2",
   },
   {
     n: 3,
     slug: "v3",
-    name: "Nightshift",
+    name: "Scroll Story",
     thesis:
-      "The studio works in the dark while your ops run; the page is a slow film of pipes, valves and light.",
+      "The whole page is one build, told in order, and the background travels from the night the brief arrived to the morning the product went live.",
     href: "/v3",
   },
   {
     n: 4,
     slug: "v4",
-    name: "Swiss Signal",
+    name: "Bento SaaS",
     thesis:
-      "Process plumbing explained like a metro map; big flat colour, bold geometry, no ornament.",
+      "A light, tightly engineered product page whose grid is a status board, with the launch energy of a company that has something running today.",
     href: "/v4",
   },
   {
     n: 5,
     slug: "v5",
-    name: "Console",
+    name: "Liquid Metal",
     thesis:
-      "Sell the artefacts, not the story; the page is a scroll of real deliverables — routing diagrams, runbooks, ledgers, alert dashboards.",
+      "A dark, near-empty page with one chrome orb and type at poster scale, built for a studio that wants to be read as expensive.",
     href: "/v5",
   },
 ] as const;

@@ -1,56 +1,31 @@
-import type { Metadata } from "next";
-import {
-  Contact,
-  Engagement,
-  Faq,
-  Footer,
-  Founders,
-  Hero,
-  Nav,
-  Process,
-  Proof,
-  Services,
-  Work,
-  sections,
-} from "@/components/variations/v2";
-import "@/components/variations/v2/tokens.css";
+import Link from "next/link";
+import { getVariation } from "../variations";
 
 /**
- * Variation 2 - Terminal.
+ * Variation 2. Round 1 was deleted wholesale; this route holds the slug and
+ * the name until the round-2 direction is built here.
  *
- * The page is a shell buffer: the rail on the left is the file tree of what is
- * in it, each section opens with a full-width ASCII rule carrying its name, and
- * the buffer ends at `eof`. Sections render in registry order, so adding one is
- * an entry in `components/variations/v2/sections.ts` plus a line here.
+ * The name is read from `variations.ts` rather than typed, so this page, the
+ * switcher at `/` and the mini-switcher can never disagree about what v2 is.
  */
+const variation = getVariation("v2")!;
 
-export const metadata: Metadata = {
-  title: "2. Terminal - Devonel redesign",
-  description:
-    "One monospace type system, no imagery, an 80 character measure. The studio answers at a shell prompt.",
-};
+export const metadata = { title: `${variation.name} - Devonel` };
 
 export default function Page() {
   return (
-    <div className="v2">
-      <Nav sections={sections} />
-
-      <div className="v2-shell">
-        <main className="v2-main">
-          <Hero />
-          <Proof />
-          <Services />
-          <Work />
-          <Process />
-          <Founders />
-          <Engagement />
-          <Faq />
-          <Contact />
-        </main>
-
-        {/* The eof block. It stays last as sections are appended inside <main> above. */}
-        <Footer />
-      </div>
-    </div>
+    <main className="mx-auto flex min-h-svh max-w-[46rem] flex-col justify-center px-5 py-16 sm:px-8">
+      <h1 className="text-[clamp(2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
+        {variation.name}
+      </h1>
+      <p className="mt-8">
+        <Link
+          href="/"
+          className="underline decoration-border-strong underline-offset-4 hover:decoration-fg"
+        >
+          Back to all five variations
+        </Link>
+      </p>
+    </main>
   );
 }

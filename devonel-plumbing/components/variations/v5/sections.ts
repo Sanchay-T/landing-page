@@ -26,15 +26,15 @@ export type V5Section = {
 /** Order matches the canonical section list in docs/goal/05-build-spec.md. */
 export const SECTIONS: readonly V5Section[] = [
   { id: "hero", label: "Overview", nav: false, built: true },
-  { id: "proof", label: "Proof", nav: true, built: false },
-  { id: "services", label: "Services", nav: true, built: false },
-  { id: "work", label: "Work", nav: true, built: false },
-  { id: "process", label: "Process", nav: true, built: false },
-  { id: "founders", label: "Founders", nav: true, built: false },
-  { id: "engagement", label: "Engagement", nav: true, built: false },
-  { id: "faq", label: "FAQ", nav: true, built: false },
-  { id: "contact", label: "Contact", nav: true, built: false },
-  { id: "footer", label: "Footer", nav: false, built: false },
+  { id: "proof", label: "Proof", nav: true, built: true },
+  { id: "services", label: "Services", nav: true, built: true },
+  { id: "work", label: "Work", nav: true, built: true },
+  { id: "process", label: "Process", nav: true, built: true },
+  { id: "founders", label: "Founders", nav: true, built: true },
+  { id: "engagement", label: "Engagement", nav: true, built: true },
+  { id: "faq", label: "FAQ", nav: true, built: true },
+  { id: "contact", label: "Contact", nav: true, built: true },
+  { id: "footer", label: "Footer", nav: false, built: true },
 ] as const;
 
 /** The entries the top bar prints right now. */

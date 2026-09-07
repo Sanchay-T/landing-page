@@ -15,8 +15,14 @@ import { isBuilt, navSections } from "./sections";
  * One DOM order at every width, and the layout never reorders it, so the tab
  * order and the reading order are the same thing everywhere. Wrapping, not
  * scrolling, on phone: a scroll rail leaves a half-word at the edge at 360.
+ *
+ * `base` is what the anchors are relative to. Empty on the variation itself, so
+ * every link stays a same-page anchor; "/v5" on a sub-page such as
+ * `/v5/work/jewelo`, where a bare "#proof" would point at an anchor that is not
+ * in that document. One prop, so a sub-page cannot grow a nav of its own that
+ * drifts from this one.
  */
-export function Nav() {
+export function Nav({ base = "" }: { base?: string }) {
   const links = navSections();
   const showCaseLink = isBuilt("work");
 
@@ -24,7 +30,7 @@ export function Nav() {
     <header className="v5-nav">
       <div className="v5-container">
         <div className="v5-nav__bar">
-          <a href="#hero" className="v5-nav__brand">
+          <a href={`${base}#hero`} className="v5-nav__brand">
             <Mark className="v5-nav__mark" />
             Devonel
           </a>
@@ -32,7 +38,7 @@ export function Nav() {
           {links.length > 0 ? (
             <nav className="v5-nav__links" aria-label="Sections">
               {links.map((s) => (
-                <a key={s.id} href={`#${s.id}`} className="v5-nav__link">
+                <a key={s.id} href={`${base}#${s.id}`} className="v5-nav__link">
                   {s.label}
                 </a>
               ))}
@@ -40,7 +46,7 @@ export function Nav() {
           ) : null}
 
           {showCaseLink ? (
-            <a href="#work" className="v5-textlink v5-nav__second">
+            <a href={`${base}#work`} className="v5-textlink v5-nav__second">
               See how it was built
             </a>
           ) : null}

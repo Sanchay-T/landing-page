@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
 import "@/components/variations/v5/tokens.css";
-import { Hero, Nav } from "@/components/variations/v5";
+import {
+  Contact,
+  Engagement,
+  Faq,
+  Footer,
+  Founders,
+  Hero,
+  Nav,
+  Process,
+  Proof,
+  Services,
+  Work,
+} from "@/components/variations/v5";
 
 export const metadata: Metadata = {
   title: "5. Console - Devonel redesign",
@@ -14,7 +26,16 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
+        <Proof />
+        <Services />
+        <Work />
+        <Process />
+        <Founders />
+        <Engagement />
+        <Faq />
+        <Contact />
       </main>
+      <Footer />
     </div>
   );
 }

@@ -4,29 +4,33 @@
  * `docs/goal/03-design-research.md` section 4, direction 4, layout skeleton
  * item 7 asks for the money section to read as a document rather than as a
  * decorated grid. On this board a document is made of cells, so the shape does
- * the reading: the two rules that bind every engagement are full-width single
- * lines, and the four ways to work are four equal cells beneath them.
+ * the reading: the four ways to work are four equal cells, and each rule that
+ * binds all four is a full-width single line under them.
  *
  * THE TWIST, APPLIED HERE. Cell size is honesty, and here honesty is scope of
  * application. A term that holds for all four engagement shapes is wider than
- * any one of them, so the two binding rules run the full twelve columns on one
- * line each, and the four shapes - all four equally on offer today, none of
- * them unbuilt - take three columns each. Nothing in COPY.md section 7 is
- * marked as not yet offered, so no cell here carries the hatch: hatching an
- * option Devonel does sell would be the same lie in the other direction.
+ * any one of them, so each binding rule runs the full twelve columns on one
+ * line, and the four shapes - all four equally on offer today, none of them
+ * unbuilt - take three columns each. Nothing in COPY.md section 7 is marked as
+ * not yet offered, so no cell here carries the hatch: hatching an option
+ * Devonel does sell would be the same lie in the other direction.
  *
- * The rules come first because they are the frame, not the footnote. Reading
- * the immovable terms before the menu is the honest order for a section whose
- * headline is "No prices on this page."
+ * ORDER AND LABELS ARE COPY.md's, NOT THE BUILD'S. Section 7 runs the four
+ * shapes first, then sets "Minimum commitment up front on every engagement."
+ * after them - its editorial note says the line "sets with the list above, on
+ * the rule that closes it" - and only then prints its own label "What we do not
+ * do" over "No unpaid multi-month starts." So the minimum-commitment cell is
+ * the last child of the "Four ways" region, one 8px board gap under the shapes
+ * it binds, and the refusal is its own labelled region. The earlier build
+ * hoisted both lines above the list under section 5's heading "Two rules that
+ * do not move"; that heading is gone with it, so every label in this band is
+ * now section 7's own.
  *
  * No cobalt: the budget is spent on the nav button, the hero button and the
  * live cell's rule. No jade: nothing in this section is a live fact. No icons,
  * no shadows, no CTA - the final CTA is its own section.
  *
- * Every visible string is verbatim from `docs/goal/COPY.md`, section 7 with one
- * recorded exception: the sub-head "Two rules that do not move" is COPY.md
- * section 5's own heading for exactly these two lines, handed to section 7 by
- * the process band because they are engagement terms and must be printed once.
+ * Every visible string is verbatim from `docs/goal/COPY.md` section 7.
  */
 
 type Shape = {
@@ -59,11 +63,14 @@ const SHAPES: readonly Shape[] = [
   },
 ];
 
-/** COPY.md section 5, "Two rules that do not move", printed here and nowhere else. */
-const RULES: readonly string[] = [
-  "Minimum commitment up front on every engagement.",
-  "No unpaid multi-month starts.",
-];
+/**
+ * COPY.md section 7's two binding rules, printed here and nowhere else on the
+ * page. They are separate constants rather than one list because section 7
+ * gives them different jobs: the first sets with the four shapes above it, the
+ * second is what the label "What we do not do" refuses.
+ */
+const MINIMUM = "Minimum commitment up front on every engagement.";
+const REFUSAL = "No unpaid multi-month starts.";
 
 export function Engagement() {
   return (
@@ -84,20 +91,6 @@ export function Engagement() {
 
       <div className="v4-band-region">
         <div className="v4-band-head">
-          <h3 className="v4-band-label">Two rules that do not move</h3>
-        </div>
-
-        <div className="v4-board v4-board--rules">
-          {RULES.map((rule) => (
-            <p key={rule} className="v4-cell v4-cell--rule">
-              <span>{rule}</span>
-            </p>
-          ))}
-        </div>
-      </div>
-
-      <div className="v4-band-region">
-        <div className="v4-band-head">
           <h3 className="v4-band-label">Four ways to work with us</h3>
         </div>
 
@@ -112,6 +105,28 @@ export function Engagement() {
               ))}
             </article>
           ))}
+        </div>
+
+        {/* COPY.md section 7: this line carries no label of its own because it
+            "sets with the list above, on the rule that closes it". So it is the
+            last child of this region, on the region's own 8px board gap, and
+            full width because it binds all four shapes. */}
+        <div className="v4-board v4-board--rules">
+          <p className="v4-cell v4-cell--rule">
+            <span>{MINIMUM}</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="v4-band-region">
+        <div className="v4-band-head">
+          <h3 className="v4-band-label">What we do not do</h3>
+        </div>
+
+        <div className="v4-board v4-board--rules">
+          <p className="v4-cell v4-cell--rule">
+            <span>{REFUSAL}</span>
+          </p>
         </div>
       </div>
 

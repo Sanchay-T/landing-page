@@ -35,6 +35,17 @@
                          list geometry, the run-in list header, the one-rule
                          hover, and the pass-through cost that closes the
                          section.
+   08  2026-09-07  faq  the question type step and the disclose duration, the
+                         seven ruled rows in entry 03's list geometry, the
+                         full-width disclosure control with its text glyph at
+                         the row's right end, and the panel that opens in place
+                         under it.
+   09  2026-09-07  final CTA  the ask type step, the page's second panel band,
+                         the dimmed lamp glow behind the one button, the proof
+                         line beside it and the always-on channel line.
+   10  2026-09-07  footer  the colophon on the void: the wordmark block, the
+                         two-column section links, the reach block and the
+                         small print under one rule.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
@@ -2095,5 +2106,665 @@ body:has(.v1) {
   .v1-engage__terms {
     grid-column: 6 / span 7;
     margin-top: 0;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   08 - faq
+
+   Back on the void after the engagement rows, and the third and last use of
+   entry 03's list instrument: the row owns the hairline above it, the list owns
+   the one that closes the set, and hovering a row lifts exactly its own rule to
+   text colour over --v1-open with no lift, no scale, no fill and no shadow.
+   Three sections now read as one list because they are one list, which is a
+   smaller thing for a reader to learn than three ways of stacking a row.
+
+   What is new here is that this list opens. The direction asks for seven
+   `details` rows on hairlines; this is that, drawn as an explicit disclosure so
+   the open can be timed. The row is not a name beside a paragraph like services
+   and engagement - it is a control, so it is denser than they are (--v1-5 of
+   padding at phone widths against their --v1-6, --v1-6 from 1180 against their
+   --v1-7) and it splits 7 + the last column rather than 5 + 7: the question
+   takes columns 1-7 and the state glyph stands alone at the row's right end, so
+   the whole width of the row reads as one target.
+
+   No lamp fill and no mono anywhere in this block. The section's only lamp is
+   the shared focus ring from entry 01, which is the first time on this page it
+   has had anything to land on, and it is inset by two pixels so it draws inside
+   the row instead of across the hairline above it.
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* 22 at 390 -> 26 at 1280, then held. A clear step under --v1-section-head
+     in both directions: the head sits above every rule and the questions sit
+     inside them, and the same 4px travel as --v1-quote keeps the two small
+     display steps on one slope. */
+  --v1-faq-q: clamp(1.375rem, 1.2654rem + 0.4494vw, 1.625rem);
+
+  /* The fourth and last motion primitive of this direction: an answer opens in
+     place over 200ms on the shared curve. It is a separate token from
+     --v1-open because --v1-open is the 180ms a rule takes to change colour,
+     and a panel that changes height is a different event from a hairline that
+     changes value - binding them would mean one could never be retimed. */
+  --v1-disclose: 200ms;
+}
+
+/* The one collapse, on entry 01's terms: reduced motion is read on first paint
+   and takes the duration to zero, so a row opens instantly and completely. The
+   answer is never withheld - only its transition is. */
+@media (prefers-reduced-motion: reduce) {
+  .v1,
+  :root:has(.v1) {
+    --v1-disclose: 0ms;
+  }
+}
+
+.v1-faq {
+  padding-block: var(--v1-8);
+}
+
+.v1-faq__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   08 - the seven rows
+
+   The transition is declared on the row rather than on the hover state so the
+   rule falls back to --v1-line at the same speed it lifts, and hover is guarded
+   on a real pointer: on a touch screen :hover sticks to the last row tapped,
+   and a rule left bright behind a finger would be the one thing on this page
+   that looks like state. Open state is not drawn on the rule for the same
+   reason - the rule already means "your pointer is here", the glyph and the
+   open answer already say which rows are open, and a third signal would take
+   the one meaning the rule has away from it.
+
+   COPY.md section 8 has no subhead, so there is no `.v1-faq__sub` to match
+   services and engagement. The list starts at --v1-8 under the head, which is
+   the same distance their lists sit under their subheads.
+   -------------------------------------------------------------------------- */
+
+.v1-faq__list {
+  margin-top: var(--v1-8);
+  border-bottom: 1px solid var(--v1-line);
+}
+
+.v1-faq__row {
+  border-top: 1px solid var(--v1-line);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+@media (hover: hover) {
+  .v1-faq__row:hover {
+    border-top-color: var(--v1-text);
+  }
+}
+
+/* The h3 is structure for a screen reader's heading list and carries no type of
+   its own: the question inside it does. */
+.v1-faq__heading {
+  font: inherit;
+}
+
+/* -----------------------------------------------------------------------------
+   08 - the control
+
+   A real button the full width of the list, so the target is the row and not
+   the words. Baseline alignment rather than centre: the glyph and the question
+   sit on one line even though they are 26px display and 26px body, and the
+   row's right edge does not move when a two-line question opens.
+   -------------------------------------------------------------------------- */
+
+.v1-faq__control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--v1-5);
+  width: 100%;
+  padding: var(--v1-5) 0;
+  background: none;
+  border: 0;
+  border-radius: var(--v1-radius-control);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Inset, so the ring never draws over the hairline of the row above it and
+   leaves it looking broken. */
+.v1-faq__control:focus-visible {
+  outline-offset: -2px;
+}
+
+.v1-faq__question {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-faq-q);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+
+/* The state indicator: a text glyph in the body face, `+` closed and the true
+   minus sign open, at the question's own size so the two read as one
+   line. There is no icon in this direction and none is introduced here. It is
+   muted until the row is open or under a pointer, which is the only thing on
+   this page that tells a reader the row does something before they touch it. */
+.v1-faq__glyph {
+  color: var(--v1-muted);
+  font-size: var(--v1-faq-q);
+  font-weight: 400;
+  line-height: 1;
+  transition: color var(--v1-open) var(--v1-ease);
+}
+
+.v1-faq__control[aria-expanded="true"] .v1-faq__glyph {
+  color: var(--v1-text);
+}
+
+@media (hover: hover) {
+  .v1-faq__control:hover .v1-faq__glyph {
+    color: var(--v1-text);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   08 - the answer
+
+   Closed, the panel carries the `hidden` attribute and a real `display: none`,
+   so it is out of the accessibility tree, out of find-in-page and out of the
+   tab order while still being in the document a crawler reads. It still opens
+   over 200ms because `display` is transitioned with `allow-discrete` - the
+   property holds its rendered value for the whole duration and flips at the far
+   end of it - and `@starting-style` supplies the closed height and opacity a
+   display: none element cannot otherwise transition from.
+
+   The height itself is the grid-row trick rather than a measured pixel height:
+   0fr to 1fr on the panel with `min-height: 0` and `overflow: hidden` on the
+   one child, which is what lets the answer be its own natural height at every
+   width with no JavaScript measuring it. Where a browser has neither
+   `allow-discrete` nor `@starting-style` the row opens instantly and completely,
+   which is the reduced-motion behaviour anyway.
+   -------------------------------------------------------------------------- */
+
+.v1-faq__answer {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--v1-disclose) var(--v1-ease),
+    opacity var(--v1-disclose) var(--v1-ease),
+    display var(--v1-disclose) allow-discrete;
+}
+
+@starting-style {
+  .v1-faq__answer {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+.v1-faq__answer[hidden] {
+  display: none;
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.v1-faq__answer-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* The bottom air lives on the text rather than on the panel so it collapses
+   with the row instead of transitioning separately. */
+.v1-faq__answer-text {
+  padding-bottom: var(--v1-6);
+  max-width: 62ch;
+  color: var(--v1-text);
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   08 - faq, the question on columns 1-7 from 1180
+
+   The same 73.75rem every other section on this page turns on, and the one
+   place this list's geometry parts from services and engagement: they split
+   5 + 7 because they are a name beside a paragraph, and this splits 7 + the
+   twelfth column alone because it is a question with a state on the far end of
+   its own rule.
+
+   The row and the control are both on the shell's 12-column definition. The
+   control needs it to put the question on 1-7 and the glyph on 12; the row
+   needs it so the answer, which is a sibling of the control and not a cell of
+   it, lands on the same seven columns the question does. Without it the answer
+   would be held only by its 62ch measure, and 62ch is 699px against a 644px
+   seven-column track at 1180, so the paragraph would run past the question
+   above it exactly where the two are closest together. The measure still caps
+   it from 1384 up, where the shell stops growing and the track reaches 726px.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-faq {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-faq__row {
+    display: grid;
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+
+  .v1-faq__heading {
+    grid-column: 1 / -1;
+  }
+
+  .v1-faq__control {
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    padding-block: var(--v1-6);
+  }
+
+  .v1-faq__question {
+    grid-column: 1 / span 7;
+    padding-right: var(--v1-5);
+  }
+
+  .v1-faq__glyph {
+    grid-column: 12 / span 1;
+    justify-self: end;
+  }
+
+  .v1-faq__answer {
+    grid-column: 1 / span 7;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   09 - final CTA
+
+   The page's second and last panel band. It opened on "Shipped, not promised."
+   and it closes on the ask, on the same surface with the same hairline top and
+   bottom, so the page reads void, band, void at the start and void, band, void
+   again at the end. Nothing else here is raised edge to edge, which is what
+   makes the two bands a pair rather than two cards.
+
+   The lamp returns in this block and then never again. Entry 01 allows lamp on
+   four things - the object specular, the live centre dot, the focus ring and
+   the primary CTA fill - and this is the second and final CTA fill on the page.
+   The hero's radial lamp glow comes back with it, dimmed and sitting behind the
+   button instead of behind an object: the direction wants the hero device to
+   return at low brightness at this point, and its light is the part that can
+   return without a second WebGL context, which is a hard rule of the round. It
+   is one background-image on a pseudo-element, no canvas and no JavaScript.
+
+   No icons, no cards, no shadow, no form, no second button. The heading is the
+   one loud thing; the quote beside the button is set at body size on purpose,
+   because a client's sentence is here to stand next to the action rather than
+   to compete with the ask above it.
+
+   One new token, and mono once. --v1-ask is the step between the 64px hero
+   display and the 32px section head, and the shipped date is set inline in
+   Geist Mono exactly as entry 04 sets dates inside Geist sentences. The date
+   class is this entry's own rather than a second use of `.v1-work__date`, so a
+   later change to the case-study vocabulary cannot silently reset the type of
+   the closing proof.
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* 40px at 390 -> 56px at 1280, then held. It shares its ramp with --v1-figure
+     on purpose: the two panel bands carry their loudest type at the same size,
+     so the claim that opens the page and the ask that closes it are set to one
+     measure. */
+  --v1-ask: clamp(2.5rem, 2.0618rem + 1.7978vw, 3.5rem);
+}
+
+.v1-ask {
+  background-color: var(--v1-panel);
+  border-block: 1px solid var(--v1-line);
+  padding-block: var(--v1-8);
+}
+
+.v1-ask__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-ask);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.05;
+  max-width: 18ch;
+  text-wrap: pretty;
+}
+
+.v1-ask__sub {
+  margin-top: var(--v1-5);
+  max-width: 56ch;
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+.v1-ask__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-6);
+  margin-top: var(--v1-7);
+}
+
+/* -----------------------------------------------------------------------------
+   09 - the button and the lamp behind it
+
+   `isolation: isolate` keeps the z-index -1 glow inside this block's own
+   stacking context, so it paints behind the button and above the band rather
+   than disappearing under --v1-panel. The insets are deliberately small: the
+   glow never reaches the band's two hairlines, so it has no hard edge to clip
+   against, and the widest it runs past the shell is 32px, which the variation's
+   `overflow-x: clip` on `.v1` already contains.
+
+   Measured over --v1-panel #111519: the peak stop lifts the surface to about
+   #171a1e, which leaves the muted support line at 5.0:1 and the body text at
+   11.4:1. The light reads and nothing crosses it that it can dim.
+   -------------------------------------------------------------------------- */
+
+.v1-ask__act {
+  position: relative;
+  isolation: isolate;
+}
+
+.v1-ask__act::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -3rem -2rem;
+  background-image: radial-gradient(
+    circle at 30% 50%,
+    rgb(255 243 224 / 0.06),
+    rgb(255 243 224 / 0.02) 42%,
+    rgb(255 243 224 / 0) 70%
+  );
+  pointer-events: none;
+}
+
+.v1-ask .v1-btn--primary {
+  display: flex;
+  width: 100%;
+}
+
+.v1-ask__support {
+  margin-top: var(--v1-3);
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+}
+
+/* -----------------------------------------------------------------------------
+   09 - the proof beside the button
+
+   Body size, not entry 02's quote step. The opening quotation mark hangs into
+   the block's left edge on the same 0.368em entry 02 measured for the proof
+   band, so the sentence starts on the section's left edge with every heading
+   and paragraph above it.
+   -------------------------------------------------------------------------- */
+
+.v1-ask__said {
+  max-width: 34ch;
+  color: var(--v1-text);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  text-indent: -0.368em;
+  text-wrap: pretty;
+}
+
+.v1-ask__who {
+  margin-top: var(--v1-3);
+  max-width: 44ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* 0.94em because Geist Mono runs wider and taller than Geist at the same
+   nominal size - entry 04's measurement, reused rather than re-derived. */
+.v1-ask__date {
+  font-family: var(--v1-font-mono);
+  font-size: 0.94em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* The always-on channel line. It closes the band on space rather than on a
+   third rule, the same call every other section on this page has made. */
+.v1-ask__channel {
+  margin-top: var(--v1-7);
+  color: var(--v1-text);
+  font-size: var(--v1-small);
+}
+
+.v1-ask__mail {
+  border-bottom: 1px solid var(--v1-muted);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+.v1-ask__mail:hover {
+  border-bottom-color: var(--v1-text);
+}
+
+/* -----------------------------------------------------------------------------
+   09 - final CTA, the button stops being full width from 640
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 40rem) {
+  .v1-ask .v1-btn--primary {
+    display: inline-flex;
+    width: auto;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   09 - final CTA, the proof beside the button from 1180
+
+   The same 73.75rem every section on this page turns on, and the same 1-5 /
+   6-12 split entries 03 and 07 use for their rows, so the quote starts on the
+   vertical every paragraph in the services and engagement lists starts on. The
+   two blocks are top-aligned: the button and the first line of the quote share
+   one baseline, which is the gesture the proof band makes with its own quote
+   and link.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-ask {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-ask__row {
+    display: grid;
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+    align-items: start;
+    margin-top: var(--v1-8);
+  }
+
+  .v1-ask__act {
+    grid-column: 1 / span 5;
+    padding-right: var(--v1-5);
+  }
+
+  .v1-ask__proof {
+    grid-column: 6 / span 7;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   10 - footer
+
+   A colophon on the void. The closing band is the last raised surface on the
+   page, so this sits back on the void under it and earns its edges from rules
+   alone, the way services, process and engagement do. Three blocks above one
+   rule - who this is, where to go on the page, where the studio is and how to
+   reach it - then the small print under it. That rule is the only ornament in
+   the block.
+
+   No icons, no social links, no card, no shadow, and no lamp: the only lamp in
+   this section is the shared focus ring from entry 01, which every link here
+   uses. Mono appears once, on the revision date, the same inline treatment
+   entry 04 gives dates in Geist sentences.
+
+   No new tokens. Everything here is set at --v1-small or below, because a
+   colophon is the one block on the page that is read last and on purpose.
+   -------------------------------------------------------------------------- */
+
+.v1-colophon {
+  padding-block: var(--v1-8);
+}
+
+.v1-colophon__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--v1-7);
+  column-gap: var(--v1-gutter);
+}
+
+.v1-colophon__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v1-3);
+  color: var(--v1-text);
+}
+
+.v1-colophon__mark {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--v1-text);
+}
+
+.v1-colophon__word {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: -0.03em;
+}
+
+.v1-colophon__line {
+  margin-top: var(--v1-3);
+  max-width: 40ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.v1-colophon__reach .v1-colophon__line:first-child {
+  margin-top: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   10 - the section links
+
+   Two columns at every width, so nine anchors read as a short block beside the
+   other two rather than as a tower down the page. The hairline under a link is
+   the same one the proof band's text link carries, so a reader who has met one
+   text link on this page has met all of them.
+   -------------------------------------------------------------------------- */
+
+.v1-colophon__links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--v1-2) var(--v1-4);
+}
+
+.v1-colophon__link {
+  display: inline-block;
+  padding-block: var(--v1-1);
+  border-bottom: 1px solid transparent;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.4;
+  transition:
+    color var(--v1-open) var(--v1-ease),
+    border-color var(--v1-open) var(--v1-ease);
+}
+
+@media (hover: hover) {
+  .v1-colophon__link:hover {
+    border-bottom-color: var(--v1-muted);
+    color: var(--v1-text);
+  }
+}
+
+.v1-colophon__mail {
+  color: var(--v1-text);
+  border-bottom: 1px solid var(--v1-line);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+.v1-colophon__mail:hover {
+  border-bottom-color: var(--v1-muted);
+}
+
+/* -----------------------------------------------------------------------------
+   10 - the small print
+
+   Under the one rule, at the smallest size on the page. Four sentences from
+   COPY.md, each on its own line: they are separate provenance statements and
+   running them together with separators would draw a meta string, which is a
+   named tell.
+   -------------------------------------------------------------------------- */
+
+.v1-colophon__small {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-1);
+  margin-top: var(--v1-8);
+  padding-top: var(--v1-5);
+  border-top: 1px solid var(--v1-line);
+  color: var(--v1-muted);
+  font-size: var(--v1-micro);
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.v1-colophon__date {
+  font-family: var(--v1-font-mono);
+  font-size: 0.94em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* -----------------------------------------------------------------------------
+   10 - footer, the three blocks side by side from 768, and the rule from 1180
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .v1-colophon__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v1-colophon__reach {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 73.75rem) {
+  .v1-colophon {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-colophon__row {
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+  }
+
+  .v1-colophon__id {
+    grid-column: 1 / span 4;
+  }
+
+  .v1-colophon__nav {
+    grid-column: 5 / span 4;
+  }
+
+  .v1-colophon__reach {
+    grid-column: 9 / span 4;
   }
 }

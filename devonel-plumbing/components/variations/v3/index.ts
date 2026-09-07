@@ -9,6 +9,7 @@ export { Hero } from "./hero";
 export { Proof } from "./proof";
 export { Services } from "./services";
 export { TickBar } from "./tick-bar";
+export { CaseBlock, CaseLines, Work, flagship } from "./work";
 export { WireRing } from "./wire-ring";
 export { getSection, resolvedTicks, sections, ticks } from "./sections";
 export type { ResolvedTick, Section, SectionId, Stage, Tick } from "./sections";

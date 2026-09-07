@@ -53,7 +53,14 @@ const COUNTS: readonly Count[] = [
     caption:
       "product live: a name-pendant studio for a bespoke jewellery house in Dubai, 27 Aug 2026",
   },
-  { figure: "Sixteen", caption: "days from spec to live" },
+  {
+    figure: "Sixteen",
+    // The second sourced date. "Briefed on the 11th." is COPY.md section 2's
+    // own headline alternate B, used here as a caption rather than a headline
+    // so both ends of the sixteen days are on the page: the count says how long
+    // it took and the two dates say when.
+    caption: "days from spec to live. Briefed on the 11th.",
+  },
   {
     figure: "Four",
     caption: "renders per design, the first in about two minutes",

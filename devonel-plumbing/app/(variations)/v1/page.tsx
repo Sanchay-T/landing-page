@@ -1,7 +1,10 @@
 import "@/components/variations/v1/tokens.css";
 
 import {
+  Contact,
   Engagement,
+  Faq,
+  Footer,
   Founders,
   Hero,
   Nav,
@@ -36,7 +39,10 @@ export default function Page() {
         <Process />
         <Founders />
         <Engagement />
+        <Faq />
+        <Contact />
       </main>
+      <Footer />
     </div>
   );
 }

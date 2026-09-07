@@ -208,7 +208,7 @@ export default function Page() {
           </ul>
 
           <p className="v2-case-page__deck">
-            Spec on 11 Aug 2026. Live on the morning of 27 Aug 2026, in time for the client&rsquo;s
+            Spec on 11 Aug 2026. Live on the morning of 27 Aug 2026, in time for the client&#39;s
             exhibition stall.
           </p>
         </header>
@@ -220,7 +220,7 @@ export default function Page() {
             </h2>
             <div className="v2-case-sec__content">
               <p className="v2-case-sec__p">
-                A bespoke jewellery house sells pendants cut to a customer&rsquo;s name.
+                A bespoke jewellery house sells pendants cut to a customer&#39;s name.
               </p>
               <p className="v2-case-sec__p">
                 Before ordering, the customer could not see their own name as a finished piece.

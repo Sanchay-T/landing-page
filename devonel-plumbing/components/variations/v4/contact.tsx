@@ -27,6 +27,13 @@ import { contactChannel, contactLabel, site } from "@/lib/site";
  * once in the channel line, and both are required; putting them at opposite
  * ends of the cell is what stops the repetition reading as a copy defect.
  *
+ * COPY.md section 9 also specifies "Proof beside the button" - the owner's
+ * words and the ship date - and it is rendered here, in the action column
+ * under the button, which is what "beside the button" means once the ask and
+ * the action are two columns. It is the same sentence the board prints, and it
+ * belongs in both places: on the board it is the evidence for a claim, here it
+ * is the last thing read before the one action on the page.
+ *
  * No icons, no shadow, no form, no second button. Every visible string is
  * verbatim from `docs/goal/COPY.md` section 9, and the one string that is not
  * written in this file at all is the address: it comes from `lib/site.ts`, the
@@ -73,6 +80,23 @@ export function Contact() {
             <div className="v4-final-act">
               <ContactCTA className="v4-btn v4-btn--on-cobalt">{contactLabel()}</ContactCTA>
               <p className="v4-final-support">Paid discovery, fixed scope, no forms.</p>
+
+              {/* COPY.md section 9, "Proof beside the button". It is the only
+                  evidence the ask carries, so it sits in the action column
+                  under the button rather than in the ask column, where it
+                  would read as more subhead. The date is mono because every
+                  figure on this page is, and the whole block is capped at 32ch
+                  so the action column never grows wide enough to push the ask
+                  headline onto a third line. */}
+              <figure className="v4-final-proof">
+                <blockquote className="v4-final-quote">
+                  &ldquo;the layout is very good and simple&rdquo;
+                </blockquote>
+                <figcaption className="v4-final-cite">
+                  - the owner, a bespoke jewellery house in Dubai. Shipped{" "}
+                  <span className="v4-mono">27 Aug 2026</span>
+                </figcaption>
+              </figure>
             </div>
           </div>
 

@@ -94,7 +94,7 @@ export function Work() {
 
           <h4 className="v2-case__h">Problem</h4>
           <p className="v2-case__p">
-            A bespoke jewellery house sells pendants cut to a customer&rsquo;s name. Before ordering,
+            A bespoke jewellery house sells pendants cut to a customer&#39;s name. Before ordering,
             the customer could not see their own name as a finished piece. A customisation field on
             a store page is a text box, not a design studio.
           </p>
@@ -127,7 +127,7 @@ export function Work() {
 
           <h4 className="v2-case__h">Result</h4>
           <p className="v2-case__p">
-            Spec on 11 Aug 2026. Live on the morning of 27 Aug 2026, in time for the client&rsquo;s
+            Spec on 11 Aug 2026. Live on the morning of 27 Aug 2026, in time for the client&#39;s
             exhibition stall.
           </p>
 

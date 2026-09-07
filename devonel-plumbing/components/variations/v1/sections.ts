@@ -44,9 +44,9 @@ export const sections: readonly Section[] = [
   { id: "process", label: "Process", built: true, inNav: true },
   { id: "founders", label: "Founders", built: true, inNav: true },
   { id: "engagement", label: "Engagement", built: true, inNav: true },
-  { id: "faq", label: "Objections and FAQ", built: false, inNav: true },
-  { id: "final-cta", label: "Final CTA", built: false, inNav: true },
-  { id: "footer", label: "Footer", built: false, inNav: false },
+  { id: "faq", label: "Objections and FAQ", built: true, inNav: true },
+  { id: "final-cta", label: "Final CTA", built: true, inNav: true },
+  { id: "footer", label: "Footer", built: true, inNav: false },
 ] as const;
 
 /** Sections that exist and belong in a navigation list. Safe to render as links. */

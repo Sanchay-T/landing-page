@@ -66,7 +66,17 @@ function useScrollClockFallback() {
   }, []);
 }
 
-export function TickBar() {
+type TickBarProps = {
+  /**
+   * Prefix for every anchor the bar builds. Empty on `/v3`, where the sections
+   * are on the same document; `"/v3"` on a sub-page such as
+   * `/v3/work/jewelo`, where the same sixteen ticks are the way back into the
+   * page they came from.
+   */
+  base?: string;
+};
+
+export function TickBar({ base = "" }: TickBarProps) {
   useScrollClockFallback();
 
   return (
@@ -75,7 +85,7 @@ export function TickBar() {
         {/* The wordmark is display:none below 46rem and the mark is decorative,
             so the link carries its own name; at 46rem and up the label is the
             visible word. */}
-        <a className="v3-bar-mark" href="#hero" aria-label="Devonel">
+        <a className="v3-bar-mark" href={`${base}#hero`} aria-label="Devonel">
           <Mark />
           <span className="v3-bar-name">Devonel</span>
         </a>
@@ -101,7 +111,7 @@ export function TickBar() {
               <a
                 key={tick.n}
                 className="v3-tick-hit"
-                href={tick.href}
+                href={`${base}${tick.href}`}
                 style={style}
                 aria-label={`${tick.date}, ${tick.label}`}
               >

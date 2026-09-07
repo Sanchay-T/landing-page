@@ -1,4 +1,4 @@
-import { Hero, Proof, Services, TickBar } from "@/components/variations/v3";
+import { Hero, Proof, Services, TickBar, Work } from "@/components/variations/v3";
 import "@/components/variations/v3/tokens.css";
 import { getVariation } from "../variations";
 
@@ -23,6 +23,7 @@ export default function Page() {
         <Hero />
         <Proof />
         <Services />
+        <Work />
       </main>
     </div>
   );

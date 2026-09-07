@@ -686,11 +686,22 @@
    1280 and 264px at 1536, so a single row of five caps the display at 46.7px
    and 57.0px - smaller on a 1280 screen than the 45.3px this section sets on a
    390 phone. A proof strip with no scale change between a phone and a desktop
-   gives up the one axis this direction is built on. Three columns give 376px
-   per column at 1280 and 455px at 1536, so the figures land at 79.8px and at
-   the direction's full 96px. Hence 3 + 2, with the sixth cell left empty: five
-   facts do not divide by three, and on a page whose argument is emptiness the
-   hole is the honest way to say so.
+   gives up the one axis this direction is built on. Three columns give 353px
+   per column at 1280 and 395px at 1536, so the figures land at 74.9px and
+   83.8px. Hence 3 + 2, with the sixth cell left empty: five facts do not divide
+   by three, and on a page whose argument is emptiness the hole is the honest
+   way to say so. MEASURED figure size: 41.5px at 360, 45.3 at 390, 49.4 at
+   844x390, 48.0 at 640 and 767, 44.9 at 768, 48.0 at 820, 69.0 at 1180, 74.9 at
+   1280, 83.8 at 1536, 81.8 at 1920, 79.4 at 2560. It peaks at 84.3px when the
+   viewport is 1440 and `.v5-band` first hits `--v5-page`, so the 6rem ceiling
+   is a guard rather than a value the ramp reaches.
+
+   The column gap is a percentage, not a space token, because it has to stay in
+   proportion to type this large: at 24px against a 75px figure, "Sixteen" and
+   "Four" read as one phrase across the gutter. 5 percent of the container is
+   0.79 of the figure size at every width, so the three columns stay three
+   columns, and the figure ramp is the leftover 90 percent divided by three
+   columns of 4.623em plus 2 percent of headroom for a wider fallback face.
 
    Below 48rem the grid is one column and each figure sits on a baseline with
    its caption beside it, `flex-wrap` deciding per item: a caption that fits on
@@ -793,12 +804,12 @@
 /* Three columns, five facts, one empty cell. */
 @media (min-width: 48rem) {
   .v5-proof {
-    --v5-proof-figure: min(calc((100cqw - 3rem) / 14.153), 6rem);
+    --v5-proof-figure: min(6.359cqw, 6rem);
   }
 
   .v5-proof__figures {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: var(--v5-space-3);
+    column-gap: 5%;
     row-gap: var(--v5-space-5);
   }
 
@@ -860,4 +871,229 @@
 .v5-proof__more:hover::after,
 .v5-proof__more:focus-visible::after {
   transform: scaleX(1);
+}
+
+/* ------------------------------------------------------------- services ---
+   Block 06 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03 nav,
+   04 hero, 05 proof, 06 services); the third section block on the page.
+   Appended, nothing above this line is touched.
+
+   THE VOID RETURNS. The proof band is steel, so this section takes no ground
+   colour at all and the page drops back to #06080D under it. The value step
+   between the two is the separation; there is no rule, no border and no card
+   anywhere in this section.
+
+   THE ONLY STRUCTURE IS A HAIRLINE BETWEEN ROWS. Chrome at 24 percent, one step
+   above `--v5-rule-strong`, because in the proof band the hairline sits on
+   steel and here it sits on the void, where the same alpha reads fainter. It is
+   set with `+` so it appears between rows only: nothing above the first name
+   and nothing under the last, so the stack reads as five things separated
+   rather than as five things in a table.
+
+   NO NUMBERING. `services.tsx` explains why at length: the five are a menu, not
+   a sequence, and 01/02/03 markers would claim an order that does not exist.
+
+   SIZE OF THE NAMES, MEASURED. Archivo at `wdth` 125 / `wght` 800 with -0.02em
+   sets the five COPY.md names at these widths per 100px of font size, measured
+   in this page's own font stack at 1280:
+
+     Customer-facing product studios.  2004   (longest word "Customer-" 635)
+     Generated product media.          1570
+     Agent systems and harnesses.      1847
+     WhatsApp lead systems.            1485
+     App store readiness.              1231
+
+   "Customer-facing" is 10.09em on its own and it is what sets the scale, since
+   the only line break inside it is the hyphen and a name that breaks to
+   "Customer-" over "facing product" is a defect at poster scale. So the size is
+   solved from the column that has to hold it rather than from the viewport:
+   `--v5-services-name` is a container-query unit resolved against
+   `.v5-services__list`, which is the element whose width actually changes.
+
+   Below 1180 the name has the whole band: 9.2cqw keeps "Customer-facing" at 92
+   percent of the line and lands 29.8px at 360, 32.6px at 390 and the 3rem cap
+   from 522px of content upwards, which is every tablet and desktop width in the
+   matrix that is still stacked.
+
+   From 1180 the name has columns 1-6, which is a stable 49.0 percent of the
+   content box at every width in the matrix (530.8px at 1180, 576.8px at 1280,
+   646.6px at 1536, 631.2px at 1920, 612px at 2560 - it stops growing at 1536
+   because `.v5-band` caps at `--v5-page` while the gutter keeps widening). So
+   4.7cqw of the row is 9.59cqw of the name's own column, "Customer-facing"
+   holds one line with about 3 percent to spare at every one of them, and the
+   name lands 51.0px at 1180, 55.3px at 1280 and 61.9px at 1536. The 4.5rem cap
+   is a guard rather than a limit: the ramp never reaches it.
+
+   THE PARAGRAPH SITS ON THE NAME'S BASELINE. `align-items: baseline` lines the
+   first line of the copy up with the first line of the name rather than with
+   the top of its em box, so a 16px paragraph beside a 55px name reads as one
+   sentence continuing across the row instead of floating at the top of it.
+
+   HOVER, THE ONE CHROME EFFECT OUTSIDE THE HERO. The name always carries a
+   chrome gradient clipped to its glyphs; what changes on hover is the text fill
+   painted over it, which cross-fades from solid `--v5-chrome` to the same
+   colour at zero alpha over 240ms. So the gradient is revealed rather than
+   moved: no transform, no layout, no repaint outside the glyphs, and a browser
+   without `-webkit-text-fill-color` simply keeps the flat chrome. Every stop in
+   the gradient is `--v5-muted`, `--v5-text` or `--v5-chrome`, which is what
+   keeps the effect legible: the darkest stop is `--v5-muted` at 5.51:1 on the
+   void, so no part of a hovered name drops below AA. Steel is deliberately not
+   a stop for that reason, and the orb's key and rim are not stops because no
+   page surface may use them.
+
+   REDUCED MOTION. `--v5-services-fill` collapses to 1ms below, so the state
+   change still happens - it is a pointer affordance, not an animation - and it
+   happens instantly. Nothing else in the section moves under any setting.
+
+   CONTRAST, MEASURED on void #06080D: `--v5-muted` #7C8798 is 5.51:1,
+   `--v5-chrome` #DCE4EE is 15.6:1, `--v5-text` #E9EDF3 is 16.9:1. */
+
+.v5-services {
+  /* The section's claim, on the same ramp as `.v5-proof__head`, so the two
+     headings that make a claim about a section are one size and the poster type
+     under each of them is the thing that carries the scale. */
+  --v5-services-head: clamp(1.75rem, 2.2vw + 0.9rem, 3rem);
+
+  /* Chrome at 24 percent: the section's only structure, and the only rule
+     value on this page that sits on the void rather than on steel. */
+  --v5-services-hairline: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+
+  /* `--v5-chrome` at zero alpha, written out because a transition to
+     `transparent` is a transition to transparent *black* and would drag the
+     glyphs through a dark tint on the way. Keep in step with `--v5-chrome`. */
+  --v5-services-chrome-0: rgb(220 228 238 / 0);
+
+  --v5-services-fill: 240ms;
+
+  /* Stacked: the name owns the whole band. See the block header for the
+     measurement behind 9.2. */
+  --v5-services-name: clamp(1.875rem, 9.2cqw, 3rem);
+
+  padding-block: var(--v5-space-6);
+}
+
+.v5-services__inner {
+  display: grid;
+  row-gap: var(--v5-space-5);
+  justify-items: start;
+}
+
+.v5-services__head {
+  display: grid;
+  row-gap: var(--v5-space-2);
+}
+
+.v5-services__title {
+  font-size: var(--v5-services-head);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+.v5-services__subhead {
+  max-width: var(--v5-copy);
+  font-size: var(--v5-lead);
+  line-height: 1.5;
+  color: var(--v5-text);
+}
+
+/* The container the name is sized from. It is this element and not the section,
+   because `.v5-band` stops growing at `--v5-page` while the gutter keeps
+   widening, so a `vw` ramp would overflow exactly where the page gets wider. */
+.v5-services__list {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.v5-services__row {
+  align-items: start;
+  row-gap: var(--v5-space-2);
+  padding-block: var(--v5-space-4);
+}
+
+/* Between rows only. */
+.v5-services__row + .v5-services__row {
+  border-top: var(--v5-hairline) solid var(--v5-services-hairline);
+}
+
+.v5-services__name {
+  grid-column: 1 / -1;
+  font-size: var(--v5-services-name);
+  color: var(--v5-chrome);
+  /* Always present, always clipped to the glyphs, and hidden under an opaque
+     fill until the row is hovered. */
+  background-image: linear-gradient(
+    100deg,
+    var(--v5-muted) 0%,
+    var(--v5-text) 15%,
+    var(--v5-chrome) 28%,
+    var(--v5-muted) 45%,
+    var(--v5-text) 60%,
+    var(--v5-chrome) 76%,
+    var(--v5-muted) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: var(--v5-chrome);
+  transition: -webkit-text-fill-color var(--v5-services-fill) var(--v5-ease);
+}
+
+.v5-services__row:hover .v5-services__name {
+  -webkit-text-fill-color: var(--v5-services-chrome-0);
+}
+
+.v5-services__copy {
+  grid-column: 1 / -1;
+  display: grid;
+  row-gap: var(--v5-space-1);
+  max-width: var(--v5-copy);
+}
+
+.v5-services__promise {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-services__detail {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* The three standing lines close the section: muted, at the band's own left
+   edge, on the copy measure. They are the terms that apply to all five, so they
+   sit under the stack rather than inside any row. */
+.v5-services__standing {
+  display: grid;
+  row-gap: var(--v5-space-2);
+  max-width: var(--v5-copy);
+  color: var(--v5-muted);
+}
+
+/* Beside, not beneath: the name takes columns 1-6 and the copy columns 7-12. */
+@media (min-width: 73.75rem) {
+  .v5-services {
+    --v5-services-name: min(4.7cqw, 4.5rem);
+  }
+
+  .v5-services__row {
+    align-items: baseline;
+    row-gap: 0;
+    padding-block: var(--v5-space-5);
+  }
+
+  .v5-services__name {
+    grid-column: 1 / 7;
+  }
+
+  .v5-services__copy {
+    grid-column: 7 / 13;
+  }
+}
+
+/* The hover still changes state, it just stops taking time to do it. */
+@media (prefers-reduced-motion: reduce) {
+  .v5-services {
+    --v5-services-fill: 1ms;
+  }
 }

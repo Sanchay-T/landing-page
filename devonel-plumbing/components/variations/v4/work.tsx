@@ -5,10 +5,14 @@ import Image from "next/image";
  *
  * The honesty rule from `docs/goal/03-design-research.md` section 4, direction
  * 4, applied at case scale: cell size is how much of it is live. The one
- * shipped product is eight of the twelve columns, filled, with the cobalt rule
- * and the jade dot; each unshipped case is two columns at reduced fill under
- * the same hatch the board uses for work in build, and carries its exact status
- * line rather than a picture that would claim more than is true.
+ * shipped product is eight of the twelve columns and both rows, filled, with
+ * the cobalt rule and the jade dot; the two unshipped cases stack in the
+ * four-column strip beside it, one row each, at reduced fill under the same
+ * hatch the board uses for work in build, and each carries its exact status
+ * line rather than a picture that would claim more than is true. That is a
+ * quarter of the flagship's area apiece, the ratio block 16 set when both were
+ * on one row; block 23 stacks them so the ratio stops rendering as a 193px
+ * sliver on a wide screen.
  *
  * Imagery rule, `docs/goal/ASSET-INVENTORY.md`: one still, in the flagship cell
  * only, at most 480px at 1x and rendered here at 300px, inside its own frame
@@ -48,7 +52,8 @@ export function Work() {
         </div>
 
         <div className="v4-board v4-work-board">
-          {/* Shipped: eight columns, filled, cobalt rule, one still. */}
+          {/* Shipped: eight columns and both rows, filled, cobalt rule, one
+              still. */}
           <article className="v4-cell v4-cell--live v4-work-flagship">
             <h3 className="v4-work-title">
               A name-pendant studio, live for an exhibition stall in sixteen days.
@@ -134,7 +139,8 @@ export function Work() {
             </p>
           </article>
 
-          {/* In build: two columns, reduced fill under the hatch, no image. */}
+          {/* In build: the four-column strip beside the flagship, one row
+              each, reduced fill under the hatch, no image. */}
           <article className="v4-cell v4-cell--build v4-work-show">
             <h3 className="v4-work-show-title">
               An audit that found the launch blockers before submission.

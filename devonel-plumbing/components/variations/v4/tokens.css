@@ -26,15 +26,26 @@
      12  Chips, dots and figures
      13  Reduced motion
      14  Hero
+     15  Board band: proof and services
+     16  Case studies and the case page
+     17  Process band
+     18  Founders band
+     19  Engagement band
+     20  FAQ band
+     21  Final CTA and the nav button
+     22  Footer
+     23  Polish
 
    Two rules this file exists to enforce, both from
    `docs/goal/03-design-research.md` section 4, direction 4:
      - There is NO shadow token. `box-shadow` appears nowhere in this system.
        A flat, bordered, shadowless page is the specific defence against the
        generic SaaS-card kit.
-     - Cobalt is rationed to three surfaces: the primary action (nav and hero
-       are the same action), and the live cell's rule. Focus rings are ink so
-       they do not spend the budget.
+     - Cobalt is rationed to three surfaces. As shipped, and as block 23
+       records, they are the hero button, the live cell's rule and the final
+       CTA cell; the nav button is an ink outline and carries none. Focus
+       rings are ink so they do not spend the budget, except inside the final
+       cell, where block 21 makes them white to clear SC 1.4.11 on cobalt.
    =========================================================================== */
 
 /* -- 01 Palette ----------------------------------------------------------- */
@@ -2319,4 +2330,83 @@
   .v4-footer-legal-group--end {
     text-align: end;
   }
+}
+
+/* -- 23 Polish ------------------------------------------------------------ */
+
+/* One pass over the finished page, appended rather than folded back into the
+   blocks it corrects, because this file is append-only and blocks 15 to 22
+   belong to the builders that wrote them.
+
+   CORRECTION TO BLOCKS 15, 17 AND 18. Three comments in this file still say
+   the cobalt budget is "nav button, hero button, live rule" - near
+   `.v4-cell--shipped` in block 15, above the phase cell in block 17 and above
+   the founder cell in block 18. That was true when they were written and is
+   not true now: block 21 moved the nav button to `.v4-btn--ink` and spent the
+   third surface on `.v4-cell--final`. The budget as shipped is HERO BUTTON,
+   LIVE CELL RULE, FINAL CTA CELL - the nav button carries no cobalt at all.
+   The stale comments are left in place because editing another block's prose
+   would break the append-only rule for a comment; this paragraph is the
+   correction of record. */
+
+/* -- the case-study showcases, capped ------------------------------------- */
+
+/* Block 16 gives the flagship eight columns and each unshipped showcase two,
+   all on one row. The row is as tall as the flagship, so from 1024 up the two
+   showcases stretched into 193 x 824 slivers: a proportion no reader parses as
+   a judgement about how much of the work is live, only as a layout accident.
+
+   They stack instead. The flagship spans both rows of a four-column strip and
+   the two showcases take one row each, which keeps the honesty ratio exactly
+   where block 16 put it - the flagship is still four times the area of a
+   showcase, 797 x 824 against 395 x 408 at 1280 and wider - while giving each
+   showcase the same footprint as the live cell on the proof board above it.
+   Twelve units per row, both rows, so the strip still tiles with no hole. */
+@media (min-width: 1024px) {
+  .v4-work-flagship {
+    grid-row: span 2;
+  }
+
+  .v4-work-show {
+    grid-column: span 4;
+  }
+}
+
+/* -- proof beside the button ---------------------------------------------- */
+
+/* COPY.md section 9, "Proof beside the button", in the action column of the
+   final cell. Capped at 32ch: the 900+ layout sizes that column to its own
+   content, so an uncapped 68-character citation would take width away from the
+   ask and push the 56px headline onto a third line. The hairline is the same
+   34% white the channel line's footer band uses, so the cell has one rule
+   vocabulary rather than two. */
+.v4-final-proof {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-1);
+  max-width: 32ch;
+  margin-top: var(--v4-2);
+  padding-top: var(--v4-3);
+  border-top: 1px solid var(--v4-on-cobalt-line);
+}
+
+/* White on cobalt, 8.3:1. The customer's words are the one piece of evidence
+   in this cell, so they are set at body size and full strength. */
+.v4-final-quote {
+  font-size: var(--v4-body);
+  line-height: 1.4;
+  color: var(--v4-on-cobalt);
+}
+
+/* The same 86% white the support line uses, 6.4:1 at 15px. */
+.v4-final-cite {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-on-cobalt-soft);
+}
+
+/* Block 12 sets every `.v4-mono` in ink, which is unreadable on cobalt. Same
+   fix block 21 makes for the channel line, at the specificity this needs. */
+.v4-final-cite .v4-mono {
+  color: inherit;
 }

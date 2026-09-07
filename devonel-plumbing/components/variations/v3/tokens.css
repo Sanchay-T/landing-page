@@ -1024,3 +1024,318 @@ body:has(.v3) {
     border-top: 0;
   }
 }
+
+/* ========================================================== 04 - case studies
+
+   Days 3 to 14, the spine of the page. No `data-clock` here: the band is a
+   plain `.v3-band` and travels with the ramp, so the flagship is read at
+   whatever hour the reader has scrolled to, unlike the proof strip two screens
+   above which is pinned to daylight.
+
+   This band adds no new object. The station the proof band introduces and the
+   services band scales up is reused unchanged for the case titles -
+   `.v3-service-rule`, the condensed name on it, the tabular date at its end -
+   and repeats a third time at body size for each block inside the case. What is
+   new is a second title scale for the two open files, the still's column, and
+   the still's frame.
+
+   THE DATES ARE AGAIN THE HONESTY. The flagship rule ends in
+   11 Aug - 27 Aug 2026, both dates from COPY.md section 4. Inside it, only the
+   two blocks the brief dates carry a date. The two showcase rules end with
+   nothing at all, because neither has shipped; each closes on its status line
+   instead. Nothing is filled in to make the three even.
+
+   No opacity on any text here either: the still is framed by a border at 24% of
+   the current ink, which travels with the ramp, and every word in the band is
+   full `--v3-fg` separated by size and by rule.
+   =========================================================================== */
+
+.v3 {
+  /* 22px at 390, 28px at 1280. One step under the flagship title, one over the
+     body, so the two open files read as smaller stations rather than as a
+     different kind of thing. */
+  --v3-size-case: clamp(1.375rem, 0.674vw + 1.211rem, 1.75rem);
+}
+
+.v3-work {
+  padding-block: clamp(2.75rem, 8vh, 5.5rem);
+}
+
+.v3-cases {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+}
+
+/* ------------------------------------------------------------- the flagship */
+
+/* The flagship title runs to eleven words and its date is a range, so on a
+   phone the two cannot share a line: the date drops under the title and stays
+   at the rule's right end. From 46rem - the width at which the bar earns its
+   wordmark - the services station's own flex row takes over again. */
+.v3-case-rule {
+  display: block;
+}
+
+.v3-case-rule .v3-service-date {
+  display: block;
+  margin-top: var(--v3-space-2xs);
+  text-align: right;
+}
+
+@media (min-width: 46rem) {
+  .v3-case-rule {
+    display: flex;
+  }
+  .v3-case-rule .v3-service-date {
+    margin-top: 0;
+  }
+}
+
+.v3-case-tags {
+  margin-top: var(--v3-space-s);
+  font-size: var(--v3-size-micro);
+  line-height: 1.5;
+}
+
+/* Text left, the still in its own 480px column on the right - the inventory's
+   cap, reserved in CSS so the image arriving late moves nothing - and the link
+   under the text. Below 1100px the three stack in document order, which is also
+   the width at which the hero's ring stops mounting. */
+.v3-case-grid {
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+  display: grid;
+  gap: var(--v3-space-xl);
+  align-items: start;
+}
+
+@media (min-width: 68.75rem) {
+  .v3-case-grid {
+    grid-template-columns: minmax(0, 1fr) 480px;
+    column-gap: var(--v3-space-2xl);
+    row-gap: var(--v3-space-l);
+  }
+  .v3-case-body {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .v3-case-still {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .v3-case-more {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0;
+  }
+}
+
+/* --------------------------------------------------- a block inside a case */
+
+/* The station at its third scale: the rule, the block's name on it in the
+   condensed display face at body size, and the day at the rule's end where the
+   brief dates one. The hairline is the 14% rule rather than the 32% one the
+   case titles sit on, so the three scales stay in order. */
+.v3-case-block + .v3-case-block {
+  margin-top: clamp(1.5rem, 4vh, 2.25rem);
+}
+
+.v3-case-block-rule {
+  display: flex;
+  align-items: flex-end;
+  align-items: last baseline;
+  justify-content: space-between;
+  gap: var(--v3-space-s);
+  padding-bottom: var(--v3-space-2xs);
+  border-bottom: 1px solid var(--v3-rule);
+  font-family: var(--v3-font-display);
+  font-variation-settings: "wdth" 70;
+  font-weight: 700;
+  font-size: var(--v3-size-body);
+  line-height: 1.2;
+}
+
+.v3-case-block-date {
+  flex: none;
+  font-family: var(--v3-font-date);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--v3-size-micro);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.v3-case-text {
+  margin-top: var(--v3-space-s);
+  max-width: 66ch;
+  font-size: var(--v3-size-caption);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.v3-case-text li + li {
+  margin-top: var(--v3-space-xs);
+}
+
+/* The problem is the one block set at reading size: it is the argument the rest
+   of the case answers. */
+.v3-case-text-lede {
+  max-width: 52ch;
+  font-size: var(--v3-size-lede);
+  line-height: 1.4;
+}
+
+/* ------------------------------------------------------------- the one still */
+
+.v3-case-still {
+  margin: 0;
+}
+
+.v3-case-img {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  /* A border, not an opacity. Text on this page never carries opacity, and the
+     frame has to invert with the ink as the ramp crosses dawn, so it is mixed
+     from the current `--v3-fg` where it is used rather than declared as a token
+     at the root. */
+  border: 1px solid color-mix(in srgb, var(--v3-fg) 24%, transparent);
+}
+
+/* -------------------------------------------------------- the two open files */
+
+.v3-cases-open {
+  margin-top: clamp(3rem, 8vh, 4.5rem);
+  display: grid;
+  gap: clamp(2.25rem, 6vh, 3.5rem);
+}
+
+/* Side by side the two open files have different amounts to say, so the status
+   lines would sit at two different heights and read as two different kinds of
+   thing. Each file becomes a column and its status drops to the foot of it, so
+   the two status rules line up and the pair reads as one row of open work. */
+@media (min-width: 51.25rem) {
+  .v3-cases-open {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--v3-space-xl);
+  }
+  .v3-case-open {
+    display: flex;
+    flex-direction: column;
+  }
+  .v3-case-open .v3-case-status {
+    margin-top: auto;
+    padding-top: var(--v3-space-m);
+  }
+}
+
+.v3-case-open .v3-service-name {
+  font-size: var(--v3-size-case);
+}
+
+/* An undated station closes on its status instead, so the status line gets the
+   rule the date would have sat on. */
+.v3-case-status {
+  margin-top: var(--v3-space-m);
+  padding-top: var(--v3-space-s);
+  border-top: 1px solid var(--v3-rule);
+  font-size: var(--v3-size-caption);
+  line-height: 1.5;
+}
+
+/* ============================================ 04b - /v3/work/jewelo, the case
+
+   ONE PAGE, ONE FIXED DAY. On `/v3` the clock is scroll position; on the case
+   page there is no build to travel through, so the whole document is pinned to
+   the morning of 27 Aug with `data-clock="flash"` - the same declaration the
+   proof strip uses, and the only one of the three clock paths that cannot be
+   overridden, because a declared value on a descendant beats both the scroll
+   animation running on `.v3` and the inline style the rAF fallback writes there.
+
+   It sits on a wrapper that is itself a `.v3-band`, so the ground under the
+   whole page is derived from the clock rather than written, and the sticky bar
+   inside it still sticks: a plain block ancestor is not a scroll container.
+   =========================================================================== */
+
+.v3-doc {
+  min-height: 100svh;
+  /* The bands inside carry the gutter; the wrapper only carries the day. */
+  padding-inline: 0;
+}
+
+/* The same declaration `body:has(.v3)` makes above the marker, for the page
+   that is fixed at day: the browser canvas is outside `.v3` and cannot read a
+   custom property from inside it, so the stop has to be written literally. It
+   is `--v3-ground-3`, unchanged. */
+body:has(.v3-doc) {
+  background-color: #f2f1ec;
+}
+
+.v3-doc-body {
+  padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 6vh, 3.5rem);
+}
+
+.v3-doc-title {
+  margin-top: var(--v3-space-l);
+}
+
+.v3-doc-blocks {
+  margin-top: clamp(2rem, 5vh, 3rem);
+}
+
+/* Small stills with captions, capped at the inventory's 480px, two up from the
+   width where the case card on `/v3` gains its own image column. Not a gallery:
+   the plates sit at reading width in the left of the measure, in the product's
+   own order, and every one of them carries its caption directly under it. */
+.v3-plates {
+  margin-top: clamp(2rem, 6vh, 3rem);
+  display: grid;
+  gap: clamp(2rem, 5vh, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 68.75rem) {
+  .v3-plates {
+    grid-template-columns: repeat(2, minmax(0, 480px));
+    column-gap: var(--v3-space-2xl);
+  }
+}
+
+.v3-plate {
+  margin: 0;
+  max-width: 480px;
+}
+
+.v3-plate img {
+  width: 100%;
+  height: auto;
+  border: 1px solid color-mix(in srgb, var(--v3-fg) 24%, transparent);
+}
+
+.v3-plate figcaption {
+  margin-top: var(--v3-space-xs);
+  font-size: var(--v3-size-caption);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.v3-doc-close {
+  padding-block: clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.v3-doc-line {
+  margin-top: var(--v3-space-m);
+  max-width: 52ch;
+  font-size: var(--v3-size-caption);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* A link inside running text, on a page with no muted ink and no second colour:
+   it is underlined, and the underline is what marks it. */
+.v3-link {
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--v3-rule-strong);
+  transition: border-color var(--v3-hover-dur) var(--v3-ease);
+}
+
+.v3-link:hover {
+  border-bottom-color: currentColor;
+}

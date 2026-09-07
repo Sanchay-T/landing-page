@@ -97,7 +97,7 @@ export function Footer({ base = "" }: { base?: string } = {}) {
         <p className="v2-footer__line">2026 {site.name}.</p>
         <p className="v2-footer__line">
           Every piece of work shown here was built by {site.name}. Client names appear only with the
-          client&rsquo;s permission.
+          client&#39;s permission.
         </p>
         <p className="v2-footer__line">
           Page last revised <time dateTime="2026-09-07">7 Sep 2026</time>.

@@ -2960,3 +2960,65 @@
     grid-column: 7 / span 6;
   }
 }
+
+/* ===========================================================================
+   BLOCK 11 - polish
+
+   Three corrections, appended so no earlier block moves a line. Nothing above
+   is edited; every rule here is a single class, so later source order alone
+   decides it.
+
+   1. INK IS MONEY. Block 5 set the convention: a --v2-ink rule is the payment
+      gate and appears nowhere else. Block 4 predated it and spent ink on two
+      things that are not money - the "Read the full build" underline and the
+      two "Status:" chip underlines. Both move off ink here.
+
+      The chips go to --v2-rule, the same hairline every other chip stands on;
+      the status chip stays distinguishable by its ink text, which is a colour,
+      not a rule. The link goes to --v2-ink-2 rather than --v2-rule because it
+      is the only thing in #work you can click and a #d8dad4 hairline under
+      13px of body text is not enough affordance for that; --v2-ink-2 is the
+      same 1px weight the proof band's secondary CTA already uses, so the two
+      read-on links now match. The hover, which fades the rule to --v2-rule,
+      is unchanged.
+
+      After this, the only resting --v2-ink borders on /v2 are the three
+      plinth/gate rules: the proof plinth top rule, the process gate line and
+      the final-CTA plinth top rule, which is block 2's plinth idiom reused on
+      the page's one ask.
+
+   2. THE INDEX AT 1280. With all ten sections built the bar carries eight
+      links, and block 1-fix put that step at 84rem, so a 1280 laptop - the
+      commonest desktop width in the matrix - lost the whole index. Measured at
+      1280: the eight labels are 665.0px, the wordmark 92.8px, the clocks 82.3
+      and 93.4px, and the bar resolves to 101.2 / 965.7 / 101.2, i.e. it
+      already fits with 7.8px to spare. 7.8px is not air, so the step moves to
+      80rem with the index's own spacing tightened one notch for the eight-link
+      bar: 18px between labels instead of 24 and 32px off the wordmark instead
+      of 40. That puts the centre column at 915.8px and leaves 32.7px in each
+      side column at 1280. Below 80rem nothing changes: the bar still shows the
+      complete index or none of it, and 1180 and 1024 stay bare.
+   =========================================================================== */
+
+/* -- 1. ink is money ------------------------------------------------------- */
+
+.v2-chip--status {
+  border-block-end-color: var(--v2-rule);
+}
+
+.v2-read {
+  border-block-end-color: var(--v2-ink-2);
+}
+
+/* -- 2. eight links from 80rem --------------------------------------------- */
+
+@media (min-width: 80rem) {
+  .v2-nav[data-links="8"] .v2-nav__links {
+    display: flex;
+    gap: 1.125rem;
+  }
+
+  .v2-nav[data-links="8"] .v2-nav__centre {
+    gap: 2rem;
+  }
+}

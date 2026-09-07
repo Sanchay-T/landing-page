@@ -2900,3 +2900,109 @@
     flex-basis: 100%;
   }
 }
+
+/* ------------------------------------------------------- hero orb fit ---
+   BLOCK 15: the orb stops swallowing a whole headline word. Appended; nothing
+   above this line is touched, and no `.tsx` and no COPY string changed.
+
+   BLOCK NUMBERING, RECORDED ONCE AND NOT REWRITTEN ABOVE. The declared
+   sequence uses 07 twice: the nav fix at line 1098 is BLOCK 07 and the work
+   block that follows it also says "Block 07". The work block's real number is
+   08 - it is the eighth appended block in this file - and every block after it
+   is likewise one ahead of its label. Those labels are cited from other files
+   and from STATUS, so they are left exactly as written; this block takes 15,
+   the next number after the highest label in the file (14), so nothing above
+   has to move.
+
+   THE DEFECT. Above 900px the orb shares the h1's grid area and stacks over it,
+   both centred on each other. A centred disc over a centre-aligned headline
+   lands on the middle of a line, and the word it landed on was `brief`:
+   measured per word (Range rects against the sphere silhouette, box/2 x 0.9496)
+   `brief` was 97-100 percent covered at 900, 1024, 1180, 1280, 1536, 1920 and
+   2560, so line two read `from [orb] to a` with no glyph of it visible, and at
+   900 and 1024 `use.` went with it. Partial occlusion is the direction
+   (03-design-research.md section 4: "the letters you cannot see directly you
+   read in the reflection"); a word gone entirely is not, because the reflection
+   carries `Sixteen days`, `ships before it pitches`, `Dubai`, `Mumbai`,
+   `paid discovery`, `Sanchay` and `Umayr` and never carries `brief`.
+
+   WHY BOTH A CAP AND A NUDGE. Two numbers were measured against every word at
+   all seven widths at and above 900 before this block was written. A nudge
+   alone cannot fix it: with the disc left at its old size the best position at
+   any width still buried a word at 70-90 percent, because at 900 the 448px disc
+   is 54 percent of the 828px headline column while at 2560 it is 29 percent of
+   1920px - the disc was sized against the fold and the viewport, never against
+   the type. A cap alone cannot fix it either: a centred disc of any size sits
+   on the middle of a centred line, and shrinking it only moved which word was
+   swallowed (`use.` at 900 reached 100 percent with the disc at 388px).
+
+   WHAT THIS BLOCK DOES. `--v5-orb-cap` gains the two limits it was missing -
+   the page width and a ceiling - so the disc is capped against the headline
+   column as well as the fold, and the orb is nudged a quarter of its own
+   diameter off the centre it shares with the h1. Both are expressed in the
+   orb's own token, so the shift scales with the disc at every width and there
+   is not a magic pixel in the block. Disc diameter, before -> after:
+   900x800 448 -> 279, 1024x800 448 -> 317, 1180x820 459 -> 366,
+   1280x800 448 -> 397, 1536x864 484 -> 449, 1920x1080 and 2560x1080 560 -> 470.
+   The 1536 case loses 35px and the 1280 case 51px; the two narrow desktops lose
+   most, which is exactly where the disc was most oversized against the type.
+
+   MEASURED AFTER, per word, on the live page at all seven widths (the same
+   lattice the round-2 verifier used): worst single word 65.3 percent, and the
+   profile barely moves across the matrix - at 1280 Sixteen 24, days 0, from 34,
+   brief 60, to 0, a 0, product 65, your 0, customers 27, use. 0. Five words are
+   still touched at every width, so the twist survives: the orb crosses four
+   lines of the headline and no line is left clean. Per glyph, every word keeps
+   a readable run - `Sixte(e)n`, `fro-m`, `--ief`, `pro---t`, `custo-ers` at
+   1280 - and `brief` now shows its own letters again. Two glyph ends are still
+   under the chrome at each width, `brief`'s `b` and `from`'s `m`; that is the
+   occlusion doing its job on a 397px disc over a 340px word, and it is the
+   least end-loss any position of any allowed size produced.
+
+   CLEARANCES held at every width: the disc's top stays 85-192px below the nav
+   and its bottom 34-81px above the subhead, so the orb never touches the two
+   pieces of type it is not occluding, and nothing crosses either viewport edge.
+
+   BELOW 900 NOTHING CHANGES. The occlusion is off there, the orb is in its own
+   grid row under the action block, and neither rule applies: 390 and 820 read
+   exactly as they did.
+
+   THE TWO RE-ASSERTIONS BELOW ARE NOT NEW BEHAVIOUR. This file is append-only,
+   so a later `--v5-orb-cap` outranks the earlier ones by order alone. The two
+   rules after the first repeat the values the hero block already sets for
+   reduced motion and for a short landscape viewport, in the same order the hero
+   block sets them, so those two cases behave exactly as before. Reduced motion
+   also clears the nudge, because occlusion is disabled there and the orb is a
+   still under the button rather than over the type. */
+
+@media (min-width: 900px) {
+  .v5 {
+    /* Capped by the fold (52vh), by the headline column (31vw) and by a 470px
+       ceiling, in place of the old fold-only 56vh. */
+    --v5-orb-cap: min(52vh, 31vw, 470px);
+  }
+
+  .v5-hero__orb {
+    /* Off the shared centre by 0.28 of the disc left and 0.04 down, so the
+       silhouette crosses the lines instead of sitting on one word. */
+    translate: calc(var(--v5-orb) * -0.28) calc(var(--v5-orb) * 0.04);
+  }
+}
+
+/* Reduced motion: occlusion is off, so the cap and the nudge go with it. */
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  .v5 {
+    --v5-orb-cap: 200vh;
+  }
+
+  .v5-hero__orb {
+    translate: none;
+  }
+}
+
+/* A short landscape viewport keeps the hero block's own 220px disc. */
+@media (max-height: 560px) and (min-width: 600px) {
+  .v5 {
+    --v5-orb-cap: 220px;
+  }
+}

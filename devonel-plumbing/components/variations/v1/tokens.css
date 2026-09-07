@@ -1,0 +1,577 @@
+/* =============================================================================
+   v1 "Studio Dark" - the whole design system for this variation.
+
+   Everything is scoped under `.v1`, the class on the root element of
+   app/(variations)/v1/page.tsx. Nothing here reaches v2..v5 and nothing in
+   app/globals.css carries a direction into this one.
+
+   APPEND ONLY. Add the next numbered entry to this header and a matching
+   numbered block below it. Never renumber and never rewrite an earlier entry:
+   a later section may already depend on it.
+
+   01  2026-09-07  hero  palette, type scale, space scale, 12-column grid,
+                         radius, the three motion primitives, :where() resets,
+                         and the first components: shell, grid, button, nav,
+                         hero, object, gauge.
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   01 - tokens
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* Palette. Achromatic on purpose: there is no accent hue on this page. The
+     only colour in the design is the temperature of the single light, and lamp
+     is allowed on four things and nothing else - the object specular, the live
+     centre dot, the focus ring, and the primary CTA fill. */
+  --v1-void: #07090c;
+  --v1-panel: #111519;
+  --v1-line: #232a31;
+  --v1-text: #e7eaec;
+  --v1-muted: #8c959d;
+  --v1-lamp: #fff3e0;
+
+  /* Type. Three roles, no fourth.
+       display  Space Grotesk 700, -0.03em, 64px at 1280 and 40px at 390
+       body     Geist 400, 17/1.6, 68ch measure
+       mono     Geist Mono, tabular figures, gauge and figures only - never an
+                eyebrow, never a label. */
+  --v1-font-display: var(--font-grotesk);
+  --v1-font-body: var(--font-sans);
+  --v1-font-mono: var(--font-mono);
+
+  /* 40px at 390 -> 64px at 1280, then held. */
+  --v1-display: clamp(2.5rem, 1.8427rem + 2.6966vw, 4rem);
+  --v1-display-track: -0.03em;
+  --v1-display-leading: 1;
+
+  --v1-body: 1.0625rem; /* 17 */
+  --v1-body-leading: 1.6;
+  --v1-measure: 68ch;
+
+  --v1-small: 0.9375rem; /* 15 - support lines */
+  --v1-micro: 0.8125rem; /* 13 - gauge and figures, mono only */
+
+  /* Space. 4px base, used for every gap and pad in the variation. */
+  --v1-1: 0.25rem;
+  --v1-2: 0.5rem;
+  --v1-3: 0.75rem;
+  --v1-4: 1rem;
+  --v1-5: 1.5rem;
+  --v1-6: 2rem;
+  --v1-7: 3rem;
+  --v1-8: 4rem;
+  --v1-9: 6rem;
+  --v1-10: 8rem;
+
+  /* Grid. One 12-column definition, used by every section. */
+  --v1-cols: 12;
+  --v1-gutter: 1rem;
+  --v1-max: 82.5rem; /* 1320 */
+  --v1-pad: 1.25rem;
+  --v1-nav-h: 3.5rem; /* 56 */
+
+  /* Radius. 0 on structural blocks, 4 on interactive controls, nothing else.
+     There is deliberately no shadow token in this direction: no shadow appears
+     anywhere on the page, so none is available to reach for. */
+  --v1-radius: 0px;
+  --v1-radius-control: 4px;
+
+  /* Motion. Three primitives and nothing else moves.
+       entrance  the sixteen-tick assembly of the hero object, one tick per day
+                 of the build, 150ms per tick, 2400ms total, once per session
+       hover     a row opens its scope line over 180ms, no lift, no scale,
+                 no shadow
+       scroll    object rotation bound to damped scroll velocity, clamped to
+                 --v1-drift radians (read by mark-scene.tsx) */
+  --v1-tick: 150ms;
+  --v1-build: 2400ms;
+  --v1-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --v1-open: 180ms;
+  --v1-drift: 0.2;
+  --v1-damp: 6;
+}
+
+@media (min-width: 40rem) {
+  .v1,
+  :root:has(.v1) {
+    --v1-pad: 2rem;
+  }
+}
+
+/* The one collapse. Reduced motion is checked on first paint, not after an
+   entrance has already run: lib/webgl.ts denies the GPU surface outright, so
+   the object renders assembled in a single frame with no idle and no scroll
+   binding, and these durations take every CSS transition to zero with it. */
+@media (prefers-reduced-motion: reduce) {
+  .v1,
+  :root:has(.v1) {
+    --v1-tick: 0ms;
+    --v1-build: 0ms;
+    --v1-open: 0ms;
+    --v1-drift: 0;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   01 - ground and resets
+
+   All resets use :where() so they carry zero specificity and a later section
+   can override any of them with a single class.
+   -------------------------------------------------------------------------- */
+
+:root:has(.v1),
+body:has(.v1) {
+  background-color: var(--v1-void);
+  color-scheme: dark;
+}
+
+.v1 {
+  min-height: 100svh;
+  background-color: var(--v1-void);
+  color: var(--v1-text);
+  font-family: var(--v1-font-body);
+  font-size: var(--v1-body);
+  line-height: var(--v1-body-leading);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+.v1 :where(h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol) {
+  margin: 0;
+}
+
+.v1 :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+.v1 :where(img, svg, canvas, video) {
+  display: block;
+  max-width: 100%;
+}
+
+.v1 :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.v1 :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+
+/* Every anchor target clears the 56px bar. */
+.v1 :where([id]) {
+  scroll-margin-top: calc(var(--v1-nav-h) + var(--v1-2));
+}
+
+/* Focus is the third place lamp is allowed. */
+.v1 :where(a, button, input, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--v1-lamp);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   01 - shell and grid
+   -------------------------------------------------------------------------- */
+
+.v1-shell {
+  width: 100%;
+  max-width: var(--v1-max);
+  margin-inline: auto;
+  padding-inline: var(--v1-pad);
+}
+
+.v1-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+  column-gap: var(--v1-gutter);
+}
+
+/* -----------------------------------------------------------------------------
+   01 - controls
+
+   Two states of one control. Primary is the only lamp fill on the page;
+   quiet is a hairline outline so the nav never competes with the hero button.
+   -------------------------------------------------------------------------- */
+
+.v1-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--v1-2);
+  border: 1px solid transparent;
+  border-radius: var(--v1-radius-control);
+  font-size: var(--v1-body);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color var(--v1-open) var(--v1-ease),
+    border-color var(--v1-open) var(--v1-ease),
+    color var(--v1-open) var(--v1-ease);
+}
+
+.v1-btn--primary {
+  min-height: 3.25rem;
+  padding-inline: var(--v1-6);
+  background-color: var(--v1-lamp);
+  color: var(--v1-void);
+}
+
+.v1-btn--primary:hover {
+  background-color: #fffaf1;
+}
+
+.v1-btn--quiet {
+  min-height: 2.25rem;
+  padding-inline: var(--v1-4);
+  border-color: var(--v1-line);
+  color: var(--v1-text);
+  font-size: var(--v1-small);
+}
+
+.v1-btn--quiet:hover {
+  border-color: var(--v1-muted);
+}
+
+/* -----------------------------------------------------------------------------
+   01 - nav
+
+   56px bar, wordmark left, one button right. No blur, no glass, no shadow:
+   a solid void bar on a hairline. The direction's nav carries no section
+   anchors; the ten section links belong in the footer.
+   -------------------------------------------------------------------------- */
+
+.v1-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: var(--v1-void);
+  border-bottom: 1px solid var(--v1-line);
+}
+
+.v1-nav__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--v1-4);
+  height: var(--v1-nav-h);
+}
+
+.v1-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v1-3);
+  color: var(--v1-text);
+}
+
+.v1-nav__mark {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--v1-text);
+}
+
+.v1-nav__word {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: -0.03em;
+}
+
+/* -----------------------------------------------------------------------------
+   01 - hero
+
+   Type first, object second, at every width. The headline is the LCP element:
+   it is painted at full strength on first paint and never animates in.
+   -------------------------------------------------------------------------- */
+
+.v1-hero {
+  padding-block: var(--v1-7) var(--v1-8);
+}
+
+.v1-hero__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+  column-gap: var(--v1-gutter);
+  row-gap: var(--v1-7);
+  align-items: center;
+}
+
+.v1-hero__type,
+.v1-hero__object {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.v1-hero__headline {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-display);
+  letter-spacing: var(--v1-display-track);
+  line-height: var(--v1-display-leading);
+  text-wrap: pretty;
+}
+
+/* Hard line breaks, because the shape of three lines at 64 and four at 40 is
+   part of the design. --s breaks are the phone set, --l the wide set. */
+.v1-hero__br--l {
+  display: none;
+}
+
+.v1-hero__sub {
+  margin-top: var(--v1-5);
+  max-width: min(var(--v1-measure), 34rem);
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+/* One sentence at phone widths, two from 640 up. */
+.v1-hero__sub-2 {
+  display: none;
+}
+
+.v1-hero__act {
+  margin-top: var(--v1-6);
+}
+
+.v1-hero__support {
+  margin-top: var(--v1-3);
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+}
+
+.v1-hero .v1-btn--primary {
+  display: flex;
+  width: 100%;
+}
+
+/* -----------------------------------------------------------------------------
+   01 - the object and its gauge
+
+   The Scene box is `contain: layout paint`, so the gauge is its sibling and
+   never its child.
+   -------------------------------------------------------------------------- */
+
+.v1-hero__object {
+  --v1-obj-size: 20rem; /* 320 at phone widths */
+}
+
+/* The drag surface. Horizontal drags scrub the build; vertical gestures still
+   scroll the page, which matters at the one width where the object shares the
+   fold with the copy. */
+.v1-obj__frame {
+  touch-action: pan-y;
+}
+
+.v1-obj__frame[data-live="1"] {
+  cursor: ew-resize;
+}
+
+.v1-obj {
+  width: var(--v1-obj-size);
+  max-width: 100%;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  background-image: radial-gradient(
+    circle at 50% 47%,
+    rgb(255 243 224 / 0.1),
+    rgb(255 243 224 / 0.028) 38%,
+    rgb(255 243 224 / 0) 68%
+  );
+}
+
+.v1-obj__glyph {
+  width: 100%;
+  height: 100%;
+  color: var(--v1-text);
+  opacity: 1;
+  transition: opacity 900ms var(--v1-ease) 700ms;
+}
+
+/* Once the canvas is live the still holds long enough to cover the dynamic
+   import, then dissolves as the object builds itself. It has to leave: two
+   rings of slightly different radius, one flat and one in perspective, read as
+   a printing error rather than as construction geometry. */
+.v1-obj__glyph[data-ghost="1"] {
+  opacity: 0;
+}
+
+.v1-gauge {
+  display: flex;
+  align-items: center;
+  gap: var(--v1-4);
+  width: var(--v1-obj-size);
+  max-width: 100%;
+  margin-inline: auto;
+  margin-top: var(--v1-4);
+}
+
+.v1-gauge__read {
+  flex: none;
+  color: var(--v1-text);
+  font-family: var(--v1-font-mono);
+  font-size: var(--v1-micro);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* The scrubber is a hairline. The visible track is 1px; the input keeps a
+   32px hit area around it so it is grabbable and, on a phone, thumbable. */
+.v1-gauge__scrub {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: ew-resize;
+}
+
+.v1-gauge__scrub::-webkit-slider-runnable-track {
+  height: 1px;
+  background-color: var(--v1-line);
+}
+
+.v1-gauge__scrub::-moz-range-track {
+  height: 1px;
+  background-color: var(--v1-line);
+}
+
+.v1-gauge__scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2px;
+  height: 0.875rem;
+  margin-top: -0.4375rem;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--v1-lamp);
+}
+
+.v1-gauge__scrub::-moz-range-thumb {
+  width: 2px;
+  height: 0.875rem;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--v1-lamp);
+}
+
+/* No canvas, so nothing to scrub: the gauge reads as a finished run instead. */
+.v1-gauge__done {
+  flex: 1 1 auto;
+  height: 1px;
+  background-color: var(--v1-lamp);
+  opacity: 0.55;
+}
+
+/* -----------------------------------------------------------------------------
+   01 - hero, from 640
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 40rem) {
+  .v1-hero__br--s {
+    display: none;
+  }
+
+  .v1-hero__br--l {
+    display: inline;
+  }
+
+  .v1-hero__sub-2 {
+    display: inline;
+  }
+
+  .v1-hero .v1-btn--primary {
+    display: inline-flex;
+    width: auto;
+  }
+
+  .v1-hero__object {
+    --v1-obj-size: 26rem;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   01 - hero, two columns from 1120
+
+   Type on seven columns, the object pinned to the right edge at its full 520.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 70rem) {
+  .v1-hero {
+    display: flex;
+    align-items: center;
+    min-height: min(calc(100svh - var(--v1-nav-h)), 54rem);
+    padding-block: var(--v1-8);
+  }
+
+  .v1-hero__grid {
+    width: 100%;
+    row-gap: 0;
+  }
+
+  .v1-hero__type {
+    grid-column: 1 / span 7;
+  }
+
+  /* Five columns, and the object is allowed to hang out of them to the left so
+     it keeps its full 520 with its right edge on the content edge. Measured:
+     the longest headline line is 9.3em of Space Grotesk 700 at -0.03em, which
+     is 595px at the specified 64, and a five-column type track is 507px wide
+     at 1280. Seven columns of type against a right-pinned object is the same
+     picture with the headline set in three lines instead of five. */
+  .v1-hero__object {
+    --v1-obj-size: min(32.5rem, calc(100vw - 44rem));
+
+    grid-column: 8 / span 5;
+    justify-self: end;
+    width: var(--v1-obj-size);
+  }
+
+  .v1-obj,
+  .v1-gauge {
+    margin-inline: 0;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   01 - short viewports
+
+   Phone landscape is 390 tall. The CTA has to stay above the fold there, so
+   the display steps down and the vertical rhythm tightens.
+   -------------------------------------------------------------------------- */
+
+@media (max-height: 34rem) and (min-width: 40rem) {
+  .v1-hero {
+    padding-block: var(--v1-5) var(--v1-7);
+  }
+
+  .v1-hero__grid {
+    row-gap: var(--v1-6);
+  }
+
+  .v1,
+  :root:has(.v1) {
+    --v1-display: 2.25rem; /* 36 */
+  }
+
+  /* 390 tall leaves no room for the second sentence, whatever the width, so
+     the phone rule applies here on height instead. */
+  .v1-hero__sub-2 {
+    display: none;
+  }
+
+  .v1-hero__sub {
+    margin-top: var(--v1-4);
+  }
+
+  .v1-hero__act {
+    margin-top: var(--v1-5);
+  }
+}

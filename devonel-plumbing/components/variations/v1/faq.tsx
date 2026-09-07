@@ -51,6 +51,27 @@ import { useState } from "react";
  *   keeps one primary action.
  */
 
+/**
+ * NO JAVASCRIPT. Every question and every answer already ships in the markup,
+ * but a closed answer carries `hidden` and only a click can take it off, so
+ * with scripting disabled the seven rows are dead buttons and the seven answers
+ * are unreachable. This rule reverses the closed state and stands all seven
+ * open, which is the only honest resting state for a page whose buttons cannot
+ * fire.
+ *
+ * WHY `@layer base`, AND WHY `!important`. Tailwind's preflight ships
+ * `[hidden]:where(:not([hidden="until-found"])){display:none!important}` inside
+ * `base`, and for important declarations the cascade reverses layer order: an
+ * unlayered `!important` is the weakest of them, so no specificity out here
+ * would answer it. Standing in the same layer puts the argument back on
+ * specificity, which `.v1-faq__answer[hidden]` wins. The other three
+ * declarations answer this file's own closed state in `tokens.css`, where
+ * importance outranks it whatever the layer. `transition` goes with them
+ * because the `@starting-style` block would otherwise run a 200ms entrance on
+ * load for a state change that never happened.
+ */
+const NOSCRIPT_OPEN = `@layer base{.v1-faq__answer[hidden]{display:grid!important;grid-template-rows:1fr!important;opacity:1!important;transition:none!important}}`;
+
 /** question  the row's control, in the display face
  *  answer    COPY.md's reply, opening in place under it */
 const QUESTIONS = [
@@ -137,6 +158,10 @@ function Row({ index, question, answer }: { index: number; question: string; ans
 export function Faq() {
   return (
     <section id="faq" className="v1-faq" aria-labelledby="faq-head">
+      <noscript>
+        <style>{NOSCRIPT_OPEN}</style>
+      </noscript>
+
       <div className="v1-shell">
         <h2 id="faq-head" className="v1-faq__head">
           The questions we get before the first payment.

@@ -50,7 +50,7 @@ export function Hero() {
               </p>
               <p className="v4-cell-title">A name-pendant studio</p>
               <p className="v4-cell-line">
-                &ldquo;the layout is very good and simple&rdquo;
+                &quot;the layout is very good and simple&quot;
               </p>
               <p className="v4-cell-line v4-cell-line--muted">
                 - the owner, a bespoke jewellery house in Dubai

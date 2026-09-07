@@ -57,6 +57,30 @@
 
 import { useState } from "react";
 
+/**
+ * NO JAVASCRIPT. The seven questions ship in the markup either way, but the
+ * answer is hidden and its wrapper is collapsed, and only a click takes either
+ * off, so with scripting disabled the ledger is seven dead buttons and an empty
+ * answer column. This rule reverses the closed state and stands all seven open,
+ * which is the only honest resting state for a page that cannot open them.
+ *
+ * TWO DECLARATIONS BECAUSE THE CLOSE IS IN TWO PLACES. `.v2-faq__answer` is the
+ * element `hidden` is on, so it needs its `display` back; `.v2-faq__panel` is
+ * the wrapper carrying the collapse, and at rest it is `0fr` and transparent
+ * because `data-open` is still "false". `transition` goes with the wrapper so
+ * the reversal is the resting state rather than a 200ms open on load.
+ *
+ * WHY `@layer base`, AND WHY `!important`. Tailwind's preflight ships
+ * `[hidden]:where(:not([hidden="until-found"])){display:none!important}` inside
+ * `base`, and for important declarations the cascade reverses layer order: an
+ * unlayered `!important` is the weakest of them, so no specificity out here
+ * would answer it. Standing in the same layer puts the argument back on
+ * specificity, which `.v2-faq__answer[hidden]` wins. The wrapper's three
+ * declarations are answering unlayered rules in `tokens.css`, where importance
+ * outranks them whatever the layer.
+ */
+const NOSCRIPT_OPEN = `@layer base{.v2-faq__answer[hidden]{display:grid!important}.v2-faq__panel{grid-template-rows:1fr!important;opacity:1!important;transition:none!important}}`;
+
 type Entry = {
   /** Stable key, and the id the button points aria-controls at. */
   id: string;
@@ -191,6 +215,10 @@ function Row({ entry }: { entry: Entry }) {
 export function Faq() {
   return (
     <section id="faq" className="v2-faq" aria-labelledby="faq-headline">
+      <noscript>
+        <style>{NOSCRIPT_OPEN}</style>
+      </noscript>
+
       <header className="v2-faq__head">
         <p className="v2-faq__label">Before you pay</p>
         <h2 className="v2-faq__headline" id="faq-headline">

@@ -78,7 +78,7 @@ export function Board() {
                 the honesty rule is built on sit together. */}
             <div className="v4-cell-quote">
               <p className="v4-cell-line">
-                &ldquo;the layout is very good and simple&rdquo;
+                &quot;the layout is very good and simple&quot;
               </p>
               <p className="v4-cell-line v4-cell-line--muted">
                 - the owner, a bespoke jewellery house in Dubai, on the day the studio went live

@@ -249,7 +249,7 @@ export default function Page() {
                   Problem
                 </h2>
                 <p className="v4-case-prose">
-                  A bespoke jewellery house sells pendants cut to a customer&rsquo;s name. Before
+                  A bespoke jewellery house sells pendants cut to a customer&#39;s name. Before
                   ordering, the customer could not see their own name as a finished piece. A
                   customisation field on a store page is a text box, not a design studio.
                 </p>
@@ -339,7 +339,7 @@ export default function Page() {
               <div className="v4-case-quote-wrap">
                 <figure className="v4-cell v4-cell--live v4-case-quote">
                   <blockquote className="v4-quote">
-                    &ldquo;the layout is very good and simple&rdquo;
+                    &quot;the layout is very good and simple&quot;
                   </blockquote>
                   <figcaption className="v4-quote-by">
                     the owner, a bespoke jewellery house in Dubai
@@ -369,7 +369,7 @@ export default function Page() {
                   </p>
                   <p className="v4-cell-line">
                     Live on the morning of <span className="v4-mono">27 Aug 2026</span>, in time for
-                    the client&rsquo;s exhibition stall.
+                    the client&#39;s exhibition stall.
                   </p>
                 </li>
                 <li className="v4-cell v4-cell--build">

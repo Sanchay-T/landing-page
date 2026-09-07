@@ -110,7 +110,7 @@ export function Footer() {
         <div className="v4-footer-legal">
           <div className="v4-footer-legal-group">
             <p>Every piece of work shown here was built by Devonel.</p>
-            <p>Client names appear only with the client&rsquo;s permission.</p>
+            <p>Client names appear only with the client&#39;s permission.</p>
           </div>
           <div className="v4-footer-legal-group v4-footer-legal-group--end">
             <p>2026 Devonel.</p>

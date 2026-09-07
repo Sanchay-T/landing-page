@@ -6,7 +6,7 @@ import { variations } from "./(variations)/variations";
  *
  * Deliberately plain: this is the index Sanchay taps through, not a sixth
  * design. It should never be mistaken for one of the five, so it carries no
- * accent colour, no imagery and no motion — a directory of five rows, each row
+ * accent colour, no imagery and no motion - a directory of five rows, each row
  * one large target with its number, its name and what it argues.
  */
 export default function SwitcherPage() {

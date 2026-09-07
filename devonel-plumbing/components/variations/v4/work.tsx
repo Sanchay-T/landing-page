@@ -75,7 +75,7 @@ export function Work() {
               <div className="v4-work-text">
                 <h4 className="v4-work-label">Problem</h4>
                 <p className="v4-cell-line">
-                  A bespoke jewellery house sells pendants cut to a customer&rsquo;s name. Before
+                  A bespoke jewellery house sells pendants cut to a customer&#39;s name. Before
                   ordering, the customer could not see their own name as a finished piece. A
                   customisation field on a store page is a text box, not a design studio.
                 </p>
@@ -105,7 +105,7 @@ export function Work() {
                 <h4 className="v4-work-label">Result</h4>
                 <p className="v4-cell-line">
                   Spec on 11 Aug 2026. Live on the morning of 27 Aug 2026, in time for the
-                  client&rsquo;s exhibition stall.
+                  client&#39;s exhibition stall.
                 </p>
 
                 <p className="v4-work-more">
@@ -158,7 +158,7 @@ export function Work() {
             </h3>
             <p className="v4-cell-line v4-cell-line--muted">Retail. WhatsApp. In progress.</p>
             <p className="v4-cell-line">
-              Leads were arriving on WhatsApp and going cold in the boutique&rsquo;s current tool.
+              Leads were arriving on WhatsApp and going cold in the boutique&#39;s current tool.
             </p>
             <p className="v4-cell-foot">Status: in progress, discovery started 25 Aug 2026</p>
           </article>

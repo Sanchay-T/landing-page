@@ -44,6 +44,32 @@ import { useState } from "react";
  * because there is no number on it.
  */
 
+/**
+ * NO JAVASCRIPT. Every answer is in the markup already, but a closed panel is
+ * collapsed to `0fr` with `visibility: hidden` and its answer sits at zero
+ * opacity, and only a click changes `data-open`, so with scripting disabled six
+ * of the seven cells are dead buttons over unreadable text and only the cost
+ * cell, open on arrival, says anything. This rule reverses the closed state and
+ * stands all seven open, which is the only honest resting state for a board
+ * whose cells cannot be opened.
+ *
+ * THE COLLAPSE IS THE PANEL, NOT A `hidden` ATTRIBUTE. Unlike the other
+ * directions, nothing here carries `hidden`: the panel owns the two collapsing
+ * declarations and the answer owns the fade, so the reversal has to name both.
+ * `transition` goes with them so this is the resting state rather than a 200ms
+ * open running on load. `--v4-cell-fill` is reversed with them because on this
+ * board the fill IS the state - outline means the content is not on the page,
+ * filled means it is - and with the answers standing open the cells would
+ * otherwise be telling the reader the opposite of what they can see.
+ *
+ * WHY `@layer base`, AND WHY `!important`. For important declarations the
+ * cascade reverses layer order, so an unlayered `!important` is the weakest of
+ * them; standing inside `base` - the layer Tailwind's preflight uses - is what
+ * lets these outrank both preflight and the unlayered closed state in
+ * `tokens.css`. The same shape v3 and v5 ship.
+ */
+const NOSCRIPT_OPEN = `@layer base{.v4-faq-panel{grid-template-rows:1fr!important;visibility:visible!important;transition:none!important}.v4-faq-answer{opacity:1!important;transition:none!important}.v4-cell--faq{--v4-cell-fill:var(--v4-cell)!important}}`;
+
 type Entry = {
   /** Stable anchor id, used for `aria-controls` and the panel id. */
   id: string;
@@ -135,6 +161,10 @@ export function Faq() {
 
   return (
     <section id="faq" className="v4-container v4-band" aria-labelledby="v4-faq-head">
+      <noscript>
+        <style>{NOSCRIPT_OPEN}</style>
+      </noscript>
+
       <header className="v4-sticky-head v4-band-head">
         <h2 id="v4-faq-head" className="v4-band-label">
           Before you pay

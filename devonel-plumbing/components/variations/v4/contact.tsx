@@ -90,7 +90,7 @@ export function Contact() {
                   headline onto a third line. */}
               <figure className="v4-final-proof">
                 <blockquote className="v4-final-quote">
-                  &ldquo;the layout is very good and simple&rdquo;
+                  &quot;the layout is very good and simple&quot;
                 </blockquote>
                 <figcaption className="v4-final-cite">
                   - the owner, a bespoke jewellery house in Dubai. Shipped{" "}

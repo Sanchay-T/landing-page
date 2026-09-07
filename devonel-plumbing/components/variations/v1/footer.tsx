@@ -83,7 +83,7 @@ export function Footer() {
         <div className="v1-colophon__small">
           <p>2026 Devonel.</p>
           <p>Every piece of work shown here was built by Devonel.</p>
-          <p>Client names appear only with the client&rsquo;s permission.</p>
+          <p>Client names appear only with the client&#39;s permission.</p>
           <p>
             Page last revised <span className="v1-colophon__date">7 Sep 2026</span>.
           </p>

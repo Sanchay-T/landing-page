@@ -65,7 +65,7 @@ export function Proof() {
         <div className="v1-proof__foot">
           <figure>
             <blockquote className="v1-proof__said">
-              &ldquo;the layout is very good and simple&rdquo;
+              &quot;the layout is very good and simple&quot;
             </blockquote>
             <figcaption className="v1-proof__who">
               the owner, a bespoke jewellery house in Dubai, on the day the studio went live

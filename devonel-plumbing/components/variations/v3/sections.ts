@@ -37,9 +37,10 @@ export type Stage = "night" | "first-light" | "day";
 export type Section = {
   id: SectionId;
   /**
-   * Accessible name for the tick that links here. Section labels are verbatim
-   * from `docs/goal/COPY.md`; hero and footer have no label there, so they take
-   * the structural name from `docs/goal/05-build-spec.md`.
+   * Link text for the footer index and accessible name for the tick that links
+   * here. Section labels are verbatim from `docs/goal/COPY.md`; the hero has no
+   * label there and takes the wordmark, which is the name a reader recognises,
+   * and the footer never links to itself.
    */
   label: string;
   /** First tick this section is set on, 1-16. */
@@ -56,7 +57,7 @@ export type Section = {
 };
 
 export const sections: readonly Section[] = [
-  { id: "hero", label: "Hero", tick: 1, tickEnd: 1, stage: "night", built: true, inNav: true },
+  { id: "hero", label: "Devonel", tick: 1, tickEnd: 1, stage: "night", built: true, inNav: true },
   {
     id: "proof",
     label: "Proof of work",
@@ -118,11 +119,11 @@ export const sections: readonly Section[] = [
     tick: 16,
     tickEnd: 16,
     stage: "day",
-    built: false,
+    built: true,
     inNav: true,
   },
-  { id: "contact", label: "Start", tick: 16, tickEnd: 16, stage: "day", built: false, inNav: true },
-  { id: "footer", label: "Footer", tick: 16, tickEnd: 16, stage: "day", built: false, inNav: false },
+  { id: "contact", label: "Start", tick: 16, tickEnd: 16, stage: "day", built: true, inNav: true },
+  { id: "footer", label: "Footer", tick: 16, tickEnd: 16, stage: "day", built: true, inNav: false },
 ];
 
 export function getSection(id: SectionId): Section {

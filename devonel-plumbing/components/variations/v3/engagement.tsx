@@ -40,6 +40,13 @@ import { getSection } from "./sections";
  * quote rather than a rule of engagement. It closes the band as a named note:
  * the same station at its smallest scale, the one the case blocks use.
  *
+ * THE LEAD-IN IS ON-PAGE COPY. "Four ways to work with us" carries a brief
+ * citation in COPY.md and takes no colon, unlike the Label/Headline/Subhead
+ * fields, so it prints. It sets in the station at its body scale - the same
+ * `.v3-case-block-rule` object the closing note uses - on the 14% hairline
+ * rather than the 32% rule the four terms sit on, so a named rule opens the
+ * list and a named rule closes the band. No new colour, no opacity.
+ *
  * Copy is verbatim from COPY.md section 7, bracketed source tags removed.
  * Server component.
  */
@@ -51,7 +58,10 @@ type Term = {
   detail: string;
 };
 
-/** COPY.md section 7, "Four ways to work with us", in that order. */
+/** COPY.md section 7's on-page lead-in, printed above the list it introduces. */
+const termsLead = "Four ways to work with us";
+
+/** COPY.md section 7, under that lead-in, in that order. */
 const terms: readonly Term[] = [
   {
     name: "Paid discovery.",
@@ -94,6 +104,10 @@ export function Engagement() {
         <p className="v3-lede">
           Scope sets the number, so we write the scope first and you pay for that step.
         </p>
+
+        <h3 className="v3-case-block-rule v3-engagement-lead">
+          <span>{termsLead}</span>
+        </h3>
 
         <ul className="v3-terms" role="list">
           {terms.map((term) => (

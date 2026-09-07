@@ -1905,3 +1905,979 @@
     column-gap: var(--v5-space-5);
   }
 }
+
+/* ------------------------------------------------------------------- faq ---
+   Block 09 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03 nav,
+   04 hero, 05 proof, 06 services, 07 work, 08 process, 09 faq).
+   Appended, nothing above this line is touched.
+
+   SEVEN ROWS ON CHROME HAIRLINES, which is the direction's whole sentence for
+   this section (03-design-research.md section 4, layout skeleton 8). The row is
+   a question in Archivo Expanded and one Geist glyph, and the only structure
+   between two of them is a 1px hairline at 24 percent chrome - the same value
+   `--v5-services-hairline` and `--v5-process-gate-ink` carry, and for the same
+   reason: on the void that alpha reads a step fainter than it does on steel.
+   Set with `+` so it appears between rows only, nothing above the first
+   question and nothing under the last, so the stack reads as seven things
+   separated rather than as a table with a frame around it.
+
+   THE WHOLE ROW IS THE BUTTON. `.v5-faq__question` is `width: 100%`, so the
+   target is the full line at every width rather than a glyph at the end of it,
+   and the glyph is a marker rather than the control. It is a real `<button>`,
+   so Enter and Space arrive without a key handler and the focus ring is the
+   one `.v5 :focus-visible` already draws. Nothing between the button and the
+   section is `overflow: hidden`, which is the named failure for this section
+   in 03-design-research.md: the 3px outline offset has clear air on all four
+   sides at every width, and the 24px row padding is what gives it that.
+
+   SIZE OF THE QUESTIONS, MEASURED. Both ramps are container-query units, not
+   viewport ones, for the reason blocks 06 and 08 record: `.v5-band` stops
+   growing at `--v5-page` while the gutter keeps widening, so a `vw` ramp
+   overflows exactly where the page gets wider. The content box is 324px at 360,
+   354px at 390, 1085.6px at 1180, 1177.6px at 1280 and about 1317px at 1536,
+   where it stops.
+
+   `--v5-faq-ask` is resolved against `.v5-faq__list`. 2.38cqw lands the
+   question at 25.8px at 1180 and 28.0px at 1280, which is the top of the 22-28
+   the direction asks for at desktop, and the 1.125rem floor holds it at 18px at
+   390 and 360. The 1.75rem cap therefore binds from 1177.6px of content upwards
+   and every width above 1280 sets the same 28px, which is deliberate: this is
+   the quietest section on the page and it must not grow into the hero's scale.
+
+   Questions wrap, and two of them do at 390: "What if the generated output is
+   not good enough?" and "Why do I need a studio if I already have AI tools?"
+   each take two lines there. Nothing is truncated and nothing is set `nowrap`.
+   The longest single word in the seven is "generated" at about 110px at 18px,
+   inside a 280px question column at 360, so no width in the matrix can push the
+   row past the band.
+
+   `--v5-faq-head` is resolved against `.v5-faq__inner`, on the same 3.85cqw
+   ramp as `.v5-process__head`, so the four section claims on this page read as
+   one size.
+
+   THE GLYPH IS A SQUARE THE HEIGHT OF ONE QUESTION LINE. `+` and the minus sign
+   are centred in a box sized from `--v5-faq-ask` and its leading, pinned to the
+   start of the row, so the marker sits against the question's first line
+   whether the question takes one line or two, and swapping one glyph for the
+   other can never move anything. It is `--v5-muted` at rest and `--v5-chrome`
+   when the row is hovered, focused or open - the one state change in the
+   section, and it is the honest one, because the glyph is the thing the click
+   changes.
+
+   OPENING IN PLACE. The answer is a `0fr` -> `1fr` grid row with its content in
+   an `overflow: hidden` track, so it grows from nothing to its own height with
+   no measured pixel value and no JavaScript reading layout. `display` is in the
+   transition with `allow-discrete` and the entering values come from
+   `@starting-style`, which is what lets the answer keep the real `hidden`
+   attribute - genuinely `display: none` and out of the accessibility tree while
+   closed - and still animate both ways. A browser without those two features
+   snaps open and shut instead, which is the same thing reduced motion gets.
+
+   THE DURATION IS THE HOVER PRIMITIVE. `--v5-faq-open` is `--v5-dur-hover`
+   rather than a new number: 200ms, and it collapses to 1ms in the token block
+   under `prefers-reduced-motion` without this block having to restate the
+   guard. That is also the argument for the motion existing at all - it is the
+   hover primitive applied to the one control on the page with state behind it,
+   not a fourth primitive.
+
+   MEASURE. The answer is capped at `--v5-copy`, 66 characters, which is the
+   named failure for this section at ultrawide: at 2560 the band is 1248px of
+   content and an uncapped answer would set at about 118 characters a line.
+
+   CONTRAST, on the void #06080D: the question in `--v5-chrome` #DCE4EE is
+   15.62:1, the answer in `--v5-text` #E9EDF3 is 17.05:1, and the glyph in
+   `--v5-muted` #7C8798 is 5.51:1. Nothing in this section is set on steel. */
+
+.v5-faq {
+  /* The section's claim, on the same ramp as `.v5-process__head`. */
+  --v5-faq-head: clamp(1.75rem, 3.85cqw, 3rem);
+
+  /* The question: 18px wherever the row is narrow, 22-28px across the desktop
+     widths. See the block header for the measurement behind 2.38. */
+  --v5-faq-ask: clamp(1.125rem, 2.38cqw, 1.75rem);
+  --v5-faq-ask-leading: 1.15;
+
+  /* The marker, a step under the question so it never competes with it. */
+  --v5-faq-glyph: calc(var(--v5-faq-ask) * 0.95);
+
+  /* Chrome at 24 percent: the section's only structure. Same value as
+     `--v5-services-hairline` and `--v5-process-gate-ink`. */
+  --v5-faq-hairline: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+
+  /* The hover primitive, spent on the one control with state behind it. It is
+     `--v5-dur-hover` and not a new number so the reduced-motion collapse in the
+     token block covers this section too. */
+  --v5-faq-open: var(--v5-dur-hover);
+
+  padding-block: var(--v5-space-6);
+}
+
+.v5-faq__inner {
+  container-type: inline-size;
+  display: grid;
+  row-gap: var(--v5-space-5);
+  justify-items: start;
+}
+
+.v5-faq__title {
+  font-size: var(--v5-faq-head);
+  line-height: 1;
+  max-width: 18ch;
+}
+
+/* The container the question is sized from: this element and not the section,
+   because `.v5-band` stops growing at `--v5-page` while the gutter keeps
+   widening. */
+.v5-faq__list {
+  container-type: inline-size;
+  width: 100%;
+}
+
+/* Between rows only. */
+.v5-faq__row + .v5-faq__row {
+  border-top: var(--v5-hairline) solid var(--v5-faq-hairline);
+}
+
+/* The heading exists for the accessibility tree, not for the page: the button
+   inside it carries every visual decision. */
+.v5-faq__heading {
+  font: inherit;
+  font-weight: 400;
+}
+
+.v5-faq__question {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: var(--v5-space-3);
+  width: 100%;
+  padding-block: var(--v5-space-3);
+  text-align: left;
+  cursor: pointer;
+}
+
+.v5-faq__ask {
+  font-size: var(--v5-faq-ask);
+  line-height: var(--v5-faq-ask-leading);
+  color: var(--v5-chrome);
+  text-wrap: pretty;
+}
+
+.v5-faq__glyph {
+  display: grid;
+  place-items: center;
+  block-size: calc(var(--v5-faq-ask) * var(--v5-faq-ask-leading));
+  inline-size: calc(var(--v5-faq-ask) * var(--v5-faq-ask-leading));
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-faq-glyph);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--v5-muted);
+  transition: color var(--v5-faq-open) var(--v5-ease);
+}
+
+.v5-faq__question:hover .v5-faq__glyph,
+.v5-faq__question:focus-visible .v5-faq__glyph,
+.v5-faq__question[aria-expanded="true"] .v5-faq__glyph {
+  color: var(--v5-chrome);
+}
+
+/* The open answer. `display` is in the transition so the closed state can stay
+   a real `display: none`; `@starting-style` below supplies the values it enters
+   from. */
+.v5-faq__answer {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--v5-faq-open) var(--v5-ease),
+    opacity var(--v5-faq-open) var(--v5-ease),
+    display var(--v5-faq-open) allow-discrete;
+}
+
+@starting-style {
+  .v5-faq__answer {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+/* The UA rule for `[hidden]` is `display: none`, and `.v5-faq__answer` above
+   would out-rank it, so it is restated here at a specificity that wins. */
+.v5-faq__answer[hidden] {
+  display: none;
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+/* The 8px on top is the focus ring: the button ends where this element
+   begins, and a 3px `outline-offset` reaches into it. Measured at 1280 and 390
+   without it, the ring sat 2px off the answer's first line. */
+.v5-faq__answer-inner {
+  display: grid;
+  row-gap: var(--v5-space-2);
+  min-height: 0;
+  overflow: hidden;
+  max-width: var(--v5-copy);
+  padding-top: var(--v5-space-1);
+  padding-bottom: var(--v5-space-4);
+}
+
+.v5-faq__line {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------- founders ---
+   Block 10 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03 nav,
+   04 hero, 05 proof, 06 services, 07 work, 08 process, 09 faq, 10 founders).
+   Appended, nothing above this line is touched. Blocks are numbered in build
+   order, not page order: this is the sixth section the page renders and the
+   tenth block written, because the FAQ was appended while this one was built.
+
+   THE VOID, AND ONE LINE. The engagement band below this section is steel, so
+   this one takes no ground colour and the page stays on #06080D under it. The
+   only structure in the section is a single 1px chrome hairline at 24 percent
+   between the two people - the same ink `--v5-services-hairline`,
+   `--v5-work-hairline` and `--v5-process-gate-ink` use, and for the reason
+   block 06 records: in the proof band a hairline sits on steel, and here it
+   sits on the void, where the same alpha reads fainter. Nothing else here is
+   ruled, boxed, outlined or underlined, and there is no card, no shadow and no
+   accent hue anywhere in it.
+
+   THE RULE TURNS WITH THE LAYOUT. Stacked, it is horizontal above the second
+   person; side by side, it is vertical between the two columns. It is drawn on
+   the second person rather than on a spacer, so it is always exactly as long as
+   the pair it separates and can never drift from them. One rule either way -
+   the direction asks for one hairline, not a frame.
+
+   NO PORTRAITS. `founders.tsx` records why at length: the orb is the only
+   glossy object this page is allowed, and the size of the name is what stands
+   in for a face. So there is no avatar box, no initial disc and no image slot
+   in this block to fill later.
+
+   SIZE OF THE NAMES, MEASURED. Archivo at `wdth` 125 / `wght` 800 with -0.02em
+   sets these widths per 1em of font size, measured in this page's own font
+   stack in the browser:
+
+     Sanchay Thalnerkar 12.020   Thalnerkar 6.470   Umayr Sheik 7.612
+
+   `.v5-founders__name` carries `max-width: 7.2em`, which is the whole sizing
+   argument. Both names are wider than 7.2em on one line and the longest single
+   part, "Thalnerkar", is 6.47em, so every name breaks at its space and never
+   inside a word, both people set as two lines at every width in the matrix, and
+   the two columns start their city and role copy on the same line. Without the
+   box "Sanchay Thalnerkar" would wrap everywhere and "Umayr Sheik" would not,
+   and the pair would sit at two different heights. The box also makes overflow
+   impossible by construction: the widest glyph run the section can produce is
+   6.47em inside a 7.2em box.
+
+   The ramp is a container-query unit, not a viewport one, for the reason block
+   05 records: `.v5-band` stops growing at `--v5-page` while the gutter keeps
+   widening, so a `vw` ramp overflows exactly where the page gets wider.
+   `--v5-founders-name` is declared on the section and consumed inside
+   `.v5-founders__pair`, which is the container.
+
+   Stacked, the name has the whole band: 8.9cqw lands 28.8px at 360 and 31.5px
+   at 390, which is the 28-32px this direction asks for on a phone, and the 4rem
+   cap holds it at 64px from 719px of content upwards - every tablet and
+   landscape width in the matrix that is still stacked.
+
+   From 1180 each name has half the band less the 4rem gutter beside the rule.
+   MEASURED LIVE, column then name then the 7.2em box: 478.8 / 53.5 / 385.3 at
+   1180, 524.8 / 58.1 / 418.0 at 1280, 594.6 / 64.0 / 460.8 at 1536, 579.2 /
+   63.4 / 456.6 at 1920 and 560.0 / 61.5 / 443.0 at 2560. Every name size is
+   inside the 48-64px the direction asks for at desktop, the box clears its
+   column by 93px at the tightest of them, and the ceiling first binds at 1536,
+   where the band's content box peaks at 1317.1px.
+
+   SIZE OF THE HEADING. `--v5-founders-head` is the same ramp `.v5-proof__head`,
+   `.v5-services__title` and `.v5-work__head` use, with the ceiling brought down
+   from 3rem to 2.9rem. "Two founders. Both of them on your project." is 26.153em
+   wide, and the band's content box does not grow monotonically: it peaks at
+   1317.1px at 1536 and then falls back to 1286.4 at 1920 and 1248 at 2560, as
+   `--v5-page` caps the box while the gutter keeps widening to its 6rem stop. At
+   3rem the claim sets 1255px, which fits every desktop width except 2560, where
+   it would wrap a single word onto a second line on the widest screen in the
+   matrix and nowhere else. At 2.9rem it sets 1213.5px, MEASURED at 1536, 1920
+   and 2560 alike, and holds one line at every one of them, at a size 1.6px
+   under the other four heads - a difference no reader can see and a wrap every
+   reader can. Below 1091px of content the ramp is under both ceilings anyway,
+   so the two are the same number everywhere else.
+
+   NO MOTION. The variation's one moment is the orb's environment map building
+   on load. Nothing in this section moves, hovers, reveals or hides at any
+   width, so it is byte-identical under `prefers-reduced-motion`.
+
+   CONTRAST, computed on the void #06080D: names `--v5-chrome` #DCE4EE 15.62:1,
+   heading, subhead, city and standing line `--v5-text` #E9EDF3 17.05:1, role
+   lines `--v5-muted` #7C8798 5.51:1. */
+
+.v5-founders {
+  /* The section's claim. See the block header for why the ceiling is 2.9rem
+     rather than the 3rem the other four heads carry. */
+  --v5-founders-head: clamp(1.75rem, 2.2vw + 0.9rem, 2.9rem);
+
+  /* Stacked: the name has the whole band. Solved from `.v5-founders__pair`. */
+  --v5-founders-name: clamp(1.75rem, 8.9cqw, 4rem);
+
+  /* The section's one rule. Chrome at 24 percent, the value every hairline on
+     the void carries on this page. */
+  --v5-founders-hairline: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+
+  /* The space either side of that rule: 2.5rem where the pair is stacked and
+     the rule runs the full width, 4rem where it stands between two columns. */
+  --v5-founders-gap-y: var(--v5-space-4);
+  --v5-founders-gap-x: var(--v5-space-5);
+
+  padding-block: var(--v5-space-6);
+}
+
+.v5-founders__inner {
+  display: grid;
+  row-gap: var(--v5-space-5);
+  justify-items: start;
+}
+
+.v5-founders__head {
+  display: grid;
+  row-gap: var(--v5-space-2);
+}
+
+.v5-founders__title {
+  font-size: var(--v5-founders-head);
+  line-height: 1;
+  /* Only ever used on a phone, where the claim takes two or three lines: it
+     evens them out instead of leaving one word alone on the last. */
+  text-wrap: balance;
+}
+
+.v5-founders__subhead {
+  max-width: var(--v5-copy);
+  font-size: var(--v5-lead);
+  line-height: 1.5;
+  color: var(--v5-text);
+}
+
+/* The container the names are sized from, and the element whose shape changes
+   at 73.75rem. Not the section and not the band: `.v5-band` stops growing at
+   `--v5-page` while the gutter keeps widening. */
+.v5-founders__pair {
+  container-type: inline-size;
+  display: grid;
+  width: 100%;
+}
+
+.v5-founders__person {
+  display: grid;
+  row-gap: var(--v5-space-2);
+  justify-items: start;
+}
+
+/* The one rule in the section, horizontal while the pair is stacked. */
+.v5-founders__person + .v5-founders__person {
+  border-top: var(--v5-hairline) solid var(--v5-founders-hairline);
+  margin-top: var(--v5-founders-gap-y);
+  padding-top: var(--v5-founders-gap-y);
+}
+
+.v5-founders__name {
+  font-size: var(--v5-founders-name);
+  color: var(--v5-chrome);
+  /* The break between the given name and the family name. See the block
+     header: it is what makes the two columns the same shape. */
+  max-width: 7.2em;
+}
+
+/* COPY.md sets the name and the city as one line; the page cuts it once so the
+   city can carry the section's other fact, and the two read back as the
+   sourced line. */
+.v5-founders__city {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-founders__roles {
+  display: grid;
+  row-gap: var(--v5-space-1);
+  /* `.v5-body`'s own measure. Measured: 34em of Geist at 16px is 544px, which
+     holds these lines at about 68 characters both stacked, where the copy has
+     the whole band, and side by side, where the column runs 494px to 560px. */
+  max-width: 34em;
+}
+
+.v5-founders__role {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* The standing line closes the section under the pair, on the copy measure,
+   with no rule and no ground. It is `--v5-text` rather than `--v5-muted`
+   because it is the claim the two names were evidence for, and the role lines
+   directly above it are the muted ones. */
+.v5-founders__standing {
+  max-width: var(--v5-copy);
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+/* Side by side, and the rule stands up between them. The gutter is put on the
+   two people rather than in a `column-gap` so the rule sits at the middle of
+   it: 4rem of space, the hairline, 4rem of space. */
+@media (min-width: 73.75rem) {
+  .v5-founders {
+    --v5-founders-name: min(4.93cqw, 4rem);
+  }
+
+  .v5-founders__pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v5-founders__person {
+    padding-inline-end: var(--v5-founders-gap-x);
+  }
+
+  .v5-founders__person + .v5-founders__person {
+    border-top: 0;
+    border-inline-start: var(--v5-hairline) solid var(--v5-founders-hairline);
+    margin-top: 0;
+    padding-top: 0;
+    padding-inline: var(--v5-founders-gap-x) 0;
+  }
+}
+
+/* ----------------------------------------------------------- engagement ---
+   Block 11 in this file's INDEX (00 tokens, 01 resets, 02 primitives, 03 nav,
+   04 hero, 05 proof, 06 services, 07 work, 08 process, 09 faq, 10 founders,
+   11 engagement). Appended, nothing above this line is touched. It is the
+   seventh section the page renders and the eleventh block written.
+
+   A STEEL BAND, LIKE THE PROOF STRIP AND FOR THE SAME REASON. Full bleed, no
+   border and no radius: the value step from #06080D to #151B26 is the edge, and
+   a rule around it would make it a card, which 03b-round2-brief.md bans. The
+   two sections above this one sit on the void, so the ground changing under the
+   whole width is what says the money section has started. These are the only
+   two steel bands on the page - the proof at the top and the terms at the
+   bottom - and they are the page's two claims of fact.
+
+   FOUR TERMS, ONE PER LINE, ENORMOUS MARGINS. That is the direction's whole
+   instruction for this section (03-design-research.md section 4, layout
+   skeleton 7), so the rows carry 2.5rem of padding stacked and 4rem side by
+   side, and the only structure between them is a 1px chrome hairline at 24
+   percent set with `+`, which puts it between rows only: nothing above the
+   first name and nothing under the last, so the four read as four things
+   separated rather than as a table of terms.
+
+   NO NUMBERING. The four are alternatives, not a sequence: a buyer picks one.
+   01/02/03/04 would claim an order that does not exist, which is the same
+   decision `services.tsx` records one page-third above.
+
+   SIZE OF THE NAMES, MEASURED. Archivo at `wdth` 125 / `wght` 800 with -0.02em
+   sets the four COPY.md names at these widths per 1em of font size, measured in
+   this page's own font stack in the browser:
+
+     Paid discovery. 8.912   Fixed-scope build. 10.797
+     Monthly retainer. 10.027   Revenue share. 9.324
+
+   "Fixed-scope build." is what settles the ramp, and it settles it twice. At
+   the 2rem ceiling it is 345.5px, which is why the name gets five of the twelve
+   columns from 73.75rem rather than four: MEASURED, five columns are 438.3px at
+   1180, 476.7 at 1280, 534.8 at 1536, 522.0 at 1920 and 506.0 at 2560, while
+   four columns are 345.9px at 1180 - which the longest name would miss by
+   0.4px, on the width where the two-column layout starts. Stacked it has the whole band, and 6.8cqw with a 1.5rem floor lands
+   24px at 360 and 24.1px at 390 - the 24-32px this direction asks for - where
+   the longest name sets 259px inside a 324px content box. The ceiling is
+   reached from 471px of content, so every width in the matrix from 640 upwards
+   runs the names at 32px.
+
+   These names are deliberately the smaller poster type on the page: 24-32px
+   against the founders' 48-64px one section above. They are terms, not the
+   argument.
+
+   THE ROW COPY IS ONE SENTENCE, NOT A PARAGRAPH. Each of the four is a single
+   sourced line, so it sets on `.v5-body`'s 34em measure - 544px, about 68
+   characters - inside a column that runs 677px at 1280. The measure binds, not
+   the column, which is what keeps the line length under 80 characters at every
+   width including 2560.
+
+   NO MOTION. The variation's one moment is the orb's environment map building
+   on load. Nothing in this section moves, hovers, reveals or hides at any
+   width, so it is byte-identical under `prefers-reduced-motion`.
+
+   CONTRAST, computed on steel #151B26: names `--v5-chrome` #DCE4EE 13.5:1,
+   heading, subhead and the two labels `--v5-text` #E9EDF3 14.8:1, row copy and
+   the pass-through line `--v5-muted` #7C8798 4.77:1. */
+
+.v5-engagement {
+  /* The section's claim, on the same ramp as `.v5-proof__head`,
+     `.v5-services__title` and `.v5-work__head`. It sets on two lines at every
+     width in the matrix, so it needs no ceiling of its own. */
+  --v5-engagement-head: clamp(1.75rem, 2.2vw + 0.9rem, 3rem);
+
+  /* 24px where the row is stacked, 32px wherever the name has its own column.
+     Solved from `.v5-engagement__list`; see the block header. */
+  --v5-engagement-name: clamp(1.5rem, 6.8cqw, 2rem);
+
+  /* Chrome at 24 percent. On the void that is one step above
+     `--v5-rule-strong`, and this band keeps the same value rather than dropping
+     to the proof strip's 22 percent so the four hairlines that separate the
+     terms read at the same weight as the one that separates the founders. */
+  --v5-engagement-hairline: color-mix(
+    in srgb,
+    var(--v5-chrome) 24%,
+    transparent
+  );
+
+  background-color: var(--v5-steel);
+  padding-block: var(--v5-space-6);
+}
+
+.v5-engagement__inner {
+  display: grid;
+  row-gap: var(--v5-space-5);
+  justify-items: start;
+}
+
+.v5-engagement__head {
+  display: grid;
+  row-gap: var(--v5-space-2);
+}
+
+.v5-engagement__title {
+  font-size: var(--v5-engagement-head);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.v5-engagement__subhead {
+  max-width: var(--v5-copy);
+  font-size: var(--v5-lead);
+  line-height: 1.5;
+  color: var(--v5-text);
+}
+
+.v5-engagement__ways {
+  display: grid;
+  row-gap: var(--v5-space-3);
+  width: 100%;
+}
+
+/* The list's own heading, in Geist directly above it, because it says how many
+   there are and the heading above does not. Sentence case, no tracking, no
+   rule: it is a caption beside the thing it captions, which is the same
+   decision `process.tsx` makes with its gate line. */
+.v5-engagement__lead {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  font-weight: 400;
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+/* The container the names are sized from, and the element whose shape changes
+   at 73.75rem. */
+.v5-engagement__list {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.v5-engagement__row {
+  align-items: start;
+  row-gap: var(--v5-space-2);
+  padding-block: var(--v5-space-4);
+}
+
+/* Between rows only. */
+.v5-engagement__row + .v5-engagement__row {
+  border-top: var(--v5-hairline) solid var(--v5-engagement-hairline);
+}
+
+.v5-engagement__name {
+  grid-column: 1 / -1;
+  font-size: var(--v5-engagement-name);
+  color: var(--v5-chrome);
+}
+
+.v5-engagement__terms {
+  grid-column: 1 / -1;
+  max-width: 34em;
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* Costs are a term of all four, so they close the section under the rows with
+   no rule and no ground, in the shape `process.tsx` gives its closing notes. */
+.v5-engagement__note {
+  display: grid;
+  row-gap: var(--v5-space-1);
+  max-width: var(--v5-copy);
+}
+
+.v5-engagement__note-label {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  font-weight: 400;
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-engagement__note-line {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* Beside, not beneath: the name takes columns 1-5 and the terms columns 6-12.
+   Five and not six because these names are half the size of the founders' and a
+   six-column name beside a 34em sentence would leave a hole between them. */
+@media (min-width: 73.75rem) {
+  .v5-engagement__row {
+    align-items: baseline;
+    row-gap: 0;
+    padding-block: var(--v5-space-5);
+  }
+
+  .v5-engagement__name {
+    grid-column: 1 / 6;
+  }
+
+  .v5-engagement__terms {
+    grid-column: 6 / 13;
+  }
+}
+
+/* ---------------------------------------------------------------- start ---
+   Block 12 in this file's INDEX; COPY.md section 9, the final CTA, whose
+   section label is "Start" and whose anchor is #start. Appended, nothing above
+   this line is touched.
+
+   THE SECTION IS THE HERO'S TYPE SCALE ON AN EMPTY SCREEN. Every other block on
+   this page sets its heading at the section-claim step (1.75-3rem) and gives
+   the poster size to the thing under it - the figures, the service names, the
+   case titles, the phase names. This one has nothing under it, so the ask
+   itself takes the poster size: the same Archivo `wdth` 125 / `wght` 800 the
+   hero uses, in `--v5-chrome` rather than `--v5-text`, which makes it the
+   brightest type on the page and the only place after the hero where the page
+   raises its voice. Nothing here is boxed, ruled, filled or raised - no slab,
+   no steel, no plinth - because the direction's answer to "what does the last
+   screen look like" is the same as its answer everywhere else: emptiness.
+
+   THE ASK'S SIZE, MEASURED IN THIS PAGE'S OWN STACK. "We send back a scope." is
+   13.676em of Archivo at these settings with -0.02em, and "Send the brief." is
+   8.578em. Solving `13.676 * size <= content box` for a ramp that never
+   overflows gives a ceiling of 7.31cqw; 6.8cqw is that with room, and it lands
+   at 80px at 1280 (the direction asks for 64-96 there), 89.6px at 1536, 87.5px
+   at 1920 and 84.9px at 2560, where the band has stopped growing but the gutter
+   has not. The 2rem floor holds 32px at 390 and 360 (the direction asks for
+   32-36), where the ask is three lines rather than two.
+
+     content box    ask size   lines   longest line
+     324px (360)    32.0 min   3       "Send the brief." 274px, fits
+     354px (390)    32.0 min   3       274px, fits
+     456px (496)    32.0 min   2       "We send back a scope." 438px, fits
+     754px (820)    51.3       2       702px, fits
+     1178px (1280)  80.1       2       1095px, fits
+     1317px (1536)  89.6       2       1225px, fits
+     1248px (2560)  84.9       2       1161px, fits
+
+   `cqw` and not `vw`, for the reason blocks 05 and 07 record: `.v5-band` stops
+   growing at `--v5-page` while the gutter keeps widening, so a viewport ramp
+   would grow exactly where the box that has to hold the type does not.
+
+   THE PROOF LINE SITS BESIDE THE BUTTON from 56rem, which is where the pill,
+   a 64px gap and a 46ch line stop competing for the same 824px. Below that it
+   falls under the action block: two columns at phone width is two narrow
+   columns. Its measure is the only 46ch on the page and it is deliberate - the
+   sentence has to read as a note beside the button rather than as body copy.
+
+   NO ORB REPRISE. The direction's layout skeleton 9 asks for the orb back at
+   240px and 30 percent brightness behind the button; it is not here, and
+   `contact.tsx` records why in full. Short version: the page gets one WebGL
+   context, so a reprise could only be the static conic disc, and at 30 percent
+   over the void its bright arc lands near #4a4e54, where the muted 16px lines
+   this section exists to deliver measure 2.3:1. The section keeps the
+   direction's type instead of its object.
+
+   NOTHING MOVES. No entrance, no scroll binding. The only transitions are the
+   pill's own fill and the mail link's hairline, both already collapsed to 1ms
+   under `prefers-reduced-motion` by the token block. */
+
+.v5-start {
+  /* Chrome at 45 percent: heavy enough that the printed address is marked as a
+     link by something other than its colour, light enough that it is still a
+     hairline. Rules elsewhere on the page are 10 and 22 percent; this one has
+     to survive being one character tall. */
+  --v5-start-ink: color-mix(in srgb, var(--v5-chrome) 45%, transparent);
+
+  padding-block: var(--v5-space-6);
+}
+
+/* The query container the ask is solved against: the band's content box. */
+.v5-start__inner {
+  container-type: inline-size;
+  display: grid;
+  justify-items: start;
+  row-gap: var(--v5-space-4);
+}
+
+.v5-start__ask {
+  max-width: 100%;
+  font-size: clamp(2rem, 6.8cqw, 6rem);
+  color: var(--v5-chrome);
+}
+
+/* The line the ask loses as the viewport grows. At the 32px floor
+   "We send back a scope." needs 438px of content box; 31rem is the first step
+   that gives it (456px), and above the floor the ramp keeps the ratio. Hidden
+   by width rather than by `white-space: nowrap`, so an unexpected line wraps
+   instead of pushing a horizontal scrollbar. */
+@media (min-width: 31rem) {
+  .v5-start__br {
+    display: none;
+  }
+}
+
+/* Both COPY.md subhead sentences, one thought per line, under 80 characters. */
+.v5-start__lede {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  max-width: var(--v5-copy);
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-start__action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--v5-space-3);
+  width: 100%;
+  margin-top: var(--v5-space-2);
+}
+
+/* The button and the line that qualifies it, which never separate. */
+.v5-start__act {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--v5-space-2);
+  width: 100%;
+}
+
+.v5-start__support {
+  font-size: var(--v5-lead);
+  line-height: 1.45;
+  color: var(--v5-muted);
+}
+
+.v5-start__proof {
+  max-width: 46ch;
+  font-size: var(--v5-body);
+  line-height: 1.5;
+  color: var(--v5-muted);
+}
+
+.v5-start__channel {
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+}
+
+/* The printed address. A resting hairline, not a hover-only one: this link sits
+   inside a sentence, so colour alone must not be what marks it. */
+.v5-start__mail {
+  color: var(--v5-text);
+  border-bottom: var(--v5-hairline) solid var(--v5-start-ink);
+  transition:
+    color var(--v5-dur-hover) var(--v5-ease),
+    border-color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-start__mail:hover,
+.v5-start__mail:focus-visible {
+  color: var(--v5-chrome);
+  border-bottom-color: var(--v5-chrome);
+}
+
+@media (min-width: 56rem) {
+  .v5-start__action {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--v5-space-5);
+  }
+
+  .v5-start__act {
+    align-items: flex-start;
+    width: auto;
+  }
+}
+
+/* --------------------------------------------------------------- footer ---
+   Block 13 in this file's INDEX; COPY.md section 10, the colophon. The last
+   block on the page. Appended, nothing above this line is touched.
+
+   ONE LINE, AND EVERYTHING HANGS OFF IT. The direction's layout skeleton 10 is
+   two words - "a single line" - and COPY.md section 10 has four things to say.
+   The reading that keeps both is literal: one 24 percent chrome hairline across
+   the content width, and under it 13px Geist on the void with no ground, no
+   box, no column rule and no second hairline anywhere in the section. 24 per
+   cent is the same value the services sliver and the process gate use, so the
+   three structural lines on this page are one line at three lengths.
+
+   The legal row at the bottom is four short sentences in a wrapping flex row
+   rather than four paragraphs, so from 1280 up it sets as one physical line
+   about 990px long. That is the direction's "single line" arriving twice: the
+   rule at the top and the provenance at the bottom.
+
+   TWO COLUMNS FROM 64rem: the colophon left, the index right at its own
+   max-content width, and the legal row spanning both. Below that the three
+   stack in reading order.
+
+   THE INDEX IS A 5-ROW COLUMN FLOW, so nine anchors set as 5 + 4 and the block
+   stays as wide as its longest label rather than as wide as the column. At 360
+   the two columns measure about 246px against a 324px content box. It is fed by
+   `navSections()`, so it lists what is actually on the page and never offers a
+   dead anchor while the page is being assembled; complete it is nine, the hero
+   labelled with the wordmark and then COPY.md's own eight section labels, with
+   no link to the footer itself.
+
+   TYPE. 13px, one step under the 16px body and one over the 12px nav, which is
+   the only size in the section - the wordmark is the single exception at 20px
+   in the display face, because the studio's name is the one thing here that
+   should be read before it is looked for. Muted #7c8798 on the void measures
+   5.5:1 and the links at #e9edf3 measure 17:1.
+
+   NOTHING MOVES but the two link hairlines, which the token block already
+   collapses to 1ms under `prefers-reduced-motion`. */
+
+.v5-footer {
+  /* Chrome at 24 percent: the one rule in the section. */
+  --v5-footer-ink: color-mix(in srgb, var(--v5-chrome) 24%, transparent);
+  /* Chrome at 45 percent, matching `--v5-start-ink`: the resting underline
+     under the printed address, which sits inside a sentence and so must not be
+     marked by colour alone. */
+  --v5-footer-link-ink: color-mix(in srgb, var(--v5-chrome) 45%, transparent);
+  --v5-footer-text: 0.8125rem;
+
+  padding-block: var(--v5-space-5);
+}
+
+.v5-footer__inner {
+  display: grid;
+  row-gap: var(--v5-space-4);
+  padding-top: var(--v5-space-4);
+  border-top: var(--v5-hairline) solid var(--v5-footer-ink);
+  font-size: var(--v5-footer-text);
+  line-height: 1.55;
+  color: var(--v5-muted);
+}
+
+.v5-footer__colophon {
+  display: grid;
+  row-gap: var(--v5-space-2);
+}
+
+.v5-footer__word {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.v5-footer__mark {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--v5-chrome);
+}
+
+.v5-footer__name {
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--v5-chrome);
+}
+
+.v5-footer__line {
+  max-width: 48ch;
+}
+
+/* The printed address: a resting hairline for the reason `.v5-start__mail`
+   carries one. */
+.v5-footer__mail {
+  color: var(--v5-text);
+  border-bottom: var(--v5-hairline) solid var(--v5-footer-link-ink);
+  transition:
+    color var(--v5-dur-hover) var(--v5-ease),
+    border-color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-footer__mail:hover,
+.v5-footer__mail:focus-visible {
+  color: var(--v5-chrome);
+  border-bottom-color: var(--v5-chrome);
+}
+
+.v5-footer__list {
+  display: grid;
+  grid-template-rows: repeat(5, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  column-gap: var(--v5-space-3);
+  row-gap: 0.55rem;
+  justify-content: start;
+}
+
+.v5-footer__link {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.3em;
+  color: var(--v5-text);
+  transition: color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-footer__link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--v5-hairline);
+  background-color: var(--v5-chrome);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-footer__link:hover,
+.v5-footer__link:focus-visible {
+  color: var(--v5-chrome);
+}
+
+.v5-footer__link:hover::after,
+.v5-footer__link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Four sentences, one row wherever the row is wide enough to hold them. */
+.v5-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+
+@media (min-width: 64rem) {
+  .v5-footer__inner {
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: var(--v5-space-5);
+    align-items: start;
+  }
+
+  .v5-footer__legal {
+    grid-column: 1 / -1;
+  }
+}

@@ -311,7 +311,7 @@ export default function Page() {
           </p>
           <p className="v1-doc__line">
             {"The owner's note on the first version: "}
-            &ldquo;the layout is very good and simple&rdquo;.
+            &quot;the layout is very good and simple&quot;.
           </p>
           <p className="v1-doc__line">
             The one complaint was generation time, which is set by the model providers, and we said

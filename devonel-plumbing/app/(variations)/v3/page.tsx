@@ -1,5 +1,8 @@
 import {
+  Contact,
   Engagement,
+  Faq,
+  Footer,
   Founders,
   Hero,
   Process,
@@ -36,7 +39,10 @@ export default function Page() {
         <Process />
         <Founders />
         <Engagement />
+        <Faq />
+        <Contact />
       </main>
+      <Footer />
     </div>
   );
 }

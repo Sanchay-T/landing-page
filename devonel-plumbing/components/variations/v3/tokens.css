@@ -1561,3 +1561,419 @@ body:has(.v3-doc) {
     column-gap: var(--v3-space-xl);
   }
 }
+
+/* ================================================================= 08 - faq
+
+   Day. `data-stage="day"` for the two clockless paths, plain `.v3-band` on the
+   rest, and nothing in this entry or in `faq.tsx` paints a colour.
+
+   SEVEN STATIONS THAT OPEN. The object is the one the proof band introduces and
+   every band since has reused: a rule, the name sitting on it in the condensed
+   display face, and a slot at the rule's right end. `.v3-service-rule` and
+   `.v3-service-name` are reused unchanged. Two things are new. The rule is now a
+   `<button>`, so the UA button box has to come off without taking the station's
+   own border and padding with it - which is why the reset below zeroes three
+   sides and three edges by name rather than writing `border: 0` and `padding: 0`
+   and putting them back. And the slot carries a plus that becomes a minus,
+   because a question is not a day of the sixteen and this is the first band
+   whose right-hand slot has something better to hold than nothing.
+
+   THE OPEN PANEL. `grid-template-rows` from `0fr` to `1fr` is what makes the
+   answer's own height animate without anyone measuring it, and the inner box
+   clips. The closed state hangs off the `hidden` attribute, restyled rather than
+   honoured: `display: grid` overrides the UA `display: none` so there is a state
+   to transition from, and `visibility: hidden` is what keeps the promise the
+   attribute makes - out of the accessibility tree, out of find-in-page, out of
+   the tab order, nothing painted. `visibility` is in the transition list on
+   purpose: it flips to visible at the start of the opening run and holds until
+   the end of the closing one, so neither direction ever clips its own content.
+
+   SIZES, STILL DECREASING. Question 24-30, one step under the 28-36 the founders
+   and engagement names take and one over the 22-28 of the case titles; answers
+   at body size on 66ch. No opacity on any text, here as everywhere.
+   =========================================================================== */
+
+.v3 {
+  /* 24px at 390, 30px at 1280. */
+  --v3-size-question: clamp(1.5rem, 0.674vw + 1.336rem, 1.875rem);
+  /* The disclosure. The page's fourth and last motion primitive, and it answers
+     a click rather than announcing itself. */
+  --v3-disclose-dur: 200ms;
+}
+
+.v3-faq {
+  padding-block: clamp(2.75rem, 8vh, 5.5rem);
+}
+
+.v3-faq-list {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+}
+
+/* Tighter than the services band's rhythm, for the reason the engagement band is
+   tighter than the founders band: a closed row is one line, and a services-sized
+   gap under a one-line entry reads as a missing paragraph. The gap between two
+   rows still runs about twice the 16px between a question and its own answer, so
+   proximity keeps an open answer with the question that opened it. */
+.v3-faq-row + .v3-faq-row {
+  margin-top: clamp(1.75rem, 4.5vh, 2.5rem);
+}
+
+/* The heading is a wrapper for the control and carries none of its own type. */
+.v3-faq-h {
+  font: inherit;
+}
+
+/* ------------------------------------------------------------- the control */
+
+.v3-faq-q {
+  /* The UA button box, removed one edge at a time: `.v3-service-rule` owns the
+     bottom border and the bottom padding and must keep both, whichever of the
+     two rules the cascade reads last. */
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  padding-block-start: 0;
+  padding-inline: 0;
+  border-block-start: 0;
+  border-inline: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--v3-hover-dur) var(--v3-ease);
+}
+
+/* The page's own hover vocabulary, the one `.v3-more a` and `.v3-link` use: the
+   rule under it goes from the 32% station rule to full ink. */
+.v3-faq-q:hover {
+  border-bottom-color: currentColor;
+}
+
+.v3-faq-name {
+  font-size: var(--v3-size-question);
+  text-wrap: pretty;
+}
+
+/* The slot the date holds in every other station, at a size that reads as a
+   control rather than as a footnote. Fixed width so the rule's right end does
+   not shift when the plus becomes a minus. */
+.v3-faq-glyph {
+  flex: none;
+  width: 1.25rem;
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+/* --------------------------------------------------------------- the answer */
+
+.v3-faq-a {
+  display: grid;
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    grid-template-rows var(--v3-disclose-dur) var(--v3-ease),
+    opacity var(--v3-disclose-dur) var(--v3-ease),
+    visibility var(--v3-disclose-dur);
+}
+
+.v3-faq-a[hidden] {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* The closed answer keeps the `hidden` attribute and is restyled rather than
+   removed, and taking `display` off it costs two things this file uses nowhere
+   else. Tailwind's preflight ships
+   `[hidden]:where(:not([hidden="until-found"])){display:none !important}`, so
+   only `!important` can answer it - and an important declaration in a layer
+   beats an important declaration in no layer, whatever the specificity, so this
+   one has to stand in `base` beside the rule it is answering. Only `display` is
+   in here: a normal declaration loses the same argument the other way round, and
+   the three above would fall to the unlayered open state if they came too.
+
+   What replaces `display: none` keeps every promise the attribute makes.
+   `visibility: hidden` takes the panel out of the accessibility tree, out of
+   find-in-page and out of the tab order, and paints nothing; what it leaves
+   behind is a box the height and opacity transitions can start from. Delete this
+   block and the answers are not more hidden, they just arrive without the
+   200ms. */
+@layer base {
+  .v3-faq-a[hidden] {
+    display: grid !important;
+  }
+}
+
+/* Padding lives here, not on the animating box: a grid row of `0fr` collapses
+   the row, and only the clipped child can take the padding down with it. */
+.v3-faq-a-inner {
+  overflow: hidden;
+}
+
+.v3-faq-a-inner p {
+  padding-top: var(--v3-space-s);
+  max-width: 66ch;
+  text-wrap: pretty;
+}
+
+/* The row snaps. The disclosure is the only motion this band has, so turning it
+   off leaves nothing behind. */
+@media (prefers-reduced-motion: reduce) {
+  .v3-faq-a {
+    transition: none;
+  }
+}
+
+/* ========================================================== 09 - final CTA
+
+   Day, and the ramp gets here on its own.
+
+   NO `data-clock` ON THIS BAND. The flash-forward in section 2 is the page's one
+   declared exception to the clock and it earns that by breaking the ramp; this
+   band is where the ramp arrives. Pinning it to t=1 would spend the ending
+   twice and would make the sixteen days a decoration rather than a clock, which
+   is the direction's own named failure. `data-stage="day"` is here only for the
+   two clockless paths, exactly as the engagement band above uses it.
+
+   THE LAST STATION. The same object the proof band introduced and the services
+   band scaled up: a rule with the section on the left and the day at its right
+   end in the tick bar's tabular mono. It reads 27 Aug 2026, the stamp screen two
+   already showed the reader.
+
+   ONE SIZE THIS PAGE HAS NOT USED YET. The ask is 48px at 390 and 64px at 1280 -
+   above every section heading (28-48) and below the hero (34-72). The hero asks
+   for sixteen days of attention; this asks for one message.
+
+   THE PROOF BESIDE THE BUTTON. Stacked below 51.25rem, two columns above it,
+   with the button's column at its own width so the sentence keeps a measure.
+   Marker red appears here for the second and last time on the page, as the rule
+   under the button, which is the hero's idiom unchanged.
+   =========================================================================== */
+
+.v3 {
+  /* 48px at 390, 64px at 1280, hard-stopped at both ends. */
+  --v3-size-ask: clamp(3rem, 1.798vw + 2.562rem, 4rem);
+}
+
+.v3-final {
+  padding-block: clamp(3rem, 9vh, 6rem);
+}
+
+.v3-ask {
+  margin-top: var(--v3-space-l);
+  max-width: 18ch;
+  font-family: var(--v3-font-display);
+  font-variation-settings: "wdth" 70;
+  font-weight: 700;
+  font-size: var(--v3-size-ask);
+  line-height: var(--v3-leading-display);
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+/* The button and its support line travel together; the proof line is a second
+   column, not a caption under the button. */
+.v3-final-act {
+  margin-top: clamp(2.25rem, 6vh, 3.25rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--v3-space-l);
+}
+
+.v3-final-do {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--v3-space-s);
+}
+
+.v3-proof-line {
+  max-width: 44ch;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* The channel closes the band on the 14% hairline: it is a note under the
+   action, not a second action. */
+.v3-channel {
+  margin-top: clamp(2.25rem, 6vh, 3.25rem);
+  padding-top: var(--v3-space-m);
+  border-top: 1px solid var(--v3-rule);
+  font-size: var(--v3-size-caption);
+  line-height: 1.5;
+}
+
+/* The live address, here and in the colophon. Underlined in ink, never in the
+   marker red, which belongs to the day marker and the primary rule alone. */
+.v3-mail {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--v3-rule-strong);
+  transition: border-color var(--v3-hover-dur) var(--v3-ease);
+}
+
+.v3-mail:hover {
+  border-bottom-color: currentColor;
+}
+
+/* Two columns once the proof line can hold a measure beside the button. The
+   button column takes its own width; the inset on the proof line puts its first
+   line on the button label's optical centre rather than on the button's top
+   edge. */
+@media (min-width: 51.25rem) {
+  .v3-final-act {
+    grid-template-columns: max-content minmax(0, 44ch);
+    column-gap: var(--v3-space-2xl);
+  }
+  .v3-proof-line {
+    padding-top: 0.6rem;
+  }
+}
+
+/* ============================================================= 10 - footer
+
+   Day, and quiet. `data-stage="day"` for the clockless paths; the ramp is at its
+   last value here in every other mode. Nothing in this band paints.
+
+   THE INDEX IS THE TICK BAR MADE READABLE. At a phone width the bar's sixteen
+   cells are about 15px, under the 24px target minimum, and this index is the
+   equivalent control that criterion allows for - so it is load-bearing, not
+   decoration. It is built as the bar's twin rather than as a link list: a row
+   per section, the label on the left, the day of the build at the right end in
+   the bar's own tabular mono, on the 14% hairline. The sixteen days run down a
+   column instead of across a bar.
+
+   Rows are at body scale with 0.7rem of padding, so every target is about 44px
+   tall at 390 - comfortably over the minimum the bar cannot meet.
+
+   NOT HERE, ON PURPOSE: a social row, a newsletter, a four-column sitemap, an
+   icon set, a plinth, a radius, a shadow, a muted grey. The colophon is a
+   wordmark, three lines and an index.
+   =========================================================================== */
+
+.v3-footer {
+  padding-block: clamp(2.75rem, 8vh, 5rem) clamp(2.25rem, 6vh, 3.5rem);
+  border-top: 1px solid var(--v3-rule-strong);
+}
+
+.v3-colophon {
+  display: grid;
+  align-items: start;
+  gap: clamp(2.5rem, 7vh, 3.5rem);
+}
+
+.v3-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.v3-wordmark svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.v3-wordmark span {
+  font-family: var(--v3-font-display);
+  font-variation-settings: "wdth" 70;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.v3-colophon-line {
+  margin-top: var(--v3-space-m);
+  max-width: 44ch;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.v3-index a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--v3-space-m);
+  min-height: 2.75rem;
+  padding-block: 0.7rem;
+  border-top: 1px solid var(--v3-rule);
+  line-height: 1.4;
+  transition: border-color var(--v3-hover-dur) var(--v3-ease);
+}
+
+.v3-index li:last-child a {
+  border-bottom: 1px solid var(--v3-rule);
+}
+
+.v3-index a:hover {
+  border-top-color: var(--v3-rule-strong);
+}
+
+.v3-index-date {
+  flex: none;
+  font-family: var(--v3-font-date);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--v3-size-micro);
+  letter-spacing: 0.01em;
+}
+
+.v3-legal {
+  padding-top: var(--v3-space-m);
+  border-top: 1px solid var(--v3-rule);
+  max-width: 60ch;
+  font-size: var(--v3-size-caption);
+  line-height: 1.6;
+}
+
+/* The colophon and the index sit side by side once the index can hold its own
+   column without squeezing the three lines beside it. The index spans both rows
+   and the provenance sits at the foot of the colophon column, so the two columns
+   end level instead of leaving a hole under three short lines. */
+@media (min-width: 64rem) {
+  .v3-colophon {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+    column-gap: var(--v3-space-2xl);
+  }
+  .v3-colophon-id {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .v3-colophon nav {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .v3-legal {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+  }
+}
+
+/* ================================================== 07b - engagement lead-in
+
+   COPY.md section 7 opens its four terms with a line of on-page copy, "Four
+   ways to work with us". It sets in the station at its body scale, the
+   `.v3-case-block-rule` object entry 07 already closes the band with, so the
+   list is opened by a named rule and closed by one. Nothing here paints.
+
+   The two margins carry the grouping. The lead-in takes the gap `.v3-terms`
+   used to take from the subhead, and the list then follows its own heading at
+   the 24px that separates a name's rule from its description everywhere else in
+   this band - big above, small below, so the line reads as belonging to the
+   four entries under it rather than floating between them. The list rule is an
+   adjacent-sibling override, so `.v3-terms` keeps entry 07's spacing wherever
+   no lead-in precedes it.
+   =========================================================================== */
+
+.v3-engagement-lead {
+  margin-top: clamp(2.75rem, 8vh, 4.5rem);
+}
+
+.v3-engagement-lead + .v3-terms {
+  margin-top: var(--v3-space-m);
+}

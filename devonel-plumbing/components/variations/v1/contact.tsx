@@ -58,11 +58,11 @@ export function Contact() {
 
           <figure className="v1-ask__proof">
             <blockquote className="v1-ask__said">
-              &ldquo;the layout is very good and simple&rdquo;
+              &quot;the layout is very good and simple&quot;
             </blockquote>
             <figcaption className="v1-ask__who">
               the owner, a bespoke jewellery house in Dubai. Shipped{" "}
-              <span className="v1-ask__date">27 Aug 2026</span>.
+              <span className="v1-ask__date">27 Aug 2026</span>
             </figcaption>
           </figure>
         </div>

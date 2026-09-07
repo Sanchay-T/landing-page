@@ -1,4 +1,9 @@
 import {
+  Contact,
+  Engagement,
+  Faq,
+  Footer,
+  Founders,
   Hero,
   Nav,
   Process,
@@ -39,7 +44,12 @@ export default function Page() {
         <Services />
         <Work />
         <Process />
+        <Founders />
+        <Engagement />
+        <Faq />
+        <Contact />
       </main>
+      <Footer />
     </div>
   );
 }

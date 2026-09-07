@@ -191,7 +191,7 @@ Buy versus build: if you should buy something off the shelf instead, we say so i
 
 **Buyer question:** Show me one you finished, what you actually built, and what happened when real customers touched it.
 
-**Label:** Proof of work
+**Label:** Case studies
 
 **Headline:** One shipped, two in build, nothing invented.
 

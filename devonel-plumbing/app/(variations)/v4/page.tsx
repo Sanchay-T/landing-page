@@ -1,5 +1,18 @@
 import type { Metadata } from "next";
-import { SECTIONS, V4Hero, V4Nav } from "@/components/variations/v4";
+import {
+  SECTIONS,
+  V4Contact,
+  V4Engagement,
+  V4Faq,
+  V4Footer,
+  V4Founders,
+  V4Hero,
+  V4Nav,
+  V4Process,
+  V4Proof,
+  V4Services,
+  V4Work,
+} from "@/components/variations/v4";
 // The whole design system for this variation. Scoped under `.v4`, so it cannot
 // reach another route.
 import "@/components/variations/v4/tokens.css";
@@ -30,7 +43,17 @@ export default function Page() {
       <V4Nav sections={SECTIONS} />
       <main>
         <V4Hero />
+        <V4Proof />
+        <V4Services />
+        <V4Work />
+        <V4Process />
+        <V4Founders />
+        <V4Engagement />
+        <V4Faq />
+        <V4Contact />
       </main>
+
+      <V4Footer sections={SECTIONS} />
     </div>
   );
 }

@@ -18,15 +18,17 @@ import { contactLabel } from "@/lib/site";
  * The map is the one place this page spends its boldness. It is a metro
  * diagram of how work moves through the studio: five service lines, each in the
  * ink that service keeps for the rest of the page, running as one corridor
- * through the four phases from COPY.md section 5. The colour inks itself in
- * once on load over a black-cased pencil drawing that is never animated, so the
- * diagram is complete in the DOM, complete under prefers-reduced-motion, and
- * complete in every capture whether or not the ink has run.
+ * through the four phases from COPY.md section 5. It is inked from the first
+ * frame and stays inked: complete in the DOM, complete under
+ * prefers-reduced-motion, complete in every capture.
  *
- * No client component, no observer, no library: the draw is a CSS transition
- * out of @starting-style on stroke-dashoffset, and the spring is a
- * cubic-bezier. See tokens.css section 4.3 for why it is a transition and not
- * a keyframe animation.
+ * The hero's motion is the entrance instead - six blocks arriving up the y axis
+ * on the spring from tokens.css 4.1, 60ms apart, in reading order. It is
+ * translate-only, so it changes how the page finishes settling and never
+ * whether anything is on it.
+ *
+ * No client component, no observer, no library: both primitives are CSS
+ * transitions out of @starting-style, and the spring is a cubic-bezier.
  */
 
 /** COPY.md section 5, the four phases, in order. Stations on the line. */
@@ -56,8 +58,22 @@ const TIMETABLE = [
   { label: "Live", value: "27 Aug 2026" },
 ] as const;
 
-/** Draw order. Each line inks in 90ms after the one above it. */
-const DRAW_STEP_MS = 90;
+/**
+ * The hero entrance, tokens.css 4.1 and 6.10. Six blocks arrive up the y axis
+ * in reading order, one step apart, each overshooting once on the spring. This
+ * is the page's one orchestrated moment.
+ *
+ * 60ms a step puts the last block's motion 800ms after first paint, which is
+ * short enough that a screenshot taken on someone else's clock catches a page
+ * whose blocks are at most a few pixels low. It cannot catch a page with a
+ * block missing: the primitive translates and never touches opacity, and the
+ * blocks are laid out where they finish.
+ */
+const ENTER_STEP_MS = 60;
+
+function enterDelay(step: number): CSSProperties {
+  return { "--v4-enter-delay": `${step * ENTER_STEP_MS}ms` } as CSSProperties;
+}
 
 // --------------------------------------------------------------------- map
 
@@ -99,30 +115,21 @@ function tallPath(index: number) {
 /**
  * One service line, four paths, painted back to front.
  *
- *   casing  black, 12 wide, static      the outline of the diagram
- *   pencil  grey, 9 wide, static        the unbuilt line inside the casing
- *   ink     the service colour, 9 wide  the only path that draws itself
- *   gaps    paper, 9 wide, static       the dash punch, service 5 only
+ *   casing  black, 12 wide   the outline of the diagram
+ *   pencil  grey, 9 wide     the line inside the casing
+ *   ink     the service colour, 9 wide
+ *   gaps    paper, 9 wide    the dash punch, service 5 only
  *
- * Only the colour moves. Everything that makes the map a readable diagram is in
- * the static paths, so the map is finished in the DOM, finished under reduced
- * motion, and finished in a screenshot taken at any moment.
+ * Nothing here moves. The ink keeps the .v4-draw class because that class is
+ * what pins its rest state - the whole path stroked, offset 0 - and what the
+ * reduced-motion block collapses; the hero takes the page default
+ * --v4-draw-lead: 0, so there is no lead to reveal and the line is inked from
+ * the first frame. tokens.css 4.3 has the reason: a load-time stroke is a
+ * window in which a screenshot catches a half-drawn map, and the deliverable
+ * for this section is the stills. The hero's motion is the block entrance
+ * instead, which cannot lose a line.
  */
-function MapLine({
-  d,
-  index,
-  ink,
-  dashed,
-}: {
-  d: string;
-  index: number;
-  ink: string;
-  dashed?: boolean;
-}) {
-  // The draw is a transition out of @starting-style (tokens.css section 4.3),
-  // so the stagger is a transition-delay, carried as a custom property.
-  const delay = { "--v4-draw-delay": `${index * DRAW_STEP_MS}ms` } as CSSProperties;
-
+function MapLine({ d, ink, dashed }: { d: string; ink: string; dashed?: boolean }) {
   return (
     <g>
       <path className="v4-map__casing" d={d} strokeWidth={12} />
@@ -132,7 +139,7 @@ function MapLine({
         d={d}
         pathLength={100}
         strokeWidth={9}
-        style={{ ...delay, stroke: ink }}
+        style={{ stroke: ink }}
       />
       {dashed ? <path className="v4-map__gaps" d={d} strokeWidth={9} /> : null}
     </g>
@@ -152,7 +159,6 @@ function WideMap() {
         <MapLine
           key={line.n}
           d={widePath(index)}
-          index={index}
           ink={line.ink}
           dashed={"dashed" in line ? line.dashed : false}
         />
@@ -195,7 +201,6 @@ function TallMap() {
         <MapLine
           key={line.n}
           d={tallPath(index)}
-          index={index}
           ink={line.ink}
           dashed={"dashed" in line ? line.dashed : false}
         />
@@ -232,23 +237,25 @@ export function V4Hero() {
       <div className="v4-shell">
         {/* COPY.md section 1 eyebrow, set as the coloured tag the v4 tone note
             asks for. Black on red, the only pairing that passes AA on this ink. */}
-        <p className="v4-tag">AI product studio and growth partner</p>
+        <p className="v4-tag v4-enter-y" style={enterDelay(0)}>
+          AI product studio and growth partner
+        </p>
 
-        <h1 className="v4-hero__title" id="v4-hero-title">
+        <h1 className="v4-hero__title v4-enter-y" id="v4-hero-title" style={enterDelay(1)}>
           <span>The studio that ships</span> <span>before it pitches.</span>
         </h1>
 
-        <p className="v4-hero__lead">
+        <p className="v4-hero__lead v4-enter-y" style={enterDelay(2)}>
           Devonel builds and runs the software owner-led brands sell with. We shipped a name-pendant
           studio for a bespoke jewellery house in Dubai on the morning of their exhibition stall.
         </p>
 
-        <div className="v4-hero__act">
+        <div className="v4-hero__act v4-enter-y" style={enterDelay(3)}>
           <ContactCTA className="v4-block v4-hero__cta">{contactLabel()}</ContactCTA>
           <p className="v4-hero__support">Paid discovery, fixed scope, no forms.</p>
         </div>
 
-        <div className="v4-hero__proof v4-grid">
+        <div className="v4-hero__proof v4-grid v4-enter-y" style={enterDelay(4)}>
           <div className="v4-tt">
             <div className="v4-tt__track" aria-hidden="true">
               <span className="v4-tt__dot v4-tt__dot--start" />
@@ -271,7 +278,7 @@ export function V4Hero() {
           </blockquote>
         </div>
 
-        <figure className="v4-map">
+        <figure className="v4-map v4-enter-y" style={enterDelay(5)}>
           <WideMap />
           <TallMap />
           {/* Both drawings are aria-hidden, so this list is the map's text

@@ -44,15 +44,15 @@ export type V4Section = {
 
 export const SECTIONS: readonly V4Section[] = [
   { id: "hero", navLabel: "Top", inNav: true, built: true },
-  { id: "proof", navLabel: "Proof", inNav: true, built: false },
-  { id: "services", navLabel: "Services", inNav: true, built: false },
-  { id: "work", navLabel: "Work", inNav: true, built: false },
-  { id: "process", navLabel: "Process", inNav: true, built: false },
-  { id: "founders", navLabel: "Founders", inNav: true, built: false },
-  { id: "engagement", navLabel: "Engagement", inNav: true, built: false },
-  { id: "faq", navLabel: "FAQ", inNav: true, built: false },
-  { id: "contact", navLabel: "Contact", inNav: true, built: false },
-  { id: "footer", navLabel: "Footer", inNav: false, built: false },
+  { id: "proof", navLabel: "Proof", inNav: true, built: true },
+  { id: "services", navLabel: "Services", inNav: true, built: true },
+  { id: "work", navLabel: "Work", inNav: true, built: true },
+  { id: "process", navLabel: "Process", inNav: true, built: true },
+  { id: "founders", navLabel: "Founders", inNav: true, built: true },
+  { id: "engagement", navLabel: "Engagement", inNav: true, built: true },
+  { id: "faq", navLabel: "FAQ", inNav: true, built: true },
+  { id: "contact", navLabel: "Contact", inNav: true, built: true },
+  { id: "footer", navLabel: "Footer", inNav: false, built: true },
 ] as const;
 
 /** The stops the signage bar shows right now. */

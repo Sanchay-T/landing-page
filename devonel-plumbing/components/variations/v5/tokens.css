@@ -1,0 +1,661 @@
+/* ===========================================================================
+   v5 "Liquid Metal" - the whole design system for variation 5.
+
+   Direction: docs/goal/03-design-research.md section 4, "Direction 5".
+   A dark, near-empty page. One chrome orb whose environment map is generated at
+   runtime from the studio's own vocabulary, and Archivo at poster scale. No
+   third hue, no shadow, no cards - slabs. The orb is the only glossy object on
+   the page, and it is the only thing allowed to move on its own.
+
+   INDEX
+   00 tokens        palette, type scale, space, grid, form, orb, motion
+   01 resets
+   02 primitives    .v5-display .v5-body .v5-micro .v5-band .v5-grid .v5-slab
+                    .v5-chip .v5-rule .v5-pill
+   03 nav
+   04 hero
+   -- the next section builder appends block 05 at the end of the file --
+
+   HOW TO USE THIS FILE
+   - Everything is scoped under `.v5`, which `app/(variations)/v5/page.tsx` puts
+     on the page wrapper. Nothing here leaks to the switcher or the other four.
+   - Sections consume tokens and the primitives below (`.v5-display`,
+     `.v5-body`, `.v5-slab`, `.v5-pill`, `.v5-rule`). A section that needs a new
+     value adds a token here rather than a magic number in a component.
+   - `.v5-band` is the one grid definition every section uses: the page gutter,
+     the 90rem page width and, with `.v5-grid`, twelve columns. The hero is the
+     single exception that runs wider, because the poster headline is the one
+     thing on the site allowed past the page width.
+
+   APPEND ONLY
+   - This file is written in section order (tokens, resets, primitives, then one
+     block per page section). A later builder APPENDS its section block at the
+     end and does not edit the blocks above it, so two builders working on
+     different sections can never collide in the same lines.
+   - The one exception is the token block itself: a new token is added at the
+     end of its own group, existing tokens are not re-tuned.
+
+   THE THREE MOTION PRIMITIVES (one each, per 05-build-spec.md)
+   1. Entrance - the environment map builds. Seven phrases of Devonel's own
+      vocabulary are painted onto the orb's env-map canvas one at a time over
+      `--v5-dur-build`, then it settles into a 0.08 rad/s idle. Once, on mount.
+      Lives in `orb-scene.tsx`; the duration token is the contract.
+   2. Hover - `--v5-dur-hover`. Two forms of the same gesture: pointer position
+      tilts the orb up to 8 degrees (desktop pointer only, in `orb-scene.tsx`),
+      and a chrome sliver fills a control bottom-to-top (`.v5-pill::before`,
+      `.v5-nav__link::after`).
+   3. Scroll - the orb's material roughness rises 0.02 -> 0.35 as the hero
+      leaves the viewport, so the chrome goes matte and the page cools as you
+      read. One uniform, no layout cost, in `orb-scene.tsx`.
+   Reduced motion collapses all three: the durations below go to 1ms and the
+   canvas never mounts at all (`lib/webgl.ts` denies the render gate), so the
+   orb renders as its static still with occlusion off.
+   =========================================================================== */
+
+.v5 {
+  /* --- palette. Blue-steel, five values plus two lighting temperatures. ---
+     `key` and `rim` are the studio-photography trick that stops chrome reading
+     as grey plastic. They exist ONLY on the orb - as two directional lights and
+     as the two coloured fields painted into its environment map. No page
+     surface may use them, and there is no third hue anywhere. */
+  --v5-void: #06080d; /* ground */
+  --v5-steel: #151b26; /* raised slabs */
+  --v5-chrome: #dce4ee; /* highlights, rules, outlines, button ink */
+  --v5-text: #e9edf3;
+  --v5-muted: #7c8798;
+  --v5-key: #8fb6ff; /* cold key, orb only */
+  --v5-rim: #f0c08a; /* warm rim, orb only */
+
+  /* Rules are chrome at 10 percent. Never a grey; the tint is the point. */
+  --v5-rule: color-mix(in srgb, var(--v5-chrome) 10%, transparent);
+  --v5-rule-strong: color-mix(in srgb, var(--v5-chrome) 22%, transparent);
+
+  /* --- type ---
+     Two families. Archivo carries the whole page's voice at `wdth` 125 /
+     `wght` 800; Geist carries the small amount of body copy. Sentence case
+     everywhere - no tracked-out caps labels.
+
+     Display is fluid from 44px at 390 to 148px at 1536 and holds 148px above
+     that: `9.075vw + 8.61px`, clamped 40px..148px.
+
+     Why 148px lands at 1536 and not at 1280, which is what the direction asks
+     for: measured in the browser, "customers use." - the longest line of the
+     COPY.md hero headline - sets 1372px wide in Archivo `wdth` 125 / `wght` 800
+     at 148px with -0.02em. A 1280 viewport minus the 4vw gutters leaves 1177px,
+     so 148px overflows the screen by 195px there and the largest size that fits
+     is 127px. Solving `1372 * size / 148 <= 0.92 * width` for the ramp puts the
+     first width that can carry 148px at 1491, so the token reaches it at 1536,
+     which is the next viewport in the matrix. At 1280 it computes to 124.8px.
+     Shrinking the copy was the alternative and it is the wrong one: the
+     headline is the fact this studio sells on. */
+  --v5-font-display: var(--font-width);
+  --v5-font-body: var(--font-sans);
+  --v5-display: clamp(2.5rem, 9.075vw + 0.538rem, 9.25rem);
+  --v5-display-leading: 0.9;
+  --v5-display-tracking: -0.02em;
+  --v5-display-wdth: 125;
+  --v5-display-wght: 800;
+
+  --v5-body: 1rem;
+  --v5-body-leading: 1.6;
+  --v5-lead: 1.0625rem; /* the one line under a CTA */
+  --v5-micro: 0.75rem; /* 12px: the two nav items */
+  --v5-chip: 0.6875rem; /* 11px on a chrome hairline */
+
+  /* --- space. The direction asks for enormous margins; this is where they
+     live, so no section invents its own. --- */
+  /* 18px at the bottom end, not 20: at 360 the headline's first line
+     ("Sixteen days") sets 321px and a 20px gutter leaves 320. */
+  --v5-gutter: clamp(1.125rem, 4vw, 6rem);
+  --v5-page: 90rem; /* every section but the hero stops here */
+  --v5-measure: 78rem; /* body text and slabs */
+  --v5-hero-measure: 120rem; /* the headline alone is allowed to run wide */
+  --v5-copy: 66ch; /* the one paragraph measure, under 80 characters */
+  --v5-space-1: 0.5rem;
+  --v5-space-2: 1rem;
+  --v5-space-3: 1.5rem;
+  --v5-space-4: 2.5rem;
+  --v5-space-5: 4rem;
+  --v5-space-6: clamp(6rem, 14vh, 11rem); /* between page sections */
+  --v5-nav-h: 3.75rem;
+
+  /* --- form. Slabs, not cards: 2px radius, a 1px chrome rule, no shadow. --- */
+  --v5-radius: 2px;
+  --v5-radius-pill: 999px;
+  --v5-hairline: 1px;
+  --v5-sliver: 3px; /* the chrome edge that lights on a service row */
+
+  /* --- the orb ---
+     `--v5-orb` is the chrome disc: 300px at 390, 560px at 1280 and above.
+     `--v5-orb-box` is the canvas that holds it. The sphere fills 94.96 percent
+     of the frame at fov 26.4 from z 4.6 with radius 1, so the box is the disc
+     divided by that. Keep the three numbers in step with `orb-scene.tsx`.
+
+     `--v5-orb-cap` is the second half of the sizing rule and it exists because
+     of the subhead. Where the orb occludes the headline it shares the fold with
+     the nav, the subhead, the button and the support line, and at 1280x800 the
+     direction's 560px disc leaves those 73px short of the fold. The cap trades
+     disc for legibility only where the viewport is short: at 1280x800 the orb
+     is 448px, at 1920x1080 and 2560x1080 it is the full 560px. */
+  --v5-orb: min(clamp(300px, 29.21vw + 186px, 560px), var(--v5-orb-cap));
+  --v5-orb-cap: 200vh; /* no cap until the orb has to share the fold */
+  --v5-orb-box: calc(var(--v5-orb) / 0.9496);
+
+  /* --- motion --- */
+  --v5-dur-build: 1200ms;
+  --v5-dur-hover: 200ms;
+  --v5-dur-fade: 600ms;
+  --v5-ease: cubic-bezier(0.16, 0.84, 0.44, 1);
+
+  background-color: var(--v5-void);
+  color: var(--v5-text);
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  min-height: 100dvh;
+  position: relative;
+  isolation: isolate;
+}
+
+/* The page ground has to reach past the wrapper, or an overscroll bounce shows
+   the switcher's white through. `color-scheme` also darkens the scrollbar. */
+:root:has(.v5) {
+  background-color: #06080d;
+  color-scheme: dark;
+}
+
+:root:has(.v5) body {
+  background-color: #06080d;
+}
+
+/* Reduced motion: the three primitives collapse to nothing. The canvas is
+   already refused by the render gate before this matters, so this covers the
+   CSS half - the sliver fill and every transition below. */
+@media (prefers-reduced-motion: reduce) {
+  .v5 {
+    --v5-dur-build: 1ms;
+    --v5-dur-hover: 1ms;
+    --v5-dur-fade: 1ms;
+  }
+}
+
+/* ---------------------------------------------------------------- resets ---
+   `:where()` so every one of these is specificity 0 and a component class
+   overrides it without a fight. */
+
+.v5 :where(h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd) {
+  margin: 0;
+}
+
+.v5 :where(ul, ol) {
+  list-style: none;
+  padding: 0;
+}
+
+.v5 :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.v5 :where(img, svg, canvas, video) {
+  display: block;
+  max-width: 100%;
+}
+
+.v5 :where(button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+/* Anchors are the nav targets for every section; keep them clear of the two
+   corner items. */
+.v5 :where([id]) {
+  scroll-margin-top: calc(var(--v5-nav-h) + var(--v5-space-3));
+}
+
+/* Chrome focus ring, overriding the neutral one in globals.css. */
+.v5 :focus-visible {
+  outline: 2px solid var(--v5-chrome);
+  outline-offset: 3px;
+  border-radius: var(--v5-radius);
+}
+
+/* ------------------------------------------------------------ primitives --- */
+
+/* The grid, once. Every section is a `.v5-band`: page gutter, 90rem of content,
+   centred. `.v5-grid` adds the twelve columns for the sections that need them.
+   The hero opts out of the width cap only, not out of the gutter. */
+.v5-band {
+  width: 100%;
+  max-width: var(--v5-page);
+  margin-inline: auto;
+  padding-inline: var(--v5-gutter);
+}
+
+.v5-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--v5-space-3);
+}
+
+.v5-display {
+  font-family: var(--v5-font-display);
+  font-weight: var(--v5-display-wght);
+  font-variation-settings:
+    "wdth" var(--v5-display-wdth),
+    "wght" var(--v5-display-wght);
+  font-size: var(--v5-display);
+  line-height: var(--v5-display-leading);
+  letter-spacing: var(--v5-display-tracking);
+  color: var(--v5-text);
+}
+
+.v5-body {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-muted);
+  max-width: 34em;
+}
+
+.v5-micro {
+  font-family: var(--v5-font-body);
+  font-size: var(--v5-micro);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: var(--v5-muted);
+}
+
+/* A slab, not a card: steel, a 1px chrome rule at 10 percent, 2px radius, and
+   no shadow anywhere on this variation. */
+.v5-slab {
+  background-color: var(--v5-steel);
+  border: var(--v5-hairline) solid var(--v5-rule);
+  border-radius: var(--v5-radius);
+}
+
+.v5-chip {
+  font-size: var(--v5-chip);
+  line-height: 1;
+  color: var(--v5-muted);
+  border-bottom: var(--v5-hairline) solid var(--v5-rule-strong);
+  padding-bottom: 0.35em;
+}
+
+.v5-rule {
+  border: 0;
+  border-top: var(--v5-hairline) solid var(--v5-rule);
+}
+
+/* One button on the whole site: a chrome outline pill whose ground fills from
+   the bottom on hover and on focus. This is the hover primitive; the orb tilt
+   is the same gesture in three dimensions. */
+.v5-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 1rem 2.25rem;
+  border: var(--v5-hairline) solid var(--v5-chrome);
+  border-radius: var(--v5-radius-pill);
+  color: var(--v5-chrome);
+  font-family: var(--v5-font-body);
+  font-size: 0.9375rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  transition: color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--v5-chrome);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-pill:hover,
+.v5-pill:focus-visible {
+  color: var(--v5-void);
+}
+
+.v5-pill:hover::before,
+.v5-pill:focus-visible::before {
+  transform: scaleY(1);
+}
+
+/* ------------------------------------------------------------------ nav ---
+   Two 12px items in opposite corners and nothing else: no bar, no ground, no
+   section links. It does not stick, so nothing ever covers the orb. */
+
+.v5-nav {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--v5-space-3);
+  min-height: var(--v5-nav-h);
+  padding: var(--v5-space-3) var(--v5-gutter) 0;
+}
+
+.v5-nav__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* Matches the hairline reserve under `.v5-nav__link` so the two corner items
+     sit on one optical line. */
+  padding-bottom: 0.35em;
+  color: var(--v5-text);
+  font-size: var(--v5-micro);
+  letter-spacing: 0.04em;
+}
+
+.v5-nav__mark svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--v5-chrome);
+}
+
+/* The nav's middle group: empty until a section other than the hero is built,
+   so today it renders nothing and the header is the two corner items. */
+.v5-nav__index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--v5-space-3);
+}
+
+.v5-nav__link {
+  position: relative;
+  font-size: var(--v5-micro);
+  letter-spacing: 0.04em;
+  color: var(--v5-muted);
+  padding-bottom: 0.35em;
+  transition: color var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-nav__link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--v5-hairline);
+  background-color: var(--v5-chrome);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--v5-dur-hover) var(--v5-ease);
+}
+
+.v5-nav__link:hover,
+.v5-nav__link:focus-visible {
+  color: var(--v5-chrome);
+}
+
+.v5-nav__link:hover::after,
+.v5-nav__link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ----------------------------------------------------------------- hero ---
+   Four rows on a phone - headline, subhead + button + support line, orb - so
+   the reading order is the order of the page and the whole action block sits
+   above the fold at 390x844, 360x780 and 844x390. At 900 and above the orb
+   moves into the headline's own grid area and stacks over it: that is the
+   occlusion, and it is off below 900 because a partly hidden headline on a
+   phone is a defect, not a device.
+
+   THE HEADLINE'S LINES. The COPY.md headline is 56 characters and Archivo at
+   `wdth` 125 sets about twelve of them per line at any size the direction
+   allows, so the line count is a measured fact and not a taste. Three regimes,
+   driven by two `<br>` elements that are hidden as the viewport grows:
+
+     >= 70rem   4 lines   Sixteen days / from brief to a / product your /
+                          customers use.
+     28.75rem   5 lines   ... / customers / use.      ("customers use." is
+       to 70rem                                        1372px at 148px and only
+                                                       clears the gutters above
+                                                       1491)
+     < 28.75rem 6 lines   ... / from brief / to a / ...
+
+   Every break is a `<br>`, never `white-space: nowrap`, so a line that turns
+   out wider than its container - a wider fallback face during the swap, a
+   125 percent text zoom - wraps instead of pushing a horizontal scrollbar. */
+
+.v5-hero {
+  display: grid;
+  grid-template-areas:
+    "type"
+    "action"
+    "orb";
+  justify-items: start;
+  align-content: center;
+  gap: var(--v5-space-4);
+  min-height: 100dvh;
+  padding: calc(var(--v5-nav-h) + var(--v5-space-3)) var(--v5-gutter)
+    var(--v5-space-4);
+}
+
+.v5-hero__type {
+  grid-area: type;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--v5-hero-measure);
+}
+
+.v5-hero__headline {
+  font-size: var(--v5-display);
+}
+
+/* Hidden as the viewport grows, so the headline loses a line at a time. See
+   the block header for the three shapes and the numbers behind them. */
+@media (min-width: 28.75rem) {
+  .v5-hero__br--tiny {
+    display: none;
+  }
+}
+
+@media (min-width: 70rem) {
+  .v5-hero__br--narrow {
+    display: none;
+  }
+}
+
+.v5-hero__action {
+  grid-area: action;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--v5-space-2);
+  width: 100%;
+}
+
+/* The subhead. One thought per line, so the two COPY.md sentences are two
+   blocks rather than one paragraph, and the measure stays under 80 characters.
+   It is the sentence that survives the occlusion: at 1280 the orb covers the
+   middle of the headline, and this is where a first-time reader finds out what
+   Devonel builds and for whom. */
+.v5-hero__lede {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  max-width: var(--v5-copy);
+  font-size: var(--v5-body);
+  line-height: var(--v5-body-leading);
+  color: var(--v5-text);
+}
+
+.v5-hero__cta {
+  align-self: stretch;
+  margin-top: var(--v5-space-1);
+}
+
+.v5-hero__support {
+  font-size: var(--v5-lead);
+  line-height: 1.45;
+  color: var(--v5-muted);
+}
+
+.v5-hero__orb {
+  grid-area: orb;
+  justify-self: center;
+  width: var(--v5-orb-box);
+  height: var(--v5-orb-box);
+  max-width: 100%;
+  pointer-events: none;
+}
+
+/* The static still: the WebP render of this same scene sits over a CSS
+   conic-gradient chrome disc, so the composition survives with no WebGL and
+   with no image. Both are the finished design, not a placeholder. */
+.v5-orb-still {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.v5-orb-still__disc {
+  width: 94.96%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 38% 26%,
+      rgba(233, 237, 243, 0.85) 0%,
+      rgba(233, 237, 243, 0) 34%
+    ),
+    conic-gradient(
+      from 205deg,
+      #2a3446 0%,
+      #dce4ee 9%,
+      #6e7b8e 20%,
+      #101722 32%,
+      #8fb6ff 46%,
+      #f0c08a 58%,
+      #2b3646 70%,
+      #dce4ee 84%,
+      #2a3446 100%
+    );
+}
+
+.v5-orb-still__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (min-width: 900px) {
+  .v5 {
+    /* The orb now shares the fold with the subhead. 58vh is what leaves the
+       support line above the fold at 1280x800 and at 1180x820, the two
+       shortest desktop viewports in the matrix; from 1080px tall the clamp
+       wins again and the disc is the direction's full 560px. */
+    --v5-orb-cap: 56vh;
+  }
+
+  .v5-hero {
+    justify-items: center;
+    text-align: center;
+    grid-template-areas:
+      "type"
+      "action";
+    gap: var(--v5-space-3);
+    padding-bottom: var(--v5-space-1);
+  }
+
+  .v5-hero__orb {
+    /* Same grid area as the headline: the orb stacks on it and both centre on
+       each other. The headline stays real DOM text underneath, in the
+       accessibility tree, and is read through the reflection where the chrome
+       covers it. */
+    grid-area: type;
+    align-self: center;
+    z-index: 2;
+  }
+
+  .v5-hero__action {
+    align-items: center;
+    gap: var(--v5-space-2);
+  }
+
+  .v5-hero__lede {
+    margin-inline: auto;
+  }
+
+  .v5-hero__cta {
+    align-self: center;
+  }
+
+  .v5-hero__support {
+    text-align: center;
+  }
+}
+
+/* Reduced motion: the still reads, and the occlusion goes with the motion. The
+   direction's own fallback rule disables it, and it is right to: occlusion is a
+   trade a reader makes for a moving reflection that completes the sentence, and
+   with the reflection frozen there is nothing left on the other side of the
+   trade. The orb drops under the button, exactly as it does on a phone, and the
+   desktop hero becomes a page that scrolls.
+
+   That is a real cost and it is the direction's own rule, not a shortcut: with
+   the overlap gone, a 449px headline, the subhead, the button and a 560px disc
+   cannot all be inside 800px of viewport. The gaps here are tightened so the
+   top of the orb clears the fold at 1280x800 - the reader sees chrome and knows
+   to scroll - and the full still is one short scroll below. */
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  .v5 {
+    --v5-orb-cap: 200vh;
+  }
+
+  .v5-hero {
+    grid-template-areas:
+      "type"
+      "action"
+      "orb";
+    align-content: start;
+    gap: var(--v5-space-3);
+    padding-top: calc(var(--v5-nav-h) + var(--v5-space-2));
+    padding-bottom: var(--v5-space-4);
+  }
+
+  .v5-hero__orb {
+    grid-area: orb;
+    align-self: auto;
+    z-index: auto;
+  }
+}
+
+/* A short landscape viewport has no room for poster type. Hold the composition,
+   drop the display size and take the headline back to its four-line shape so
+   the subhead, the button and the support line all clear the fold at 844x390. */
+@media (max-height: 560px) and (min-width: 600px) {
+  .v5 {
+    --v5-display: 2rem;
+    --v5-orb-cap: 220px;
+    --v5-space-2: 0.75rem;
+    --v5-space-4: 1.25rem;
+  }
+
+  .v5-hero {
+    align-content: start;
+    gap: var(--v5-space-2);
+    padding-top: var(--v5-nav-h);
+  }
+
+  .v5-hero__br--narrow {
+    display: none;
+  }
+}

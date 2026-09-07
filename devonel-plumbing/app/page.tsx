@@ -48,15 +48,6 @@ export default function SwitcherPage() {
           </li>
         ))}
       </ol>
-
-      <footer className="mt-auto pt-12 text-sm text-fg-muted">
-        <Link
-          href="/legacy/options"
-          className="underline decoration-border-strong underline-offset-4 hover:decoration-fg"
-        >
-          Archive: the four pre-redesign option pages
-        </Link>
-      </footer>
     </main>
   );
 }

@@ -8,8 +8,7 @@
    It carries no visual direction: each variation under `app/(variations)/vN`
    owns its own palette, type scale, spacing and motion tokens.
 
-   Do not grow this file with per-variation classes. The pre-redesign class body
-   now lives in `app/legacy/legacy.css` and is off limits.
+   Do not grow this file with per-variation classes.
    --------------------------------------------------------------------------- */
 
 /* `static` so every token reaches :root even before a utility uses it. Without

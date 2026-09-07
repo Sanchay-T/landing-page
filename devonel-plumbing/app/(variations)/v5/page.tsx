@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
-import { VariationScaffold } from "../scaffold";
-import { variations } from "../variations";
-
-const variation = variations[4];
+import "@/components/variations/v5/tokens.css";
+import { Hero, Nav } from "@/components/variations/v5";
 
 export const metadata: Metadata = {
-  title: `${variation.n}. ${variation.name} — Devonel redesign`,
-  description: variation.thesis,
+  title: "5. Console - Devonel redesign",
+  description:
+    "Devonel builds and runs the software owner-led brands sell with. Sixteen days from brief to a product your customers use.",
 };
 
 export default function Page() {
-  return <VariationScaffold variation={variation} />;
+  return (
+    <div className="v5">
+      <Nav />
+      <main>
+        <Hero />
+      </main>
+    </div>
+  );
 }

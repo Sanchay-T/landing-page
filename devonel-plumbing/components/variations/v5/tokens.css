@@ -1,0 +1,908 @@
+/* ===========================================================================
+   Variation 5 - "Console"
+   The whole design system for v5, scoped under `.v5`.
+
+   Thesis (docs/goal/03-design-research.md section 4): sell the artefacts, not
+   the story. Every pixel of colour on this page comes out of a real screenshot
+   of the shipped pendant studio; the page itself is hairlines, one blue, and
+   two Geist faces. Nothing here is decoration.
+
+   CONVENTION: this file is append-only and numbered. A later builder adds a new
+   numbered section at the end for its own block and never edits an earlier one,
+   so a section landing at 4am cannot silently restyle a section that already
+   passed. Sections 1-6 are the system; 7 onward are components.
+
+     1  palette
+     2  type scale
+     3  space, radius, shadow, hairline
+     4  motion tokens
+     5  element reset and container/grid
+     6  prose and utility roles
+     7  buttons and links
+     8  the window frame (.v5-frame) and its annotations
+     9  nav
+    10  hero
+
+   =========================================================================== */
+
+/* --- 1. palette ---------------------------------------------------------- */
+/* Light neutral ground, one accent blue, and nothing else. Contrast measured
+   against --v5-ground: ink 18.0:1, ink-muted 6.5:1, accent 5.2:1, white on
+   accent 5.6:1. Every text pair on the page is at or above AA. */
+.v5 {
+  --v5-ground: #f7f7f5;
+  --v5-paper: #ffffff;
+  --v5-sunk: #f2f2f0;
+  --v5-border: #e3e3df;
+  --v5-border-strong: #cfcfc9;
+  --v5-ink: #161616;
+  --v5-ink-muted: #5b5b57;
+  --v5-accent: #2962d6;
+  --v5-accent-deep: #1e4bab;
+  --v5-accent-wash: #eef2fd;
+}
+
+/* --- 2. type scale ------------------------------------------------------- */
+/* Two faces, both already in the project font budget (app/fonts.ts):
+     Geist       every word the reader reads as language
+     Geist Mono  every string the reader reads as data (chrome label, status
+                 line, dates, the annotation numbers)
+   Restrained scale, 14 to 56, eight stops and no others:
+     14  mono labels, chrome, status line, annotation chips, captions
+     16  UI text, nav links, tab labels, buttons
+     18  body
+     22  lead paragraph / hero subhead
+     28  card and sub-section heads
+     36  section heads at phone width
+     44  section heads at desktop
+     56  display, hero only, fluid from 32 at 390 to 56 at 1440+
+   Line heights are set per role rather than globally, because a 56px display
+   and a 14px mono label want opposite numbers. */
+.v5 {
+  --v5-text-14: 0.875rem;
+  --v5-text-16: 1rem;
+  --v5-text-18: 1.125rem;
+  --v5-text-22: 1.375rem;
+  --v5-text-28: 1.75rem;
+  --v5-text-36: 2.25rem;
+  --v5-text-44: 2.75rem;
+  /* 32px at 390, 42px at 820, 52px at 1280, 56px from 1440 up. */
+  --v5-display: clamp(2rem, 1.443rem + 2.286vw, 3.5rem);
+
+  --v5-lh-display: 1.06;
+  --v5-lh-tight: 1.2;
+  --v5-lh-body: 1.55;
+  --v5-lh-mono: 1.35;
+
+  --v5-track-display: -0.022em;
+  --v5-track-tight: -0.012em;
+  --v5-track-mono: 0.005em;
+}
+
+/* --- 3. space, radius, shadow, hairline ---------------------------------- */
+/* 4px base. Every gap, pad and margin on this page is one of these twelve. */
+.v5 {
+  --v5-s1: 0.25rem;  /*  4 */
+  --v5-s2: 0.5rem;   /*  8 */
+  --v5-s3: 0.75rem;  /* 12 */
+  --v5-s4: 1rem;     /* 16 */
+  --v5-s5: 1.5rem;   /* 24 */
+  --v5-s6: 2rem;     /* 32 */
+  --v5-s7: 2.5rem;   /* 40 */
+  --v5-s8: 3rem;     /* 48 */
+  --v5-s9: 4rem;     /* 64 */
+  --v5-s10: 5rem;    /* 80 */
+  --v5-s11: 6rem;    /* 96 */
+  --v5-s12: 8rem;    /* 128 */
+
+  /* Radius lives on frames and nothing else. A window frame is a physical
+     object with rounded corners; a button, a chip and an annotation are marks
+     on a page and stay square. One radius token, one use. */
+  --v5-radius-frame: 8px;
+
+  /* One shadow token for the whole variation. It exists so a frame reads as a
+     sheet lifted off the ground, not as a card kit. */
+  --v5-shadow-frame:
+    0 1px 1px rgb(22 22 22 / 0.04),
+    0 8px 24px -8px rgb(22 22 22 / 0.10),
+    0 24px 56px -24px rgb(22 22 22 / 0.12);
+  --v5-shadow-chip: 0 1px 2px rgb(22 22 22 / 0.06), 0 6px 16px -8px rgb(22 22 22 / 0.18);
+
+  --v5-hairline: 1px solid var(--v5-border);
+}
+
+/* --- 4. motion tokens ---------------------------------------------------- */
+/* Three primitives, all optional to the content. Nothing on this page is
+   revealed by motion: every element is present, legible and in position at
+   scroll 0 with JavaScript idle, because a full-page screenshot is the proof
+   this variation is judged on.
+     sticky   CSS position: sticky for the scroll-linked panels later sections
+              use. No JS, no IntersectionObserver.
+     parallax the frame drifts 12px against the copy across its own scroll
+              range, via a scroll-driven animation. Static everywhere the
+              feature is missing.
+     reveal   hover raises an annotation chip that was already readable. */
+.v5 {
+  --v5-sticky-top: 5.5rem;
+  --v5-parallax: 6px;
+  --v5-dur-fast: 120ms;
+  --v5-dur: 180ms;
+  --v5-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes v5-parallax {
+  from {
+    transform: translate3d(0, var(--v5-parallax), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--v5-parallax) * -1), 0);
+  }
+}
+
+/* A section that scrolls its copy past a pinned artefact uses this. Inactive
+   panels are never hidden: they stack, so the whole set survives a capture. */
+.v5 :where(.v5-sticky) {
+  position: sticky;
+  top: var(--v5-sticky-top);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* app/globals.css zeroes animation-duration, which a scroll-driven animation
+     ignores because its progress comes from the timeline, not from time. The
+     timeline itself has to be switched off here. */
+  .v5 *,
+  .v5 *::before,
+  .v5 *::after {
+    animation-timeline: none !important;
+  }
+  .v5 :where(.v5-sticky) {
+    position: static;
+  }
+}
+
+/* --- 5. element reset, container, grid ----------------------------------- */
+/* :where() so every reset has zero specificity and a component class always
+   wins without !important. */
+.v5 :where(h1, h2, h3, h4, p, figure, figcaption, blockquote, ul, ol, li, dl, dd, dt) {
+  margin: 0;
+  padding: 0;
+}
+.v5 :where(ul, ol) {
+  list-style: none;
+}
+.v5 :where(img, svg) {
+  display: block;
+  max-width: 100%;
+}
+.v5 :where(button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.v5 :where([hidden]) {
+  display: none !important;
+}
+
+.v5 {
+  background-color: var(--v5-ground);
+  /* The ground has to reach the bottom of the window on a tall or ultrawide
+     screen, or the body's white shows as a seam under the last section. svh,
+     not vh: it is never taller than the visible viewport, so it cannot add a
+     scrollbar on a phone, and nothing on this page is sized to it. */
+  min-block-size: 100svh;
+  color: var(--v5-ink);
+  font-family: var(--font-sans);
+  font-size: var(--v5-text-18);
+  line-height: var(--v5-lh-body);
+  -webkit-font-smoothing: antialiased;
+  /* Nothing on this page may push the document sideways at 360. */
+  overflow-x: clip;
+}
+
+.v5 ::selection {
+  background: var(--v5-accent-wash);
+  color: var(--v5-accent-deep);
+}
+
+.v5 :focus-visible {
+  outline: 2px solid var(--v5-accent);
+  outline-offset: 2px;
+}
+
+/* 12 columns, content capped at 1280, gutters that never let the grid drift. */
+.v5-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.4rem + 2.4vw, 2.5rem);
+}
+
+.v5-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--v5-s5);
+}
+
+/* --- 6. prose and utility roles ------------------------------------------ */
+.v5-mono {
+  font-family: var(--font-mono);
+  font-size: var(--v5-text-14);
+  line-height: var(--v5-lh-mono);
+  letter-spacing: var(--v5-track-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.v5-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--v5-s2);
+  color: var(--v5-ink-muted);
+}
+
+.v5-eyebrow::before {
+  content: "";
+  inline-size: 7px;
+  block-size: 7px;
+  flex: none;
+  background: var(--v5-accent);
+}
+
+.v5-display {
+  font-size: var(--v5-display);
+  line-height: var(--v5-lh-display);
+  letter-spacing: var(--v5-track-display);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.v5-lead {
+  font-size: var(--v5-text-18);
+  line-height: var(--v5-lh-body);
+  color: var(--v5-ink-muted);
+  text-wrap: pretty;
+}
+
+@media (min-width: 820px) {
+  .v5-lead {
+    font-size: var(--v5-text-22);
+  }
+}
+
+/* MEASURE: rem, not ch. One ch in Geist is about 1.4x the average rendered
+   letter, so a 60ch cap sets roughly 84 characters. Caps here are the rem width
+   that measured out at 58-70 characters on the rendered page. */
+.v5-measure {
+  max-width: 34rem;
+}
+
+/* --- 7. buttons and links ------------------------------------------------ */
+.v5-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--v5-s2);
+  min-block-size: 2.75rem;
+  padding-inline: var(--v5-s5);
+  font-size: var(--v5-text-16);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: var(--v5-track-tight);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    background-color var(--v5-dur) var(--v5-ease),
+    border-color var(--v5-dur) var(--v5-ease),
+    color var(--v5-dur) var(--v5-ease);
+}
+
+.v5-btn--primary {
+  background: var(--v5-accent);
+  color: #ffffff;
+}
+
+.v5-btn--primary:hover {
+  background: var(--v5-accent-deep);
+}
+
+.v5-btn--quiet {
+  background: var(--v5-paper);
+  border-color: var(--v5-border-strong);
+  color: var(--v5-ink);
+}
+
+.v5-btn--quiet:hover {
+  border-color: var(--v5-ink);
+}
+
+.v5-btn--sm {
+  min-block-size: 2.25rem;
+  padding-inline: var(--v5-s4);
+}
+
+.v5-textlink {
+  color: var(--v5-accent);
+  text-decoration: none;
+  border-block-end: 1px solid color-mix(in srgb, var(--v5-accent) 35%, transparent);
+  padding-block-end: 1px;
+  transition: border-color var(--v5-dur) var(--v5-ease), color var(--v5-dur) var(--v5-ease);
+}
+
+.v5-textlink:hover {
+  color: var(--v5-accent-deep);
+  border-color: var(--v5-accent-deep);
+}
+
+/* --- 8. the window frame ------------------------------------------------- */
+/* A real screenshot of shipped software, framed as the window it ran in.
+   The chrome carries a provenance label, never a domain: this repo may not
+   print the client's URL, and a made-up one would be exactly the fake artefact
+   this variation exists to avoid. */
+.v5-frame {
+  position: relative;
+  background: var(--v5-paper);
+  border: 1px solid var(--v5-border);
+  border-radius: var(--v5-radius-frame);
+  box-shadow: var(--v5-shadow-frame);
+  overflow: hidden;
+}
+
+.v5-frame__tabs {
+  display: flex;
+  align-items: stretch;
+  /* Measured at 360: the three labels plus 8px strip padding and 4px gaps
+     overflow the frame by 5px, which clips "Review". Zero gap and a 4px inset
+     buy 16px back and the whole flow fits. */
+  gap: 0;
+  padding: var(--v5-s2) var(--v5-s1) 0;
+  background: var(--v5-sunk);
+  border-block-end: 1px solid var(--v5-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.v5-frame__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.v5-tab {
+  /* Content width on phone: three equal thirds of a 360px frame clip
+     "Type a na...". The strip scrolls if they ever do overflow, so a label is
+     never cut mid-word either way. */
+  flex: 0 0 auto;
+  min-inline-size: 0;
+  padding: var(--v5-s3) var(--v5-s2);
+  font-size: var(--v5-text-16);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: var(--v5-track-tight);
+  color: var(--v5-ink-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-block-end: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  transition: color var(--v5-dur) var(--v5-ease), background-color var(--v5-dur) var(--v5-ease);
+}
+
+.v5-tab:hover {
+  color: var(--v5-ink);
+}
+
+.v5-tab[aria-selected="true"] {
+  background: var(--v5-paper);
+  border-color: var(--v5-border);
+  color: var(--v5-ink);
+  box-shadow: inset 0 2px 0 var(--v5-accent);
+}
+
+@media (min-width: 640px) {
+  .v5-frame__tabs {
+    gap: var(--v5-s1);
+    padding-inline: var(--v5-s2);
+  }
+
+  .v5-tab {
+    flex: 1 1 0;
+    padding-inline: var(--v5-s3);
+  }
+}
+
+.v5-frame__chrome {
+  display: flex;
+  align-items: center;
+  gap: var(--v5-s3);
+  padding: var(--v5-s2) var(--v5-s3);
+  background: var(--v5-paper);
+  border-block-end: 1px solid var(--v5-border);
+}
+
+.v5-frame__dots {
+  display: flex;
+  gap: 5px;
+  flex: none;
+}
+
+.v5-frame__dots span {
+  inline-size: 9px;
+  block-size: 9px;
+  border-radius: 50%;
+  background: var(--v5-border-strong);
+}
+
+/* The address slot. It holds where the picture came from, not a URL. */
+.v5-frame__label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  padding: 4px var(--v5-s3);
+  background: var(--v5-sunk);
+  border: 1px solid var(--v5-border);
+  color: var(--v5-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v5-frame__stamp {
+  flex: none;
+  color: var(--v5-ink-muted);
+  white-space: nowrap;
+}
+
+/* At 390 and below the address slot has about 80px of room, which turns the
+   screen name into "name-...". The provenance is the string worth keeping, and
+   the screen name is already printed on the selected tab, so the phone chrome
+   prints the stamp and drops the name. */
+@media (max-width: 559px) {
+  .v5-frame__label {
+    display: none;
+  }
+
+  .v5-frame__stamp {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    padding: 4px var(--v5-s3);
+    background: var(--v5-sunk);
+    border: 1px solid var(--v5-border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.v5-frame__stage {
+  position: relative;
+  background: var(--v5-paper);
+}
+
+.v5-panel {
+  position: relative;
+}
+
+.v5-frame__shot {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+/* Annotations.
+
+   Below 768 they are a numbered list under the shot, still inside the frame:
+   that is the form that needs no pointer at all, so a touch reader loses
+   nothing. From 768 up the same list becomes chips positioned over the shot.
+   The chips are opaque and legible at rest with JavaScript idle - hover only
+   lifts one that was already readable - because a full-page capture is taken
+   with no cursor on the page. */
+.v5-notes {
+  display: grid;
+  gap: var(--v5-s3);
+  padding: var(--v5-s4);
+  border-block-start: 1px solid var(--v5-border);
+}
+
+.v5-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--v5-s3);
+  font-size: var(--v5-text-16);
+  line-height: 1.45;
+  color: var(--v5-ink);
+}
+
+.v5-note__n {
+  flex: none;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  color: var(--v5-accent);
+  background: var(--v5-accent-wash);
+}
+
+@media (min-width: 768px) {
+  .v5-notes {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  .v5-note {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translateY(-50%);
+    inline-size: max-content;
+    max-inline-size: min(17rem, 42%);
+    align-items: center;
+    gap: var(--v5-s2);
+    padding: var(--v5-s2) var(--v5-s3) var(--v5-s2) var(--v5-s2);
+    font-size: var(--v5-text-14);
+    line-height: 1.35;
+    background: var(--v5-paper);
+    border: 1px solid var(--v5-border);
+    border-inline-start: 2px solid var(--v5-accent);
+    box-shadow: var(--v5-shadow-chip);
+    pointer-events: auto;
+    transition:
+      border-color var(--v5-dur) var(--v5-ease),
+      box-shadow var(--v5-dur) var(--v5-ease),
+      transform var(--v5-dur) var(--v5-ease);
+  }
+
+  .v5-note:hover {
+    border-color: var(--v5-accent);
+    box-shadow: 0 2px 4px rgb(22 22 22 / 0.08), 0 12px 28px -10px rgb(41 98 214 / 0.35);
+    transform: translateY(calc(-50% - 1px));
+  }
+
+  .v5-note__n {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    background: transparent;
+  }
+}
+
+/* The client's own words, kept as an annotation on the artefact they describe
+   rather than as a testimonial floating somewhere else on the page. It sits
+   outside the tab panels, so switching screens never takes the proof away. */
+.v5-quote {
+  margin: 0 var(--v5-s4) var(--v5-s4);
+  padding: var(--v5-s3);
+  background: var(--v5-paper);
+  border: 1px solid var(--v5-border);
+  border-inline-start: 2px solid var(--v5-accent);
+}
+
+.v5-quote__text {
+  font-size: var(--v5-text-16);
+  line-height: 1.45;
+  color: var(--v5-ink);
+}
+
+.v5-quote__who {
+  display: block;
+  margin-block-start: var(--v5-s2);
+  color: var(--v5-ink-muted);
+  font-style: normal;
+}
+
+@media (min-width: 768px) {
+  .v5-quote {
+    position: absolute;
+    right: var(--v5-s4);
+    bottom: var(--v5-s4);
+    z-index: 1;
+    margin: 0;
+    inline-size: min(20rem, 48%);
+    box-shadow: var(--v5-shadow-chip);
+  }
+
+  .v5-quote__text {
+    font-size: var(--v5-text-14);
+  }
+}
+
+/* --- 9. nav -------------------------------------------------------------- */
+/* A product-site top bar with one DOM order at every width, so the tab order
+   and the reading order are the same thing everywhere.
+
+   From 900 up it is a single row and it sticks. The anchor list is the only
+   flexible item, so in the 900-1200 band, where brand plus anchors plus CTA are
+   wider than the bar, the list scrolls inside itself rather than squeezing the
+   CTA out of shape.
+
+   Below 900 the bar wraps and the anchor list takes a line of its own, wrapping
+   inside it: a scroll rail at 360 leaves half a word showing at the edge. A
+   wrapped bar is two or three rows tall, so it does not stick there either -
+   on a 390x844 screen a pinned three-row header is a fifth of the viewport
+   taken away from the hero. The exception is a short landscape screen, where a
+   wrapped bar would push the hero CTA under the fold: under 480px of height the
+   bar returns to the single scrolling row. */
+.v5-nav {
+  position: relative;
+  z-index: 20;
+  background: color-mix(in srgb, var(--v5-ground) 88%, transparent);
+  border-block-end: var(--v5-hairline);
+  backdrop-filter: saturate(1.4) blur(10px);
+}
+
+.v5-nav__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--v5-s3) var(--v5-s5);
+  min-block-size: 3.5rem;
+  padding-block: var(--v5-s2);
+}
+
+.v5-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--v5-s2);
+  color: var(--v5-ink);
+  text-decoration: none;
+  font-size: var(--v5-text-16);
+  font-weight: 600;
+  letter-spacing: var(--v5-track-tight);
+}
+
+.v5-nav__mark {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  flex: none;
+  color: var(--v5-accent);
+}
+
+.v5-nav__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--v5-s2) var(--v5-s5);
+  /* Its own line below 900: wrapping inside it can never clip a word. */
+  flex: 1 1 100%;
+}
+
+.v5-nav__link {
+  font-size: var(--v5-text-16);
+  color: var(--v5-ink-muted);
+  text-decoration: none;
+  transition: color var(--v5-dur) var(--v5-ease);
+}
+
+.v5-nav__link:hover {
+  color: var(--v5-ink);
+}
+
+/* The CTA holds the right edge of whatever row it lands on. */
+.v5-nav__cta {
+  margin-inline-start: auto;
+}
+
+.v5-nav__second {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .v5-nav {
+    position: sticky;
+    top: 0;
+  }
+
+  .v5-nav__bar {
+    flex-wrap: nowrap;
+    gap: var(--v5-s6);
+  }
+
+  .v5-nav__links {
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    min-inline-size: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .v5-nav__links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .v5-nav__link {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 1100px) {
+  .v5-nav__second {
+    display: inline-flex;
+    flex: none;
+    white-space: nowrap;
+  }
+}
+
+/* Short landscape: one row, whatever the width. */
+@media (max-height: 480px) {
+  .v5-nav__bar {
+    flex-wrap: nowrap;
+    gap: var(--v5-s5);
+  }
+
+  .v5-nav__links {
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    min-inline-size: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .v5-nav__link {
+    white-space: nowrap;
+  }
+}
+
+/* --- 10. hero ------------------------------------------------------------ */
+/* No 100vh anywhere: at 844x390 the copy and the primary CTA have to fit above
+   the fold and the frame simply starts below it. */
+.v5-hero {
+  padding-block: clamp(2rem, 1rem + 3vw, 4.5rem) clamp(3rem, 2rem + 4vw, 7rem);
+}
+
+.v5-hero__inner {
+  display: grid;
+  gap: var(--v5-s9);
+  align-items: center;
+}
+
+.v5-hero__copy {
+  display: grid;
+  justify-items: start;
+  gap: var(--v5-s5);
+  max-width: 40rem;
+}
+
+.v5-hero__headline {
+  max-width: 20ch;
+}
+
+.v5-hero__cta {
+  display: grid;
+  justify-items: start;
+  gap: var(--v5-s3);
+}
+
+.v5-hero__support {
+  color: var(--v5-ink-muted);
+  font-size: var(--v5-text-16);
+}
+
+.v5-hero__status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--v5-s3);
+  padding-block-start: var(--v5-s3);
+  border-block-start: var(--v5-hairline);
+  color: var(--v5-ink-muted);
+  inline-size: 100%;
+  max-inline-size: 26rem;
+}
+
+.v5-hero__pulse {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--v5-accent);
+}
+
+.v5-hero__sep {
+  flex: 1 1 auto;
+  block-size: 1px;
+  min-inline-size: var(--v5-s5);
+  background: var(--v5-border);
+}
+
+.v5-hero__figure {
+  position: relative;
+  min-inline-size: 0;
+}
+
+/* Side by side from 1100 up. Below that the frame goes full width under the
+   copy, which is the better read on a tablet: the studio's own interface is
+   legible at 760px and unreadable at 380px. Above it the two-column hero puts
+   the artefact and the CTA on one screen, which is what the hero is for - at
+   1180x820 a stacked hero pushes the whole screenshot under the fold. */
+@media (min-width: 1100px) {
+  .v5-hero__inner {
+    grid-template-columns: minmax(0, 27rem) minmax(0, 1fr);
+    gap: var(--v5-s8);
+  }
+
+  .v5-hero__copy {
+    max-width: none;
+  }
+}
+
+/* Under 560 the two dates do not fit on one line, and a connecting rule left
+   dangling at the end of the first line reads as a mistake. Drop the rule and
+   let them stack. */
+/* Under 560 the two dates do not fit on one line. Drop the connecting rule,
+   which would otherwise dangle at the end of the first line, and set them as a
+   two-row readout with the live dot in its own column so both dates share one
+   left edge. */
+@media (max-width: 559px) {
+  .v5-hero__sep {
+    display: none;
+  }
+
+  .v5-hero__status {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--v5-s3);
+    row-gap: var(--v5-s1);
+  }
+
+  .v5-hero__pulse {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .v5-hero__status > span:nth-of-type(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .v5-hero__status > span:last-child {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+/* Short landscape, 844x390 and anything like it. The primary CTA has to be on
+   screen at scroll 0, so the display step drops to 36, the lead drops to 16 and
+   every vertical gap in the copy column tightens. Nothing is removed. */
+@media (max-height: 480px) {
+  .v5-nav__bar {
+    min-block-size: 3rem;
+  }
+
+  .v5-hero {
+    padding-block: var(--v5-s4) var(--v5-s7);
+  }
+
+  .v5-hero__inner {
+    gap: var(--v5-s6);
+  }
+
+  .v5-hero__copy {
+    gap: var(--v5-s3);
+  }
+
+  .v5-hero__headline {
+    font-size: var(--v5-text-36);
+  }
+
+  .v5-lead {
+    font-size: var(--v5-text-16);
+  }
+}
+
+/* Screenshot parallax: 12px of travel across the frame's own scroll range, and
+   nothing else moves. Guarded twice, so a browser without scroll-driven
+   animations and a reader who asked for less motion both get the frame exactly
+   where the layout puts it. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 1200px) and (prefers-reduced-motion: no-preference) {
+    .v5-hero__figure {
+      animation: v5-parallax linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}

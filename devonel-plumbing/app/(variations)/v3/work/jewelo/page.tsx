@@ -188,17 +188,17 @@ export default function Page() {
                           width={plate.width}
                           height={plate.height}
                           sizes="(min-width: 1100px) 480px, 92vw"
+                          // Only the first plate is priority; the other
+                          // fourteen take next/image's default lazy loading.
+                          // The set was eager on the theory that a reader who
+                          // lands here came for the evidence, but eager on
+                          // fifteen stills spends the whole connection before
+                          // the first one is painted, and the lazy set still
+                          // decodes 15/15 on a scroll to the bottom at 390 and
+                          // 1280. The plates are at most 480px wide and
+                          // optimised on the way out, so each one arrives well
+                          // ahead of the reader.
                           priority={i === 0}
-                          // The plates are the page. Deferring them is the
-                          // right default for decoration on a long document and
-                          // the wrong one here: a reader who lands on this page
-                          // came for the evidence, and a still that is still
-                          // arriving is a still that is not proving anything.
-                          // The whole set is 480px wide at most and optimised
-                          // on the way out, so the cost of asking for all of it
-                          // is small and the payoff is a page that is complete
-                          // the moment it is open.
-                          loading={i === 0 ? undefined : "eager"}
                         />
                         <figcaption>{plate.caption}</figcaption>
                       </figure>
@@ -255,7 +255,7 @@ export default function Page() {
               </p>
 
               <p className="v3-doc-line">
-                &ldquo;the layout is very good and simple&rdquo; - the owner, a bespoke jewellery
+                &quot;the layout is very good and simple&quot; - the owner, a bespoke jewellery
                 house in Dubai. Shipped 27 Aug 2026.
               </p>
             </div>

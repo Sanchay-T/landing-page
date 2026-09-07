@@ -42,7 +42,7 @@ import { getSection, ticks } from "./sections";
 const RESULT_SPEC = "Spec on 11 Aug 2026.";
 const RESULT_LIVE = "Live on the morning of 27 Aug 2026, in time for the client's exhibition stall.";
 const RESULT_QUOTE =
-  "The owner's note on the first version: “the layout is very good and simple”.";
+  "The owner's note on the first version: \"the layout is very good and simple\".";
 const RESULT_COMPLAINT =
   "The one complaint was generation time, which is set by the model providers, and we said so.";
 

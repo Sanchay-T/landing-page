@@ -384,7 +384,7 @@ export default function Page() {
               </dl>
 
               <blockquote className="v2-case__quote">
-                <p>&ldquo;the layout is very good and simple&rdquo;</p>
+                <p>&quot;the layout is very good and simple&quot;</p>
                 <cite className="v2-case__cite">
                   the owner, a bespoke jewellery house in Dubai, on the first version
                 </cite>

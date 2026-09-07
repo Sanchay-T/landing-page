@@ -26,11 +26,17 @@ import { contactLabel, site } from "@/lib/site";
  * own order, which is the "four renders" claim, then the three gold plates as
  * the second design, then the one wide frame.
  *
- * EAGER, NOT LAZY. Fifteen plates are the content of this page rather than
- * decoration on it, and every one of them is an optimised WebP under 40 KB at
- * the width it renders. Lazy loading buys nothing here and costs a reader who
- * scrolls fast a column of empty frames, so the first plate is preloaded and
- * the rest are requested immediately at the browser's own priority.
+ * EAGER, NOT LAZY, AND MEASURED. Fifteen plates are the content of this page
+ * rather than decoration on it, and every one of them is an optimised WebP under
+ * 40 KB at the width it renders. The first plate carries `priority` and is
+ * preloaded; the other fourteen are `eager` rather than lazy, and that is a
+ * measured decision, not a preference. The polish pass of 2026-09-07 switched
+ * the fourteen to `loading="lazy"` and re-shot the page: in the 1280 full-page
+ * capture six of the pendant plates in run two came back as empty frames with
+ * their captions under them, because the stitched capture never dwells long
+ * enough at each scroll offset for a lazily-requested image to arrive. A reader
+ * who scrolls fast sees the same column of empty frames, so the fourteen stay
+ * eager and every plate is in the document from the first paint.
  *
  * PLATE CAPTIONS. Each caption is the inventory's own alt text, verbatim, and
  * the image carries the same string as its `alt`. That is deliberate: the

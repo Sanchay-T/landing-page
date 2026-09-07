@@ -69,7 +69,7 @@ export function Proof() {
 
         <figure className="v3-quote">
           <blockquote>
-            <p>&ldquo;the layout is very good and simple&rdquo;</p>
+            <p>&quot;the layout is very good and simple&quot;</p>
           </blockquote>
           <figcaption className="v3-attrib">
             the owner, a bespoke jewellery house in Dubai, on the day the studio went live

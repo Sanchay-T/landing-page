@@ -366,14 +366,6 @@
   color: var(--v5-chrome);
 }
 
-/* The nav's middle group: empty until a section other than the hero is built,
-   so today it renders nothing and the header is the two corner items. */
-.v5-nav__index {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--v5-space-3);
-}
-
 .v5-nav__link {
   position: relative;
   font-size: var(--v5-micro);
@@ -2879,5 +2871,32 @@
 
   .v5-footer__legal {
     grid-column: 1 / -1;
+  }
+}
+
+/* ------------------------------------------------------ proof caption fix ---
+   BLOCK 14: the v5 polish pass before the matrix. Appended; nothing above this
+   line moved except the one deletion this block records in note 2.
+
+   1. THE FIVE PROOF FIGURES STACK ALIKE BELOW 48rem. Under 48rem
+      `.v5-proof__item` is a baseline flex row and `.v5-proof__caption` is
+      `flex: 0 1 auto`, so a caption short enough to fit beside its numeral sat
+      on the numeral's line while the longer ones took a line of their own. Five
+      sourced facts that read as one list should not be laid out two different
+      ways, so the caption now takes a full basis and every item is numeral over
+      caption at phone widths. At 48rem and above the item is `display: block`
+      and a flex basis means nothing there, which is why the rule is bounded
+      instead of global.
+
+   2. `.v5-nav__index` IS GONE. Block 07 took the middle group out of `nav.tsx`
+      and left its rule standing in block 03, on the grounds that this file is
+      append-only. Nothing in the DOM has matched it since, so this pass deletes
+      those two comment lines and the five rule lines from block 03. Block 07's
+      sentence about the rule staying where it is is now history and is left as
+      written rather than rewritten. No other line above this block changed. */
+
+@media (max-width: 47.999rem) {
+  .v5-proof__caption {
+    flex-basis: 100%;
   }
 }

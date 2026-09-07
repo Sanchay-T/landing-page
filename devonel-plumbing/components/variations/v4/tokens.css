@@ -657,6 +657,32 @@
   transform: translate3d(var(--v4-hover-shift), 0, 0);
 }
 
+/* The stop the reader is at. `aria-current` is set by the nav component on load
+   and on every hash change, so the mark is the same thing the screen reader
+   hears rather than a class beside it.
+
+   Yellow ink on the black band at 12.3:1 with a 2px rule under it, which is the
+   line marker on a strip map and the one signal on the bar that is not the CTA
+   block. Underline rather than a yellow plate for two reasons: a second yellow
+   block beside the CTA reads as a second button, and a plate needs padding,
+   which would change the width of one stop and move every stop after it each
+   time the hash changed - on a strip whose whole job is to hold its position.
+   Nothing here touches the box, so the line and the bar keep their metrics.
+
+   It does not take the hover shift: the current stop is where the reader is,
+   not something they are pointing at. */
+.v4-nav__link[aria-current] {
+  color: var(--v4-ink-yellow);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.v4-nav__link[aria-current]:hover,
+.v4-nav__link[aria-current]:focus-visible {
+  transform: none;
+}
+
 /* The CTA: a flat yellow block with black text, the one piece of colour on the
    bar. It is already the yellow the default swaps to, so it declares its own
    hover: paper, the inverse section 4.2 names, at 19.0:1 on the black label. */

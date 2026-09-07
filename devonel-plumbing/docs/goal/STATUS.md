@@ -21,7 +21,7 @@ docs/goal/COPY.md / PASS / 2026-09-07T02:57 / all 10 sections, 2 headline+2 CTA 
 assets harvested public/media/jewelo / PASS / 2026-09-07T02:58 / 29 files, largest 173 KB verifier 2026-09-07T03:12 find -size +400k empty, 29 files confirmed, no filename or ASSET-INVENTORY alt text names the client brand
 runway / UNAVAILABLE / 2026-09-07T02:58 / slots queued in ASSET-QUEUE.md
 
-round 2 directions doc / TODO
+round 2 directions doc / PASS / 2026-09-07T08:55 / docs/goal/03-design-research.md section 4 rewritten (5 directions with Devonel-specific twists, 5x5 matrix, section 5 risks) + docs/goal/03b-round2-brief.md; orchestrator read section 4 in full and accepted; Archivo accepted as fifth family for its width axis; Bento outline cells must still carry full service copy
 3d and shader plumbing / TODO
 switcher labels for round 2 / TODO
 round 1 variation code removed / TODO

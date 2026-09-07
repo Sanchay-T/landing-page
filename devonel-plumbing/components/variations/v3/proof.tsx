@@ -70,9 +70,10 @@ export function V3Proof() {
         <div className="v3-grid v3-proof__inner">
           <div className="v3-proof__head v3-enter">
             <p className="v3-eyebrow">Proof of work</p>
-            <h2 className="v3-proof__title">Shipped, not promised.</h2>
+            <h2 className="v3-h2 v3-h2--stack">Shipped, not promised.</h2>
             <p className="v3-lead v3-measure v3-proof__lead">
-              One product live: a name-pendant studio for a bespoke jewellery house in Dubai.
+              One product live: a name-pendant studio for a bespoke jewellery house in Dubai, 27
+              Aug 2026.
             </p>
           </div>
 
@@ -89,10 +90,10 @@ export function V3Proof() {
 
           <div className="v3-proof__body v3-enter" style={delay(180)}>
             <p className="v3-proof__dates">
-              <span className="v3-proof__date">11 August 2026</span>
+              <span className="v3-proof__date">11 Aug 2026</span>
               <span className="v3-proof__span" aria-hidden="true" />
               <span className="v3-proof__to">to</span>
-              <span className="v3-proof__date">27 August 2026</span>
+              <span className="v3-proof__date">27 Aug 2026</span>
             </p>
 
             <ul className="v3-proof__counts">

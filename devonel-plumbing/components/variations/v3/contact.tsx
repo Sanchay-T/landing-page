@@ -116,7 +116,7 @@ export function V3Contact() {
         <div className="v3-contact__body">
           <p className="v3-eyebrow v3-enter">Start</p>
 
-          <h2 className="v3-contact__title v3-enter" id="v3-contact-title" style={delay(60)}>
+          <h2 className="v3-h2 v3-h2--stack v3-contact__title v3-enter" id="v3-contact-title" style={delay(60)}>
             Send the brief. We send back a scope.
           </h2>
 

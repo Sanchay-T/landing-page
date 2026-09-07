@@ -74,7 +74,7 @@ export function V3Founders() {
       <div className="v3-shell">
         <p className="v3-eyebrow v3-enter">Who you work with</p>
 
-        <h2 className="v3-founders__headline v3-enter" style={delay(60)}>
+        <h2 className="v3-h2 v3-h2--stack v3-enter" style={delay(60)}>
           Two founders. Both of them on your project.
         </h2>
 

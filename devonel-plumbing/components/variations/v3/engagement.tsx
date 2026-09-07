@@ -78,7 +78,7 @@ export function V3Engagement() {
       <div className="v3-shell">
         <p className="v3-eyebrow v3-enter">How a quote works</p>
 
-        <h2 className="v3-eng__headline v3-enter" style={delay(60)}>
+        <h2 className="v3-h2 v3-h2--stack v3-enter" style={delay(60)}>
           No prices on this page. Here is exactly how we get to one.
         </h2>
 

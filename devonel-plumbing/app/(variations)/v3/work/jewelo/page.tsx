@@ -13,9 +13,10 @@ import "@/components/variations/v3/tokens.css";
  *
  * The one sanctioned secondary action on this variation (COPY.md, "Canonical
  * primary CTA") lands here. Copy is COPY.md section 4 for the case and section
- * 9 for the closing block, verbatim; the picture captions restate the rows in
- * docs/goal/ASSET-INVENTORY.md. The client is "a bespoke jewellery house in
- * Dubai" everywhere, per brief 8, and no image or caption names a brand.
+ * 9 for the closing block, verbatim; nothing on the page is written here, and
+ * the pictures carry their docs/goal/ASSET-INVENTORY.md row as alt rather than
+ * a caption of their own. The client is "a bespoke jewellery house in Dubai"
+ * everywhere, per brief 8, and no image or alt string names a brand.
  *
  * It reads as the same film as the section it came from, seen closer: the title
  * sits on black rather than over a picture, the one full-bleed frame under it
@@ -42,9 +43,13 @@ const FLOW = [
 
 /**
  * The screens, in the product's own order. `alt` is that file's row in
- * docs/goal/ASSET-INVENTORY.md; the caption is what the row says the shot
- * proves. Every one is cropped below the client's own navigation bar, which is
- * why none of them shows a brand.
+ * docs/goal/ASSET-INVENTORY.md. Every one is cropped below the client's own
+ * navigation bar, which is why none of them shows a brand.
+ *
+ * They carry no visible caption. COPY.md writes no line for any individual
+ * screen, and this page prints only what that document says, so the sheet runs
+ * as the flow above it describes it and the inventory row does the describing
+ * for a reader who cannot see the picture.
  */
 const SHOTS = [
   {
@@ -53,7 +58,6 @@ const SHOTS = [
     height: 822,
     modifier: "",
     alt: "The name step of a jewellery design tool: a name field, a language toggle, an approved script-spelling field, and a live pendant preview",
-    caption: "The name step, with the language toggle and the approved Arabic spelling.",
   },
   {
     src: "/media/jewelo/ui-style-picker@2x.webp",
@@ -61,7 +65,6 @@ const SHOTS = [
     height: 822,
     modifier: "",
     alt: "The style step of a jewellery design tool showing six lettering styles as selectable cards",
-    caption: "Six lettering styles, which is the scope the client locked after launch.",
   },
   {
     src: "/media/jewelo/ui-stones-and-setting@2x.webp",
@@ -69,7 +72,6 @@ const SHOTS = [
     height: 822,
     modifier: "",
     alt: "The stone step of a jewellery design tool: setting density and stone type beside a live pendant preview",
-    caption: "Setting density and stone type, beside the live preview.",
   },
   {
     src: "/media/jewelo/ui-review-spec@2x.webp",
@@ -77,7 +79,6 @@ const SHOTS = [
     height: 822,
     modifier: "",
     alt: "A review screen listing script, layout, metal, stones, size and chain, with a spelling confirmation checkbox",
-    caption: "The review screen, and the spelling the customer confirms before production.",
   },
   {
     src: "/media/jewelo/ui-rtl-mirror@2x.webp",
@@ -85,7 +86,6 @@ const SHOTS = [
     height: 822,
     modifier: "",
     alt: "A design tool mirrored right to left, with the live preview on the right and the step rail reversed",
-    caption: "The studio mirrored right to left, not a translated left to right layout.",
   },
   {
     src: "/media/jewelo/ui-generation-queue@2x.webp",
@@ -93,7 +93,6 @@ const SHOTS = [
     height: 460,
     modifier: "v3-study__shot--queue",
     alt: "Four presentation views queued in parallel, labelled Studio, On model, Close up and Dark mood, each showing a queued state",
-    caption: "Four presentation views running at once, each showing an honest queued state.",
   },
   {
     src: "/media/jewelo/ui-operator-console@2x.webp",
@@ -101,7 +100,6 @@ const SHOTS = [
     height: 322,
     modifier: "v3-study__shot--wide v3-study__shot--console",
     alt: "An operator work queue header showing counts for quote requests, in progress and ready",
-    caption: "The operator side: quote requests, in progress, ready.",
   },
 ] as const;
 
@@ -119,13 +117,6 @@ const STACK = [
   "DigitalOcean",
 ] as const;
 
-/** Every date the sources carry for this build, and the span they add up to. */
-const TIMELINE = [
-  { when: "11 Aug 2026", what: "Spec received." },
-  { when: "27 Aug 2026", what: "Live on the morning of the client’s exhibition stall." },
-  { when: "Sixteen days", what: "Spec to live." },
-] as const;
-
 export default function Page() {
   return (
     <div className="v3">
@@ -135,9 +126,9 @@ export default function Page() {
         <div className="v3-shell">
           <header className="v3-study__head v3-enter">
             <Link className="v3-study__crumb" href="/v3#work">
-              Proof of work
+              Case studies
             </Link>
-            <h1 className="v3-study__title">
+            <h1 className="v3-h2">
               A name-pendant studio, live for an exhibition stall in sixteen days.
             </h1>
             <p className="v3-study__tags">
@@ -153,21 +144,16 @@ export default function Page() {
           </header>
         </div>
 
-        <figure>
-          <div className="v3-study__plate">
-            <Image
-              src="/media/jewelo/pendant-close-silver@2x.webp"
-              alt="Close detail of a silver cut-out name pendant showing the polished edges and the chain links"
-              width={1122}
-              height={1402}
-              sizes="100vw"
-              priority
-            />
-          </div>
-          <figcaption className="v3-shell v3-caption v3-study__figcap">
-            The close-up, one of the four renders the studio returns for every design.
-          </figcaption>
-        </figure>
+        <div className="v3-study__plate">
+          <Image
+            src="/media/jewelo/pendant-close-silver@2x.webp"
+            alt="Close detail of a silver cut-out name pendant showing the polished edges and the chain links"
+            width={1122}
+            height={1402}
+            sizes="100vw"
+            priority
+          />
+        </div>
 
         <div className="v3-shell">
           <section className="v3-study__block" aria-labelledby="v3-study-built">
@@ -200,7 +186,6 @@ export default function Page() {
                       priority
                     />
                   </div>
-                  <p className="v3-caption">{shot.caption}</p>
                 </li>
               ))}
             </ul>
@@ -227,19 +212,16 @@ export default function Page() {
             <h2 className="v3-study__h" id="v3-study-result">
               Result
             </h2>
-            <dl className="v3-study__timeline">
-              {TIMELINE.map((entry) => (
-                <div className="v3-study__t-row" key={entry.when}>
-                  <dt className="v3-study__t-date">{entry.when}</dt>
-                  <dd className="v3-study__t-text">{entry.what}</dd>
-                </div>
-              ))}
-            </dl>
+            <div className="v3-study__prose">
+              <p>Spec on 11 Aug 2026.</p>
+              <p>
+                Live on the morning of 27 Aug 2026, in time for the client&rsquo;s exhibition
+                stall.
+              </p>
+            </div>
             <blockquote className="v3-study__quote">
               <p>&ldquo;the layout is very good and simple&rdquo;</p>
-              <footer>
-                The owner&rsquo;s note on the first version. A bespoke jewellery house in Dubai.
-              </footer>
+              <footer>The owner&rsquo;s note on the first version</footer>
             </blockquote>
             <div className="v3-study__prose">
               <p>
@@ -297,9 +279,11 @@ export default function Page() {
             </p>
           </section>
 
+          {/* The way back, named with the same COPY.md label the crumb at the
+              top of the page carries, because it returns to the same place. */}
           <div className="v3-study__foot">
             <Link className="v3-study__back" href="/v3#work">
-              Back to the work
+              Case studies
             </Link>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import { variations } from "@/app/(variations)/variations";
 import { Mark } from "@/components/ds/mark";
 import { site } from "@/lib/site";
@@ -20,13 +21,9 @@ const delay = (ms: number) => ({ "--v3-enter-delay": `${ms}ms` }) as CSSProperti
  */
 const MAIL = `mailto:${site.contact.email}?subject=${encodeURIComponent(site.contact.mailSubject)}`;
 
-/**
- * COPY.md section 10, "Legal and provenance", verbatim apart from the (c) mark
- * on the year line, which is the notice the copy document's bare "2026
- * Devonel." stands for.
- */
+/** COPY.md section 10, "Legal and provenance", verbatim. */
 const FINE: readonly string[] = [
-  "© 2026 Devonel.",
+  "2026 Devonel.",
   "Every piece of work shown here was built by Devonel.",
   "Client names appear only with the client's permission.",
   "Page last revised 7 Sep 2026.",
@@ -48,7 +45,9 @@ const FINE: readonly string[] = [
  * Both link lists are generated, never typed:
  *   - the page index reads `sections.ts`, filtered to sections that are really
  *     on the page, with the footer's own row dropped, so no anchor here can go
- *     dead and a section landing later needs no edit in this file;
+ *     dead and a section landing later needs no edit in this file, and it ends
+ *     on the one link that leaves the page, the flagship case study COPY.md
+ *     section 10 asks for;
  *   - the editions read `variations.ts`, so the switcher link the build spec
  *     requires and the four sibling directions stay one source.
  *
@@ -99,6 +98,15 @@ export function V3Footer() {
                   </a>
                 </li>
               ))}
+              {/* COPY.md section 10 asks the footer to carry the flagship case
+                  page beside the section anchors. It is the one route on this
+                  variation that leaves the page, and it is named in COPY.md
+                  section 4's own words. */}
+              <li>
+                <Link className="v3-foot__link" href="/v3/work/jewelo">
+                  Read the full build
+                </Link>
+              </li>
             </ul>
           </div>
 

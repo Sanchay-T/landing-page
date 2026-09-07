@@ -63,16 +63,6 @@ const HANDOVER: readonly string[] = [
 ];
 
 /**
- * COPY.md section 5, "Two rules that do not move", and the same minimum
- * commitment term set with the engagement list in COPY.md section 7. They hold
- * across every phase, so they close the schedule instead of repeating inside it.
- */
-const RULES: readonly string[] = [
-  "Minimum commitment up front on every engagement.",
-  "No unpaid multi-month starts; we have been offered one and said no.",
-];
-
-/**
  * Variation 3 - the process, staged as a night schedule.
  *
  * One amber hairline runs down the left of the content grid with a glowing node
@@ -88,9 +78,15 @@ const RULES: readonly string[] = [
  * end for what happens after handover.
  *
  * The step is one grid at every width: a rail track holding the marker, then
- * the text in the 45rem measure. The marker sits beside its own line rather
+ * the text in the page's measure. The marker sits beside its own line rather
  * than above it, so on a 390px phone the node stays next to the phase name and
  * nothing has to become a horizontal scroller.
+ *
+ * COPY.md's two standing rules are not printed here. Both of them, the minimum
+ * commitment and the refusal of unpaid multi-month starts, are terms of the
+ * engagement rather than of a phase, and the engagement section two blocks
+ * below carries them in COPY.md section 7's own placement. Printing them twice
+ * on one page would read as the schedule arguing its terms a second time.
  */
 export function V3Process() {
   return (
@@ -98,7 +94,7 @@ export function V3Process() {
       <div className="v3-shell">
         <p className="v3-eyebrow v3-enter">How we work</p>
 
-        <h2 className="v3-sched__headline v3-enter" style={delay(60)}>
+        <h2 className="v3-h2 v3-h2--stack v3-enter" style={delay(60)}>
           Four phases. You pay before each one starts.
         </h2>
 
@@ -146,18 +142,6 @@ export function V3Process() {
           </div>
         </div>
 
-        <div className="v3-sched__rules v3-enter" style={delay(600)}>
-          <div className="v3-sched__rules-inner">
-            <h3 className="v3-sched__rules-title">Two rules that do not move.</h3>
-            <ul className="v3-sched__rules-list" role="list">
-              {RULES.map((rule) => (
-                <li className="v3-sched__rule" key={rule}>
-                  {rule}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
       </div>
     </section>
   );

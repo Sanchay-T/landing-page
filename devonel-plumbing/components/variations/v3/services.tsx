@@ -98,7 +98,7 @@ export function V3Services() {
       <div className="v3-shell">
         <p className="v3-eyebrow v3-enter">What you buy</p>
 
-        <h2 className="v3-svc__headline v3-enter" style={delay(60)}>
+        <h2 className="v3-h2 v3-h2--stack v3-enter" style={delay(60)}>
           Five things we build.
         </h2>
 

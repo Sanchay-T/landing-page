@@ -30,35 +30,38 @@ const delay = (ms: number) => ({ "--v3-enter-delay": `${ms}ms` }) as CSSProperti
  * the client.
  */
 
-/** docs/goal/ASSET-INVENTORY.md. `@2x` files, with their true intrinsic size. */
+/** docs/goal/ASSET-INVENTORY.md. `@2x` files, with their true intrinsic size.
+ *  Each caption is the clause COPY.md section 4 gives that render inside "The
+ *  studio returns four renders: ...", in the document's own order and its own
+ *  words, so the strip names the four views without writing a line for them. */
 const RENDERS = [
   {
     src: "/media/jewelo/pendant-studio-silver@2x.webp",
     width: 1122,
     height: 1402,
     alt: "A silver name pendant on a fine chain, laid on cream silk and pale travertine, lit as a studio product shot",
-    caption: "A studio shot, in about two minutes.",
+    caption: "a studio shot in about two minutes",
   },
   {
     src: "/media/jewelo/pendant-worn-silver@2x.webp",
     width: 1122,
     height: 1222,
     alt: "A silver name pendant worn at the collarbone, framed below the chin",
-    caption: "The piece on the neck.",
+    caption: "the piece on the neck",
   },
   {
     src: "/media/jewelo/pendant-close-silver@2x.webp",
     width: 1122,
     height: 1402,
     alt: "Close detail of a silver cut-out name pendant showing the polished edges and the chain links",
-    caption: "A close-up.",
+    caption: "a close-up",
   },
   {
     src: "/media/jewelo/pendant-dark-silver@2x.webp",
     width: 1122,
     height: 1402,
     alt: "A silver name pendant resting on black velvet, lit as a dark editorial still",
-    caption: "A dark editorial frame.",
+    caption: "a dark editorial frame",
   },
 ] as const;
 
@@ -81,8 +84,10 @@ export function V3Work() {
     <section className="v3-work" id="work" aria-labelledby="v3-work-title">
       <div className="v3-shell">
         <div className="v3-work__head v3-enter">
-          <p className="v3-eyebrow">Proof of work</p>
-          <h2 className="v3-work__headline" id="v3-work-title">
+          {/* COPY.md section 4's own label. The proof strip above owns "Proof
+              of work", which is section 2's, so the two chips stay distinct. */}
+          <p className="v3-eyebrow">Case studies</p>
+          <h2 className="v3-h2" id="v3-work-title">
             One shipped, two in build, nothing invented.
           </h2>
         </div>
@@ -111,12 +116,6 @@ export function V3Work() {
         </div>
 
         <div className="v3-shell">
-          <div className="v3-work__strip-head">
-            <p className="v3-caption">
-              One design, four renders, in the order the studio returns them.
-            </p>
-          </div>
-
           <ul className="v3-work__strip">
             {RENDERS.map((render) => (
               <li className="v3-work__frame" key={render.src}>
@@ -126,7 +125,7 @@ export function V3Work() {
                     alt={render.alt}
                     width={render.width}
                     height={render.height}
-                    sizes="(min-width: 82.5rem) 19rem, (min-width: 48rem) 24vw, 62vw"
+                    sizes="(min-width: 82.5rem) 19rem, (min-width: 48rem) 24vw, 44vw"
                     priority
                   />
                 </div>
@@ -208,9 +207,7 @@ export function V3Work() {
                 </div>
                 <blockquote className="v3-work__quote">
                   <p>&ldquo;the layout is very good and simple&rdquo;</p>
-                  <footer>
-                    The owner&rsquo;s note on the first version. A bespoke jewellery house in Dubai.
-                  </footer>
+                  <footer>The owner&rsquo;s note on the first version</footer>
                 </blockquote>
                 <div className="v3-work__prose">
                   <p>

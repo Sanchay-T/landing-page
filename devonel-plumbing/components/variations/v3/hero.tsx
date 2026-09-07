@@ -90,7 +90,7 @@ export function V3Hero() {
 
       <div className="v3-hero__proof v3-enter" style={delay(360)}>
         <div className="v3-hero__proof-inner">
-          <p className="v3-hero__dates">Spec received 11 August 2026. Live 27 August 2026.</p>
+          <p className="v3-hero__dates">Spec received 11 Aug 2026 and live 27 Aug 2026</p>
           <p className="v3-hero__quote">
             <span className="v3-hero__quote-said">
               &quot;the layout is very good and simple&quot;

@@ -105,7 +105,7 @@ export function V3Faq() {
       <div className="v3-shell">
         <p className="v3-eyebrow v3-enter">Before you pay</p>
 
-        <h2 className="v3-faq__headline v3-enter" style={delay(60)}>
+        <h2 className="v3-h2 v3-h2--stack v3-enter" style={delay(60)}>
           The questions we get before the first payment.
         </h2>
 

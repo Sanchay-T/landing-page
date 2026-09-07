@@ -53,6 +53,12 @@
   --v3-ink-muted: #a8adb6;
   /* Ink for anything sitting on the amber pill. 9.0:1 on #e0a24a. */
   --v3-on-amber: #07080a;
+  /* Amber stepped back into the ground for glyph-weight type: the credit
+     initial, and the service numeral under a pointer. Mixed rather than set at
+     an alpha so the value is one token instead of a literal repeated per
+     section; in sRGB the mix is the same colour 62% amber over the base paints.
+     Measures 3.95:1 on --v3-base, which clears the 3:1 large-text floor. */
+  --v3-amber-glyph: color-mix(in srgb, var(--v3-amber) 62%, var(--v3-base));
 
   /* Type. Two families, both already in the project budget:
        Fraunces via --font-serif for display, Geist via --font-sans for the rest.
@@ -78,10 +84,13 @@
   --v3-tracking-body: 0.005em;
 
   /* Measure. Fraunces makes `ch` about a quarter too wide, so every measure on
-     this page is a rem value, never a ch value. 45rem is the 720px measure the
-     direction asks for. */
-  --v3-measure: 45rem;
-  --v3-measure-tight: 34rem;
+     this page is a rem value, never a ch value. 38rem is 608px, which sets
+     Geist at 17px to 65-72 characters: the reading measure this much running
+     text needs. The direction's own 720px figure was measured at about 94
+     characters a line and was too long for the body ramp, so the pictures keep
+     the full bleed and the words keep the shorter line. */
+  --v3-measure: 38rem;
+  --v3-measure-tight: 31rem;
 
   /* Space. Section gaps run 80px on a phone to 160px on a desktop. */
   --v3-space-section: clamp(5rem, 2.29rem + 7.14vw, 10rem);
@@ -234,6 +243,29 @@
   line-height: var(--v3-leading-display);
   letter-spacing: var(--v3-tracking-display);
   text-wrap: balance;
+}
+
+/* The section head. One role for every heading below the hero h1, so the page
+   has exactly two display steps: the hero owns opsz 144 at 10rem, and a section
+   owns opsz 96 at 3.75rem. At 32 to 60px the 144 cut's hairlines go spindly on
+   a dark ground, and 96 keeps the stroke contrast without losing the thins.
+   Every section applies this class and adds only its own spacing. */
+.v3-h2 {
+  max-width: var(--v3-measure);
+  font-family: var(--v3-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 96;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* The head as it sits under an eyebrow, which is where all but one of them
+   sit: the same 0.875rem the eyebrow rule leaves under itself. */
+.v3-h2--stack {
+  margin-top: 0.875rem;
 }
 
 .v3-lead {
@@ -713,12 +745,16 @@
 .v3-nav__anchors {
   grid-area: anchors;
   min-width: 0;
-  /* The row scrolls sideways rather than wrapping or truncating: every label
-     keeps `white-space: nowrap`, so no label is ever broken across lines or cut
-     with an ellipsis, and each one snaps to the gutter when scrolled. The mask
-     softens the right edge into the bar instead of chopping the label that runs
-     past it, which is also the affordance that says the row scrolls. It stays
-     on at every width because the anchor list grows as sections land. */
+  /* Under 1168px the row scrolls sideways rather than wrapping or truncating:
+     every label keeps `white-space: nowrap`, so no label is ever broken across
+     lines or cut with an ellipsis, and each one snaps to the gutter when
+     scrolled. The mask softens the right edge into the bar instead of chopping
+     the label that runs past it, which is the affordance that says the row
+     scrolls; the list carries a matching end pad, so the last label comes to
+     rest clear of the fade rather than under it. Both are lifted at 73rem,
+     where the row fits its own column and there is nothing to scroll to.
+     Keyboard reach needs nothing extra here: every child is a link, so Tab
+     walks the row and the browser scrolls each label into view in turn. */
   margin-inline: calc(-1 * var(--v3-gutter));
   /* Room for a focus ring inside a scroll container, taken back out again so
      the bar keeps its height. */
@@ -730,8 +766,8 @@
   scrollbar-width: none;
   scroll-snap-type: x proximity;
   scroll-padding-inline: var(--v3-gutter);
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
-  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent 100%);
 }
 
 .v3-nav__anchors::-webkit-scrollbar {
@@ -743,6 +779,9 @@
   align-items: center;
   gap: 1.375rem;
   padding-inline: var(--v3-gutter);
+  /* The fade's own width, so the last label ends where the fade begins when the
+     row is scrolled to its end. */
+  padding-inline-end: 2rem;
   padding-bottom: 0.625rem;
   width: max-content;
 }
@@ -778,6 +817,11 @@
 
   .v3-nav__anchors {
     margin-inline: 0;
+    /* The row fits its own column from here up, at every width, because the gap
+       below shrinks with the viewport. Nothing scrolls, so the fade comes off:
+       left on, it dimmed the last label on a desktop that had no overflow. */
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .v3-nav__list {
@@ -806,26 +850,13 @@
   padding-block: calc(var(--v3-space-section) / 2);
 }
 
-/* 9a. the section head. It keeps the shell's left edge, column 1, so the
-   indented list below reads as its contents. */
-.v3-svc__headline {
-  margin-top: 0.875rem;
-  max-width: var(--v3-measure);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  /* One step down from the hero's 144 cut: at 32 to 60px the display cut's
-     hairlines go spindly on a dark ground, and 96 keeps the contrast without
-     losing the thin strokes. */
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
+/* 9a. the section head is the shared `.v3-h2` role in section 4, applied in
+   the markup. It keeps the shell's left edge, column 1, so the indented list
+   below reads as its contents. */
 
 .v3-svc__lead {
   margin-top: 1.125rem;
+  max-width: var(--v3-measure);
 }
 
 /* 9b. the five scenes. A vertical sequence of full-width rows on the section's
@@ -847,9 +878,11 @@
   padding-block: clamp(1.75rem, 1.3rem + 1.9vw, 3rem);
 }
 
-/* The index. Large, and muted to 34% white, which lands at 3.6:1 on the base
-   and clears AA for text this size while staying far enough under the ink ramp
-   to read as an index mark rather than as a heading. */
+/* The index. It reads as an index mark rather than as a heading because it is
+   set in the numeral cut with no weight behind it, not because it is dim: the
+   colour is the ink ramp's muted tier, 8.9:1 on the base, which is the floor
+   this file sets for anything carrying a character. The alpha literal that
+   stood here before measured 2.80:1 and failed the 3:1 large-text line. */
 .v3-svc__index {
   grid-column: 1 / -1;
   font-family: var(--v3-font-display);
@@ -860,7 +893,7 @@
   line-height: 0.9;
   letter-spacing: -0.03em;
   font-variant-numeric: lining-nums tabular-nums;
-  color: rgb(244 242 238 / 0.34);
+  color: var(--v3-ink-muted);
   transition: color var(--v3-dur-hover) var(--v3-ease);
 }
 
@@ -920,7 +953,7 @@
   }
 
   .v3-svc__row:hover .v3-svc__index {
-    color: rgb(224 162 74 / 0.62);
+    color: var(--v3-amber-glyph);
   }
 }
 
@@ -993,20 +1026,9 @@
 
 /* --------------------------------------------------- shared to both routes */
 
-/* The section head. One display size for every heading below the hero h1, so
-   the page has exactly two display steps. */
-.v3-work__headline,
-.v3-study__title {
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
-  line-height: 1.06;
-  letter-spacing: -0.018em;
-  text-wrap: balance;
-  max-width: var(--v3-measure);
-}
+/* Both section heads here are the shared `.v3-h2` role in section 4, applied
+   in the markup: the case section's own title on the variation page, and the
+   sub page's h1, which is the same sentence one click in. */
 
 /* A row of small facts under a title: tags, dateline, industry. Set as one
    sentence rather than as chips, because that is how COPY.md writes it. */
@@ -1230,39 +1252,22 @@
 
 /* --- the filmstrip: the four presentation views the product returns. */
 
-.v3-work__strip-head {
-  padding-top: var(--v3-space-block);
-  padding-bottom: 1rem;
-}
-
+/* Four frames, one row of four from 768px and a 2x2 block below it. The block
+   is what a phone gets rather than a sideways scroller: a scroller with no
+   focusable child inside it is unreachable by keyboard, and the four renders
+   are the proof this section is making, so none of them is allowed to sit
+   behind a gesture. Two columns at 360px give each frame about 160px, which is
+   the size the same frame has in the row of four on a laptop. */
 .v3-work__strip {
   display: grid;
-  /* A phone scrolls the strip sideways rather than stacking four frames into a
-     column that is taller than the section it proves. Every frame snaps. */
-  grid-auto-flow: column;
-  grid-auto-columns: 62vw;
-  gap: var(--v3-gutter);
-  margin-inline: calc(-1 * var(--v3-gutter));
-  padding-inline: var(--v3-gutter);
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scroll-snap-type: x proximity;
-  scroll-padding-inline: var(--v3-gutter);
-  scrollbar-width: none;
-}
-
-.v3-work__strip::-webkit-scrollbar {
-  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--v3-space-block) var(--v3-gutter);
+  margin-top: var(--v3-space-block);
 }
 
 @media (min-width: 48rem) {
   .v3-work__strip {
-    grid-auto-flow: row;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-columns: auto;
-    margin-inline: 0;
-    padding-inline: 0;
-    overflow-x: visible;
   }
 }
 
@@ -1271,7 +1276,6 @@
   flex-direction: column;
   gap: 0.75rem;
   min-width: 0;
-  scroll-snap-align: start;
 }
 
 .v3-work__frame-media {
@@ -1426,22 +1430,8 @@
   grid-column: 1 / -1;
 }
 
-/* 10a. the head. Same display cut, size and rhythm as .v3-svc__headline, so
-   every section title on this variation is one tier: the hero owns 144 and
-   10rem, a section owns 96 and 3.75rem. When the last section lands these two
-   rules are the same rule and should be lifted into one role. */
-.v3-proof__title {
-  margin-top: 0.875rem;
-  max-width: var(--v3-measure);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
+/* 10a. the head is the shared `.v3-h2` role in section 4, applied in the
+   markup, like every other section title on the variation. */
 
 .v3-proof__lead {
   margin-top: 1.125rem;
@@ -1755,10 +1745,6 @@
   object-position: 50% 55%;
 }
 
-.v3-study__figcap {
-  padding-top: 0.875rem;
-}
-
 .v3-study__block {
   display: flex;
   flex-direction: column;
@@ -1829,9 +1815,6 @@
 }
 
 .v3-study__shot {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
   min-width: 0;
 }
 
@@ -1859,39 +1842,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* Dated rows. Two facts and one open item, which is every date the sources
-   carry for this build. */
-.v3-study__timeline {
-  border-bottom: 1px solid var(--v3-line);
-}
-
-.v3-study__t-row {
-  display: grid;
-  gap: 0.375rem 2.5rem;
-  padding-block: 1.125rem;
-  border-top: 1px solid var(--v3-line);
-}
-
-@media (min-width: 48rem) {
-  .v3-study__t-row {
-    grid-template-columns: 12rem minmax(0, 1fr);
-    align-items: baseline;
-  }
-}
-
-.v3-study__t-date {
-  font-size: var(--v3-size-small);
-  line-height: 1.4;
-  color: var(--v3-ink);
-  font-variant-numeric: lining-nums;
-}
-
-.v3-study__t-text {
-  max-width: var(--v3-measure);
-  color: var(--v3-ink-2);
-  text-wrap: pretty;
 }
 
 .v3-study__cta {
@@ -1949,20 +1899,7 @@
   padding-block: calc(var(--v3-space-section) / 2);
 }
 
-/* The head matches the services head exactly. One display size for every
-   heading under the hero h1 keeps the page reading as one film. */
-.v3-founders__headline {
-  margin-top: 0.875rem;
-  max-width: var(--v3-measure);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
+/* The head is the shared `.v3-h2` role in section 4, applied in the markup. */
 
 .v3-founders__lead {
   margin-top: 1.125rem;
@@ -1996,10 +1933,11 @@
   min-width: 0;
 }
 
-/* The credit glyph, where a portrait would be. Amber at 62% is 3.95:1 on the
-   base, which clears AA for text this size, and it is aria-hidden anyway: the
-   name under it carries the letter. The halo is wide and low alpha so it reads
-   as light in the room rather than as a drop shadow. */
+/* The credit glyph, where a portrait would be. It takes --v3-amber-glyph, the
+   one stepped-back amber the page declares, which is 3.95:1 on the base and
+   clears the large-text line; it is aria-hidden anyway, since the name under it
+   carries the letter. The halo is wide and low alpha so it reads as light in
+   the room rather than as a drop shadow. */
 .v3-founders__initial {
   font-family: var(--v3-font-display);
   font-optical-sizing: none;
@@ -2008,7 +1946,7 @@
   font-size: clamp(4.5rem, 3.1rem + 6.2vw, 7.5rem);
   line-height: 0.82;
   letter-spacing: -0.03em;
-  color: rgb(224 162 74 / 0.62);
+  color: var(--v3-amber-glyph);
   text-shadow: 0 0 3rem rgb(224 162 74 / 0.3);
 }
 
@@ -2110,21 +2048,8 @@
   padding-block: calc(var(--v3-space-section) / 2);
 }
 
-/* The section head. Same display cut, size and rhythm as .v3-svc__headline and
-   .v3-proof__title: the hero owns opsz 144 at 10rem, every section below it
-   owns opsz 96 at 3.75rem, so the page has exactly two display steps. */
-.v3-eng__headline {
-  margin-top: 0.875rem;
-  max-width: var(--v3-measure);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
+/* The section head is the shared `.v3-h2` role in section 4, applied in the
+   markup. */
 
 /* Sized from --v3-size-lead-full, not --v3-size-lead: the short-viewport arm in
    section 1 shrinks the lead ramp so the hero's CTA clears a 390px tall window,
@@ -2280,25 +2205,15 @@
   padding-block: calc(var(--v3-space-section) / 2);
 }
 
-/* 11a. the section head. Same two display steps the rest of the page uses. */
-.v3-sched__headline {
-  margin-top: 0.875rem;
-  max-width: var(--v3-measure);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
+/* 11a. the section head is the shared `.v3-h2` role in section 4, applied in
+   the markup. */
 
 /* The short-viewport arm in section 1 shrinks --v3-size-lead so the hero CTA
    clears a 390px tall window. This section scrolls, so it sizes from the
    unshrunk ramp instead and the lead stays above the body at 844x390. */
 .v3-sched__lead {
   margin-top: 1.125rem;
+  max-width: var(--v3-measure);
   font-size: var(--v3-size-lead-full);
 }
 
@@ -2503,44 +2418,6 @@
   color: var(--v3-ink);
 }
 
-/* 11d. the two rules. They hold across every phase, so they close the schedule
-   off the rail instead of repeating inside it. Indented to the text column so
-   they read as the note at the foot of the call sheet. */
-.v3-sched__rules {
-  margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
-  padding-top: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
-  /* The closing rule, full shell width like the opening one, so the schedule
-     sits between two lines rather than trailing off. */
-  border-top: 1px solid var(--v3-line);
-}
-
-/* The words inside it stay in the text column and the measure. */
-.v3-sched__rules-inner {
-  margin-left: calc(var(--v3-sched-rail) + var(--v3-sched-gap));
-  max-width: var(--v3-measure);
-}
-
-/* Set in the body face, not the display face: it is a note, not a phase, and
-   nothing on the rail should be mistaken for a fifth thing you buy. */
-.v3-sched__rules-title {
-  font-family: var(--v3-font-body);
-  font-size: var(--v3-size-body);
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--v3-ink);
-}
-
-.v3-sched__rules-list {
-  display: grid;
-  row-gap: 0.5rem;
-  margin-top: 0.625rem;
-  color: var(--v3-ink-muted);
-}
-
-.v3-sched__rule {
-  text-wrap: pretty;
-}
-
 /* ===========================================================================
    FAQ. Owns `#faq` on the variation page.
 
@@ -2577,20 +2454,8 @@
   --v3-faq-q-size: clamp(1.25rem, 1.1rem + 0.62vw, 1.75rem);
 }
 
-/* The section head. Same display cut, size and rhythm as .v3-svc__headline and
-   .v3-eng__headline, so the page keeps exactly two display steps. */
-.v3-faq__headline {
-  margin-top: 0.875rem;
-  max-width: var(--v3-measure);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
-}
+/* The section head is the shared `.v3-h2` role in section 4, applied in the
+   markup. */
 
 /* The column of cards. Capped at the same 64rem the engagement document above
    it is capped at, so the two adjacent sections share a right edge and the run
@@ -3128,23 +2993,12 @@
   max-width: var(--v3-measure);
 }
 
-/* The section tier every head below the hero is set at: opsz 96, not the
-   display cut. The hero owns 144 and 10rem; a closing frame that matched it
-   would read as a second hero rather than as the end of this one. */
+/* The closing head is the shared `.v3-h2` role, with one override: it is set
+   tighter than the measure so the recap breaks into two balanced lines instead
+   of one long one. A rem cap, never ch: Fraunces sets about a quarter wide of
+   the character box. */
 .v3-contact__title {
-  margin-top: 0.875rem;
-  /* Tighter than the measure so the recap breaks into two balanced lines
-     instead of one long one. A rem cap, never ch: Fraunces sets about a
-     quarter wide of the character box. */
   max-width: var(--v3-measure-tight);
-  font-family: var(--v3-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 96;
-  font-weight: 400;
-  font-size: clamp(2rem, 1.4rem + 2.65vw, 3.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  text-wrap: balance;
 }
 
 .v3-contact__lead {
@@ -3175,9 +3029,10 @@
 }
 
 /* Stacked under the button on a phone, on a hairline; beside it from 768px, on
-   the same hairline turned upright. */
+   the same hairline turned upright. Capped at 20rem so that beside it the
+   button's own support line still sets on one line inside the type column. */
 .v3-contact__proof {
-  max-width: 22rem;
+  max-width: 20rem;
   padding-top: 1.0625rem;
   border-top: 1px solid var(--v3-line);
 }

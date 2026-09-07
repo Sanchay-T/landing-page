@@ -72,7 +72,10 @@ export function TickBar() {
   return (
     <header className="v3-bar">
       <div className="v3-bar-inner">
-        <a className="v3-bar-mark" href="#hero">
+        {/* The wordmark is display:none below 46rem and the mark is decorative,
+            so the link carries its own name; at 46rem and up the label is the
+            visible word. */}
+        <a className="v3-bar-mark" href="#hero" aria-label="Devonel">
           <Mark />
           <span className="v3-bar-name">Devonel</span>
         </a>

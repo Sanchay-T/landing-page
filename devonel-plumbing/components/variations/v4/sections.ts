@@ -51,11 +51,11 @@ export const sections: readonly Section[] = [
   // COPY.md section 7, "Label: How a quote works".
   { id: "engagement", label: "How a quote works", built: true, inNav: true },
   // COPY.md section 8, "Label: Before you pay".
-  { id: "faq", label: "Before you pay", built: false, inNav: false },
+  { id: "faq", label: "Before you pay", built: true, inNav: false },
   // COPY.md section 9, "Label: Start".
-  { id: "contact", label: "Start", built: false, inNav: false },
+  { id: "contact", label: "Start", built: true, inNav: false },
   // COPY.md section 10 carries no label; the footer is never a nav target.
-  { id: "footer", label: "Footer", built: false, inNav: false },
+  { id: "footer", label: "Footer", built: true, inNav: false },
 ];
 
 /** The anchors the nav is allowed to render today. Five once all five ship. */

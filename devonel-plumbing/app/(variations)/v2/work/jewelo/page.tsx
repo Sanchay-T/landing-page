@@ -354,26 +354,6 @@ export default function Page() {
           </div>
         </section>
 
-        <section className="v2-case-sec" aria-labelledby="feedback">
-          <div className="v2-case-sec__inner">
-            <h2 id="feedback" className="v2-case-sec__h">
-              Feedback
-            </h2>
-            <div className="v2-case-sec__content">
-              <blockquote className="v2-case__quote v2-case__quote--lead">
-                <p>&ldquo;the layout is very good and simple&rdquo;</p>
-                <cite className="v2-case__cite">
-                  the owner, a bespoke jewellery house in Dubai, on the first version
-                </cite>
-              </blockquote>
-              <p className="v2-case-sec__p">
-                The one complaint was generation time, which is set by the model providers, and we
-                said so.
-              </p>
-            </div>
-          </div>
-        </section>
-
         <section className="v2-case-sec" aria-labelledby="stack">
           <div className="v2-case-sec__inner">
             <h2 id="stack" className="v2-case-sec__h">
@@ -402,6 +382,18 @@ export default function Page() {
                   </div>
                 ))}
               </dl>
+
+              <blockquote className="v2-case__quote">
+                <p>&ldquo;the layout is very good and simple&rdquo;</p>
+                <cite className="v2-case__cite">
+                  the owner, a bespoke jewellery house in Dubai, on the first version
+                </cite>
+              </blockquote>
+
+              <p className="v2-case-sec__p">
+                The one complaint was generation time, which is set by the model providers, and we
+                said so.
+              </p>
             </div>
           </div>
         </section>

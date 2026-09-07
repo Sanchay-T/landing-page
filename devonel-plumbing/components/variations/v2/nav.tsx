@@ -9,10 +9,17 @@
  * where the proof it needs is already on screen.
  *
  * Section links come from `sections.ts` and only for a section that is built,
- * so this nav can never render a link to a section that does not exist. Today
- * that list is empty and the bar is wordmark plus clocks, exactly as drawn.
+ * so this nav can never render a link to a section that does not exist. The
+ * finished page has eight of them, and eight 13px labels plus the wordmark and
+ * the two clocks measure 1235px of content: more than a 1180 or a 1024 bar can
+ * hold. So the bar shows the complete index or none of it. `data-links` puts
+ * the count in the DOM and tokens.css carries one width step per count - the
+ * width at which that many links fit without anything shrinking or wrapping.
+ * Below its step the list is `display: none`, out of the tab order with it,
+ * and the sections stay reachable by scroll and by the footer's own index.
  *
- * Below 40rem the clocks drop out of the bar. They are not lost: the hero
+ * Below 40rem no link is ever shown and the clocks drop out too, so the phone
+ * bar is the wordmark alone on its 64px. The clocks are not lost: the hero
  * carries them at display size directly under the headline, stacked, which is
  * where the phone layout wants them.
  */
@@ -27,7 +34,7 @@ import { CityClock } from "./two-city-field";
  */
 export function Nav({ base = "" }: { base?: string } = {}) {
   return (
-    <nav className="v2-nav" aria-label="Devonel">
+    <nav className="v2-nav" aria-label="Devonel" data-links={navSections.length}>
       <div className="v2-nav__side v2-nav__side--start">
         <CityClock cityKey="dubai" />
       </div>

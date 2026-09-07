@@ -1179,11 +1179,14 @@
 }
 
 /* Six build lines as a ruled ledger rather than one paragraph: each line is a
-   thing that exists, and the rules count them without numbering them. */
+   thing that exists, and the rules count them without numbering them. The
+   rules run the full width of the plinth, the same width the section headings
+   rule to, so every division inside the block stops on one vertical. The band
+   caps the plinth at about 66ch, so the lines stay inside the measure without
+   a second cap holding the rules short of the edge. */
 
 .v2-case__list {
   margin-block-start: var(--v2-s3);
-  max-inline-size: 62ch;
 }
 
 .v2-case__list > li {
@@ -1394,10 +1397,11 @@
   margin-block-start: var(--v2-s6);
 }
 
-.v2-case__quote--lead {
-  margin-block-start: 0;
-  padding-block-start: 0;
-  border-block-start: 0;
+/* COPY.md keeps the owner's note and the one complaint inside Result, under
+   the two dates, so the sub-page does too: a rule, the quote, and the sentence
+   that qualifies it. */
+.v2-case__quote + .v2-case-sec__p {
+  margin-block-start: var(--v2-s5);
 }
 
 @media (min-width: 64rem) {
@@ -1956,12 +1960,20 @@
 
 /* -- the standing line ------------------------------------------------------
    It answers both entries rather than either one, so it closes the section on
-   its own hairline, set in ink at lead size. */
+   its own hairline, set in ink at lead size.
 
-.v2-founders__standing {
+   The rule is on the wrapper and the measure is on the paragraph, so the line
+   runs the full section width the way the process coda's rules do. Put both on
+   the paragraph and the rule stops at 46ch, which reads as an unfinished line
+   next to the full-width plinths above it. */
+
+.v2-founders__close {
   margin-block-start: var(--v2-s7);
   padding-block-start: var(--v2-s5);
   border-block-start: 1px solid var(--v2-rule);
+}
+
+.v2-founders__standing {
   max-inline-size: 46ch;
   font-size: var(--v2-lead);
   line-height: 1.5;
@@ -2178,5 +2190,374 @@
   .v2-engagement__note > p:nth-child(2) {
     grid-column: 5 / span 8;
     margin-block-start: 0;
+  }
+}
+
+/* ===========================================================================
+   BLOCK 1-fix r1: hero seam + phone nav
+
+   Two corrections to block 1, appended rather than edited so no other builder's
+   lines move. Nothing else in block 1 changes.
+
+   1. THE SEAM. `.v2-hero` is `overflow: hidden`, so above 40rem the field
+      stopped dead on the hero's lower bound and a single row stepped from
+      tinted to paper right across the width (measured at 1280 y=857, at 2560
+      y=1080, at 844x390 y=323). The phone rule already ends its 300px band in
+      paper; this does the same thing at every other width, fading the field out
+      over its last 120-200px so the hero dissolves into the paper the proof
+      band starts from. The fade is a mask, so it only ever multiplies the
+      field's alpha down: the 22% ceiling in `--v2-field-max` still holds at
+      every pixel, and the darkest pixel now sits further up the hero than it
+      did before.
+
+      The length is fixed in px rather than a percentage because it is a
+      distance the eye reads, not a share of the hero: 200px on the tall
+      desktop hero, 160px between 40rem and 64rem, and 120px in a 390px tall
+      landscape window where 200px would reach the headline.
+
+   2. THE PHONE (AND TABLET) NAV. The bar was drawn for a wordmark and two
+      clocks. The finished page has eight sections in the nav, and eight 13px
+      labels plus the wordmark and the two clocks measure 1235px of content at
+      full spacing - wider than a 1180 bar, let alone a 390 one. Below 40rem
+      the old rule let the list wrap to two lines each, pushed the nav content
+      to 84px inside a 64px bar and shoved the wordmark into the left gutter.
+
+      The bar now shows the complete section index or none of it. nav.tsx puts
+      the built count in `data-links` and each step below is the width at which
+      that many links fit with the wordmark, both clocks and every gap at its
+      largest, plus 60px of air; below its step the list is `display: none`,
+      which takes it out of the tab order with it. Nothing is ever shrunk and
+      nothing ever wraps. Sections stay reachable by scroll, and the footer
+      carries the full index in text.
+   =========================================================================== */
+
+/* -- 1. the hero field ends in paper ---------------------------------------
+   Below 40rem the phone rule owns the mask; these only apply above it. */
+
+@media (min-width: 40rem) {
+  .v2-hero__field {
+    --v2-hero-fade: 160px;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - var(--v2-hero-fade)),
+      transparent
+    );
+    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--v2-hero-fade)), transparent);
+  }
+}
+
+@media (min-width: 64rem) {
+  .v2-hero__field {
+    --v2-hero-fade: 200px;
+  }
+}
+
+/* Phone landscape: the hero is only ~320px tall, so the fade is one step down
+   to keep it below the headline. Last, so it wins over the two above. */
+@media (min-width: 40rem) and (max-height: 33rem) {
+  .v2-hero__field {
+    --v2-hero-fade: 120px;
+  }
+}
+
+/* -- 2. the section index, complete or not at all -------------------------- */
+
+.v2-nav__links {
+  display: none;
+  flex-wrap: nowrap;
+}
+
+.v2-nav__links > li {
+  flex: 0 0 auto;
+}
+
+.v2-nav__link {
+  white-space: nowrap;
+}
+
+/* One step per count. Each width is the measured content width for that many
+   links (361.9px of bar furniture, then 80.8 / 80.8 / 76.5 / 80.9 / 113.5 /
+   114.1 / 88.9 / 29.5 for the eight labels, 24px between them, 40px from the
+   wordmark) rounded up to the next whole rem with air. A count never appears
+   in two queries, so there is no cascade to resolve. */
+
+@media (min-width: 40rem) {
+  .v2-nav[data-links="1"] .v2-nav__links,
+  .v2-nav[data-links="2"] .v2-nav__links {
+    display: flex;
+  }
+}
+
+@media (min-width: 52rem) {
+  .v2-nav[data-links="3"] .v2-nav__links,
+  .v2-nav[data-links="4"] .v2-nav__links {
+    display: flex;
+  }
+}
+
+@media (min-width: 62rem) {
+  .v2-nav[data-links="5"] .v2-nav__links {
+    display: flex;
+  }
+}
+
+@media (min-width: 72rem) {
+  .v2-nav[data-links="6"] .v2-nav__links {
+    display: flex;
+  }
+}
+
+@media (min-width: 80rem) {
+  .v2-nav[data-links="7"] .v2-nav__links {
+    display: flex;
+  }
+}
+
+@media (min-width: 84rem) {
+  .v2-nav[data-links="8"] .v2-nav__links {
+    display: flex;
+  }
+}
+
+/* ===========================================================================
+   BLOCK 8 - FAQ (the page's canonical section 8)
+
+   The services ledger with a hinge in it.
+
+   Same idiom, same alignment: 1px --v2-rule hairlines, the question in Fraunces
+   on the left five of twelve columns, the answer in Geist on the right seven,
+   one empty column between them. --v2-ink rules mean money and belong to the
+   process gate, so every line in this block is --v2-rule, ordinary separation.
+   No plinth: nothing here sits over the field. No card, no border, no shadow,
+   no radius, no icon - the state indicator is a Geist "+" that becomes a minus.
+
+   What is new is the open, and it is built around one fact: an element with no
+   box has nothing to interpolate from, so a `hidden` answer cannot itself be
+   transitioned. The answer therefore sits inside a wrapper that is always in
+   layout, and the wrapper carries the 200ms: grid-template-rows 0fr -> 1fr for
+   the height and opacity 0 -> 1 for the reveal. faq.tsx removes `hidden` at the
+   start of the open and restores it on the wrapper's own transitionend, so the
+   answer is out of the accessibility tree whenever the row is closed and the
+   close still gets its 200ms.
+
+   Above 64rem the answer opens on the same grid row as its question, in the
+   right seven columns, so the left column stays a readable index of seven
+   questions whatever is open and the ledger never pushes itself down a screen.
+   Below 64rem the pair stacks, which keeps the question at display size instead
+   of squeezing Fraunces into half a phone.
+
+   Reduced motion collapses --v2-faq-open to 1ms, the same device this file
+   already applies to --v2-hover-in: the answer appears and disappears in one
+   frame, and the transitionend that restores `hidden` still fires.
+
+   Widths follow services and process: padded to the same --v2-band the nav is,
+   so the hairlines run out to where the nav clocks stand. Measure is held by
+   the copy, so the answer carries its own max-inline-size.
+   =========================================================================== */
+
+.v2 {
+  /* The one value this block adds. */
+  --v2-faq-open: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 {
+    --v2-faq-open: 1ms;
+  }
+}
+
+.v2-faq {
+  padding-block: var(--v2-s8);
+  padding-inline: max(var(--v2-gutter), var(--v2-band-inset));
+}
+
+/* -- the heading block ------------------------------------------------------
+   Same string the nav links with ("Before you pay"), sentence case at
+   body-small size, not a tracked-out eyebrow. COPY.md section 8 gives this
+   section a label and a headline and no subhead, so the right seven columns
+   stay empty here and the head is the ledger's first left-column entry. */
+
+.v2-faq__label {
+  font-size: var(--v2-small);
+  letter-spacing: 0.03em;
+  color: var(--v2-ink-2);
+}
+
+.v2-faq__headline {
+  margin-block-start: var(--v2-s3);
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(2.25rem, 1.55rem + 2.9vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  max-inline-size: 20ch;
+  text-wrap: balance;
+  color: var(--v2-ink);
+}
+
+/* -- the seven rows ---------------------------------------------------------
+   Every row owns the rule above it and the list owns the one below the last, so
+   the set is closed by eight lines and no row carries a card, a number or a
+   mark of any kind. Hover is the services hover: the rule goes one step darker
+   and nothing else moves, because nothing here is hover-gated. */
+
+.v2-faq__list {
+  margin-block-start: var(--v2-s7);
+  border-block-end: 1px solid var(--v2-rule);
+}
+
+.v2-faq__row {
+  border-block-start: 1px solid var(--v2-rule);
+  transition: border-color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-faq__row:hover {
+  border-block-start-color: var(--v2-rule-hover);
+}
+
+/* Neutralises the UA h3, so the button below inherits the page's own type. */
+.v2-faq__q {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.v2-faq__toggle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--v2-s5);
+  inline-size: 100%;
+  margin: 0;
+  padding: var(--v2-s5) 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.v2-faq__question {
+  font-family: var(--v2-display-font);
+  font-weight: 400;
+  font-variation-settings: "opsz" 32;
+  font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.625rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+  color: var(--v2-ink);
+}
+
+/* The state, as a text glyph rather than an icon: "+" closed, minus open. It
+   is aria-hidden, so it repeats what aria-expanded already says rather than
+   being the only place the state is written. */
+.v2-faq__state {
+  flex: none;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: var(--v2-ink-2);
+  transition: color var(--v2-hover-in) var(--v2-ease);
+}
+
+.v2-faq__toggle:hover .v2-faq__state,
+.v2-faq__toggle[aria-expanded="true"] .v2-faq__state {
+  color: var(--v2-ink);
+}
+
+/* -- the open ---------------------------------------------------------------
+   The wrapper is always in layout and carries the whole transition; the answer
+   inside it is the element faq.tsx hides. */
+
+.v2-faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--v2-faq-open) var(--v2-ease),
+    opacity var(--v2-faq-open) var(--v2-ease);
+}
+
+.v2-faq__panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.v2-faq__answer {
+  display: grid;
+  gap: var(--v2-s3);
+  /* Both lines are load-bearing on the open, and they belong on the grid item
+     rather than on the wrapper: a grid item's automatic minimum size floors the
+     0fr track at a line of text unless the item's own overflow is hidden, and
+     any padding on the item is measured outside that floor. So the item clips
+     itself, and the answer's bottom air is carried by its last line. Without
+     this pair the panel snapped open 64px before it started easing, and snapped
+     the last 64px shut at the end of the close. */
+  overflow: hidden;
+  min-block-size: 0;
+  max-inline-size: var(--v2-measure);
+  font-size: var(--v2-body);
+  line-height: var(--v2-body-leading);
+  color: var(--v2-ink-2);
+}
+
+/* The rule above sets `display`, and any author rule beats the UA sheet's
+   `[hidden] { display: none }` however specific it is, so the attribute has to
+   be honoured here or a closed answer would stay on the page. */
+.v2-faq__answer[hidden] {
+  display: none;
+}
+
+/* The direct answer leads, the elaboration follows in the second ink. Two steps
+   of one hierarchy, the same one the services promise and the phase lines use,
+   not two colours picked for variety. */
+.v2-faq__answer > p:first-child {
+  color: var(--v2-ink);
+}
+
+/* The row's bottom air, set inside the item so it does not floor the track. */
+.v2-faq__answer > p:last-child {
+  padding-block-end: var(--v2-s6);
+}
+
+/* -- the two column read ----------------------------------------------------
+   The same 5 / air / 7 read the services and process ledgers use, so the
+   questions line up with the service names above them. The answer takes the
+   question's own grid row rather than the one below it, which is what makes an
+   open row read as one line of a ledger instead of a block pushed into it. */
+
+@media (min-width: 64rem) {
+  .v2-faq__head {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+  }
+
+  .v2-faq__label,
+  .v2-faq__headline {
+    grid-column: 1 / span 5;
+  }
+
+  .v2-faq__row {
+    display: grid;
+    grid-template-columns: repeat(var(--v2-columns), minmax(0, 1fr));
+    column-gap: var(--v2-gap);
+    align-items: start;
+  }
+
+  .v2-faq__q {
+    grid-column: 1 / span 5;
+  }
+
+  .v2-faq__panel {
+    grid-column: 6 / span 7;
+    grid-row: 1;
+  }
+
+  .v2-faq__answer > p:first-child {
+    /* Matches the button's own top padding, so the answer's first line starts
+       level with the question it answers. Set on the line rather than on the
+       item, for the same reason its bottom air is. */
+    padding-block-start: var(--v2-s5);
   }
 }

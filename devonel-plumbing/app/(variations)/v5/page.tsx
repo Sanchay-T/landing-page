@@ -1,12 +1,22 @@
-import Link from "next/link";
+import { Hero, Nav } from "@/components/variations/v5";
+import "@/components/variations/v5/tokens.css";
 import { getVariation } from "../variations";
 
 /**
- * Variation 5. Round 1 was deleted wholesale; this route holds the slug and
- * the name until the round-2 direction is built here.
+ * Variation 5, "Liquid Metal".
  *
- * The name is read from `variations.ts` rather than typed, so this page, the
- * switcher at `/` and the mini-switcher can never disagree about what v5 is.
+ * A dark, near-empty page with one chrome orb and type at poster scale, built
+ * for a studio that wants to be read as expensive. Direction, palette, type
+ * scale and motion: `docs/goal/03-design-research.md` section 4. Every word on
+ * the page is verbatim from `docs/goal/COPY.md`.
+ *
+ * `.v5` is the scope every token and every class in `tokens.css` hangs off, so
+ * nothing here reaches the switcher at `/` or the other four variations. The
+ * name is read from `variations.ts` rather than typed, so this page, the
+ * switcher and the mini-switcher can never disagree about what v5 is.
+ *
+ * Sections are added one at a time; `components/variations/v5/sections.ts` is
+ * the list of the ten and the record of which are built.
  */
 const variation = getVariation("v5")!;
 
@@ -14,18 +24,11 @@ export const metadata = { title: `${variation.name} - Devonel` };
 
 export default function Page() {
   return (
-    <main className="mx-auto flex min-h-svh max-w-[46rem] flex-col justify-center px-5 py-16 sm:px-8">
-      <h1 className="text-[clamp(2rem,8vw,3.5rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
-        {variation.name}
-      </h1>
-      <p className="mt-8">
-        <Link
-          href="/"
-          className="underline decoration-border-strong underline-offset-4 hover:decoration-fg"
-        >
-          Back to all five variations
-        </Link>
-      </p>
-    </main>
+    <div className="v5">
+      <Nav />
+      <main>
+        <Hero />
+      </main>
+    </div>
   );
 }

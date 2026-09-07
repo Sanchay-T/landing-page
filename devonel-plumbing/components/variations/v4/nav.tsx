@@ -4,7 +4,7 @@ import { contactLabel } from "@/lib/site";
 import { navSections } from "./sections";
 
 /**
- * The product bar: 64px, wordmark, the section anchors, one cobalt button.
+ * The product bar: 64px, wordmark, the section anchors, one ink outline button.
  *
  * The anchors come from `sections.ts` and only from sections whose `built` flag
  * is true, so the bar cannot carry a dead link at any point in the build. Below
@@ -18,6 +18,11 @@ import { navSections } from "./sections";
  * `base` is the path the anchors hang off. Empty on the variation root, where a
  * bare `#work` is correct; `/v4` on a sub-page such as `/v4/work/jewelo`, where
  * the same anchor has to travel back to the root before it means anything.
+ *
+ * The button is the ink outline form, not the cobalt fill. Cobalt is rationed
+ * to three surfaces on this page and the final CTA cell is the third, so the
+ * bar spends none: same href, same label, same size, only the colour leaves.
+ * See `docs/goal/STATUS.md`, the v4 decision line, and tokens.css block 21.
  */
 export function Nav({ base = "" }: { base?: string } = {}) {
   return (
@@ -38,7 +43,7 @@ export function Nav({ base = "" }: { base?: string } = {}) {
           </nav>
         ) : null}
 
-        <ContactCTA className="v4-btn v4-btn--primary">{contactLabel()}</ContactCTA>
+        <ContactCTA className="v4-btn v4-btn--ink">{contactLabel()}</ContactCTA>
       </div>
     </header>
   );

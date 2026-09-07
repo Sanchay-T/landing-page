@@ -1,6 +1,7 @@
 import { getVariation } from "../variations";
 import {
   Engagement,
+  Faq,
   Founders,
   Hero,
   Nav,
@@ -35,6 +36,7 @@ export default function Page() {
         <Process />
         <Founders />
         <Engagement />
+        <Faq />
       </main>
     </div>
   );

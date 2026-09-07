@@ -10,12 +10,17 @@ import { contactLabel } from "@/lib/site";
  * The bar carries no section anchors on purpose. The direction gives it one
  * button, and `sections.ts` keeps the ten section links for the footer. It is
  * a server component: nothing here needs state, so nothing here ships JS.
+ *
+ * `base` prefixes the one anchor the bar owns. It is empty on the variation
+ * root, where `#hero` is a same-page jump, and `/v1` on a sub-page such as
+ * `/v1/work/jewelo`, where the wordmark has to travel back to the page the
+ * anchor lives on. Nothing else in the bar is a link, so one prop covers it.
  */
-export function Nav() {
+export function Nav({ base = "" }: { base?: string }) {
   return (
     <header className="v1-nav">
       <div className="v1-shell v1-nav__bar">
-        <a className="v1-nav__brand" href="#hero">
+        <a className="v1-nav__brand" href={`${base}#hero`}>
           <Mark className="v1-nav__mark" />
           <span className="v1-nav__word">Devonel</span>
         </a>

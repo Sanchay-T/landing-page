@@ -13,5 +13,6 @@ export { Services } from "./services";
 export { Process } from "./process";
 export { Founders } from "./founders";
 export { Engagement } from "./engagement";
+export { Faq } from "./faq";
 export { sections, navSections } from "./sections";
 export type { Section, SectionId } from "./sections";

@@ -19,6 +19,14 @@
    03  2026-09-07  services  five ruled rows back on the void, the name/body
                          split at 1180, the one-rule hover, and the standing
                          lines that close the section.
+   04  2026-09-07  work  the panel surface, the case tag chip, the inline mono
+                         date, the flagship and showcase panels and their 7 + 5
+                         row at 1180, and the /v1/work/jewelo document with its
+                         two panel bands and its plate grids.
+   05  2026-09-07  process  the phase type step, the gate dot and the
+                         station tick, and the one gauge geometry that
+                         turns vertical at 390, 2 x 2 at 768 and four
+                         across at 1180.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
@@ -932,12 +940,796 @@ body:has(.v1) {
     padding-block: var(--v1-7);
   }
 
+  /* The gutter alone is not enough air between a 32px display face and a 17px
+     paragraph. Measured: "Customer-facing product studios." sets 496px of ink
+     and the five-column track is 497px at 1280 and 514px at the capped shell,
+     so at 1280 the name ends 16px from the paragraph and reads as one run of
+     text. This reserves a step of the space scale on the name's right, which
+     makes the smallest gap 40px at every width and wraps that one name onto
+     two lines - the column is genuinely full, so the wrap is the honest
+     result rather than a squeeze. */
   .v1-services__name {
     grid-column: 1 / span 5;
+    padding-right: var(--v1-5);
   }
 
   .v1-services__body {
     grid-column: 6 / span 7;
     margin-top: 0;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   04 - case studies
+
+   Back on the void, and the first place on this page where the surface is cut
+   into blocks instead of run edge to edge. The proof band is one panel across
+   the whole width; this section is three panels in a row, same fill, same
+   hairline, 0 radius, no shadow. Panels, not cards: nothing lifts, nothing
+   rounds, nothing tints, and the only thing that separates a panel from the
+   void is one line.
+
+   The flagship takes seven columns and the two showcases stack inside the
+   remaining five. 8 + 2 + 2 was the other option in the direction's skeleton
+   and it was measured out: two columns is 176px at 1280, and the showcases
+   carry three and four lines of prose each, which sets to 22ch in that track.
+   Seven and five keeps every measure between 38 and 52ch.
+
+   Mono appears twice, on the two datelines, and nowhere else - no mono tag, no
+   mono label, no mono heading. The stack is a plain Geist word list rather than
+   the mono list the direction allows, because mono here would read as a logo
+   strip made of type and the point of the line is that it is prose.
+
+   Nothing in this section is lamp. The only lamp is the shared focus ring from
+   entry 01, which is the whole visual treatment of the case link: no fill, no
+   arrow, no second button. The page has one primary action and it is in the
+   hero.
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* 32 -> 40. The flagship's outcome title: a clear step under the 40 -> 64
+     hero display and a clear step over the 24 -> 32 section heads. */
+  --v1-case-title: clamp(2rem, 1.8143rem + 0.7619vw, 2.5rem);
+  /* 20 -> 24. The two showcases, subordinate to the flagship by one step. */
+  --v1-case-sub: clamp(1.25rem, 1.1404rem + 0.4494vw, 1.5rem);
+  /* 32 -> 52. The h1 of /v1/work/jewelo. It is the biggest type on that page
+     and still smaller than the hero headline, because a case study is not the
+     studio's own opening claim. */
+  --v1-doc-title: clamp(2rem, 1.4522rem + 2.2472vw, 3.25rem);
+  /* Chips: 11px sentence case in a 1px outline, the direction's own vocabulary
+     for case tags. Never caps, never mono, never an eyebrow. */
+  --v1-chip: 0.6875rem;
+}
+
+/* The one surface this section and the sub-page share. Structural, so radius
+   is 0; the 4px radius in this direction belongs to interactive controls only,
+   and a panel is not a control. */
+.v1-panel {
+  background-color: var(--v1-panel);
+  border: 1px solid var(--v1-line);
+  border-radius: var(--v1-radius);
+  padding: var(--v1-5);
+}
+
+@media (min-width: 40rem) {
+  .v1-panel {
+    padding: var(--v1-6);
+  }
+}
+
+.v1-work {
+  padding-block: var(--v1-8);
+}
+
+.v1-work__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+.v1-work__row {
+  display: grid;
+  gap: var(--v1-5);
+  margin-top: var(--v1-8);
+}
+
+/* -----------------------------------------------------------------------------
+   04 - the shared case vocabulary
+
+   Tags, dates, block headings and body lines are written once and used by both
+   the flagship panel and the two showcases, so a reader who has learned the
+   flagship can read a showcase without learning anything new.
+   -------------------------------------------------------------------------- */
+
+.v1-work__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--v1-2);
+  margin-top: var(--v1-4);
+}
+
+.v1-work__tag {
+  padding: 0.1875rem var(--v1-2);
+  border: 1px solid var(--v1-line);
+  color: var(--v1-text);
+  font-size: var(--v1-chip);
+  line-height: 1.45;
+}
+
+/* Dates are the one thing mono is for here, and they sit inline in Geist
+   sentences rather than in a dateline of their own. 0.94em because Geist Mono
+   runs wider and taller than Geist at the same nominal size. */
+.v1-work__date {
+  color: var(--v1-text);
+  font-family: var(--v1-font-mono);
+  font-size: 0.94em;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* COPY.md's own block names. Set in the body face at body size, one weight up
+   and one colour step up from the prose under them: a run-in heading inside a
+   document, not a label floating above a section. */
+.v1-work__block {
+  margin-top: var(--v1-6);
+  color: var(--v1-text);
+  font-family: var(--v1-font-body);
+  font-size: var(--v1-body);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.v1-work__block:first-child {
+  margin-top: 0;
+}
+
+.v1-work__line {
+  margin-top: var(--v1-3);
+  max-width: 62ch;
+  color: var(--v1-muted);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   04 - the flagship panel
+
+   Title and tags above a rule, then the still, the write-up and the link. The
+   still is capped at 420 here and 220 once the panel is in its seven-column
+   track, both well under the 480 the asset inventory allows, and it is framed
+   by one line so a black-velvet still meets the panel on an edge rather than a
+   seam. It is never behind text and never full-bleed.
+   -------------------------------------------------------------------------- */
+
+.v1-work__flagtitle {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-case-title);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.05;
+  text-wrap: pretty;
+}
+
+.v1-work__flagbody {
+  display: grid;
+  gap: var(--v1-6);
+  margin-top: var(--v1-6);
+  padding-top: var(--v1-6);
+  border-top: 1px solid var(--v1-line);
+}
+
+.v1-work__plate {
+  width: 100%;
+  max-width: 26.25rem; /* 420 */
+  border: 1px solid var(--v1-line);
+}
+
+.v1-work__still {
+  width: 100%;
+  height: auto;
+}
+
+/* A text link on a hairline, the same weight as the proof band's. The lamp on
+   it is the focus ring and nothing else. */
+.v1-work__more {
+  display: inline-block;
+  padding-bottom: var(--v1-1);
+  border-bottom: 1px solid var(--v1-muted);
+  color: var(--v1-text);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+.v1-work__more:hover {
+  border-bottom-color: var(--v1-text);
+}
+
+/* -----------------------------------------------------------------------------
+   04 - the two showcases
+
+   Narrower panels, no image. Neither piece of work is shipped, and a still on
+   either one would claim it was. The status line is the last thing in each
+   panel, on its own rule, because the honest count in the section heading is
+   only honest if those two lines are read.
+   -------------------------------------------------------------------------- */
+
+.v1-work__side {
+  display: grid;
+  gap: var(--v1-5);
+}
+
+.v1-work__show {
+  display: flex;
+  flex-direction: column;
+}
+
+.v1-work__showtitle {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-case-sub);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.15;
+  text-wrap: pretty;
+}
+
+/* margin-top: auto pins the status to the foot of the panel when two panels
+   share a row and one is taller; the padding is the minimum gap for when it
+   collapses to nothing. */
+.v1-work__status {
+  margin-top: auto;
+  padding-top: var(--v1-6);
+  border-top: 1px solid var(--v1-line);
+  color: var(--v1-text);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+}
+
+/* -----------------------------------------------------------------------------
+   04 - case studies, the two showcases side by side from 768
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .v1-work__side {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   04 - case studies, one row of 7 + 5 from 1180
+
+   The same 73.75rem the proof band and the services list change on, so all
+   three sections take their wide shape at one width.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-work {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-work__row {
+    grid-template-columns: repeat(var(--v1-cols), minmax(0, 1fr));
+    column-gap: var(--v1-gutter);
+  }
+
+  .v1-work__flag {
+    grid-column: 1 / span 7;
+  }
+
+  .v1-work__side {
+    grid-column: 8 / span 5;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+  }
+
+  /* The still moves into a fixed 220 column beside the write-up and spans both
+     of its rows, so the link stays on the prose column's left edge instead of
+     drifting under the image. */
+  .v1-work__flagbody {
+    grid-template-columns: minmax(0, 1fr) 13.75rem;
+    column-gap: var(--v1-6);
+    align-items: start;
+  }
+
+  .v1-work__plate {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    max-width: none;
+  }
+
+  .v1-work__doc {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .v1-work__act {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   04 - /v1/work/jewelo
+
+   The sub-page. A document on the void: one reading column at the page's own
+   left edge, with two panel bands in it - the plate run and the close - so the
+   prose is never interrupted by a surface change mid-sentence. No canvas here;
+   the hero object is the variation root's one entrance and nothing on this page
+   moves at all.
+
+   Fifteen plates, in the order the asset inventory fixes, each one capped at
+   480 and framed by a line. They are stills with captions rather than a
+   gallery, because this page is a write-up about the studio's work and not a
+   lookbook for the client's product.
+   -------------------------------------------------------------------------- */
+
+.v1-doc__mast {
+  padding-block: var(--v1-8) 0;
+}
+
+.v1-doc__title {
+  max-width: 20ch;
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-doc-title);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.02;
+  text-wrap: pretty;
+}
+
+.v1-doc__block {
+  margin-block: var(--v1-8);
+}
+
+.v1-doc__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+.v1-doc__line {
+  margin-top: var(--v1-4);
+  max-width: var(--v1-measure);
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+.v1-doc__head + .v1-doc__line {
+  margin-top: var(--v1-5);
+}
+
+.v1-doc__band {
+  margin-block: var(--v1-8);
+  padding-block: var(--v1-8);
+  background-color: var(--v1-panel);
+  border-block: 1px solid var(--v1-line);
+}
+
+.v1-doc__plates {
+  display: grid;
+  gap: var(--v1-5);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.v1-doc__plates + .v1-doc__plates {
+  margin-top: var(--v1-7);
+}
+
+.v1-doc__plates--wide,
+.v1-doc__plates--screens {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.v1-doc__plate {
+  max-width: 30rem; /* 480, the inventory's cap */
+}
+
+.v1-doc__still {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--v1-line);
+}
+
+.v1-doc__caption {
+  margin-top: var(--v1-3);
+  color: var(--v1-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   04 - the close
+
+   COPY.md section 9 on a panel band, so the page ends on the same surface the
+   plates sit on and the last thing under the reader is a raised block with one
+   button in it. The button is the primary control from entry 01 and the only
+   lamp fill on the page.
+   -------------------------------------------------------------------------- */
+
+.v1-doc__close {
+  margin-bottom: 0;
+  padding-block: var(--v1-9);
+}
+
+.v1-doc__closehead {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-case-title);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.05;
+  text-wrap: pretty;
+}
+
+.v1-doc__closesub {
+  margin-top: var(--v1-5);
+  max-width: 56ch;
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+.v1-doc__act {
+  margin-top: var(--v1-6);
+}
+
+.v1-doc .v1-btn--primary {
+  display: flex;
+  width: 100%;
+}
+
+.v1-doc__support {
+  margin-top: var(--v1-3);
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+}
+
+.v1-doc__channel {
+  margin-top: var(--v1-6);
+  color: var(--v1-text);
+  font-size: var(--v1-small);
+}
+
+.v1-doc__mail {
+  border-bottom: 1px solid var(--v1-muted);
+  transition: border-color var(--v1-open) var(--v1-ease);
+}
+
+.v1-doc__mail:hover {
+  border-bottom-color: var(--v1-text);
+}
+
+/* -----------------------------------------------------------------------------
+   04 - /v1/work/jewelo, from 640 and from 768
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 40rem) {
+  .v1-doc .v1-btn--primary {
+    display: inline-flex;
+    width: auto;
+  }
+}
+
+@media (min-width: 48rem) {
+  .v1-doc__plates--renders {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .v1-doc__plates--screens {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   04 - /v1/work/jewelo, four renders across from 1180
+
+   Capped at 64rem rather than the shell's 82.5rem: past that the plates start
+   growing into a lookbook, and the inventory is explicit that this page is a
+   set of small stills with captions.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-doc__block,
+  .v1-doc__band {
+    margin-block: var(--v1-9);
+  }
+
+  .v1-doc__band {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-doc__close {
+    margin-bottom: 0;
+  }
+
+  .v1-doc__plates {
+    max-width: 64rem;
+  }
+
+  .v1-doc__plates--renders {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   05 - process
+
+   The hero's instrument, printed once more at the moment the reader is
+   deciding about money. Four phases are stations on a single 1px line and the
+   three payment gates are 6px lamp dots on that line between them, so the
+   section reads as a gauge rather than as a rail of steps: the hero counts
+   sixteen days on a hairline with a lamp needle, this counts four phases on a
+   hairline with lamp dots.
+
+   This is the only lamp on the page outside the hero and the shared focus
+   ring, and it is spent on the three dots and on the 6px swatch that keys
+   them. The dot is the one curve in the section: --v1-radius governs
+   structural blocks and --v1-radius-control governs controls, and a 6px dot is
+   neither - it is the mark's centre dot at gauge scale.
+
+   Mono appears once, on the station numbers, tabular like the hero gauge and
+   the proof figures. COPY.md section 5 carries no day counts, so none are
+   printed: the hero's sixteen days are the build of one product, not the
+   length of a phase.
+
+   Nothing here moves on load, nothing is hover-gated and nothing is hidden -
+   the sixteen-tick assembly in the hero is this page's one entrance.
+
+   One geometry, three shapes. The gate belongs to the phase it closes, so a
+   step carrying a gate positions the dot at its own far end, and only the axis
+   changes with the breakpoint:
+     390   the line is vertical on the left, dots in the row gaps
+     820   2 x 2, each step owns its segment of line, dot at the segment end
+     1180  four across, one continuous line over the band, dots in the gaps
+   -------------------------------------------------------------------------- */
+
+.v1,
+:root:has(.v1) {
+  /* 24 at 390 -> 28 at 1280, then held. A clear step under --v1-section-head
+     at every width from 640 up, so the phase names never compete with the
+     section heading above them. */
+  --v1-phase: clamp(1.5rem, 1.3904rem + 0.4494vw, 1.75rem);
+  /* The payment gate. 6px is the smallest dot that still reads as a dot on a
+     1px line at 390; measured against the rail it is six times the line. */
+  --v1-gate: 6px;
+  /* The station mark: a 12px hairline crossing the line at each phase. */
+  --v1-station: 0.75rem;
+}
+
+.v1-process {
+  padding-block: var(--v1-8);
+}
+
+.v1-process__head {
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-section-head);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.1;
+}
+
+.v1-process__sub {
+  margin-top: var(--v1-4);
+  max-width: 52ch;
+  color: var(--v1-muted);
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   05 - the key
+
+   Sits directly above the line it explains, close enough to read as its
+   legend. The swatch is the gate at its own size rather than a symbol for it,
+   which is why the section still carries no icon.
+   -------------------------------------------------------------------------- */
+
+.v1-process__key {
+  display: flex;
+  align-items: center;
+  gap: var(--v1-3);
+  margin-top: var(--v1-8);
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+}
+
+.v1-process__key-dot {
+  flex: none;
+  width: var(--v1-gate);
+  height: var(--v1-gate);
+  border-radius: 50%;
+  background-color: var(--v1-lamp);
+}
+
+/* -----------------------------------------------------------------------------
+   05 - the gauge, vertical at phone widths
+
+   The line is the container's own border, so it runs unbroken through the row
+   gaps and stops exactly at the last phase. The step is the positioned
+   ancestor for both marks: the station tick reaches back to the rail, and the
+   gate dot sits on the rail in the gap below the phase it closes.
+   -------------------------------------------------------------------------- */
+
+.v1-process__gauge {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--v1-7);
+  margin-top: var(--v1-4);
+  padding-left: var(--v1-5);
+  border-left: 1px solid var(--v1-line);
+}
+
+.v1-process__step {
+  position: relative;
+  min-width: 0;
+}
+
+.v1-process__step::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  left: calc(var(--v1-5) * -1);
+  width: var(--v1-station);
+  height: 1px;
+  background-color: var(--v1-text);
+}
+
+/* -24.5px is the centre of a 1px border sitting outside 24px of padding. */
+.v1-process__gate {
+  position: absolute;
+  top: calc(100% + var(--v1-7) / 2 - var(--v1-gate) / 2);
+  left: calc(var(--v1-5) * -1 - 0.5px - var(--v1-gate) / 2);
+  width: var(--v1-gate);
+  height: var(--v1-gate);
+  border-radius: 50%;
+  background-color: var(--v1-lamp);
+}
+
+.v1-process__idx {
+  color: var(--v1-muted);
+  font-family: var(--v1-font-mono);
+  font-size: var(--v1-micro);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.v1-process__name {
+  margin-top: var(--v1-2);
+  font-family: var(--v1-font-display);
+  font-weight: 700;
+  font-size: var(--v1-phase);
+  letter-spacing: var(--v1-display-track);
+  line-height: 1.15;
+}
+
+/* Each paragraph carries its own measure, counted in its own font size, the
+   same rule entry 03 uses on the service rows. */
+.v1-process__lead {
+  margin-top: var(--v1-3);
+  max-width: 46ch;
+  color: var(--v1-text);
+  text-wrap: pretty;
+}
+
+.v1-process__rest {
+  margin-top: var(--v1-3);
+  max-width: 50ch;
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   05 - after the gauge
+
+   COPY.md's two closing blocks. They sit on space rather than on another rule
+   - the gauge is already a horizontal line with four ticks on it, and one more
+   rule would start to draw a table. Same call the proof band made under its
+   figure row and services made under its last one.
+   -------------------------------------------------------------------------- */
+
+.v1-process__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-6);
+  margin-top: var(--v1-8);
+}
+
+.v1-process__note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v1-2);
+  max-width: 52ch;
+}
+
+.v1-process__note-lead {
+  color: var(--v1-text);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+}
+
+.v1-process__note-line {
+  color: var(--v1-muted);
+  font-size: var(--v1-small);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* -----------------------------------------------------------------------------
+   05 - the gauge, 2 x 2 from 768
+
+   Two columns cannot carry one line across the band, so each step takes its
+   own segment and the gate moves to the end of the segment it closes: you pay,
+   that phase's line runs out, the next one starts. The station tick turns
+   ninety degrees with the line and drops from it.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .v1-process__gauge {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--v1-7);
+    row-gap: var(--v1-8);
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .v1-process__step {
+    padding-top: var(--v1-5);
+    border-top: 1px solid var(--v1-line);
+  }
+
+  .v1-process__step::before {
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: var(--v1-station);
+  }
+
+  .v1-process__gate {
+    top: calc(var(--v1-gate) / -2 - 0.5px);
+    left: calc(100% - var(--v1-gate));
+  }
+
+  .v1-process__foot {
+    flex-direction: row;
+    gap: var(--v1-7);
+  }
+
+  .v1-process__note {
+    flex: 1 1 0;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   05 - the gauge, four across from 1180
+
+   The same 73.75rem the proof band and the services rows change shape on, so
+   all three sections turn on one breakpoint. Here the line is continuous
+   across the band again - it is the grid's own border-top - the steps give
+   their segments back, and each gate returns to the middle of the gap between
+   the phase it closes and the one the payment starts.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 73.75rem) {
+  .v1-process {
+    padding-block: var(--v1-9);
+  }
+
+  .v1-process__gauge {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--v1-7);
+    border-top: 1px solid var(--v1-line);
+  }
+
+  .v1-process__step {
+    border-top: 0;
+  }
+
+  .v1-process__gate {
+    left: calc(100% + var(--v1-7) / 2 - var(--v1-gate) / 2);
   }
 }

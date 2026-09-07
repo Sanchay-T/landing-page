@@ -115,9 +115,11 @@ export function Founders() {
         ))}
       </div>
 
-      <p className="v2-founders__standing">
-        Two cities, one thread, and no layer between you and the people building.
-      </p>
+      <div className="v2-founders__close">
+        <p className="v2-founders__standing">
+          Two cities, one thread, and no layer between you and the people building.
+        </p>
+      </div>
     </section>
   );
 }

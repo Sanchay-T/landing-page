@@ -40,11 +40,14 @@
    luminance of about 0.156 and dark ink fails below about 0.210.
 
    So the ground crosses that band quickly and rests outside it. Night to blue
-   hour takes 52% of the scroll, blue hour to first light takes 0.8%, first
-   light to day takes the remaining 47%. The ink turns over inside that 0.8%,
-   at the point where light ink and dark ink read about the same (~4:1 each),
-   which is the best available worst case. Dawn is a fast event; this is the
-   clock being accurate, not a workaround.
+   hour takes 52% of the scroll, blue hour to first light takes 0.4%, first
+   light to day takes the remaining 47.6%. The ink does not cross with it: it
+   is a step, taken inside that 0.4% at the point where light ink and dark ink
+   read about the same (3.98:1 and 3.93:1 measured either side of it), which is
+   the best available worst case. There is no mid-tone ink at any scroll
+   position, so 3.93:1 at the step is the worst this page can render, and the
+   band under 4.5:1 is t 0.5228 to 0.5237 - 0.09% of the scroll. Dawn is a fast
+   event; this is the clock being accurate, not a workaround.
 
    Consequence for every later section: body text is always full `--v3-fg`.
    There is no muted body token on this page, because a 72% ink on the
@@ -181,12 +184,22 @@
   --v3-s2: clamp(0, calc((var(--v3-t) - 0.52) / 0.004), 1);
   --v3-s3: clamp(0, calc((var(--v3-t) - 0.524) / 0.476), 1);
 
-  /* Ink: the turn is 0.002% of the page, which is a step in everything but
-     name. It is placed at the one point inside dawn where light ink and dark
-     ink read the same on the ground beneath them, about 4:1 each - the best
-     available worst case on a page that inverts. */
+  /* Ink: a step, not a crossfade. It is taken at the one point inside dawn
+     where light ink and dark ink read the same on the ground beneath them,
+     3.98:1 and 3.93:1 - the best available worst case on a page that inverts.
+     A crossfade, however narrow, would put mid-tone ink on a mid-tone ground
+     at some scroll position and read at 1.05:1 there; a step cannot.
+
+     `round(up, x, 1)` is ceil(x), so this is 0 at and below the turn and 1
+     above it, with nothing in between. The declaration here is the same step
+     for engines without `round()`, where the fade is a billionth of the page -
+     narrower than the finest step any scroll height can produce - and the
+     @supports block below replaces it with the exact step everywhere else. It
+     has to be a separate rule: a custom property never invalidates at parse
+     time, so a second declaration in this block would win even where round()
+     does not parse, and take `--v3-fg` down with it. */
   --v3-i1: clamp(0, calc(var(--v3-t) / 0.5232), 1);
-  --v3-i2: clamp(0, calc((var(--v3-t) - 0.5232) / 0.00002), 1);
+  --v3-i2: clamp(0, calc((var(--v3-t) - 0.5232) * 1000000000), 1);
   --v3-i3: clamp(0, calc((var(--v3-t) - 0.52322) / 0.47678), 1);
 
   --v3-ground-a: color-mix(
@@ -207,6 +220,16 @@
 
   --v3-rule: color-mix(in srgb, var(--v3-fg) 14%, transparent);
   --v3-rule-strong: color-mix(in srgb, var(--v3-fg) 32%, transparent);
+}
+
+/* The ink step, exactly, wherever `round()` parses. Same selector and same
+   property as above, later in the file, so it wins on source order. */
+@supports (width: round(up, 1px, 1px)) {
+  .v3,
+  .v3-bar,
+  .v3-band {
+    --v3-i2: clamp(0, round(up, calc(var(--v3-t) - 0.5232), 1), 1);
+  }
 }
 
 /* ------------------------------------------------------------ reduced motion
@@ -876,5 +899,128 @@ body:has(.v3) {
   }
   .v3-caption {
     max-width: none;
+  }
+}
+
+/* ============================================================ 03 - services
+
+   Day 2, night, and the band travels with the ramp: no `data-clock` here, so
+   `--v3-t` is whatever the reader's scroll position says it is, and the ground
+   under this band is still dark while the flash-forward above it is daylight.
+
+   Five stations down the timeline. A station is the same object the proof band
+   introduces itself with, scaled up: a rule, the name sitting on it, and the
+   day of the build at the rule's right end in the tick bar's tabular mono. Only
+   the two services the sixteen-day build actually used carry a date; the other
+   three rules simply end. That gap is the point and it is never filled.
+
+   Four sizes, each with one job, decreasing all the way down the band:
+   name 34-44, promise 17-20, detail 14, standing lines 14 under a rule. No
+   opacity anywhere - there is no muted ink on this page.
+   =========================================================================== */
+
+.v3 {
+  /* 34px at 390, 44px at 1280. Condensed display, one step under the section
+     h2 at the laptop width the direction is drawn at. */
+  --v3-size-service: clamp(2.125rem, 1.124vw + 1.852rem, 2.75rem);
+}
+
+.v3-services {
+  padding-block: clamp(2.75rem, 8vh, 5.5rem);
+}
+
+.v3-services-list {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+}
+
+/* Entries are separated by space, not by a container. The gap between two
+   entries is three times the gap inside one, so proximity does the grouping and
+   the hairline never has to. */
+.v3-service + .v3-service {
+  margin-top: clamp(2.25rem, 6vh, 3.5rem);
+}
+
+/* `last baseline` puts the date on the name's final line, so it stays at the
+   rule's right end when the name wraps to two lines on a phone. `flex-end` is
+   declared first as the fallback for engines that do not take the keyword. */
+.v3-service-rule {
+  display: flex;
+  align-items: flex-end;
+  align-items: last baseline;
+  justify-content: space-between;
+  gap: var(--v3-space-m);
+  padding-bottom: var(--v3-space-xs);
+  /* The load-bearing rule of the entry, so 32% - the same weight the proof band
+     gives its station. */
+  border-bottom: 1px solid var(--v3-rule-strong);
+}
+
+.v3-service-name {
+  font-family: var(--v3-font-display);
+  font-variation-settings: "wdth" 70;
+  font-weight: 700;
+  font-size: var(--v3-size-service);
+  line-height: 1;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.v3-service-date {
+  flex: none;
+  font-family: var(--v3-font-date);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--v3-size-micro);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.v3-service-lede {
+  margin-top: var(--v3-space-m);
+  max-width: 66ch;
+  font-size: var(--v3-size-lede);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.v3-service-detail {
+  margin-top: var(--v3-space-xs);
+  max-width: 66ch;
+  font-size: var(--v3-size-caption);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* The three standing lines close the band flat and wide, against the tall
+   stations above them. Stacked on hairlines at a phone, three columns from
+   1180 - the same width at which the proof band goes to one row. */
+.v3-standing {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+  padding-top: var(--v3-space-m);
+  border-top: 1px solid var(--v3-rule-strong);
+  display: grid;
+  font-size: var(--v3-size-caption);
+  line-height: 1.5;
+}
+
+.v3-standing li {
+  max-width: 66ch;
+  text-wrap: pretty;
+}
+
+.v3-standing li + li {
+  margin-top: var(--v3-space-s);
+  padding-top: var(--v3-space-s);
+  border-top: 1px solid var(--v3-rule);
+}
+
+@media (min-width: 73.75rem) {
+  .v3-standing {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--v3-space-xl);
+  }
+  .v3-standing li + li {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
   }
 }

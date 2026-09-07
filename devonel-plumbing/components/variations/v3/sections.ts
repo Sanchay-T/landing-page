@@ -73,7 +73,7 @@ export const sections: readonly Section[] = [
     tick: 2,
     tickEnd: 2,
     stage: "night",
-    built: false,
+    built: true,
     inNav: true,
   },
   {

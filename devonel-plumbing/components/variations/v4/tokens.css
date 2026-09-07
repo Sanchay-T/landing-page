@@ -1657,3 +1657,666 @@
 .v4-board--shapes .v4-cell--shape:nth-child(4) {
   --v4-i: 3;
 }
+
+/* -- 20 FAQ band ---------------------------------------------------------- */
+
+/* COPY.md section 8 on the same board, per `docs/goal/03-design-research.md`
+   section 4, layout skeleton item 8: an accordion of seven rows. A row here is
+   a cell, so the accordion reuses `.v4-band`, `.v4-sticky-head` and `.v4-cell`
+   and adds no new container.
+
+   THE HONESTY RULE IN THIS BAND. Cell size is how much of the answer is on the
+   page, so the row floor is dropped to the content and `align-items: start`
+   replaces grid's default stretch. A closed cell is one question tall; an open
+   cell is as tall as its answer; and a neighbour in the same row does not grow
+   to match, which is the whole point - if two cells were equal after one of
+   them opened, the board would be lying about what it is showing.
+
+   The cost question is wider for the reason the two engagement rules are wider:
+   scope of application. It stands in front of every other question in a section
+   labelled "Before you pay", so it spans the board and is the one cell open on
+   arrival.
+
+   Column ladder, matching the rest of the page:
+     below 640    1 column, seven questions stacked in COPY.md's order
+     640 to 1023  2 columns, cost spans both, then three rows of two
+     1024 and up  3 columns, cost spans all three, then two rows of three
+   Six questions after the wide one divide cleanly by both 2 and 3, so no row
+   ever ends in an empty slot. */
+
+.v4 {
+  /* Geist 600, 18px at 390 through 20px from about 1140. Declared as a token
+     because the closed-cell floor below is derived from it: the floor is two
+     lines of exactly this type, and the two values must not drift apart. */
+  --v4-faq-q: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --v4-faq-q-lh: 1.3;
+}
+
+.v4-board--faq {
+  /* Closed cells are question-height. The 180px floor from block 11 would print
+     up to 120px of white under a one-line question and would make every cell
+     the same size, which is the one thing this band must not do. */
+  grid-auto-rows: minmax(0, auto);
+  /* The rule that lets an open cell grow without dragging its row with it. */
+  align-items: start;
+}
+
+@media (min-width: 640px) {
+  .v4-board--faq {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v4-board--faq .v4-cell--faq:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-board--faq {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* The wide cell stacks its answer under its question like every other cell
+     until there is more width than an answer can honestly fill. From three
+     columns up the cell is over 900px, and a 68ch answer stacked under the
+     question would leave a third of the widest cell on the board empty, which
+     is the exact thing "cell size is honesty" is supposed to prevent. So the
+     wide cell splits: question in the left two fifths, answer in the right
+     three, on the same left-column-and-content rhythm the band heads and the
+     standing lines under the other boards already use. The disclosure is
+     unchanged - the panel still collapses its own height - only its position
+     moves. */
+  .v4-board--faq .v4-cell--faq:first-child {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--v4-8);
+    align-items: start;
+  }
+
+  /* Side by side, the separator is the edge between the two columns rather than
+     a rule across the answer. It sits on the answer so it collapses with it and
+     never prints beside a closed cell. */
+  .v4-board--faq .v4-cell--faq:first-child .v4-faq-answer {
+    padding-inline-start: var(--v4-6);
+    border-inline-start: var(--v4-hairline) solid var(--v4-border);
+  }
+
+  /* The column already sets the measure here, and it never exceeds about 72
+     characters because the container caps at 1280, so the 68ch cap would only
+     reintroduce the void it was there to avoid. */
+  .v4-board--faq .v4-cell--faq:first-child .v4-faq-answer .v4-cell-line {
+    max-width: none;
+  }
+
+  .v4-board--faq .v4-cell--faq:first-child .v4-faq-answer > :first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+/* Fill is the state, and it is the board's own fill language rather than a new
+   one: an outline cell holds content that is not on the page, a filled cell
+   holds content that is. No chevron, no plus, no rotating glyph. */
+.v4-cell--faq {
+  /* Canvas rather than `transparent`: it paints the same over the board's own
+     ground, and it gives the open a clean colour interpolation instead of
+     fading through transparent black and flashing grey. */
+  --v4-cell-fill: var(--v4-canvas);
+  /* The cell's own 8px gap would print under a collapsed panel, so the panel
+     owns its spacing instead and shows it only when it is open. */
+  gap: 0;
+  padding: var(--v4-5);
+  /* A floor of exactly two question lines. `align-items: start` is what lets an
+     open cell grow past its row, and the same rule would otherwise leave a row
+     of closed cells ragged at the bottom - which reads as unfinished rather
+     than as honest, because at rest nothing has been opened yet. With the
+     floor, a closed row is even and the only thing that ever breaks the line is
+     an answer the reader asked for. */
+  min-height: calc(2 * var(--v4-faq-q-lh) * var(--v4-faq-q) + 2 * var(--v4-5));
+}
+
+/* One column means one cell per row and therefore no row siblings to be even
+   with, so the floor buys nothing there and just prints up to 46px of air under
+   a one-line question. The floor is a multi-column device; below 640 the cells
+   drop to their content, the same call block 15 and block 19 make. Same
+   specificity as the rule above and later in the file, so it wins. */
+@media (max-width: 639px) {
+  .v4-cell--faq {
+    min-height: 0;
+  }
+}
+
+/* The fill lives on block 11's `::before` layer, so that is where the state
+   change has to be timed. */
+.v4-cell--faq::before {
+  transition: background-color var(--v4-hover) var(--v4-ease);
+}
+
+.v4-cell--faq[data-open="true"] {
+  --v4-cell-fill: var(--v4-cell);
+}
+
+/* Entrance: the single board-online pass from block 06, widest cell first. */
+.v4-board--faq .v4-cell--faq:nth-child(1) {
+  --v4-i: 0;
+}
+.v4-board--faq .v4-cell--faq:nth-child(2) {
+  --v4-i: 1;
+}
+.v4-board--faq .v4-cell--faq:nth-child(3) {
+  --v4-i: 2;
+}
+.v4-board--faq .v4-cell--faq:nth-child(4) {
+  --v4-i: 3;
+}
+.v4-board--faq .v4-cell--faq:nth-child(5) {
+  --v4-i: 4;
+}
+.v4-board--faq .v4-cell--faq:nth-child(6) {
+  --v4-i: 5;
+}
+.v4-board--faq .v4-cell--faq:nth-child(7) {
+  --v4-i: 6;
+}
+
+/* The question is a heading that holds a button, so the seven questions are
+   still a heading list to a screen reader and still one real control each. */
+.v4-faq-q {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.v4-faq-trigger {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+  font-size: var(--v4-faq-q);
+  font-weight: 600;
+  line-height: var(--v4-faq-q-lh);
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+/* The whole cell is the hit area a reader aims at, so the whole cell answers
+   the pointer: block 11 already thickens the perimeter on hover, and this adds
+   the fill hint that says a closed cell has something in it. */
+.v4-cell--faq[data-open="false"]:hover {
+  --v4-cell-fill: color-mix(in oklab, var(--v4-cell) 45%, var(--v4-canvas));
+}
+
+/* Collapsed with `grid-template-rows: 0fr` rather than with `display: none`, so
+   the answer is in the DOM at server render and the open is animatable.
+   `visibility` keeps a closed answer out of the tab order and out of the
+   accessibility tree, and it transitions discretely: it flips to visible at the
+   start of an open and back to hidden at the end of a close, which is exactly
+   the timing a disclosure wants. */
+.v4-faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 200ms var(--v4-ease),
+    visibility 200ms var(--v4-ease);
+}
+
+.v4-faq-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+
+/* `min-height: 0` is what makes a grid row shrink below its content, and the
+   overflow clip is what stops the answer painting outside the collapsed row. */
+.v4-faq-answer {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 200ms var(--v4-ease);
+}
+
+.v4-faq-panel[data-open="true"] .v4-faq-answer {
+  opacity: 1;
+}
+
+/* The hairline between a question and its answer exists only when there is an
+   answer to separate, so it lives on the answer rather than on the question and
+   collapses with it. */
+.v4-faq-answer > :first-child {
+  margin-top: var(--v4-4);
+  padding-top: var(--v4-4);
+  border-top: var(--v4-hairline) solid var(--v4-border);
+}
+
+.v4-faq-answer > * + * {
+  margin-top: var(--v4-2);
+}
+
+.v4-faq-answer .v4-cell-line {
+  max-width: 68ch;
+}
+
+/* Reduced motion, checked at first paint: the open is instant and nothing about
+   the disclosure has to be undone. Same specificity as the rules above and
+   later in the file, so this wins without an override. */
+@media (prefers-reduced-motion: reduce) {
+  .v4-cell--faq::before,
+  .v4-faq-panel,
+  .v4-faq-answer {
+    transition: none;
+  }
+}
+
+/* -- 21 Final CTA and the nav button ------------------------------------- */
+
+/* COPY.md section 9 as one full-width cobalt cell, per
+   `docs/goal/03-design-research.md` section 4, layout skeleton item 9. This is
+   the third and last cobalt surface on the page.
+
+   THE COBALT BUDGET, SETTLED. The orchestrator's decision line in
+   `docs/goal/STATUS.md` sets it at hero button, live cell rule and this cell.
+   That is three, and the nav button was the fourth, so the nav button moves to
+   the ink outline form below. Same href, same label, same size; only the
+   colour leaves. The page now spends cobalt once above the fold, once on the
+   one thing that is live, and once on the one thing it is asking for.
+
+   Contrast, measured rather than assumed. White on #1b34d8 is 8.3:1, so the
+   ask and the button both clear AAA. Supporting text uses one mix, 86% white
+   over cobalt, at 6.4:1, which holds at 15px. The hairline over the channel
+   line is 34% white, which is a border and not text.
+
+   FOCUS RINGS. Block 07 draws them in ink, which is 2.2:1 against cobalt and
+   fails SC 1.4.11 as a non-text indicator. Inside this cell only, the ring is
+   white at 8.3:1. Nothing else about the focus treatment changes. */
+
+.v4 {
+  --v4-on-cobalt: #ffffff;
+  --v4-on-cobalt-soft: color-mix(in srgb, #ffffff 86%, var(--v4-cobalt));
+  --v4-on-cobalt-line: color-mix(in srgb, #ffffff 34%, var(--v4-cobalt));
+}
+
+/* -- the nav button, in ink ----------------------------------------------- */
+
+/* Still one of the direction's two button forms, not a third: the cobalt fill
+   and the outline. This is the outline drawn at the weight a primary action
+   needs on a white bar, since the neutral border in block 09 is #d3d6da and
+   disappears at 64px. `.v4-btn--outline` is untouched: the case card's
+   secondary link is a secondary action and reads correctly at that weight. */
+.v4-btn--ink {
+  background: var(--v4-canvas);
+  border-color: var(--v4-ink);
+  color: var(--v4-ink);
+  /* Restated rather than inherited from block 09, which does not transition
+     `color` because neither form there changes it on hover. */
+  transition:
+    background-color var(--v4-hover) var(--v4-ease),
+    border-color var(--v4-hover) var(--v4-ease),
+    color var(--v4-hover) var(--v4-ease);
+}
+
+.v4-btn--ink:hover {
+  background: var(--v4-ink);
+  color: var(--v4-canvas);
+}
+
+/* Block 13 kills `.v4-btn` transitions at the same specificity and earlier in
+   the file, so the rule above would quietly reinstate one. Killed again here. */
+@media (prefers-reduced-motion: reduce) {
+  .v4-btn--ink {
+    transition: none;
+  }
+}
+
+/* -- the cell ------------------------------------------------------------- */
+
+/* One cell in the board grid, so it takes the full column and the same 8px
+   radius, 1px perimeter and entrance pass as every other cell. The border is
+   cobalt rather than the neutral line: a grey perimeter around a saturated
+   panel reads as a seam. */
+.v4-cell--final {
+  --v4-cell-fill: var(--v4-cobalt);
+  --v4-i: 0;
+  border-color: var(--v4-cobalt);
+  color: var(--v4-on-cobalt);
+  gap: var(--v4-6);
+  padding: var(--v4-6);
+}
+
+@media (min-width: 900px) {
+  .v4-cell--final {
+    padding: var(--v4-14);
+  }
+}
+
+/* Block 11 thickens every cell's perimeter on hover, which is an affordance
+   for a board a reader scans. This cell is not scanned, it is acted on, and
+   its affordance is the button inside it. An ink outline over cobalt would
+   also read as a rendering fault rather than as a state. */
+.v4-cell--final:hover {
+  outline: none;
+}
+
+.v4-cell--final :where(:focus-visible) {
+  outline-color: var(--v4-on-cobalt);
+}
+
+.v4-final-main {
+  display: grid;
+  gap: var(--v4-8);
+}
+
+/* The ask left, the action right, both sitting on the cell's bottom edge, so
+   the button lands beside the last line of the subhead instead of floating
+   against the top of a three-line headline. Below 900 the two stack in reading
+   order and the button is the last thing before the channel line. */
+@media (min-width: 900px) {
+  .v4-final-main {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--v4-12);
+  }
+}
+
+.v4-final-ask {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-2);
+}
+
+/* 40px at 390 through 56px from 1082 up, which is the 40 to 56 range the
+   direction specifies for the ask. Balanced and capped at 22ch so the sentence
+   sets to two lines from the split up and never leaves a one-word last line. */
+.v4-final-head {
+  font-size: clamp(2.5rem, 1.2rem + 3.4vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: var(--v4-display-tracking);
+  text-wrap: balance;
+  max-width: 22ch;
+  margin-bottom: var(--v4-3);
+}
+
+.v4-final-sub {
+  font-size: var(--v4-lead);
+  line-height: 1.5;
+  color: var(--v4-on-cobalt-soft);
+  max-width: 52ch;
+}
+
+.v4-final-act {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--v4-3);
+}
+
+/* Same rule the hero uses: full width on the narrowest phones, intrinsic from
+   480 up, so the one action is never a 120px target in a 302px column. */
+.v4-final-act .v4-btn {
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .v4-final-act .v4-btn {
+    width: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .v4-final-act {
+    align-items: flex-end;
+    text-align: end;
+  }
+}
+
+/* The cobalt fill's inverse: same form, own ground. Hover steps to canvas
+   rather than to a tinted white, so no eighth colour joins the palette. */
+.v4-btn--on-cobalt {
+  background: var(--v4-on-cobalt);
+  border-color: var(--v4-on-cobalt);
+  color: var(--v4-ink);
+}
+
+.v4-btn--on-cobalt:hover {
+  background: var(--v4-canvas);
+  border-color: var(--v4-canvas);
+}
+
+.v4-final-support {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-on-cobalt-soft);
+}
+
+/* The channel line reuses the board's footer band: pinned to the bottom of the
+   cell, under a hairline, which is where every other cell prints its datum.
+   COPY.md requires "no forms" in both the support line and the channel line;
+   putting them at opposite ends of a 56px-padded cell is what keeps the
+   repetition from reading as a copy defect. */
+.v4-cell--final .v4-cell-foot {
+  padding-top: var(--v4-5);
+  border-top-color: var(--v4-on-cobalt-line);
+  color: var(--v4-on-cobalt-soft);
+}
+
+/* Block 12 sets `.v4-mono` in ink, which is the right colour everywhere but
+   here. Same specificity, later in the file. */
+.v4-final-channel {
+  color: var(--v4-on-cobalt-soft);
+}
+
+.v4-final-mail {
+  color: var(--v4-on-cobalt);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* -- 22 Footer ------------------------------------------------------------ */
+
+/* COPY.md section 10 as "four grid-aligned columns", per
+   `docs/goal/03-design-research.md` section 4, layout skeleton item 10.
+
+   NOT CELLS. Every other row on this page is made of cells, and this one is
+   not: the cobalt cell directly above is the page's one loud surface, and a
+   second filled row under it would take half of that away. The footer sits on
+   the canvas, unfilled, under a single hairline that runs the full width of the
+   viewport rather than of the container, so the board reads as closed.
+
+   Column ladder, on the same twelve everything else uses:
+     below 640    1 column
+     640 to 1023  2 columns
+     1024 and up  3 / 6 / 3, and the middle sets its links in two sub-columns,
+                  which is what makes the row read as the specified four
+   No icons, no shadow, no social row. */
+
+.v4-footer {
+  border-top: var(--v4-hairline) solid var(--v4-border);
+}
+
+.v4-footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-10);
+  padding-block: var(--v4-12);
+}
+
+.v4-footer-row {
+  display: grid;
+  gap: var(--v4-8) var(--v4-col-gap);
+}
+
+@media (min-width: 640px) {
+  .v4-footer-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Between 640 and 1024 the row is two columns, and the section list is much
+   taller than the sign-off beside it. Left to the implicit row, the reach
+   column would start below the whole list and leave 150px of canvas between
+   the sign-off and the address. The list spans both rows instead, so the two
+   short columns stack against each other and the white lands at the bottom of
+   the row rather than in the middle of it. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .v4-footer-sign {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .v4-footer-reach {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .v4-footer-nav {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-footer-row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .v4-footer-sign {
+    grid-column: span 3;
+  }
+
+  .v4-footer-nav {
+    grid-column: span 6;
+  }
+
+  .v4-footer-reach {
+    grid-column: span 3;
+  }
+}
+
+.v4-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-3);
+}
+
+/* The wordmark carries the first sentence of COPY.md's sign-off line, so it is
+   set at the same size the nav sets it and the descriptor follows underneath.
+   `.v4-wordmark` is written for a flex row, so its trailing auto margin is
+   replaced here by an explicit cross-axis alignment. */
+.v4-footer-mark {
+  align-self: flex-start;
+  margin-inline-end: 0;
+}
+
+.v4-footer-line {
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  max-width: 44ch;
+}
+
+.v4-footer-line--muted {
+  color: var(--v4-muted);
+}
+
+/* -- the section list ----------------------------------------------------- */
+
+/* Two sub-columns from 480 up, which is what turns an eleven-item list into
+   the two middle columns of a four-column row instead of a tall stack beside
+   two short ones. Row gap is deliberately small and the padding is on the
+   link, so each target is 34px tall rather than a 22px line of text.
+
+   MULTI-COLUMN, NOT A TWO-TRACK GRID. A grid fills row by row, which would put
+   the hero, services, process, engagement and contact anchors in the left
+   column and everything between them in the right, so neither column reads in
+   page order. `columns` fills and balances down the first column before the
+   second, which is the only fill order that keeps the ten anchors in the order
+   the reader just scrolled through. It also survives the list changing length
+   the day another section is added. */
+.v4-footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+@media (min-width: 480px) {
+  .v4-footer-links {
+    display: block;
+    columns: 2;
+    column-gap: var(--v4-col-gap);
+  }
+
+  .v4-footer-links li {
+    break-inside: avoid;
+  }
+}
+
+.v4-footer-links a {
+  display: inline-block;
+  padding-block: 6px;
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+  transition: color var(--v4-hover) var(--v4-ease);
+}
+
+.v4-footer-links a:hover {
+  color: var(--v4-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v4-footer-links a {
+    transition: none;
+  }
+}
+
+/* -- the address ---------------------------------------------------------- */
+
+/* COPY.md section 10 requires the address as live text, never as a label, so it
+   is underlined at the same weight and offset the case card's link uses.
+   `overflow-wrap` is the guard for the 3-of-12 column at 1024, where a longer
+   mailbox than today's would otherwise push the row wider than the viewport. */
+.v4-footer-mail {
+  color: var(--v4-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  overflow-wrap: anywhere;
+}
+
+/* -- legal and provenance ------------------------------------------------- */
+
+/* One band under a hairline: what was built and by whom on the left, the two
+   dated facts on the right, which is where a reader looks for a revision line.
+   The date itself is Geist Mono, the same face every other datum on the page
+   is set in. */
+.v4-footer-legal {
+  display: grid;
+  gap: var(--v4-4) var(--v4-col-gap);
+  padding-top: var(--v4-5);
+  border-top: var(--v4-hairline) solid var(--v4-border);
+  font-size: var(--v4-caption);
+  line-height: var(--v4-caption-lh);
+  color: var(--v4-muted);
+}
+
+.v4-footer-legal-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--v4-1);
+}
+
+@media (min-width: 900px) {
+  .v4-footer-legal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v4-footer-legal-group--end {
+    text-align: end;
+  }
+}

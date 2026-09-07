@@ -41,7 +41,7 @@ export const sections: readonly Section[] = [
   { id: "process", label: "How we work", built: true, inNav: true },
   { id: "founders", label: "Who you work with", built: true, inNav: true },
   { id: "engagement", label: "How a quote works", built: true, inNav: true },
-  { id: "faq", label: "Before you pay", built: false, inNav: true },
+  { id: "faq", label: "Before you pay", built: true, inNav: true },
   { id: "final-cta", label: "Start", built: false, inNav: true },
   { id: "footer", label: "Footer", built: false, inNav: false },
 ] as const;

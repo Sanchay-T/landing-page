@@ -112,3 +112,53 @@ Both files exist and are confirmed present in this repo:
 Builders reuse this mark and nothing else.
 There is no client logo, no fake client logo, and no partner logo strip anywhere on the site.
 Where a variation wants a client identity in a case study, use the words "a bespoke jewellery house in Dubai" from `01-business-brief.md` section 8 with the real renders in `public/media/jewelo/`.
+
+## Round 2 dependencies
+
+Installed 2026-09-07 with `npm install --save-exact`, so every version in
+`package.json` is exact and matches `package-lock.json`.
+Node resolution in this folder walks up into the parent repo's `node_modules`,
+so each one was checked with `require.resolve(..., { paths: [cwd] })` and every
+path resolved inside `devonel-plumbing/node_modules`, not the parent's.
+
+| Package | Version | Licence | Why | Bundle cost |
+| --- | --- | --- | --- | --- |
+| `three` | 0.182.0 | MIT | The 3D renderer behind `components/ds/scene.tsx`. Directions 1 (Studio Dark), 3 (Scroll Story) and 5 (Liquid Metal) need real geometry, not a video loop. | 0 KB on any route that does not render a `<Scene>`. On a route that does: 721 KB raw / 184 KB gzip across two async chunks (`three.core` + `three.module`), fetched only after the render gate passes. Never in first-load JS. |
+| `@react-three/fiber` | 9.7.0 | MIT | React reconciler for three. Lets a variation write its scene as JSX instead of imperative three code, and gives `scene-canvas.tsx` the per-root `advance()` the frame driver needs. | 148 KB raw / 47 KB gzip, in the same async chunk group as three. |
+| `@react-three/drei` | 10.7.8 | MIT | Helper library for r3f scenes (`Float`, `MeshDistortMaterial`, `Environment`, ...). Installed here because variation builders may only touch `components/variations/**` and so cannot add a dependency themselves. Not imported by the plumbing. | 0 KB unless a variation imports it. Per-export tree-shaken: `Float` + `MeshDistortMaterial` measured at +4.2 KB raw over the three/r3f chunks. |
+| `@paper-design/shaders-react` | 0.0.80 | Apache-2.0 | The shader surface behind `components/ds/shader-surface.tsx`. `MeshGradient` is the flowing-colour field direction 2 (Shader Light) is built on, and the package also ships `LiquidMetal`, `GodRays`, `Dithering` and `PaperTexture` for the other four. Pulls `@paper-design/shaders@0.0.80` (Apache-2.0) as its only dependency. | 0 KB on any route that does not render a `<ShaderSurface>`. On a route that does: 25 KB raw / 8 KB gzip in one async chunk. |
+
+### How the cost was measured
+
+The five numbers above come from a throwaway copy of this package in the agent
+scratchpad, not from this repo: a demo route under `app/` is forbidden, and
+without one that imports them the build cannot price them at all.
+The copy symlinked this package's `node_modules`, added one `app/ds-probe/page.tsx`
+rendering a `<Scene>` and a `<ShaderSurface>`, and built with
+`NEXT_BUILD_DIR=.next-probe npx next build`.
+Result: `/ds-probe` 3.15 kB route JS, 105 kB first load, shared chunks still
+101 kB - identical to `/`. Every byte of three, r3f and the shaders sits in async
+chunks that are fetched only when a gated surface actually mounts.
+
+The trap that measurement caught, recorded in the header of
+`components/ds/scene.tsx`: importing `@react-three/drei` from a module a page
+imports statically puts the whole library in that route's first-load JS
+(`/ds-probe` went to 239 kB route JS / 340 kB first load). Behind
+`next/dynamic({ ssr: false })` the same scene rendered identically and the route
+went back to 3.13 kB / 105 kB.
+
+### Version note
+
+`three` is pinned to 0.182.0 rather than the current 0.185.1 on purpose.
+`THREE.Clock` was deprecated in r183, and @react-three/fiber 9.7.0 still
+constructs one per canvas, so r183 and later print
+`THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.`
+to the console on every route with a 3D scene.
+0.182.0 is the last release without it and satisfies every peer range in play
+(fiber wants `three >=0.156`, drei wants `>=0.159`).
+Verified: the probe route logs zero console messages and zero page errors.
+Revisit when fiber moves to `THREE.Timer`.
+
+`npm audit` reports four high-severity advisories in this package
+(`next`, `sharp`, `postcss`, `nanoid`). All four predate this install and none
+of them come from the four packages above.
